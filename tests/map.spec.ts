@@ -59,5 +59,5 @@ test('real map sources, comparison, navigation, sources and mobile layout', asyn
 test('historical network failure is explained', async ({ page }) => {
   await page.route('**/tolosa-1680.pmtiles', route => route.abort())
   await page.goto('/')
-  await expect(page.getByRole('alert')).toContainText('Не удалось загрузить часть карты 1680 года', { timeout: 30000 })
+  await expect(page.getByRole('alert')).toContainText('Не удалось загрузить часть исторической карты', { timeout: 30000 })
 })

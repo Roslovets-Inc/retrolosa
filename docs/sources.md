@@ -1,5 +1,9 @@
 # Source feasibility — 2026-09-29
 
+## Continuous timeline
+
+The Time mode interpolates opacity between the three available sources, not historical geometry or building dates. Both cadastral sources coexist in one MapLibre style so scrubbing only updates paint opacity. The 1680 layer stays opaque below the incoming 1830 layer until 1830; then 1680 is hidden and 1830 fades into the modern basemap. Source dates are positioned proportionally along the slider. Intermediate labels report the source pair and blend percentage rather than claiming a surveyed intermediate year. Time mode and slider position are retained in shared URLs.
+
 ## Added 1830 layer
 
 Original application: https://tolosa.makina-corpus.com/ credits the historical parcel dataset https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-1830/. The live municipal API reports Mairie de Toulouse and Licence Ouverte v2.0 (Etalab) on 2026-09-29. The artwork/hosting caveats below also apply to this third-party rendering.

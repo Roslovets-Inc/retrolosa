@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 test('1830 loads real tiles, preserves view and comparison, survives reload and zoom out', async ({ page, context }) => {
   const failures: string[] = []
+  let received1830 = false
+  page.on('response', r => { if (r.url().includes('tolosa-1830.pmtiles') && r.status() === 206) received1830 = true })
   page.on('pageerror', e => failures.push(e.message))
   await context.grantPermissions(['geolocation'])
   await context.setGeolocation({ longitude: 1.44954, latitude: 43.597678, accuracy: 10 })
@@ -8,9 +10,8 @@ test('1830 loads real tiles, preserves view and comparison, survives reload and 
   await expect(page.getByText('Карты загружены', { exact: true })).toBeVisible({ timeout: 60000 })
   await page.getByRole('button', { name: 'Наложение', exact: true }).click()
   await page.getByRole('slider', { name: 'Непрозрачность исторической карты' }).fill('42')
-  const response = page.waitForResponse(r => r.url().includes('tolosa-1830.pmtiles') && r.status() === 206)
   await page.getByRole('button', { name: 'Карта 1830 года' }).click()
-  await response
+  await expect.poll(() => received1830).toBeTruthy()
   await expect(page.getByText('Карты загружены', { exact: true })).toBeVisible({ timeout: 60000 })
   await expect(page.getByRole('alert')).toHaveCount(0)
   await expect(page.locator('.historic-map')).toHaveCSS('opacity', '0.42')
