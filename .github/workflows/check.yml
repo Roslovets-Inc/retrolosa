@@ -26,10 +26,10 @@ jobs:
         with:
           bun-version: "1.4.2"
       - run: bun install --frozen-lockfile
-      - run: bun project check
-      - run: bun project build
+      - run: bun run check
+      - run: bun run build
       - run: bun x playwright install --with-deps chromium
-      - run: bun project test:e2e
+      - run: bun run test:e2e
       - name: Upload browser diagnostics and unit coverage
         if: always()
         uses: actions/upload-artifact@v7

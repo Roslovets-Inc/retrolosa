@@ -25,10 +25,12 @@ When publication is not explicitly requested, complete the work locally and repo
 ## Development workflow
 
 - Use Bun 1.4.2 as the package manager. Keep `bun.lock` as the single lockfile; do not create npm, pnpm or Yarn lockfiles.
-- Use `bun project help` for the supported commands. The equivalent Windows entry points are `project.cmd` and `project.ps1`; Unix users can run `sh ./project`.
-- After code changes, run `bun project check`. For changes affecting the browser, run relevant tests with `bun project test:e2e <test file>`; for a complete verification use `bun project verify`.
+- Use standard Bun scripts from `package.json`, run from the repository root. Install with `bun install --frozen-lockfile`; do not add a custom command router.
+- After code changes, run `bun run check`. For changes affecting the browser, run relevant tests with `bun run test:e2e <test file>`; for a complete verification use `bun run verify`.
 - Prefer the smallest relevant test set during development. Network-dependent E2E failures must be reported separately from offline checks.
 - Format with Oxfmt and lint with Oxlint. Fix the underlying issue; use a narrow, explained suppression only for an intentional exception.
+- Use PumpRoom-UI as the DevEx reference: Bun, Oxfmt, Oxlint with the official React Hooks plugin, and Vitest. Keep effect dependencies, render purity, refs and state mutation checks enabled. Do not copy its Docker deployment or release automation into this static site.
+- Use `bun run test` for Vitest; `bun test` selects Bun's native runner. `start` and `local` are aliases for `dev`.
 - Keep the user interface and accessibility labels in French; use English code comments.
 - Keep unit tests under `tests/unit/*.test.ts` and Playwright scenarios under `tests/*.spec.ts`.
 - Do not edit generated raster assets as part of routine formatting or web builds. Asset generation is an explicit separate operation.

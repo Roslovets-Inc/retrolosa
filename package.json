@@ -6,8 +6,9 @@
   "license": "ISC",
   "type": "module",
   "scripts": {
-    "project": "node scripts/project.mjs",
+    "start": "vite",
     "dev": "vite",
+    "local": "vite",
     "build": "bun run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
@@ -21,8 +22,7 @@
     "test:e2e:ui": "playwright test --ui",
     "check": "bun run format:check && bun run lint && bun run typecheck && bun run test",
     "prep": "bun run format && bun run lint:fix && bun run check",
-    "verify": "bun run check && bun run build && bun run test:e2e",
-    "doctor": "node scripts/project.mjs doctor"
+    "verify": "bun run check && bun run build && bun run test:e2e"
   },
   "dependencies": {
     "lucide-react": "^1.48.0",
@@ -38,6 +38,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "5.0.1",
+    "eslint-plugin-react-hooks": "7.1.1",
     "oxfmt": "0.70.0",
     "oxlint": "1.85.0",
     "typescript": "^7.0.2",
