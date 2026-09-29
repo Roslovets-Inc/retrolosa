@@ -8,7 +8,7 @@ test('timeline snaps close to each source and releases for dragging and keyboard
     const today = new Date().getFullYear()
     // Native range positions account for the 16px thumb.
     const x = (year:number) => box.x + 8 + (box.width - 16) * (year - 1680) / (today - 1680)
-    for (const year of [1680,1830,1954,today]) {
+    for (const year of [1680,1830,1875,1954,today]) {
       const nearby = year === today ? year - 3 : year + 3
       await page.mouse.move(x(nearby),box.y+box.height/2)
       await page.mouse.down()

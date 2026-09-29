@@ -17,7 +17,7 @@ test('1954 aerial tiles, shared view and four-period timeline work on mobile', a
   await page.screenshot({path:'.local/1954-mobile.png'})
   await page.getByRole('button', {name:'Время',exact:true}).click()
   const slider=page.getByRole('slider',{name:'Путешествие по времени'})
-  for (const [value,label] of [['1892','1830 → 1954 · 50%'],['1954','1954'],['1990','1954 → Сегодня · 50%'],['1680','1680'],['1830','1830']]) {
+  for (const [value,label] of [['1892','1875 → 1954 · 22%'],['1954','1954'],['1990','1954 → Сегодня · 50%'],['1680','1680'],['1830','1830']]) {
     await slider.fill(value)
     await expect(page.locator('.timeline-value')).toHaveText(label)
   }

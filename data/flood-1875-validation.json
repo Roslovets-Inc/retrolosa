@@ -1,0 +1,41 @@
+{
+  "sourceUrl": "https://mapasmilhaud.com/wp-content/uploads/2026/07/1384-Plano-de-las-inundaciones-de-Toulouse-1875.jpg",
+  "sha256": "64766d89e706266236ab01377885703b6cbb1f707d581577fda9826f58f810c1",
+  "sourceSize": [
+    4843,
+    5852
+  ],
+  "fitPoints": 15,
+  "independentCheckPoints": [
+    {
+      "name": "La Grave dome",
+      "errorMetres": 13.7,
+      "reference": [
+        1.433001708984392,
+        43.60080115820243
+      ]
+    },
+    {
+      "name": "Jacobins cloister centre",
+      "errorMetres": 20.0,
+      "reference": [
+        1.4401098632812364,
+        43.60381636258454
+      ]
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "errorMetres": 26.8,
+      "reference": [
+        1.4497613525390705,
+        43.599794730490714
+      ]
+    }
+  ],
+  "medianCheckErrorMetres": 20.0,
+  "maxCheckErrorMetres": 26.8,
+  "minimumForwardJacobian": 0.2721973057345352,
+  "tileCount": 894,
+  "bytes": 8444156,
+  "limitations": "Manual landmark checks, not a survey accuracy guarantee. Edge areas outside the control-point network are less reliable. Flood colouring is historical evidence, not a current flood-risk boundary."
+}

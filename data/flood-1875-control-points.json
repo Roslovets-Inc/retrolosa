@@ -1,0 +1,261 @@
+{
+  "sourceUrl": "https://mapasmilhaud.com/wp-content/uploads/2026/07/1384-Plano-de-las-inundaciones-de-Toulouse-1875.jpg",
+  "sourceSize": [
+    4843,
+    5852
+  ],
+  "annotationWidth": 1200,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536
+  },
+  "points": [
+    {
+      "name": "Pont des Minimes",
+      "old": [
+        562,
+        220
+      ],
+      "ref": [
+        564.3377777778369,
+        303.11355118028587
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont du Bearnais",
+      "old": [
+        298,
+        354
+      ],
+      "ref": [
+        346,
+        404
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Matabiau",
+      "old": [
+        888,
+        298
+      ],
+      "ref": [
+        812,
+        356
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Bayard",
+      "old": [
+        975.25,
+        438
+      ],
+      "ref": [
+        844.1,
+        421.4
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        676,
+        479
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Place Wilson fountain",
+      "old": [
+        805.25,
+        600.25
+      ],
+      "ref": [
+        747.4,
+        585
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Place du Capitole centre",
+      "old": [
+        712.5,
+        614
+      ],
+      "ref": [
+        676.2,
+        598
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond fountain",
+      "old": [
+        925.5,
+        905.5
+      ],
+      "ref": [
+        843.2,
+        813.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Neuf east bank",
+      "old": [
+        638.25,
+        774.5
+      ],
+      "ref": [
+        621.7,
+        717.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Chateau d eau centre",
+      "old": [
+        559,
+        803.5
+      ],
+      "ref": [
+        558.4,
+        739.7
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Porte Saint-Cyprien",
+      "old": [
+        420,
+        827
+      ],
+      "ref": [
+        451,
+        759
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Patte d'Oie junction",
+      "old": [
+        232,
+        878
+      ],
+      "ref": [
+        305.3,
+        797.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Prison Saint-Michel radial centre",
+      "old": [
+        822,
+        1215
+      ],
+      "ref": [
+        763,
+        1052
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "La Grave dome",
+      "old": [
+        469.25,
+        734.75
+      ],
+      "ref": [
+        487,
+        687
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Jacobins cloister centre",
+      "old": [
+        631,
+        635
+      ],
+      "ref": [
+        616.4,
+        611.2
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Saint-Aubin west portal",
+      "old": [
+        974.5,
+        641.25
+      ],
+      "ref": [
+        881.7,
+        617.9
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [
+        859.5,
+        768
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Pont Guilhemery",
+      "old": [
+        1027.5,
+        695.5
+      ],
+      "ref": [
+        911.87,
+        687.33
+      ],
+      "role": "fit"
+    }
+  ],
+  "mask": [
+    [
+      19,
+      144
+    ],
+    [
+      1171,
+      151
+    ],
+    [
+      1171,
+      1300
+    ],
+    [
+      159,
+      1300
+    ],
+    [
+      159,
+      1205
+    ],
+    [
+      19,
+      1205
+    ]
+  ],
+  "method": "Thin plate spline in Web Mercator; smoothing 1000 in annotation pixel units",
+  "smoothing": 1000,
+  "sha256": "64766d89e706266236ab01377885703b6cbb1f707d581577fda9826f58f810c1"
+}

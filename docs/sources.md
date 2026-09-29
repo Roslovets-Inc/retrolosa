@@ -59,3 +59,20 @@ Municipal data license does not establish rights to all third-party styling and 
 ## Added aerial photography 1954
 
 IGN / Edugéo WMTS layer ORTHOIMAGERY.EDUGEO.TOULOUSE1954, style normal, PNG, PM_6_16 (zooms 6–16). Live GetCapabilities and actual central Toulouse tile checked 2026-09-29. Bounds [1.23852, 43.5618, 1.55128, 43.7247]. Original georeferencing reused; no new accuracy claim or resampling. Higher map zooms overzoom the original tiles. Source: https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities . The timeline retains all sources in one style and blends successive dates, with no invented intermediate imagery.
+
+## 1875 flood plan (added September 2026)
+
+Original Sirven / La Dépêche plan of the 23–24 June 1875 flood, Archives municipales de Toulouse, **20 Fi 45** (stamp on scan).
+- Scan: https://mapasmilhaud.com/wp-content/uploads/2026/07/1384-Plano-de-las-inundaciones-de-Toulouse-1875.jpg
+- Description: https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/
+- Original size 4843 × 5852; SHA-256 in data/flood-1875-control-points.json.
+- Blue marks flooded areas; red marks collapsed houses. This is historical evidence, not present-day flood-risk data.
+- Historical artwork is public domain by age. Specific scan reuse terms have not been independently confirmed; retain archive and scan-provider attribution in this private prototype.
+
+### Reproducible alignment
+
+scripts/build-flood.py downloads and verifies the original, masks its printed border, title and publisher inset, and renders transparent WebP tiles at zooms 14–17 plus a low-zoom overview. Requires Python, numpy, scipy and Pillow. Run from the repository root with those packages available. Generated assets are committed so deployment does not need Python.
+
+Manual correspondences are in data/flood-1875-control-points.json. Old-plan coordinates use a 1200 px wide annotation image; reference coordinates use a 1200 px wide IGN PLANIGNV2 mosaic (1536 × 1792 original, zoom 15, origin tile 16512/11962). Reference service: https://data.geopf.fr/wmts (GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2).
+
+Fifteen fitting landmarks span bridges, churches, squares and road junctions. A thin-plate spline in Web Mercator uses smoothing 1000. Three withheld landmarks test the rendered inverse transformation: La Grave dome 13.7 m, Jacobins cloister 20.0 m, Saint-Étienne west portal 26.8 m. These are manual central-landmark checks, not a citywide accuracy claim or a survey. Edges outside the fitting network are less reliable. No folds were detected in the sampled forward Jacobian grid; this is a sampled check, not a mathematical guarantee. Full measurements and artifact size are in data/flood-1875-validation.json.
