@@ -54,7 +54,7 @@ footer { height: var(--footer-height); padding: 0 10px; font-size: 8px }
   footer { font-size: 7px; line-height: 1.4 }
   .source-modal { max-height: calc(100dvh - 32px) }
 }
-.compare-hold { position: absolute; z-index: 5; top: calc(var(--header-height) + 210px); right: 14px; display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; border: 1px solid #d5d8cd; border-radius: 8px; background: #faf9f2; color: #2f4b40; box-shadow: 0 2px 8px #20302416; font: 500 12px 'Golos Text',sans-serif; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none }
+.compare-hold { position: absolute; z-index: 5; top: calc(var(--header-height) + 210px); right: 14px; display: flex; align-items: center; justify-content: center; width: 46px; height: 44px; padding: 0; border: 1px solid #d5d8cd; border-radius: 8px; background: #faf9f2; color: #2f4b40; box-shadow: 0 2px 8px #20302416; font: 500 12px 'Golos Text',sans-serif; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none }
 .compare-hold[aria-pressed="true"] { background: #2f4b40; color: #fff }
 .compare-hold:focus-visible { outline: 2px solid #2f4b40; outline-offset: 3px }
 @media(max-width:600px) { .compare-hold { right: 10px } }
