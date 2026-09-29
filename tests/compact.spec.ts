@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('compact mobile controls keep the map clear and places collapse after selection', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 700 })
   await page.goto('/')
@@ -9,7 +11,7 @@ test('compact mobile controls keep the map clear and places collapse after selec
   await expect(page.getByRole('combobox')).toBeVisible()
   await page.getByRole('combobox').selectOption('1')
   await expect(page.getByRole('combobox')).toHaveCount(0)
-  await expect(page).toHaveURL(/lat=43.599782/)
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/)
   await page.getByRole('button', { name: 'Superposer', exact: true }).click()
   const panel = await page.locator('.control-panel').boundingBox()
   expect(panel!.height).toBeLessThan(110)

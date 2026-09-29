@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('1875 flood tiles, timeline and mobile controls', async ({page}) => {
   const errors:string[]=[]
   const tiles:number[]=[]
@@ -22,7 +24,8 @@ test('1875 flood tiles, timeline and mobile controls', async ({page}) => {
     await expect(page.locator('.timeline-value')).toHaveText(label)
   }
   await slider.fill('1875')
-  await expect(page).toHaveURL(/time=1875/)
+  await expect.poll(() => sharedView(page)).toMatch(/time=1875/)
+  await page.goto(await sharedView(page))
   await page.reload()
   await expect(slider).toHaveValue('1875')
   await expect(page.getByText('Cartes chargées',{exact:true})).toBeVisible({timeout:60000})

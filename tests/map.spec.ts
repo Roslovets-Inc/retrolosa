@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('real map sources, comparison, navigation, sources and mobile layout', async ({ page }) => {
   const failures: string[] = []
   page.on('pageerror', error => failures.push(error.message))
@@ -28,7 +30,7 @@ test('real map sources, comparison, navigation, sources and mobile layout', asyn
   await expect(page.locator('.historic-map')).toHaveCSS('clip-path', 'inset(0px 30% 0px 0px)')
   await page.getByRole('button', { name: 'Lieux', exact: true }).click()
   await page.getByRole('combobox').selectOption('1')
-  await expect(page).toHaveURL(/lat=43.599782/, { timeout: 10000 })
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/)
   await page.screenshot({ path: '.local/saint-etienne.png' })
   await page.getByRole('button', { name: 'Superposer', exact: true }).click()
   await page.getByRole('slider', { name: 'Opacité de la carte historique', exact: true }).fill('50')
@@ -37,13 +39,14 @@ test('real map sources, comparison, navigation, sources and mobile layout', asyn
   await page.getByRole('slider', { name: 'Limite de comparaison', exact: true }).focus()
   await page.keyboard.press('ArrowLeft')
   await expect(page.locator('.historic-map')).toHaveCSS('clip-path', 'inset(0px 32% 0px 0px)')
-  const oldUrl = page.url()
+  const oldUrl = await sharedView(page)
   await page.mouse.move(1100, 600)
   await page.mouse.down()
   await page.mouse.move(950, 650, { steps: 12 })
   await page.mouse.up()
-  await expect.poll(() => page.url()).not.toEqual(oldUrl)
-  const savedUrl = page.url()
+  await expect.poll(() => sharedView(page)).not.toEqual(oldUrl)
+  const savedUrl = await sharedView(page)
+  await page.goto(await sharedView(page))
   await page.reload()
   await expect(page.getByText('Cartes chargées', { exact: true })).toBeVisible({ timeout: 60000 })
   expect(page.url()).toEqual(savedUrl)

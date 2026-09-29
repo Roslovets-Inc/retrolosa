@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 
 test('rapid scrubbing survives browser history rate limits', async ({ page }) => {
   const failures: string[] = []
@@ -25,7 +27,7 @@ test('rapid scrubbing survives browser history rate limits', async ({ page }) =>
   await expect(slider).toBeVisible()
   await slider.fill('1830')
   await expect(page.locator('.timeline-value')).toHaveText('1830')
-  await expect(page).toHaveURL(/time=1830/, { timeout: 5000 })
+  await expect.poll(() => sharedView(page)).toMatch(/time=1830/)
   await expect(page.getByRole('button', { name: 'Rideau', exact: true })).toBeVisible()
   expect(failures).toEqual([])
 })

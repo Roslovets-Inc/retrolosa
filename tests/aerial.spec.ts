@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('1954 aerial tiles, shared view and four-period timeline work on mobile', async ({ page }) => {
   const errors: string[] = []
   const tiles: number[] = []
@@ -23,7 +25,8 @@ test('1954 aerial tiles, shared view and four-period timeline work on mobile', a
   }
   await slider.fill('1954')
   await page.screenshot({path:'.local/1954-time-mobile.png'})
-  await expect(page).toHaveURL(/time=1954/)
+  await expect.poll(() => sharedView(page)).toMatch(/time=1954/)
+  await page.goto(await sharedView(page))
   await page.reload()
   await expect(slider).toHaveValue('1954')
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()

@@ -73,3 +73,4 @@ footer { height: var(--footer-height); padding: 0 10px; font-size: 8px }
   .header-right .header-icon { min-width: 30px; padding: 0 6px }
 }
 .masthead { z-index: 6 }
+.share-modal input { width: 100%; padding: 12px; border: 1px solid #d5d8cd; border-radius: 6px; background: #fff; font-size: 14px }

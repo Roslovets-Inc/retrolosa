@@ -1,4 +1,6 @@
 import {test,expect} from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('epoch selection skips disabled sources, survives reload and permits an empty selection',async({page})=>{
  const errors:string[]=[]
  page.on('pageerror',e=>errors.push(e.message))
@@ -9,8 +11,9 @@ test('epoch selection skips disabled sources, survives reload and permits an emp
  await expect(page.locator('.timeline-value')).toHaveText('1830 → 1954 · 36%')
  await expect(page.locator('.timeline-ticks').getByRole('button',{name:'1875',exact:true})).toHaveCount(0)
  await page.screenshot({path:'.local/epochs-mobile.png'})
- await expect(page).toHaveURL(/layers=1680%2C1830%2C1954/)
- await page.reload()
+ await expect.poll(() => sharedView(page)).toMatch(/layers=1680%2C1830%2C1954/)
+ await page.goto(await sharedView(page))
+  await page.reload()
  await page.getByRole('button',{name:'Époques',exact:true}).click()
  await expect(page.getByRole('checkbox',{name:'1875 Inondation'})).not.toBeChecked()
  for(const name of ['1680 Cadastre','1830 Cadastre','1954 Vue aérienne'])await page.getByRole('checkbox',{name}).uncheck()

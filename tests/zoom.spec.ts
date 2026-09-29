@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 test('zoom out, pan outside centre, preserve overview and restore shared view', async ({ page }) => {
   const errors: string[] = []
   page.on('pageerror', e => errors.push(e.message))
@@ -8,16 +10,17 @@ test('zoom out, pan outside centre, preserve overview and restore shared view', 
   const response = await page.request.get('/history-overview.png')
   expect(response.ok()).toBeTruthy()
   await page.getByRole('button', { name: 'Zoom arrière', exact: true }).click()
-  await expect(page).toHaveURL(/z=11.00/)
+  await expect.poll(() => sharedView(page)).toMatch(/z=11.00/)
   await page.mouse.move(1050, 500)
   await page.mouse.down()
   await page.mouse.move(500, 650, { steps: 10 })
   await page.mouse.up()
-  await expect.poll(() => Number(new URLSearchParams(new URL(page.url()).hash.slice(1)).get('lon'))).toBeGreaterThan(1.48)
+  await expect.poll(async () => Number(new URLSearchParams(new URL(await sharedView(page)).hash.slice(1)).get('lon'))).toBeGreaterThan(1.48)
+  await page.goto(await sharedView(page))
   await page.reload()
   await expect(page.getByText('Cartes chargées', { exact: true })).toBeVisible({ timeout: 60000 })
   await page.getByRole('button', { name: 'Zoom arrière', exact: true }).click()
-  await expect(page).toHaveURL(/z=10.00/)
+  await expect.poll(() => sharedView(page)).toMatch(/z=10.00/)
   await page.goto('/#lon=1.44954&lat=43.597678&z=13')
   await expect(page.getByText('Cartes chargées', { exact: true })).toBeVisible({ timeout: 60000 })
   await page.getByRole('button', { name: '1680', exact: true }).click()

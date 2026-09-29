@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { prepareSharing, sharedView } from './sharing'
+test.beforeEach(async ({page}) => prepareSharing(page))
 
 test('location opt-in, tracking on both maps, stop and outside coverage', async ({ page, context }) => {
   await context.grantPermissions(['geolocation'])
@@ -9,9 +11,9 @@ test('location opt-in, tracking on both maps, stop and outside coverage', async 
   await page.getByRole('button', { name: 'Me localiser', exact: true }).click()
   await expect(page.locator('.location-dot')).toHaveCount(2)
   await expect(page.getByRole('status')).toContainText('précision estimée : 12 m')
-  await expect(page).toHaveURL(/lat=43.599000/)
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599000/)
   await context.setGeolocation({ longitude: 1.4488, latitude: 43.5992, accuracy: 10 })
-  await expect(page).toHaveURL(/lat=43.599200/)
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599200/)
   await page.getByRole('button', { name: '1680', exact: true }).click()
   await expect(page.locator('.historic-map .location-dot')).toBeVisible()
   await page.getByRole('button', { name: 'Désactiver la localisation', exact: true }).click()
