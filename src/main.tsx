@@ -8,6 +8,7 @@ import { ArrowLeftRight, Layers, MapPin, Plus, Minus, RotateCcw, Info, X, Extern
 import { useLocation } from './useLocation'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './style.css'
+import overviewCoordinates from './history-overview.json'
 
 const HISTORIC = 'https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-1680.pmtiles'
 maplibregl.setWorkerUrl(workerUrl)
@@ -24,7 +25,7 @@ const places = [
 function initialView() {
   const p = new URLSearchParams(location.hash.slice(1))
   const lon = Number(p.get('lon')), lat = Number(p.get('lat')), z = Number(p.get('z'))
-  return p.has('lon') && lon > 1.405 && lon < 1.48 && lat > 43.575 && lat < 43.635 && z >= 15 && z <= 20
+  return p.has('lon') && Number.isFinite(lon) && lon >= -180 && lon <= 180 && Number.isFinite(lat) && lat > -85 && lat < 85 && z >= 2 && z <= 20
     ? { center: [lon, lat] as [number, number], zoom: z } : { center: places[0].center, zoom: 16.7 }
 }
 function App() {
@@ -55,9 +56,9 @@ function App() {
     if (!modernEl.current || !oldEl.current) return
     let modern: MapInstance, historic: MapInstance
     try {
-      const options = { ...initialView(), minZoom: 15, maxZoom: 20, maxBounds: [[1.405, 43.575], [1.48, 43.635]] as [[number, number], [number, number]], pitchWithRotate: false, dragRotate: false, touchPitch: false, attributionControl: false as const }
+      const options = { ...initialView(), minZoom: 2, maxZoom: 20, pitchWithRotate: false, dragRotate: false, touchPitch: false, attributionControl: false as const }
       modern = new maplibregl.Map({ ...options, container: modernEl.current, style: 'https://tiles.openfreemap.org/styles/positron' })
-      historic = new maplibregl.Map({ ...options, container: oldEl.current, interactive: false, style: { version: 8, sources: { history: { type: 'raster', url: `pmtiles://${HISTORIC}`, tileSize: 256, attribution: 'Toulouse Métropole · Makina Corpus' } }, layers: [{ id: 'paper', type: 'background', paint: { 'background-color': '#ead9b2' } }, { id: 'history', type: 'raster', source: 'history', paint: { 'raster-fade-duration': 0 } }] } })
+      historic = new maplibregl.Map({ ...options, container: oldEl.current, interactive: false, style: { version: 8, sources: { overview: { type: 'image', url: '/history-overview.png', coordinates: overviewCoordinates as [[number, number], [number, number], [number, number], [number, number]] }, history: { type: 'raster', url: `pmtiles://${HISTORIC}`, tileSize: 256, attribution: 'Toulouse Métropole · Makina Corpus' } }, layers: [{ id: 'overview', type: 'raster', source: 'overview', maxzoom: 15, paint: { 'raster-fade-duration': 0 } }, { id: 'history', type: 'raster', source: 'history', minzoom: 15, paint: { 'raster-fade-duration': 0 } }] } })
     } catch { setErrors(['Браузер не смог запустить карту. Проверьте поддержку WebGL и аппаратное ускорение.']); return }
     map.current = modern
     locationMaps.current = [modern, historic]
