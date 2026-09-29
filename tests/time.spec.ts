@@ -20,6 +20,7 @@ test('continuous timeline preserves view, endpoints, keyboard peek and shared st
   await expect(page.locator('.timeline-value')).toHaveText('Сегодня')
   await page.screenshot({ path: '.local/time-today.png' })
   await slider.fill('1755')
+  await expect(page).toHaveURL(/time=1755/)
   await page.reload()
   await expect(slider).toHaveValue('1755')
   await expect(page.getByText('Карты загружены', { exact: true })).toBeVisible({ timeout: 60000 })

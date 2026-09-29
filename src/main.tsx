@@ -6,6 +6,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
 import { Protocol } from 'pmtiles'
 import { ArrowLeftRight, Layers, MapPin, Plus, Minus, RotateCcw, Info, X, ExternalLink, Copy, Check, Navigation } from 'lucide-react'
 import { useLocation } from './useLocation'
+import { replaceViewUrl } from './viewUrl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import './style.css'
 import overviewCoordinates from './history-overview.json'
@@ -92,7 +93,7 @@ function App() {
     modern.touchZoomRotate.disableRotation()
     const sync = () => historic.jumpTo({ center: modern.getCenter(), zoom: modern.getZoom(), bearing: 0, pitch: 0 })
     modern.on('move', sync)
-    modern.on('moveend', () => { const c = modern.getCenter(); history.replaceState(null, '', `#lon=${c.lng.toFixed(6)}&lat=${c.lat.toFixed(6)}&z=${modern.getZoom().toFixed(2)}&year=${yearRef.current}${modeRef.current === 'time' ? '&mode=time&time=' + timeRef.current : ''}`) })
+    modern.on('moveend', () => { const c = modern.getCenter(); replaceViewUrl(`#lon=${c.lng.toFixed(6)}&lat=${c.lat.toFixed(6)}&z=${modern.getZoom().toFixed(2)}&year=${yearRef.current}${modeRef.current === 'time' ? '&mode=time&time=' + timeRef.current : ''}`) })
     modern.on('mousemove', e => setCoords(`${e.lngLat.lat.toFixed(5)}° N · ${e.lngLat.lng.toFixed(5)}° E`))
     modern.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-left')
     for (const [kind, instance] of [['modern', modern], ['historic', historic]] as const) {
@@ -127,10 +128,13 @@ function App() {
     return () => { historical.off('style.load', apply) }
   }, [mode, time, year])
   useEffect(() => {
-    const params = new URLSearchParams(location.hash.slice(1))
-    if (mode === 'time') { params.set('mode', 'time'); params.set('time', String(time)) }
-    else { params.delete('mode'); params.delete('time') }
-    history.replaceState(null, '', '#' + params.toString())
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams(location.hash.slice(1))
+      if (mode === 'time') { params.set('mode', 'time'); params.set('time', String(time)) }
+      else { params.delete('mode'); params.delete('time') }
+      replaceViewUrl('#' + params.toString())
+    }, 400)
+    return () => window.clearTimeout(timer)
   }, [mode, time])
   const timeLabel = time === 1680 ? '1680' : time === 1830 ? '1830' : time === TODAY ? 'Сегодня' : time < 1830 ? '1680 → 1830 · ' + Math.round((time - 1680) / 150 * 100) + '%' : '1830 → Сегодня · ' + Math.round((time - 1830) / (TODAY - 1830) * 100) + '%'
   const changeYear = (next: Year) => {
@@ -140,7 +144,7 @@ function App() {
     setErrors([])
     const params = new URLSearchParams(location.hash.slice(1))
     params.set('year', next)
-    history.replaceState(null, '', '#' + params.toString())
+    replaceViewUrl('#' + params.toString())
   }
   const visibleMode = peek ? 'modern' : mode
   const go = (index: number) => map.current?.flyTo({ ...places[index], duration: 1000, essential: true })
