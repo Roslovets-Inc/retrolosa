@@ -1,5 +1,13 @@
 # Source feasibility — 2026-09-29
 
+## Added 1830 layer
+
+Original application: https://tolosa.makina-corpus.com/ credits the historical parcel dataset https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-1830/. The live municipal API reports Mairie de Toulouse and Licence Ouverte v2.0 (Etalab) on 2026-09-29. The artwork/hosting caveats below also apply to this third-party rendering.
+
+Archive: https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-1830.pmtiles. Verified PMTiles v3 and successful range requests. Bounds [1.4127, 43.5829, 1.4616, 43.6169], zoom 15–20, metadata name Toulouse1830. Georeferencing is reused unchanged. This is a rendering of cadastral data, not an original scan. No new historical control points or accuracy claims are introduced.
+
+`node scripts/build-overview.mjs 1830` creates the 30-tile low-zoom mosaic and exact tile-grid coordinates. The epoch selector preserves camera, comparison settings and location markers. Shared view URLs include `year=1830` or `year=1680`; older URLs default to 1680.
+
 ## Selected prototype path
 
 Reuse the already georeferenced raster tile rendering of the 1680 cadastral data from Makina Corpus. This is a modern cartographic interpretation of historical cadastral data, **not an original historical scan**. No new warping, control-point selection, or reconstructed geometry was performed.

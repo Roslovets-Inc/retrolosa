@@ -1,7 +1,10 @@
 import { PMTiles } from 'pmtiles'
 import { chromium } from '@playwright/test'
 import { mkdir, writeFile } from 'node:fs/promises'
-const archive = new PMTiles('https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-1680.pmtiles')
+const year = process.argv[2] || '1680'
+if (!['1680', '1830'].includes(year)) throw new Error('Unsupported year')
+const suffix = year === '1680' ? '' : `-${year}`
+const archive = new PMTiles(`https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-${year}.pmtiles`)
 const h = await archive.getHeader()
 const z = h.minZoom, n = 2 ** z
 const x = lon => Math.floor((lon + 180) / 360 * n)
@@ -28,7 +31,7 @@ try {
   const lat = row => Math.atan(Math.sinh(Math.PI * (1 - 2 * row / n))) * 180 / Math.PI
   const coordinates = [[lon(west), lat(north)], [lon(east + 1), lat(north)], [lon(east + 1), lat(south + 1)], [lon(west), lat(south + 1)]]
   await mkdir('public', { recursive: true })
-  await writeFile('public/history-overview.png', Buffer.from(png, 'base64'))
-  await writeFile('src/history-overview.json', JSON.stringify(coordinates))
+  await writeFile(`public/history-overview${suffix}.png`, Buffer.from(png, 'base64'))
+  await writeFile(`src/history-overview${suffix}.json`, JSON.stringify(coordinates))
   console.log(JSON.stringify({ tiles: tiles.length, coordinates }))
 } finally { await browser.close() }
