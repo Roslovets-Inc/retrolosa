@@ -2,7 +2,7 @@
 
 ## Continuous timeline
 
-The Time mode interpolates opacity between the three available sources, not historical geometry or building dates. Both cadastral sources coexist in one MapLibre style so scrubbing only updates paint opacity. The 1680 layer stays opaque below the incoming 1830 layer until 1830; then 1680 is hidden and 1830 fades into the modern basemap. Source dates are positioned proportionally along the slider. Intermediate labels report the source pair and blend percentage rather than claiming a surveyed intermediate year. Time mode and slider position are retained in shared URLs.
+The Time mode interpolates opacity between the four available sources, not historical geometry or building dates. Both cadastral sources coexist in one MapLibre style so scrubbing only updates paint opacity. The 1680 layer stays opaque below the incoming 1830 layer until 1830; then 1830 blends into 1954, which fades into the modern basemap. Source dates are positioned proportionally along the slider. Intermediate labels report the source pair and blend percentage rather than claiming a surveyed intermediate year. Time mode and slider position are retained in shared URLs.
 
 ## Added 1830 layer
 
@@ -55,3 +55,7 @@ Historical control points, transformation parameters and RMS values are not supp
 ## Rights and publishing
 
 Municipal data license does not establish rights to all third-party styling and icons. The source app credits individual icon creators. This prototype accesses its public remote tiles and links the complete source credits; it does not redistribute the archive. Separate permission/terms for production hosting and cartographic artwork remain unconfirmed. Before public deployment, clarify those terms or replace with a self-rendered layer from verified open source data. No public deployment performed.
+
+## Added aerial photography 1954
+
+IGN / Edugéo WMTS layer ORTHOIMAGERY.EDUGEO.TOULOUSE1954, style normal, PNG, PM_6_16 (zooms 6–16). Live GetCapabilities and actual central Toulouse tile checked 2026-09-29. Bounds [1.23852, 43.5618, 1.55128, 43.7247]. Original georeferencing reused; no new accuracy claim or resampling. Higher map zooms overzoom the original tiles. Source: https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities . The timeline retains all sources in one style and blends successive dates, with no invented intermediate imagery.

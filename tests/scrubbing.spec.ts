@@ -40,9 +40,10 @@ test('rejected history writes never blank the application', async ({ page }) => 
   await page.getByRole('button', { name: 'Время', exact: true }).click()
   await page.getByRole('slider', { name: 'Путешествие по времени' }).fill('1900')
   await page.waitForTimeout(700)
-  await expect(page.locator('.timeline-value')).toContainText('1830 → Сегодня')
+  await expect(page.locator('.timeline-value')).toContainText('1830 → 1954')
   await page.getByRole('button', { name: 'Шторка', exact: true }).click()
   await page.getByRole('button', { name: 'Карта 1830 года' }).click()
   await expect(page.getByRole('button', { name: 'Карта 1830 года' })).toHaveAttribute('aria-pressed', 'true')
   expect(failures).toEqual([])
 })
+
