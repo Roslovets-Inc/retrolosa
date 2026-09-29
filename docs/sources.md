@@ -63,6 +63,7 @@ IGN / Edugéo WMTS layer ORTHOIMAGERY.EDUGEO.TOULOUSE1954, style normal, PNG, PM
 ## 1875 flood plan (added September 2026)
 
 Original Sirven / La Dépêche plan of the 23–24 June 1875 flood, Archives municipales de Toulouse, **20 Fi 45** (stamp on scan).
+
 - Scan: https://mapasmilhaud.com/wp-content/uploads/2026/07/1384-Plano-de-las-inundaciones-de-Toulouse-1875.jpg
 - Description: https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/
 - Original size 4843 × 5852; SHA-256 in data/flood-1875-control-points.json.

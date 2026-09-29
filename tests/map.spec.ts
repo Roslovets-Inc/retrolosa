@@ -1,67 +1,79 @@
-import { test, expect } from '@playwright/test'
-import { prepareSharing, sharedView } from './sharing'
-test.beforeEach(async ({page}) => prepareSharing(page))
-test('real map sources, comparison, navigation, sources and mobile layout', async ({ page }) => {
-  const failures: string[] = []
-  page.on('pageerror', error => failures.push(error.message))
-  const historicResponses: number[] = []
-  page.on('response', response => { if(response.url().includes('tolosa-1680.pmtiles')) historicResponses.push(response.status()) })
-  await page.goto('/')
-  await expect(page.getByText('Cartes chargées', { exact: true })).toBeVisible({ timeout: 60000 })
-  await expect(page.getByRole('alert')).toHaveCount(0)
-  expect(historicResponses.some(code => code === 206)).toBeTruthy()
-  await page.screenshot({ path: '.local/desktop.png' })
-  await page.getByRole('button', { name: 'Superposer', exact: true }).click()
-  await page.getByRole('slider', { name: 'Opacité de la carte historique', exact: true }).fill('38')
-  await expect(page.locator('.historic-map')).toHaveCSS('opacity', '0.38')
-  await page.getByRole('button', { name: 'Actuel', exact: true }).click()
-  await expect(page.locator('.historic-map')).toHaveCSS('opacity', '0')
-  await page.screenshot({ path: '.local/modern.png' })
-  await page.getByRole('button', { name: '1680', exact: true }).click()
-  await expect(page.locator('.historic-map')).toHaveCSS('opacity', '1')
-  await page.screenshot({ path: '.local/historic.png' })
-  await page.locator('main').focus()
-  await page.keyboard.down('Space')
-  await expect(page.locator('.historic-map')).toHaveCSS('opacity', '0')
-  await page.keyboard.up('Space')
-  await expect(page.locator('.historic-map')).toHaveCSS('opacity', '1')
-  await page.getByRole('button', { name: 'Rideau', exact: true }).click()
-  await page.getByRole('slider', { name: 'Position du rideau', exact: true }).fill('70')
-  await expect(page.locator('.historic-map')).toHaveCSS('clip-path', 'inset(0px 30% 0px 0px)')
-  await page.getByRole('button', { name: 'Lieux', exact: true }).click()
-  await page.getByRole('combobox').selectOption('1')
-  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/)
-  await page.screenshot({ path: '.local/saint-etienne.png' })
-  await page.getByRole('button', { name: 'Superposer', exact: true }).click()
-  await page.getByRole('slider', { name: 'Opacité de la carte historique', exact: true }).fill('50')
-  await page.screenshot({ path: '.local/alignment.png' })
-  await page.getByRole('button', { name: 'Rideau', exact: true }).click()
-  await page.getByRole('slider', { name: 'Limite de comparaison', exact: true }).focus()
-  await page.keyboard.press('ArrowLeft')
-  await expect(page.locator('.historic-map')).toHaveCSS('clip-path', 'inset(0px 32% 0px 0px)')
-  const oldUrl = await sharedView(page)
-  await page.mouse.move(1100, 600)
-  await page.mouse.down()
-  await page.mouse.move(950, 650, { steps: 12 })
-  await page.mouse.up()
-  await expect.poll(() => sharedView(page)).not.toEqual(oldUrl)
-  const savedUrl = await sharedView(page)
-  await page.goto(await sharedView(page))
-  await page.reload()
-  await expect(page.getByText('Cartes chargées', { exact: true })).toBeVisible({ timeout: 60000 })
-  expect(page.url()).toEqual(savedUrl)
-  await page.getByRole('button', { name: 'À propos des cartes', exact: true }).click()
-  await expect(page.getByRole('dialog')).toBeVisible()
-  await page.keyboard.press('Escape')
-  await expect(page.getByRole('dialog')).toHaveCount(0)
-  await page.setViewportSize({ width: 390, height: 844 })
-  await page.screenshot({ path: '.local/mobile.png' })
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy()
-  await expect(page.getByRole('button', { name: 'Actuel', exact: true })).toBeVisible()
-  expect(failures).toEqual([])
-})
-test('historical network failure is explained', async ({ page }) => {
-  await page.route('**/tolosa-1680.pmtiles', route => route.abort())
-  await page.goto('/')
-  await expect(page.getByRole('alert')).toContainText('Chargement incomplet de la carte historique', { timeout: 30000 })
-})
+import { test, expect } from "@playwright/test";
+
+import { prepareSharing, sharedView } from "./sharing";
+test.beforeEach(async ({ page }) => prepareSharing(page));
+test("real map sources, comparison, navigation, sources and mobile layout", async ({ page }) => {
+  const failures: string[] = [];
+  page.on("pageerror", (error) => failures.push(error.message));
+  const historicResponses: number[] = [];
+  page.on("response", (response) => {
+    if (response.url().includes("tolosa-1680.pmtiles")) historicResponses.push(response.status());
+  });
+  await page.goto("/#lon=1.442&lat=43.602&z=16.7");
+  await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  expect(historicResponses.some((code) => code === 206)).toBeTruthy();
+  await page.screenshot({ path: ".local/desktop.png" });
+  await page.getByRole("button", { name: "Superposer", exact: true }).click();
+  await page
+    .getByRole("slider", { name: "Opacité de la carte historique", exact: true })
+    .fill("38");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.38");
+  await page.getByRole("button", { name: "Actuel", exact: true }).click();
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
+  await page.screenshot({ path: ".local/modern.png" });
+  await page.getByRole("button", { name: "Historique", exact: true }).click();
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await page.screenshot({ path: ".local/historic.png" });
+  await page.locator("main").focus();
+  await page.keyboard.down("Space");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
+  await page.keyboard.up("Space");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("slider", { name: "Position du rideau", exact: true }).fill("70");
+  await expect(page.locator(".historic-map")).toHaveCSS("clip-path", "inset(0px 30% 0px 0px)");
+  await page.getByRole("button", { name: "Lieux", exact: true }).click();
+  await page.getByRole("combobox").selectOption("1");
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
+  await page.screenshot({ path: ".local/saint-etienne.png" });
+  await page.getByRole("button", { name: "Superposer", exact: true }).click();
+  await page
+    .getByRole("slider", { name: "Opacité de la carte historique", exact: true })
+    .fill("50");
+  await page.screenshot({ path: ".local/alignment.png" });
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("slider", { name: "Limite de comparaison", exact: true }).focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(page.locator(".historic-map")).toHaveCSS("clip-path", "inset(0px 32% 0px 0px)");
+  const oldUrl = await sharedView(page);
+  await page.mouse.move(1100, 600);
+  await page.mouse.down();
+  await page.mouse.move(950, 650, { steps: 12 });
+  await page.mouse.up();
+  await expect.poll(() => sharedView(page)).not.toEqual(oldUrl);
+  const savedUrl = await sharedView(page);
+  await page.goto(await sharedView(page));
+  await page.reload();
+  await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
+  expect(page.url()).toEqual(savedUrl);
+  await page.getByRole("button", { name: "À propos des cartes", exact: true }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({ path: ".local/mobile.png" });
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+  ).toBeTruthy();
+  await expect(page.getByRole("button", { name: "Actuel", exact: true })).toBeVisible();
+  expect(failures).toEqual([]);
+});
+test("historical network failure is explained", async ({ page }) => {
+  await page.route("**/tolosa-1680.pmtiles", (route) => route.abort());
+  await page.goto("/");
+  await expect(page.getByRole("alert")).toContainText(
+    "Chargement incomplet de la carte historique",
+    { timeout: 30000 },
+  );
+});

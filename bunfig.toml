@@ -1,0 +1,5 @@
+[install]
+exact = true
+peer = true
+cache = true
+minimumReleaseAge = 432000
