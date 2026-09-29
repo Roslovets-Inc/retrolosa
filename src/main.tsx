@@ -12,6 +12,7 @@ import {
   Check,
   Navigation,
   Eye,
+  Search,
 } from "lucide-react";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapInstance } from "maplibre-gl";
@@ -22,38 +23,99 @@ import { createRoot } from "react-dom/client";
 
 import flood1875 from "./flood-1875.json";
 import overview1830 from "./history-overview-1830.json";
+import overviewCoordinates from "./history-overview.json";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
-import overviewCoordinates from "./history-overview.json";
-import { snapTimelineYear } from "./timeline";
+import medieval13c from "./openedition-13c.json";
+import tavernier1631 from "./tavernier-1631.json";
+import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import { useLocation } from "./useLocation";
 
-const YEARS = ["1680", "1830", "1875", "1954"] as const;
+const YEARS = ["1250", "1631", "1680", "1830", "1875", "1954"] as const;
 type Year = (typeof YEARS)[number];
+const epochLabel = (value: Year) => (value === "1250" ? "XIIIe" : value);
 const initialYear = (): Year => {
   const value = new URLSearchParams(location.hash.slice(1)).get("year");
-  return YEARS.includes(value as Year) ? (value as Year) : "1680";
+  return YEARS.includes(value as Year) ? (value as Year) : YEARS[0];
 };
 const IGN_SOURCE = "https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities";
 const FLOOD_SOURCE =
   "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/";
+const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
+const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
 const sourceUrl = (year: Year) =>
-  year === "1875"
-    ? FLOOD_SOURCE
-    : year === "1954"
-      ? IGN_SOURCE
-      : year === "1680"
-        ? "https://tolosa1680.makina-corpus.com/"
-        : "https://tolosa.makina-corpus.com/";
+  year === "1250"
+    ? MEDIEVAL_SOURCE
+    : year === "1631"
+      ? TAVERNIER_SOURCE
+      : year === "1875"
+        ? FLOOD_SOURCE
+        : year === "1954"
+          ? IGN_SOURCE
+          : year === "1680"
+            ? "https://tolosa1680.makina-corpus.com/"
+            : "https://tolosa.makina-corpus.com/";
 const TODAY = new Date().getFullYear();
 const initialTime = () => {
   const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
-  return Number.isFinite(value) && value >= 1680 && value <= TODAY ? value : Number(initialYear());
+  return Number.isFinite(value) && value >= 1250 && value <= TODAY ? value : Number(initialYear());
 };
 function historicalStyle(year: Year): maplibregl.StyleSpecification {
   const style: maplibregl.StyleSpecification = { version: 8, sources: {}, layers: [] };
+  style.sources["history-1250"] = {
+    type: "image",
+    url: "/openedition-13c/map.webp",
+    coordinates: medieval13c.coordinates as [
+      [number, number],
+      [number, number],
+      [number, number],
+      [number, number],
+    ],
+  };
+  style.layers.push({
+    id: "history-1250",
+    type: "raster",
+    source: "history-1250",
+    paint: {
+      "raster-opacity": year === "1250" ? 1 : 0,
+      "raster-opacity-transition": { duration: 0 },
+      "raster-fade-duration": 0,
+    },
+  });
+  style.sources["overview-1631"] = {
+    type: "image",
+    url: `/tavernier-1631/overview.webp?v=${tavernier1631.revision}`,
+    coordinates: tavernier1631.coordinates as [
+      [number, number],
+      [number, number],
+      [number, number],
+      [number, number],
+    ],
+  };
+  style.sources["history-1631"] = {
+    type: "raster",
+    tiles: [location.origin + `/tavernier-1631/{z}/{x}/{y}.webp?v=${tavernier1631.revision}`],
+    tileSize: 256,
+    minzoom: 14,
+    maxzoom: 17,
+    bounds: tavernier1631.bounds as [number, number, number, number],
+    attribution: "Melchior Tavernier · Archives municipales de Toulouse, II 671 · Domaine public",
+  };
+  for (const kind of ["overview", "history"]) {
+    style.layers.push({
+      id: kind + "-1631",
+      type: "raster",
+      source: kind + "-1631",
+      ...(kind === "overview" ? { maxzoom: 14 } : { minzoom: 14 }),
+      paint: {
+        "raster-opacity": year === "1631" ? 1 : 0,
+        "raster-opacity-transition": { duration: 0 },
+        "raster-fade-duration": 0,
+      },
+    });
+  }
   for (const period of ["1680", "1830"] as const) {
     style.sources["overview-" + period] = {
       type: "image",
@@ -153,14 +215,21 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
 maplibregl.setWorkerUrl(workerUrl);
 const protocol = new Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
-type Mode = "split" | "overlay" | "modern" | "historic" | "time";
+type Mode = "split" | "overlay" | "loupe" | "modern" | "time";
 function initialMode(): Mode {
   const value = new URLSearchParams(location.hash.slice(1)).get("mode");
-  return ["split", "overlay", "modern", "historic", "time"].includes(value ?? "")
+  if (value === "historic") return "overlay";
+  if (value === "modern") return "overlay";
+  return ["split", "overlay", "loupe", "modern", "time"].includes(value ?? "")
     ? (value as Mode)
-    : "split";
+    : "overlay";
 }
 function initialPercent(key: string, fallback: number) {
+  if (key === "opacity" && new URLSearchParams(location.hash.slice(1)).get("mode") === "modern")
+    return 0;
+  // Legacy historical-only links retain their fully opaque appearance.
+  if (key === "opacity" && new URLSearchParams(location.hash.slice(1)).get("mode") === "historic")
+    return 100;
   const raw = new URLSearchParams(location.hash.slice(1)).get(key);
   const value = Number(raw);
   return raw !== null && Number.isFinite(value) && value >= 0 && value <= 100 ? value : fallback;
@@ -220,7 +289,7 @@ function App() {
   const [enabled, setEnabled] = useState<Year[]>(initialEnabled);
   const [epochsOpen, setEpochsOpen] = useState(false);
   const [year, setYear] = useState<Year>(() =>
-    enabled.includes(initialYear()) ? initialYear() : (enabled[0] ?? "1680"),
+    enabled.includes(initialYear()) ? initialYear() : (enabled[0] ?? YEARS[0]),
   );
   const yearRef = useRef(year);
   const locationMaps = useRef<MapInstance[]>([]);
@@ -228,9 +297,16 @@ function App() {
   const [mode, setMode] = useState<Mode>(initialMode);
   const [time, setTime] = useState(() => Math.max(Number(enabled[0] ?? TODAY), initialTime()));
   const timelinePointer = useRef(false);
-  const [opacity, setOpacity] = useState(() => initialPercent("opacity", 65)),
+  const [opacity, setOpacity] = useState(() =>
+      initialPercent("opacity", initialMode() === "overlay" ? 75 : 100),
+    ),
     [split, setSplit] = useState(() => initialPercent("split", 50));
   const [compareHeld, setCompareHeld] = useState(false);
+  const [loupe, setLoupe] = useState({ x: 50, y: 42 });
+  const [comparison, setComparison] = useState<"split" | "loupe" | "overlay">(() =>
+    initialMode() === "loupe" ? "loupe" : initialMode() === "split" ? "split" : "overlay",
+  );
+  const loupeDrag = useRef<{ id: number; x: number; y: number } | null>(null);
   const [peek, setPeek] = useState(false),
     [sources, setSources] = useState(false);
   const [ready, setReady] = useState({ modern: false, historic: false });
@@ -287,7 +363,7 @@ function App() {
         style: historicalStyle(yearRef.current),
       });
     } catch {
-      // eslint-disable-next-line react/set-state-in-effect -- Report failure of the external WebGL renderer.
+      // eslint-disable-next-line react/set-state-in-effect, react-hooks-js/set-state-in-effect -- Report failure of the external WebGL renderer.
       setErrors(["Impossible de démarrer la carte. Vérifiez WebGL et l’accélération matérielle."]);
       return;
     }
@@ -419,7 +495,14 @@ function App() {
   const dates = [...enabled.map(Number), TODAY];
   const lower = dates.filter((date) => date <= time).at(-1)!;
   const upper = dates.find((date) => date > time) ?? TODAY;
-  const dateLabel = (date: number) => (date === TODAY ? "Actuel" : String(date));
+  const dateLabel = (date: number) =>
+    date === TODAY ? "Actuel" : date === 1250 ? "XIIIe" : String(date);
+  const timePosition = timelinePosition(time, dates);
+  const moveTimeline = (element: HTMLInputElement, clientX: number) => {
+    const box = element.getBoundingClientRect();
+    const position = (clientX - box.left - 8) / Math.max(1, box.width - 16);
+    setTime(snapTimelineYear(Math.round(timelineYear(position, dates)), dates));
+  };
   const timeLabel = dates.includes(time)
     ? time === 1875
       ? "1875 · Inondation"
@@ -444,6 +527,8 @@ function App() {
   };
   const visibleMode =
     enabled.length === 0 ? "modern" : compareHeld ? "overlay" : peek ? "modern" : mode;
+  const loupeLeft = `clamp(var(--loupe-radius), ${loupe.x}%, calc(100% - var(--loupe-radius)))`;
+  const loupeTop = `clamp(var(--loupe-radius), ${loupe.y}%, calc(100% - var(--loupe-radius)))`;
   const go = (index: number) =>
     map.current?.flyTo({ ...places[index], duration: 1000, essential: true });
   const share = async () => {
@@ -488,7 +573,9 @@ function App() {
         aria-label={
           mode === "time"
             ? "Cartes historiques sur la frise"
-            : `Carte historique de Toulouse en ${year}`
+            : year === "1250"
+              ? "Reconstruction de Toulouse au XIIIe siècle"
+              : `Carte historique de Toulouse en ${year}`
         }
         style={{
           opacity:
@@ -498,12 +585,97 @@ function App() {
                 ? 0.2
                 : visibleMode === "modern"
                   ? 0
-                  : visibleMode === "overlay"
-                    ? opacity / 100
-                    : 1,
-          clipPath: visibleMode === "split" ? `inset(0 ${100 - split}% 0 0)` : "none",
+                  : opacity / 100,
+          clipPath:
+            visibleMode === "split"
+              ? `inset(0 ${100 - split}% 0 0)`
+              : visibleMode === "loupe"
+                ? `circle(var(--loupe-radius) at ${loupeLeft} ${loupeTop})`
+                : "none",
         }}
       />
+      {visibleMode === "loupe" && opacity > 0 && (
+        <div className="map loupe-overlay">
+          <button
+            className="loupe-glass"
+            aria-label="Déplacer la loupe historique"
+            aria-describedby="loupe-help"
+            style={{ left: loupeLeft, top: loupeTop }}
+            onPointerDown={(e) => {
+              if (e.button !== 0) return;
+              const rect = e.currentTarget.getBoundingClientRect();
+              loupeDrag.current = {
+                id: e.pointerId,
+                x: e.clientX - rect.left - rect.width / 2,
+                y: e.clientY - rect.top - rect.height / 2,
+              };
+              e.currentTarget.setPointerCapture(e.pointerId);
+              e.currentTarget.focus({ preventScroll: true });
+              e.preventDefault();
+            }}
+            onPointerMove={(e) => {
+              const drag = loupeDrag.current;
+              if (!drag || drag.id !== e.pointerId) return;
+              const rect = e.currentTarget.parentElement!.getBoundingClientRect();
+              const radius = e.currentTarget.offsetWidth / 2;
+              setLoupe({
+                x:
+                  (Math.max(radius, Math.min(rect.width - radius, e.clientX - rect.left - drag.x)) /
+                    rect.width) *
+                  100,
+                y:
+                  (Math.max(radius, Math.min(rect.height - radius, e.clientY - rect.top - drag.y)) /
+                    rect.height) *
+                  100,
+              });
+            }}
+            onPointerUp={() => {
+              loupeDrag.current = null;
+            }}
+            onPointerCancel={() => {
+              loupeDrag.current = null;
+            }}
+            onLostPointerCapture={() => {
+              loupeDrag.current = null;
+            }}
+            onKeyDown={(e) => {
+              const direction = {
+                ArrowLeft: [-1, 0],
+                ArrowRight: [1, 0],
+                ArrowUp: [0, -1],
+                ArrowDown: [0, 1],
+              }[e.key];
+              if (!direction) return;
+              e.preventDefault();
+              const rect = e.currentTarget.parentElement!.getBoundingClientRect();
+              const radius = e.currentTarget.offsetWidth / 2;
+              const step = e.shiftKey ? 40 : 10;
+              setLoupe((position) => ({
+                x:
+                  (Math.max(
+                    radius,
+                    Math.min(
+                      rect.width - radius,
+                      (position.x / 100) * rect.width + direction[0] * step,
+                    ),
+                  ) /
+                    rect.width) *
+                  100,
+                y:
+                  (Math.max(
+                    radius,
+                    Math.min(
+                      rect.height - radius,
+                      (position.y / 100) * rect.height + direction[1] * step,
+                    ),
+                  ) /
+                    rect.height) *
+                  100,
+              }));
+            }}
+          />
+        </div>
+      )}
       <header className="masthead">
         <a className="brand" href="/" aria-label="Toulouse au fil du temps">
           <Layers size={20} />
@@ -544,13 +716,17 @@ function App() {
                         checked={enabled.includes(value)}
                         onChange={() => toggleEpoch(value)}
                       />
-                      <span>{value}</span>
+                      <span>{epochLabel(value)}</span>
                       <small>
-                        {value === "1875"
-                          ? "Inondation"
-                          : value === "1954"
-                            ? "Vue aérienne"
-                            : "Cadastre"}
+                        {value === "1250"
+                          ? "Reconstruction"
+                          : value === "1631"
+                            ? "Plan · calage approximatif"
+                            : value === "1875"
+                              ? "Inondation"
+                              : value === "1954"
+                                ? "Vue aérienne"
+                                : "Cadastre"}
                       </small>
                     </label>
                   ))}
@@ -626,11 +802,17 @@ function App() {
           </button>
         </div>
       </header>
-      {visibleMode === "split" && (
+      {visibleMode === "split" && opacity > 0 && (
         <>
           <div className="epoch-label old-label">
-            {year === "1875" ? "1875 · Inondation" : year}{" "}
-            <span>{year === "1954" ? "VUE AÉRIENNE" : "CADASTRE HISTORIQUE"}</span>
+            {year === "1875" ? "1875 · Inondation" : epochLabel(year)}{" "}
+            <span>
+              {year === "1250"
+                ? "RECONSTRUCTION"
+                : year === "1954"
+                  ? "VUE AÉRIENNE"
+                  : "CADASTRE HISTORIQUE"}
+            </span>
           </div>
           <div className="epoch-label new-label">
             <span>CARTE ACTUELLE</span> Actuel
@@ -730,135 +912,187 @@ function App() {
           <RotateCcw size={18} />
         </button>
       </div>
-      <section className="control-panel" aria-label="Comparaison des cartes">
-        <span className="sr-only">
-          {ready.modern && ready.historic ? "Cartes chargées" : "Chargement des cartes…"}
-        </span>
-        {!(ready.modern && ready.historic) && (
-          <span className="loading-dot" title="Chargement des cartes…" />
-        )}
-        {mode !== "time" && mode !== "modern" && (
-          <div className="year-selector">
-            <div role="group" aria-label="Époque historique">
-              {enabled.map((value) => (
-                <button
-                  key={value}
-                  aria-label={`Carte de ${value}`}
-                  aria-pressed={year === value}
-                  className={year === value ? "selected" : ""}
-                  onClick={() => changeYear(value)}
-                >
-                  {value}
-                </button>
-              ))}
+      <div className="control-dock">
+        <section className="control-panel" aria-label="Comparaison des cartes">
+          <span className="sr-only">
+            {ready.modern && ready.historic ? "Cartes chargées" : "Chargement des cartes…"}
+          </span>
+          {!(ready.modern && ready.historic) && (
+            <span className="loading-dot" title="Chargement des cartes…" />
+          )}
+          {mode !== "time" && mode !== "modern" && (
+            <div className="year-selector">
+              <div role="group" aria-label="Époque historique">
+                {enabled.map((value) => (
+                  <button
+                    key={value}
+                    aria-label={value === "1250" ? "Carte du XIIIe siècle" : `Carte de ${value}`}
+                    aria-pressed={year === value}
+                    className={year === value ? "selected" : ""}
+                    onClick={() => changeYear(value)}
+                  >
+                    {epochLabel(value)}
+                  </button>
+                ))}
+              </div>
             </div>
+          )}
+          <div className="mode-buttons">
+            {(
+              [
+                ["time", "Frise", null],
+                ["split", "Cartes", null],
+              ] as const
+            ).map(([key, title, icon]) => (
+              <button
+                key={key}
+                aria-pressed={mode === key || (key === "split" && mode !== "time")}
+                className={mode === key || (key === "split" && mode !== "time") ? "active" : ""}
+                onClick={() => setMode(key === "split" ? comparison : key)}
+              >
+                {icon}
+                {title}
+              </button>
+            ))}
           </div>
-        )}
-        <div className="mode-buttons">
-          {(
-            [
-              ["time", "Frise", null],
-              ["split", "Rideau", null],
-              ["overlay", "Superposer", null],
-              ["historic", "Historique", null],
-              ["modern", "Actuel", null],
-            ] as const
-          ).map(([key, title, icon]) => (
-            <button
-              key={key}
-              aria-pressed={mode === key}
-              className={mode === key ? "active" : ""}
-              onClick={() => setMode(key)}
-            >
-              {icon}
-              {title}
-            </button>
-          ))}
-        </div>
-        {mode === "time" ? (
-          <div className="timeline">
-            <div
-              className="timeline-value"
-              aria-live="polite"
-              title="Transition entre cartes, pas une reconstitution des années intermédiaires"
-            >
-              {timeLabel}
-            </div>
-            <input
-              key={dates.join(",")}
-              aria-label="Voyage dans le temps"
-              aria-valuetext={timeLabel}
-              type="range"
-              min={dates[0]}
-              max={TODAY}
-              disabled={!enabled.length}
-              step="1"
-              value={time}
-              onPointerDown={() => {
-                timelinePointer.current = true;
-              }}
-              onPointerUp={() => {
-                timelinePointer.current = false;
-              }}
-              onPointerCancel={() => {
-                timelinePointer.current = false;
-              }}
-              onBlur={() => {
-                timelinePointer.current = false;
-              }}
-              onKeyDown={() => {
-                timelinePointer.current = false;
-              }}
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                // Keyboard input retains one-year steps.
-                setTime(timelinePointer.current ? snapTimelineYear(value, dates) : value);
-              }}
-            />
-            <div className="timeline-ticks">
-              {dates.map((date, i) => (
+          {mode !== "time" && mode !== "modern" && (
+            <div className="comparison-switch" role="group" aria-label="Forme de comparaison">
+              {(["overlay", "split", "loupe"] as const).map((shape) => (
                 <button
-                  key={date}
-                  style={
-                    i === 0
-                      ? { left: 0 }
-                      : i === dates.length - 1
-                        ? { right: 0, left: "auto" }
-                        : {
-                            left: ((date - dates[0]) / (TODAY - dates[0])) * 100 + "%",
-                            transform: "translateX(-50%)",
-                          }
+                  key={shape}
+                  aria-label={
+                    shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
                   }
-                  onClick={() => setTime(date)}
+                  title={
+                    shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
+                  }
+                  aria-pressed={mode === shape}
+                  onClick={() => {
+                    setComparison(shape);
+                    setMode(shape);
+                  }}
                 >
-                  {dateLabel(date)}
+                  {shape === "split" ? (
+                    <ArrowLeftRight size={16} />
+                  ) : shape === "loupe" ? (
+                    <Search size={16} />
+                  ) : (
+                    <Layers size={16} />
+                  )}
                 </button>
               ))}
             </div>
-          </div>
-        ) : (
-          (mode === "overlay" || mode === "split") && (
-            <div className="slider-row">
-              <span>{mode === "overlay" ? "" : year}</span>
-              <input
-                aria-label={
-                  mode === "overlay" ? "Opacité de la carte historique" : "Position du rideau"
-                }
-                type="range"
-                min="0"
-                max="100"
-                value={mode === "overlay" ? opacity : split}
-                onChange={(e) =>
-                  mode === "overlay"
-                    ? setOpacity(Number(e.target.value))
-                    : setSplit(Number(e.target.value))
-                }
-              />
-              <span>{mode === "overlay" ? `${opacity}%` : "Actuel"}</span>
+          )}
+          {mode === "loupe" && (
+            <p className="sr-only" id="loupe-help">
+              Déplacez la loupe pour explorer le passé
+              <span className="sr-only">. Utilisez les flèches du clavier pour la déplacer.</span>
+            </p>
+          )}
+          {mode === "time" && (
+            <div className="timeline">
+              <div
+                className="timeline-value sr-only"
+                aria-live="polite"
+                title="Transition entre cartes, pas une reconstitution des années intermédiaires"
+              >
+                {timeLabel}
+              </div>
+              <div className="timeline-range">
+                <div
+                  className="timeline-track"
+                  style={{
+                    background: `linear-gradient(to right, #3e604d ${timePosition * 100}%, #d9dcda ${timePosition * 100}%)`,
+                  }}
+                />
+                <div
+                  className="timeline-thumb"
+                  style={{ left: `calc(${timePosition * 100}% + ${8 - 16 * timePosition}px)` }}
+                />
+                <input
+                  key={dates.join(",")}
+                  aria-label="Voyage dans le temps"
+                  aria-valuetext={timeLabel}
+                  type="range"
+                  min={dates[0]}
+                  max={TODAY}
+                  disabled={!enabled.length}
+                  step="1"
+                  value={time}
+                  onPointerDown={(e) => {
+                    if (e.button !== 0 || !e.isPrimary || !enabled.length) return;
+                    e.preventDefault();
+                    e.currentTarget.focus();
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                    timelinePointer.current = true;
+                    moveTimeline(e.currentTarget, e.clientX);
+                  }}
+                  onPointerMove={(e) => {
+                    if (e.currentTarget.hasPointerCapture(e.pointerId))
+                      moveTimeline(e.currentTarget, e.clientX);
+                  }}
+                  onPointerUp={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onPointerCancel={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onBlur={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onKeyDown={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    // Keyboard input retains one-year steps.
+                    setTime(timelinePointer.current ? snapTimelineYear(value, dates) : value);
+                  }}
+                />
+              </div>
+              <div className="timeline-ticks">
+                {dates.map((date, index) => (
+                  <button
+                    key={date}
+                    style={{
+                      // Match the native range's 16px thumb travel, including both end insets.
+                      left: `calc(${timelinePosition(date, dates) * 100}% + ${8 - 16 * timelinePosition(date, dates)}px)`,
+                      transform:
+                        index === 0
+                          ? "none"
+                          : index === dates.length - 1
+                            ? "translateX(-100%)"
+                            : "translateX(-50%)",
+                    }}
+                    onClick={() => setTime(date)}
+                  >
+                    {dateLabel(date)}
+                  </button>
+                ))}
+              </div>
             </div>
-          )
-        )}
-      </section>
+          )}
+        </section>
+        <section
+          className="opacity-panel"
+          aria-label="Opacité"
+          title="Opacité de la carte historique"
+        >
+          <Eye size={16} aria-hidden="true" />
+          <input
+            type="range"
+            aria-label="Opacité de la carte historique"
+            aria-valuetext={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
+            min="0"
+            max="100"
+            step="1"
+            value={opacity}
+            disabled={!enabled.length}
+            onChange={(e) => setOpacity(Number(e.target.value))}
+          />
+          <output>{opacity}%</output>
+        </section>
+      </div>
       {(geo.message || geo.status === "locating") && (
         <div className="location-notice" role="status">
           <span>{geo.message || "Localisation en cours…"}</span>
@@ -881,6 +1115,22 @@ function App() {
       <footer>
         <span className="coordinates">{coords}</span>
         <span>
+          {(mode === "time" || year === "1250") && (
+            <>
+              <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
+                XIIIe siècle · F. Callède / Inrap · OpenEdition
+              </a>
+              {mode === "time" ? " · " : ""}
+            </>
+          )}
+          {(mode === "time" || year === "1631") && (
+            <>
+              <a href={TAVERNIER_SOURCE} target="_blank" rel="noreferrer">
+                Tavernier · 1631 · calage approximatif
+              </a>
+              {mode === "time" ? " · " : ""}
+            </>
+          )}
           {mode === "time" || year === "1680" || year === "1830" ? (
             <>
               <a
@@ -971,7 +1221,43 @@ function App() {
             </button>
             <div className="eyebrow">SOURCES ET PRÉCISION</div>
             <h2>Cartes de Toulouse</h2>
-            {year === "1875" ? (
+            {year === "1250" ? (
+              <>
+                <h3>Toulouse au XIIIe siècle · reconstruction</h3>
+                <p>
+                  Dessin de F. Callède, Inrap, PCR « Toulouse au Moyen Âge », illustration 6 de
+                  l’étude de Quitterie Cazes publiée dans Marquer la ville (2013), sur OpenEdition.
+                  Les positions connues et proposées sont distinguées dans la légende originale. Le
+                  fond parcellaire est un repère de lecture, pas un relevé exact du XIIIe siècle.
+                </p>
+                <p>
+                  Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle
+                  indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+                  {medieval13c.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
+                  La légende masquée laisse une zone transparente. Le repère 1250 dans les liens et
+                  la frise sert au classement ; la source date le plan du XIIIe siècle, sans année
+                  précise.
+                </p>
+                <a href="/openedition-13c/figure-06.jpg" target="_blank" rel="noreferrer">
+                  Voir le dessin complet et sa légende <ExternalLink size={14} />
+                </a>
+              </>
+            ) : year === "1631" ? (
+              <>
+                <h3>Plan de Melchior Tavernier · 1631</h3>
+                <p>
+                  Plan de la ville de Tholose, Archives municipales de Toulouse, II 671.
+                  Numérisation originale de 7874 × 5884 pixels, domaine public.
+                </p>
+                <p>
+                  Calage révisé sur 22 repères au sol, avec une correction locale de la rue
+                  Nazareth. Quatre contrôles distincts autour de Nazareth et du Salin donnent des
+                  écarts de 8 à 39 m, sans établir la précision de toute la ville. Les monuments
+                  sont dessinés en perspective ; les toits et les bords restent moins fiables. Ce
+                  plan ne garantit pas une correspondance exacte rue par rue.
+                </p>
+              </>
+            ) : year === "1875" ? (
               <>
                 <h3>Inondation des 23–24 juin 1875</h3>
                 <p>
@@ -1019,10 +1305,19 @@ function App() {
             <h3>Mode « Frise »</h3>
             <p>
               La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
-              sources disponibles sont les cadastres de 1680 et 1830, le plan d’inondation de 1875
-              et la vue aérienne de 1954. Les positions intermédiaires sont des transitions
-              visuelles, pas des reconstitutions de ces années.
+              sources disponibles sont la reconstruction du XIIIe siècle, le plan de 1631, les
+              cadastres de 1680 et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954.
+              Les positions intermédiaires sont des transitions visuelles, pas des reconstitutions
+              de ces années.
             </p>
+            <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
+              Source XIIIe siècle · figure 6
+            </a>{" "}
+            ·{" "}
+            <a href={TAVERNIER_SOURCE} target="_blank" rel="noreferrer">
+              Source 1631
+            </a>{" "}
+            ·{" "}
             <a href={sourceUrl("1680")} target="_blank" rel="noreferrer">
               Source 1680
             </a>{" "}

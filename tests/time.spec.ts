@@ -34,7 +34,8 @@ test("continuous timeline preserves view, endpoints, keyboard peek and shared st
   await page.keyboard.down("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.keyboard.up("Space");
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.75");
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await expect(page.getByRole("group", { name: "Époque historique" })).toBeVisible();
   await page.getByRole("button", { name: "Frise", exact: true }).click();

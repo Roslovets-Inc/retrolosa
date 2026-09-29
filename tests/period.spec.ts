@@ -16,7 +16,9 @@ test("1830 loads real tiles, preserves view and comparison, survives reload and 
   await context.setGeolocation({ longitude: 1.44954, latitude: 43.597678, accuracy: 10 });
   await page.goto("/#lon=1.44954&lat=43.597678&z=16.7");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
-  await page.getByRole("button", { name: "Superposer", exact: true }).click();
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("42");
   await page.getByRole("button", { name: "Carte de 1830" }).click();
   await expect.poll(() => received1830).toBeTruthy();
@@ -26,7 +28,10 @@ test("1830 loads real tiles, preserves view and comparison, survives reload and 
   await expect
     .poll(() => sharedView(page))
     .toMatch(/lon=1.449540?&lat=43.597678&z=16.70?&year=1830/);
-  await page.getByRole("button", { name: "Historique", exact: true }).click();
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("button", { name: "Superposition", exact: true }).click();
+  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("100");
   await page.screenshot({ path: ".local/1830-desktop.png" });
   await page.getByRole("button", { name: "Me localiser", exact: true }).click();
   await expect(page.locator(".location-dot")).toHaveCount(2);

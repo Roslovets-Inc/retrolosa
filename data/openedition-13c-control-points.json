@@ -1,0 +1,18 @@
+{
+  "sourcePath": ".local/openedition-3296/originals/figure-06.jpg",
+  "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-6.jpg/download",
+  "sourcePage": "https://books.openedition.org/psorbonne/3296",
+  "sha256": "8d831bc740cb35711b1f1a799a1885ca2748cfa1ff7d6fd93d9af166d01dbcd6",
+  "annotationWidth": 1200,
+  "reference": { "z": 15, "x0": 16512, "y0": 11962, "width": 1536 },
+  "points": [
+    { "name": "Saint-Sernin crossing", "old": [546, 263], "ref": [649.3, 494.5], "role": "fit" },
+    { "name": "Saint-Étienne west portal", "old": [935, 875], "ref": [792.1, 712.3], "role": "fit" },
+    { "name": "Dalbade nave footprint", "old": [563, 1017], "ref": [661.43, 765.73], "role": "fit" },
+    { "name": "Saint-Pierre-des-Cuisines footprint", "old": [216, 547], "ref": [534.9, 599.44], "role": "check" }
+  ],
+  "mask": [[170,590],[205,125],[400,60],[600,115],[735,278],[762,508],[815,565],[990,600],[1035,910],[900,839],[980,1290],[720,1315],[530,1300],[425,1310],[320,1400],[175,1365],[100,1165],[90,990],[50,820],[22,450],[141,695],[60,310]],
+  "method": "Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+  "dating": "XIIIe siècle; 1250 is a timeline ordering anchor, not an asserted survey year.",
+  "rights": "F. Callède / Inrap / PCR Toulouse au Moyen Âge. Reuse authorization unconfirmed; attribution and source link do not establish permission. Integrated at user's request."
+}

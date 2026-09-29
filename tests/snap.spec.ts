@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+
+import { timelinePosition } from "../src/timeline";
 test("timeline snaps close to each source and releases for dragging and keyboard", async ({
   page,
 }) => {
@@ -9,8 +11,11 @@ test("timeline snaps close to each source and releases for dragging and keyboard
     const box = (await slider.boundingBox())!;
     const today = new Date().getFullYear();
     // Native range positions account for the 16px thumb.
-    const x = (year: number) => box.x + 8 + ((box.width - 16) * (year - 1680)) / (today - 1680);
-    for (const year of [1680, 1830, 1875, 1954, today]) {
+    const x = (year: number) =>
+      box.x +
+      8 +
+      (box.width - 16) * timelinePosition(year, [1250, 1631, 1680, 1830, 1875, 1954, today]);
+    for (const year of [1250, 1631, 1680, 1830, 1875, 1954, today]) {
       const nearby = year === today ? year - 3 : year + 3;
       await page.mouse.move(x(nearby), box.y + box.height / 2);
       await page.mouse.down();

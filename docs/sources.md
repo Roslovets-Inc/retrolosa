@@ -2,7 +2,23 @@
 
 ## Continuous timeline
 
-The Time mode interpolates opacity between the four available sources, not historical geometry or building dates. Both cadastral sources coexist in one MapLibre style so scrubbing only updates paint opacity. The 1680 layer stays opaque below the incoming 1830 layer until 1830; then 1830 blends into 1954, which fades into the modern basemap. Source dates are positioned proportionally along the slider. Intermediate labels report the source pair and blend percentage rather than claiming a surveyed intermediate year. Time mode and slider position are retained in shared URLs.
+The Time mode interpolates opacity between the enabled historical sources (1631, 1680, 1830, 1875 and 1954) and the modern basemap, not historical geometry or building dates. All historical sources coexist in one MapLibre style so scrubbing only updates paint opacity. Disabled epochs are skipped. Source dates are positioned proportionally along the slider; pointer input snaps within 20% of each local interval. Intermediate labels report the source pair without a blend percentage or a claimed surveyed intermediate year. Time mode and slider position are included only when explicitly generating a shared URL; navigation does not rewrite the address.
+
+Remaining candidates and priorities are maintained in [map-backlog.md](map-backlog.md).
+
+## Added Tavernier plan 1631 (approximate alignment)
+
+Original source: [Archives municipales de Toulouse, II 671](https://www.flickr.com/photos/archives-toulouse/24484342123/), Melchior Tavernier, 1631. The official source marks the scan public domain. Original raster 7874 × 5884 pixels; checksum, source URL, mask and manual landmark coordinates are versioned in `data/tavernier-1631-control-points.json`.
+
+Revision 3 includes the full landmark re-identification from revision 2 and a local Nazareth correction. The earlier fit confused Porte Pouzonville with Porte Arnaud-Bernard, Cordeliers with Jacobins, and the former Pont Couvert with Pont Neuf. Those are annotation errors, not historical changes. Landmarks were re-read against the numbered/lettered legend of the full-resolution scan. Ground footprints and tower bases are used instead of roof tops. Modern church footprints were cross-checked against OpenStreetMap geometries and PLAN IGN; street geocodes supply approximate context, not building coordinates.
+
+`scripts/build-tavernier.py` reproduces local WebP tiles at zooms 14–17 and a low-zoom overview, with the same Python dependencies as the flood generator. Twenty-two correspondences now span Saint-Sernin, Arnaud-Bernard, Saint-Pierre, Jacobins, Capitole, Saint-Georges, Augustins, Saint-Etienne, Daurade, both Pont Neuf abutments, Saint-Cyprien, Carmes, Rouaix, Mage, Dalbade and Salin, plus three Nazareth junctions (Perchepinte, Philippe Feral and Languedoc). Place Mage now uses its actual OSM street-junction coordinates [744.09, 746.4], replacing the misplaced reference [757, 770] that displaced this neighbourhood. Modern Nazareth geometry comes from OSM ways 115572305 and 791005603; neighbouring junctions from ways 22529543, 22530936, 22530935 and 186598289, accessed 2026-09-30. The inverse thin-plate spline uses smoothing 500 in reference annotation pixels. An affine fit and spline smoothing 0, 25, 100, 500 and 2000 were compared. Smoothing 500 retains modest regularization while keeping all fitting residuals below 16 m and positive sampled inverse Jacobians. These fitting residuals describe the warp, not absolute accuracy of hand-identified landmarks.
+
+Four withheld checks measure the actual inverse renderer: Saint-Antoine du Salin chapel 39.2 m, the former Tresorerie / Temple du Salin 34.6 m, Nazareth / Coffres 27.3 m and Nazareth / Antoine Darquier 8.3 m. These checks cover the southern area, not the entire city. The two Nazareth intersections are not used for fitting. Applying revision 2 to the same two manually identified checkpoints gives 93.4 and 89.5 m respectively, so this comparison uses identical landmarks rather than changing the test set to claim improvement. Each of the twenty-two fitting points is also omitted in turn and re-evaluated: leave-one-out median 57.5 m, maximum 113.7 m. This exposes the perspective drawing's local distortions and areas that depend on their nearby anchors. Full current measurements are in `data/tavernier-1631-validation.json`.
+
+Unlike the former forward-only check, the validation now samples the **actual inverse mapping throughout the visible mask**, at four reference annotation pixels: 8,372 visible samples, minimum determinant 1.386, no sampled folds. This is a sampled check, not a mathematical guarantee. Printed margins and the cartouche are masked; the river corridor is retained. Areas outside the control-point network remain less reliable. Roofs displaced by the original perspective cannot coincide with modern building footprints even when their ground anchors agree. The interface retains the approximate-alignment label and links the unwarped original. All five historical epochs remain in the same map style; 1631 can be disabled and skipped by the timeline.
+
+Run `python scripts/build-tavernier.py --validate-only` with numpy, scipy and Pillow available to check geometry without modifying assets. Run without the option only when explicitly regenerating the map. Visual review compares the resulting overlay around Saint-Sernin/Capitole, Daurade/Pont Neuf, Saint-Cyprien and Carmes/Salin against the PLAN IGN reference mosaic; passing browser loading tests alone does not validate alignment.
 
 ## Added 1830 layer
 
@@ -44,7 +60,7 @@ Attribution: OpenFreeMap, OpenMapTiles, OpenStreetMap contributors. No OSM publi
 
 ## Quality and limits
 
-The zoom-out overview is a 5×5 mosaic of the source's minimum-zoom tiles, generated by `scripts/build-overview.mjs`. Its four corners are calculated from the original Web Mercator tile grid, not manually selected control points; no new geographic warp is applied. Below zoom 15 this local overview replaces detailed remote tiles. The original attribution and artwork caveats apply to the derived overview as well. The modern map remains visible outside the historical coverage. Map navigation now permits zoom 2–20 without a centre-only bounding box.
+The 1680 zoom-out overview is a 5×5 mosaic of the source's minimum-zoom tiles, generated by `scripts/build-overview.mjs`. Its four corners are calculated from the original Web Mercator tile grid, not manually selected control points; no new geographic warp is applied. Below zoom 15 this local overview replaces detailed remote tiles. The original attribution and artwork caveats apply to the derived overview as well. The modern map remains visible outside the historical coverage. Navigation is limited to Toulouse and its surroundings, with zoom 11.5–19 and bounds [1.30, 43.49, 1.57, 43.75]. Initial and reset views show the city centre rather than one street.
 
 Quick-jump coordinates were checked against IGN's public geocoding endpoint `https://data.geopf.fr/geocodage/search` on 2026-09-29: Rue Ninau [1.44954, 43.597678], Place Saint Etienne [1.448962, 43.599782], Place Saintes Scarbes [1.448734, 43.598128], Place Montoulieu [1.450186, 43.596732]. These are navigation targets, not historical georeferencing control points.
 
@@ -54,7 +70,7 @@ Historical control points, transformation parameters and RMS values are not supp
 
 ## Rights and publishing
 
-Municipal data license does not establish rights to all third-party styling and icons. The source app credits individual icon creators. This prototype accesses its public remote tiles and links the complete source credits; it does not redistribute the archive. Separate permission/terms for production hosting and cartographic artwork remain unconfirmed. Before public deployment, clarify those terms or replace with a self-rendered layer from verified open source data. No public deployment performed.
+Municipal data license does not establish rights to all third-party styling and icons. The source app credits individual icon creators. This prototype accesses its public remote tiles and links the complete source credits; it does not redistribute the archive. Separate permission/terms for production hosting and cartographic artwork remain unconfirmed. Before public deployment, clarify those terms or replace with a self-rendered layer from verified open source data. The prototype has been deployed to Sites with owner-only access; no public-access deployment is recorded.
 
 ## Added aerial photography 1954
 

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { snapTimelineYear } from "../../src/timeline";
+import {
+  snapTimelineYear,
+  timelinePosition,
+  timelineStops,
+  timelineYear,
+} from "../../src/timeline";
 
 describe("timeline snapping", () => {
   it.each([
@@ -28,5 +33,34 @@ describe("timeline snapping", () => {
     expect(snapTimelineYear(1850, [])).toBe(1850);
     expect(snapTimelineYear(1000, [1680, 1830])).toBe(1680);
     expect(snapTimelineYear(2100, [1680, 1830])).toBe(1830);
+  });
+});
+
+describe("bounded visual timeline", () => {
+  const dates = [1250, 1631, 1680, 1830, 1875, 1954, 2026];
+  it("keeps the widest visual gap at most twice the narrowest", () => {
+    const stops = timelineStops(dates);
+    const gaps = stops.slice(1).map((stop, i) => stop - stops[i]);
+    expect(stops[0]).toBe(0);
+    expect(stops.at(-1)).toBe(1);
+    expect(Math.max(...gaps) / Math.min(...gaps)).toBeCloseTo(2);
+  });
+  it("maps dates and intermediate years back without changing chronological order", () => {
+    for (const year of [...dates, 1400, 1700, 1850, 1900, 2000])
+      expect(timelineYear(timelinePosition(year, dates), dates)).toBeCloseTo(year);
+    expect(timelinePosition(1000, dates)).toBe(0);
+    expect(timelinePosition(2200, dates)).toBe(1);
+    expect(timelineYear(-1, dates)).toBe(1250);
+    expect(timelineYear(2, dates)).toBe(2026);
+  });
+  it("handles disabled epochs, a single date and an empty selection", () => {
+    expect(
+      timelineYear(timelinePosition(1800, [1680, 1954, 2026]), [1680, 1954, 2026]),
+    ).toBeCloseTo(1800);
+    expect(timelineStops([2026])).toEqual([0]);
+    expect(timelinePosition(2026, [2026])).toBe(0);
+    expect(timelinePosition(2026, [])).toBe(0);
+    expect(timelineYear(0, [2026])).toBe(2026);
+    expect(timelineYear(0, [])).toBe(0);
   });
 });

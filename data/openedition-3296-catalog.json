@@ -1,0 +1,271 @@
+{
+  "reviewedAt": "2026-09-30",
+  "source": {
+    "url": "https://books.openedition.org/psorbonne/3296",
+    "author": "Quitterie Cazes",
+    "title": "Toulouse au Moyen Âge : les pouvoirs dans la ville",
+    "book": "Marquer la ville",
+    "publishedYear": 2013,
+    "pages": "341–366",
+    "illustrator": "F. Callède"
+  },
+  "rights": {
+    "illustrations": "Tous droits réservés sauf mention contraire ; aucune autorisation spécifique relevée.",
+    "textLicenseDoesNotCoverIllustrations": true,
+    "publicationStatus": "not-authorized-by-this-collection",
+    "rightsHolder": "unconfirmed-not-assumed-to-be-OpenEdition",
+    "creatorIdentification": "F. Callède in captions; Fabien Callède identified in BnF bibliography of the source research book",
+    "embeddedCreditEvidence": "Figure 6: F. Callède, Inrap, PCR Toulouse au Moyen Âge",
+    "rightsReviewDate": "2026-09-30",
+    "permissionInquiryContact": "marie.brunet@univ-paris1.fr",
+    "permissionInquiryContactSource": "https://www.editionsdelasorbonne.fr/store/page/90/foreign-rights",
+    "permissionInquirySent": false
+  },
+  "collection": {
+    "count": 12,
+    "bytes": 9134723,
+    "localOnly": true,
+    "originalsDirectory": ".local/openedition-3296/originals"
+  },
+  "proposal": "docs/openedition-medieval-layers.md",
+  "maps": [
+    {
+      "number": 1,
+      "path": ".local/openedition-3296/originals/figure-01.jpg",
+      "width": 2007,
+      "height": 2660,
+      "bytes": 1644049,
+      "sha256": "a1b070195e5edc4efea63c92e2ed035215d7c246ca816b98bd28e01c87121083",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-1.jpg/download",
+      "title": "Toulouse à la fin de l’Antiquité",
+      "representedPeriod": "Antiquité tardive, plusieurs phases",
+      "candidateGroups": [
+        "antiquite"
+      ],
+      "kind": "Plan général",
+      "assessment": "Vestiges du Haut et du Bas Empire, restitution des voies et palais des Goths : ne pas traiter comme un instantané unique.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 2,
+      "path": ".local/openedition-3296/originals/figure-02.jpg",
+      "width": 907,
+      "height": 1150,
+      "bytes": 426889,
+      "sha256": "fc2a8b0b095223314b19912c2e1aa9ed3774e007ff87b6c69e81dc84d7472381",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-2.jpg/download",
+      "title": "Saint-Sernin et son enclos",
+      "representedPeriod": "XIIe siècle ; extension XIVe ; bas Moyen Âge",
+      "candidateGroups": [
+        "medieval-12",
+        "medieval-13",
+        "medieval-tardif"
+      ],
+      "kind": "Quartier",
+      "assessment": "Séparer les phases romanes, l’extension au XIVe et les éléments postérieurs.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 3,
+      "path": ".local/openedition-3296/originals/figure-03.jpg",
+      "width": 922,
+      "height": 921,
+      "bytes": 159494,
+      "sha256": "46f1f3373a98164e5d79b7a483db80b71dc387144eca250021ae21b550331d36",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-3.jpg/download",
+      "title": "Saint-Pierre-des-Cuisines",
+      "representedPeriod": "1050 ; vers 1100, 1150, 1180 ; bas Moyen Âge",
+      "candidateGroups": [
+        "medieval-12",
+        "medieval-13",
+        "medieval-tardif"
+      ],
+      "kind": "Bâtiment multiphase",
+      "assessment": "Les phases successives ne prouvent pas que tous les murs coexistent.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 4,
+      "path": ".local/openedition-3296/originals/figure-04.jpg",
+      "width": 1654,
+      "height": 2339,
+      "bytes": 226536,
+      "sha256": "5644a728b25e44a6241c4781075599b035fd92600a54f7f5b7aea045729e9ce7",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-4.jpg/download",
+      "title": "Quartier canonial de Saint-Étienne",
+      "representedPeriod": "Roman ; extensions XIIIe ; éléments postérieurs",
+      "candidateGroups": [
+        "medieval-12",
+        "medieval-13"
+      ],
+      "kind": "Quartier multiphase",
+      "assessment": "Distinguer état roman, extensions du XIIIe et édifices plus tardifs.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 5,
+      "path": ".local/openedition-3296/originals/figure-05.jpg",
+      "width": 922,
+      "height": 1024,
+      "bytes": 317472,
+      "sha256": "be949af4be83c926d790cb1902ac8adac3605ca16ecbc2029035408ea93fb14b",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-5.jpg/download",
+      "title": "Monastère de la Daurade",
+      "representedPeriod": "Vers 1760 ; phases médiévales depuis 1050",
+      "candidateGroups": [
+        "medieval-12",
+        "medieval-tardif",
+        "daurade-1760"
+      ],
+      "kind": "Monastère multiphase",
+      "assessment": "Le dessin entier représente vers 1760 ; seules les phases explicitement datées peuvent alimenter une couche médiévale.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 6,
+      "path": ".local/openedition-3296/originals/figure-06.jpg",
+      "width": 1953,
+      "height": 2610,
+      "bytes": 1332117,
+      "sha256": "8d831bc740cb35711b1f1a799a1885ca2748cfa1ff7d6fd93d9af166d01dbcd6",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-6.jpg/download",
+      "title": "Toulouse au XIIIe siècle",
+      "representedPeriod": "XIIIe siècle, année non déterminée",
+      "candidateGroups": [
+        "medieval-13"
+      ],
+      "kind": "Plan général",
+      "assessment": "Première couche recommandée ; conserver la distinction entre positions connues et proposées.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": true,
+      "integrationStatus": "integrated-at-user-request",
+      "controlPoints": "data/openedition-13c-control-points.json",
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 7,
+      "path": ".local/openedition-3296/originals/figure-07.jpg",
+      "width": 1999,
+      "height": 2482,
+      "bytes": 682326,
+      "sha256": "02d42ac6a62b535ebfaafcfa05f3b5aaf31f886ddb053a4f1021e4332b7379cd",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-7.jpg/download",
+      "title": "Héritages antiques du parcellaire",
+      "representedPeriod": "Cadastre restitué de 1550",
+      "candidateGroups": [
+        "parcellaire-1550"
+      ],
+      "kind": "Analyse morphologique",
+      "assessment": "Les orientations attribuées à l’Antiquité ne datent pas toutes les parcelles de l’Antiquité.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 8,
+      "path": ".local/openedition-3296/originals/figure-08.jpg",
+      "width": 1999,
+      "height": 2482,
+      "bytes": 1008800,
+      "sha256": "12d8840967b9fa374672e793b18e96f41d9584d910e626a5514020ac1b519092",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-8.jpg/download",
+      "title": "Héritages médiévaux du parcellaire",
+      "representedPeriod": "Cadastre restitué de 1550",
+      "candidateGroups": [
+        "parcellaire-1550"
+      ],
+      "kind": "Analyse morphologique",
+      "assessment": "Complément de 7 ; vérifier le fond commun avant de partager la transformation.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 9,
+      "path": ".local/openedition-3296/originals/figure-09.jpg",
+      "width": 1999,
+      "height": 1734,
+      "bytes": 1420478,
+      "sha256": "275db363639f896c31522dca777eb10bdfb5ad1d945b2b54af1f3a97749dd44d",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-9.jpg/download",
+      "title": "Croissance du bourg Saint-Sernin",
+      "representedPeriod": "Vers 1107 ; vers 1150 ; après 1150 ; après 1191",
+      "candidateGroups": [
+        "medieval-12",
+        "parcellaire-1550"
+      ],
+      "kind": "Quartier multiphase",
+      "assessment": "Support cadastral de 1550 ; séparer croissance du bourg et enceintes de dates différentes.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 10,
+      "path": ".local/openedition-3296/originals/figure-10.jpg",
+      "width": 1984,
+      "height": 1382,
+      "bytes": 838383,
+      "sha256": "8d21f4076abe5bb99ff52dcad5c2a3b2caf110386635de28b549af398a40e12b",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-10.jpg/download",
+      "title": "Palais des Goths et Saint-Pierre",
+      "representedPeriod": "Ve siècle",
+      "candidateGroups": [
+        "antiquite"
+      ],
+      "kind": "Fragment archéologique",
+      "assessment": "Complément de 1 ; ne pas dater le fond cadastral du Ve siècle.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 11,
+      "path": ".local/openedition-3296/originals/figure-11.jpg",
+      "width": 926,
+      "height": 1215,
+      "bytes": 147055,
+      "sha256": "de1e2c7c7d8d2d4cfbfcfa17b18e2c91d58b5acd8be5f95ac9ceda7bb831b307",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-11.jpg/download",
+      "title": "Porte et château Narbonnais",
+      "representedPeriod": "Fin du XIIe siècle",
+      "candidateGroups": [
+        "medieval-12"
+      ],
+      "kind": "Fragment archéologique",
+      "assessment": "Accès possibles et porte hypothétique explicitement signalés dans le dessin.",
+      "datingStatus": "caption-and-legend-reviewed",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    },
+    {
+      "number": 12,
+      "path": ".local/openedition-3296/originals/figure-12.jpg",
+      "width": 1983,
+      "height": 1458,
+      "bytes": 931124,
+      "sha256": "a28ef2c9f0f893bfb246b43229168d22d38be46f8897005596c6b27e6a497fc0",
+      "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-12.jpg/download",
+      "title": "Palais royal et Salin",
+      "representedPeriod": "À confirmer : légende XIIe, texte après 1271 / travaux 1287",
+      "candidateGroups": [
+        "medieval-13"
+      ],
+      "kind": "Quartier à datation incertaine",
+      "assessment": "Contradiction entre légende et paragraphe 23 ; fin XIIIe envisagée, sans intégration automatique avant confirmation.",
+      "datingStatus": "conflict-needs-confirmation",
+      "georeferenced": false,
+      "publicReuse": "permission-required"
+    }
+  ]
+}

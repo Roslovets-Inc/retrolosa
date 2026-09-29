@@ -14,15 +14,20 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await expect(page.getByRole("alert")).toHaveCount(0);
   expect(historicResponses.some((code) => code === 206)).toBeTruthy();
   await page.screenshot({ path: ".local/desktop.png" });
-  await page.getByRole("button", { name: "Superposer", exact: true }).click();
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page
     .getByRole("slider", { name: "Opacité de la carte historique", exact: true })
     .fill("38");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.38");
-  await page.getByRole("button", { name: "Actuel", exact: true }).click();
+  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("0");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.screenshot({ path: ".local/modern.png" });
-  await page.getByRole("button", { name: "Historique", exact: true }).click();
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("button", { name: "Superposition", exact: true }).click();
+  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("100");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await page.screenshot({ path: ".local/historic.png" });
   await page.locator("main").focus();
@@ -30,18 +35,24 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.keyboard.up("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("slider", { name: "Position du rideau", exact: true }).fill("70");
+  await page.getByRole("slider", { name: "Limite de comparaison", exact: true }).focus();
+  await page.keyboard.press("Home");
+  for (let i = 0; i < 35; i++) await page.keyboard.press("ArrowRight");
   await expect(page.locator(".historic-map")).toHaveCSS("clip-path", "inset(0px 30% 0px 0px)");
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
   await page.getByRole("combobox").selectOption("1");
   await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
   await page.screenshot({ path: ".local/saint-etienne.png" });
-  await page.getByRole("button", { name: "Superposer", exact: true }).click();
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page
     .getByRole("slider", { name: "Opacité de la carte historique", exact: true })
     .fill("50");
   await page.screenshot({ path: ".local/alignment.png" });
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison", exact: true }).focus();
   await page.keyboard.press("ArrowLeft");
@@ -66,7 +77,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
   ).toBeTruthy();
-  await expect(page.getByRole("button", { name: "Actuel", exact: true })).toBeVisible();
+  await expect(page.getByRole("slider", { name: "Opacité de la carte historique" })).toBeVisible();
   expect(failures).toEqual([]);
 });
 test("historical network failure is explained", async ({ page }) => {

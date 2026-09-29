@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Literata:ital,wght@0,500;0,600;1,500&display=swap");
+@import url("/fonts/fonts.css");
 :root {
   font-family: "Golos Text", sans-serif;
   color: #263e36;
@@ -674,15 +674,6 @@ footer b {
   position: absolute;
   font-size: 10px;
   padding: 3px 0;
-}
-.timeline-ticks button:first-child {
-  left: 0;
-}
-.timeline-ticks button:nth-child(2) {
-  transform: translateX(-50%);
-}
-.timeline-ticks button:last-child {
-  right: 0;
 }
 .timeline p {
   font-size: 9px;

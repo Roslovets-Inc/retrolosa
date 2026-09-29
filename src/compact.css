@@ -1,6 +1,39 @@
 :root {
   --header-height: 46px;
   --footer-height: 28px;
+  --loupe-radius: min(120px, 24vw, 24dvh);
+}
+.loupe-overlay {
+  pointer-events: none;
+  z-index: 2;
+}
+.loupe-glass {
+  position: absolute;
+  width: calc(var(--loupe-radius) * 2);
+  height: calc(var(--loupe-radius) * 2);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid rgb(255 255 255 / 85%);
+  background: radial-gradient(circle at 28% 16%, rgb(255 255 255 / 16%), transparent 35%);
+  box-shadow:
+    0 6px 22px rgb(24 43 36 / 24%),
+    0 0 0 1px rgb(38 62 54 / 25%),
+    inset 0 0 9px rgb(24 43 36 / 15%);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+}
+.loupe-glass:active {
+  cursor: grabbing;
+}
+.loupe-glass::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: inherit;
+  border-top: 2px solid rgb(255 255 255 / 70%);
+  transform: rotate(-35deg);
+  pointer-events: none;
 }
 main {
   min-height: 320px;
@@ -66,10 +99,27 @@ main {
   color: inherit;
   font-size: 14px;
 }
-.control-panel {
+.control-dock {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
   bottom: calc(var(--footer-height) + 10px);
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  max-width: calc(100% - 20px);
+}
+.control-panel {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
   padding: 8px 10px;
   width: 440px;
+  min-width: 0;
+  flex: 1;
+  height: 110px;
   border-radius: 10px;
   display: flex;
   flex-wrap: wrap;
@@ -90,32 +140,57 @@ main {
 .year-selector {
   order: 1;
   margin: 0;
-  flex-shrink: 0;
+  flex: 1;
 }
 .year-selector button {
   height: 36px;
   padding: 0 8px;
   font-size: 11px;
 }
-.slider-row {
-  order: 2;
-  flex: 1;
+.comparison-switch {
+  order: 1;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 6px;
+  background: #eceee6;
+}
+.comparison-switch button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+.comparison-switch button[aria-pressed="true"] {
+  background: #2f4b40;
+  color: #fff;
+}
+.opacity-panel {
+  flex: 0 0 46px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 4px;
+  border: 1px solid #d5d8cd;
+  border-radius: 10px;
+  background: #fbfaf5;
+  box-shadow: 0 8px 36px #27332426;
+  font-size: 9px;
+}
+.opacity-panel input {
+  writing-mode: vertical-lr;
+  direction: rtl;
+  width: 24px;
+  height: 58px;
   margin: 0;
-  gap: 6px;
-  min-width: 0;
+  accent-color: #3d5e49;
+  cursor: pointer;
 }
-.slider-row > span:first-child {
-  display: none;
-}
-.slider-row input {
-  height: 30px;
-  width: 100%;
-  margin: 0;
-}
-.slider-row span {
-  min-width: 30px;
-  font-size: 10px;
-  text-align: right;
+.opacity-panel input:disabled {
+  opacity: 0.3;
 }
 .timeline {
   width: 100%;
@@ -128,15 +203,50 @@ main {
   margin: 2px 0;
 }
 .timeline input {
-  height: 24px;
+  height: 20px;
   display: block;
 }
 .timeline-ticks {
-  height: 26px;
+  display: block;
+  height: 22px;
   margin: 0;
 }
+.timeline-range {
+  position: relative;
+  height: 20px;
+}
+.timeline-range input {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+.timeline-range:focus-within {
+  outline: 2px solid #b47348;
+  outline-offset: 2px;
+}
+.timeline-track {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 8px;
+  height: 5px;
+  border-radius: 4px;
+}
+.timeline-thumb {
+  position: absolute;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: #3e604d;
+  pointer-events: none;
+}
 .timeline-ticks button {
-  min-height: 26px;
+  position: absolute;
+  min-height: 22px;
   font-size: 10px;
   padding: 2px 0;
 }
@@ -220,6 +330,7 @@ footer {
 @media (max-width: 600px) {
   :root {
     --header-height: 44px;
+    --loupe-radius: min(90px, 24vw, 24dvh);
   }
   .masthead {
     padding: 0 10px;
@@ -234,11 +345,33 @@ footer {
     gap: 0;
   }
   .control-panel {
-    width: calc(100% - 20px);
-    max-width: 430px;
+    width: auto;
     padding: 7px 8px;
+    gap: 5px 4px;
+  }
+  .control-dock {
+    width: calc(100% - 20px);
+    max-width: 494px;
     bottom: calc(var(--footer-height) + 8px);
-    gap: 5px 8px;
+  }
+  .year-selector button {
+    padding: 0 2px;
+    font-size: 9px;
+    flex: 1;
+    min-width: 0;
+  }
+  .year-selector > div {
+    width: 100%;
+    gap: 2px;
+  }
+  .year-selector {
+    min-width: 0;
+  }
+  .comparison-switch button {
+    width: 24px;
+  }
+  .timeline-ticks button {
+    font-size: 9px;
   }
   .mode-buttons button {
     font-size: 10px;

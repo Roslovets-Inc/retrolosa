@@ -1,0 +1,233 @@
+{
+  "sourceUrl": "https://live.staticflickr.com/1657/24484342123_28192e7c15_o.jpg",
+  "sha256": "71be08d5d5be6f4882153eaf65ee524d5f5eee7ab29b79736579ebeb03383d44",
+  "sourceSize": [
+    7874,
+    5884
+  ],
+  "revision": 3,
+  "fitPoints": 22,
+  "fittingResiduals": [
+    {
+      "name": "Saint-Sernin crossing, legend 2",
+      "errorMetres": 3.5
+    },
+    {
+      "name": "Porte Arnaud-Bernard, legend I",
+      "errorMetres": 1.5
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines, legend 6",
+      "errorMetres": 1.9
+    },
+    {
+      "name": "Jacobins bell tower base, legend 22",
+      "errorMetres": 3.6
+    },
+    {
+      "name": "Saint-Etienne west portal, legend 1",
+      "errorMetres": 5.2
+    },
+    {
+      "name": "Pont Neuf east abutment",
+      "errorMetres": 8.1
+    },
+    {
+      "name": "Pont Neuf west abutment",
+      "errorMetres": 11.6
+    },
+    {
+      "name": "Saint-Nicolas nave footprint, legend 7",
+      "errorMetres": 2.7
+    },
+    {
+      "name": "Porte Saint-Cyprien road centre",
+      "errorMetres": 1.3
+    },
+    {
+      "name": "Rue Saint-Rome / Porterie junction",
+      "errorMetres": 14.9
+    },
+    {
+      "name": "Notre-Dame du Taur, legend 5",
+      "errorMetres": 6.5
+    },
+    {
+      "name": "Augustins cloister, legend 24",
+      "errorMetres": 6.2
+    },
+    {
+      "name": "Place du Salin, legend P",
+      "errorMetres": 7.3
+    },
+    {
+      "name": "Place de la Daurade, legend T",
+      "errorMetres": 3.7
+    },
+    {
+      "name": "Saint-Georges square, legend S",
+      "errorMetres": 9.4
+    },
+    {
+      "name": "Place Rouaix, legend Q",
+      "errorMetres": 11.8
+    },
+    {
+      "name": "Carmes former cloister courtyard, legend 25",
+      "errorMetres": 11.5
+    },
+    {
+      "name": "Place Mage, legend X",
+      "errorMetres": 14.5
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint, legend 4",
+      "errorMetres": 7.9
+    },
+    {
+      "name": "Nazareth / Perchepinte junction",
+      "errorMetres": 6.6
+    },
+    {
+      "name": "Nazareth / Philippe Feral junction",
+      "errorMetres": 2.5
+    },
+    {
+      "name": "Nazareth / Languedoc junction",
+      "errorMetres": 13.6
+    }
+  ],
+  "independentCheckPoints": [
+    {
+      "name": "Saint-Antoine du Salin chapel footprint, legend 26",
+      "errorMetres": 39.2,
+      "reference": [
+        1.4445098876952898,
+        43.595827331901525
+      ]
+    },
+    {
+      "name": "Former Tresorerie / Temple du Salin, legend 77",
+      "errorMetres": 34.6,
+      "reference": [
+        1.444543945312489,
+        43.59519995533923
+      ]
+    },
+    {
+      "name": "Nazareth / Coffres junction",
+      "errorMetres": 27.3,
+      "reference": [
+        1.4461940917968832,
+        43.59572469242951
+      ]
+    },
+    {
+      "name": "Nazareth / Antoine Darquier junction",
+      "errorMetres": 8.3,
+      "reference": [
+        1.445871643066397,
+        43.59545536243995
+      ]
+    }
+  ],
+  "medianCheckErrorMetres": 31.0,
+  "maxCheckErrorMetres": 39.2,
+  "leaveOneOutPoints": [
+    {
+      "name": "Saint-Sernin crossing, legend 2",
+      "errorMetres": 55.2
+    },
+    {
+      "name": "Porte Arnaud-Bernard, legend I",
+      "errorMetres": 97.0
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines, legend 6",
+      "errorMetres": 72.3
+    },
+    {
+      "name": "Jacobins bell tower base, legend 22",
+      "errorMetres": 33.1
+    },
+    {
+      "name": "Saint-Etienne west portal, legend 1",
+      "errorMetres": 85.3
+    },
+    {
+      "name": "Pont Neuf east abutment",
+      "errorMetres": 66.5
+    },
+    {
+      "name": "Pont Neuf west abutment",
+      "errorMetres": 111.4
+    },
+    {
+      "name": "Saint-Nicolas nave footprint, legend 7",
+      "errorMetres": 28.2
+    },
+    {
+      "name": "Porte Saint-Cyprien road centre",
+      "errorMetres": 65.7
+    },
+    {
+      "name": "Rue Saint-Rome / Porterie junction",
+      "errorMetres": 113.7
+    },
+    {
+      "name": "Notre-Dame du Taur, legend 5",
+      "errorMetres": 60.1
+    },
+    {
+      "name": "Augustins cloister, legend 24",
+      "errorMetres": 40.9
+    },
+    {
+      "name": "Place du Salin, legend P",
+      "errorMetres": 53.7
+    },
+    {
+      "name": "Place de la Daurade, legend T",
+      "errorMetres": 30.0
+    },
+    {
+      "name": "Saint-Georges square, legend S",
+      "errorMetres": 98.5
+    },
+    {
+      "name": "Place Rouaix, legend Q",
+      "errorMetres": 55.9
+    },
+    {
+      "name": "Carmes former cloister courtyard, legend 25",
+      "errorMetres": 52.7
+    },
+    {
+      "name": "Place Mage, legend X",
+      "errorMetres": 59.0
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint, legend 4",
+      "errorMetres": 63.4
+    },
+    {
+      "name": "Nazareth / Perchepinte junction",
+      "errorMetres": 29.3
+    },
+    {
+      "name": "Nazareth / Philippe Feral junction",
+      "errorMetres": 8.9
+    },
+    {
+      "name": "Nazareth / Languedoc junction",
+      "errorMetres": 47.4
+    }
+  ],
+  "medianLeaveOneOutErrorMetres": 57.5,
+  "maxLeaveOneOutErrorMetres": 113.7,
+  "minimumVisibleInverseJacobian": 1.385766644299707,
+  "visibleJacobianSamples": 8372,
+  "tileCount": 894,
+  "bytes": 3084582,
+  "limitations": "Manual ground-landmark alignment of a perspective drawing, not a survey. Withheld checks concentrate on Nazareth and Salin; they do not establish citywide accuracy. Leave-one-out errors expose weaker areas of the network. Printed margins are masked; edges outside the control network and roofs displaced by perspective remain less reliable."
+}

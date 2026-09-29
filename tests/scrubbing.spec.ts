@@ -29,7 +29,7 @@ test("rapid scrubbing survives browser history rate limits", async ({ page }) =>
   await slider.fill("1830");
   await expect(page.locator(".timeline-value")).toHaveText("1830");
   await expect.poll(() => sharedView(page)).toMatch(/time=1830/);
-  await expect(page.getByRole("button", { name: "Rideau", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Cartes", exact: true })).toBeVisible();
   expect(failures).toEqual([]);
 });
 
@@ -46,6 +46,7 @@ test("rejected history writes never blank the application", async ({ page }) => 
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1900");
   await page.waitForTimeout(700);
   await expect(page.locator(".timeline-value")).toContainText("1875 → 1954");
+  await page.getByRole("button", { name: "Cartes", exact: true }).click();
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Carte de 1830" }).click();
   await expect(page.getByRole("button", { name: "Carte de 1830" })).toHaveAttribute(
