@@ -59,3 +59,17 @@ footer { height: var(--footer-height); padding: 0 10px; font-size: 8px }
 .compare-hold:focus-visible { outline: 2px solid #2f4b40; outline-offset: 3px }
 @media(max-width:600px) { .compare-hold { right: 10px } }
 @media(max-height:500px) { .compare-hold { top: calc(var(--header-height) + 14px); right: 70px } }
+.epochs-menu { position: relative }
+.epochs-dismiss { position: fixed; inset: var(--header-height) 0 0; border: 0; background: transparent; cursor: default }
+.epochs-popover { position: absolute; z-index: 20; top: 44px; right: 0; width: 240px; padding: 10px; background: #faf9f2; border: 1px solid #d5d8cd; border-radius: 8px; box-shadow: 0 8px 25px #20302426 }
+.epochs-popover label { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; font-size: 14px }
+.epochs-popover input { accent-color: #2f4b40; width: 18px; height: 18px }
+.epochs-popover small { margin-left: auto; color: #70766d; font-size: 12px }
+.epochs-popover p { font-size: 12px; line-height: 1.4; margin: 8px 0 2px; color: #70766d }
+@media(max-width:600px) {
+  .epochs-menu { position: static }
+  .epochs-popover { top: 48px; right: 10px }
+  .header-right .places-button { padding: 0 5px; gap: 3px }
+  .header-right .header-icon { min-width: 30px; padding: 0 6px }
+}
+.masthead { z-index: 6 }

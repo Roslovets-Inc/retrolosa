@@ -68,8 +68,8 @@ const places = [
   { name: 'Saint-Étienne', center: [1.448962, 43.599782] as [number, number], zoom: 17 },
   { name: 'Saintes-Scarbes', center: [1.448734, 43.598128] as [number, number], zoom: 18 },
   { name: 'Montoulieu', center: [1.450186, 43.596732] as [number, number], zoom: 17.5 },
-  { name: 'Сен-Сиприен', center: [1.4315, 43.599] as [number, number], zoom: 15.6 },
-  { name: 'Весь центр', center: [1.442, 43.602] as [number, number], zoom: 15 },
+  { name: 'Saint-Cyprien', center: [1.4315, 43.599] as [number, number], zoom: 15.6 },
+  { name: 'Tout le centre', center: [1.442, 43.602] as [number, number], zoom: 15 },
 ]
 function initialView() {
   const p = new URLSearchParams(location.hash.slice(1))
@@ -77,16 +77,24 @@ function initialView() {
   return p.has('lon') && Number.isFinite(lon) && lon >= -180 && lon <= 180 && Number.isFinite(lat) && lat > -85 && lat < 85 && z >= 2 && z <= 20
     ? { center: [lon, lat] as [number, number], zoom: z } : { center: places[0].center, zoom: 16.7 }
 }
+function initialEnabled(): Year[] {
+  const value = new URLSearchParams(location.hash.slice(1)).get('layers')
+  return value === null ? [...YEARS] : YEARS.filter(year => value.split(',').includes(year))
+}
 function App() {
   const modernEl = useRef<HTMLDivElement>(null), oldEl = useRef<HTMLDivElement>(null)
   const map = useRef<MapInstance | null>(null)
   const historicMap = useRef<MapInstance | null>(null)
-  const [year, setYear] = useState<Year>(initialYear)
+  const [enabled, setEnabled] = useState<Year[]>(initialEnabled)
+  const enabledRef = useRef(enabled)
+  enabledRef.current = enabled
+  const [epochsOpen, setEpochsOpen] = useState(false)
+  const [year, setYear] = useState<Year>(() => enabled.includes(initialYear()) ? initialYear() : enabled[0] ?? '1680')
   const yearRef = useRef(year)
   const locationMaps = useRef<MapInstance[]>([])
   const geo = useLocation(locationMaps)
   const [mode, setMode] = useState<Mode>(() => new URLSearchParams(location.hash.slice(1)).get('mode') === 'time' ? 'time' : 'split')
-  const [time, setTime] = useState(initialTime)
+  const [time, setTime] = useState(() => Math.max(Number(enabled[0] ?? TODAY), initialTime()))
   const timelinePointer = useRef(false)
   const modeRef = useRef(mode), timeRef = useRef(time)
   modeRef.current = mode; timeRef.current = time
@@ -117,26 +125,26 @@ function App() {
       const options = { ...initialView(), minZoom: 2, maxZoom: 20, pitchWithRotate: false, dragRotate: false, touchPitch: false, attributionControl: false as const }
       modern = new maplibregl.Map({ ...options, container: modernEl.current, style: 'https://tiles.openfreemap.org/styles/positron' })
       historic = new maplibregl.Map({ ...options, container: oldEl.current, interactive: false, style: historicalStyle(yearRef.current) })
-    } catch { setErrors(['Браузер не смог запустить карту. Проверьте поддержку WebGL и аппаратное ускорение.']); return }
+    } catch { setErrors(['Impossible de démarrer la carte. Vérifiez WebGL et l’accélération matérielle.']); return }
     map.current = modern
     historicMap.current = historic
     locationMaps.current = [modern, historic]
     modern.touchZoomRotate.disableRotation()
     const sync = () => historic.jumpTo({ center: modern.getCenter(), zoom: modern.getZoom(), bearing: 0, pitch: 0 })
     modern.on('move', sync)
-    modern.on('moveend', () => { const c = modern.getCenter(); replaceViewUrl(`#lon=${c.lng.toFixed(6)}&lat=${c.lat.toFixed(6)}&z=${modern.getZoom().toFixed(2)}&year=${yearRef.current}${modeRef.current === 'time' ? '&mode=time&time=' + timeRef.current : ''}`) })
+    modern.on('moveend', () => { const c = modern.getCenter(); replaceViewUrl(`#lon=${c.lng.toFixed(6)}&lat=${c.lat.toFixed(6)}&z=${modern.getZoom().toFixed(2)}&year=${yearRef.current}&layers=${enabledRef.current.join(',')}${modeRef.current === 'time' ? '&mode=time&time=' + timeRef.current : ''}`) })
     modern.on('mousemove', e => setCoords(`${e.lngLat.lat.toFixed(5)}° N · ${e.lngLat.lng.toFixed(5)}° E`))
     modern.addControl(new maplibregl.ScaleControl({ maxWidth: 120, unit: 'metric' }), 'bottom-left')
     for (const [kind, instance] of [['modern', modern], ['historic', historic]] as const) {
       instance.on('idle', () => setReady(s => ({ ...s, [kind]: true })))
-      instance.on('error', e => { console.error(kind, e.error); setErrors(s => [...new Set([...s, kind === 'modern' ? 'Не удалось загрузить часть современной карты. Проверьте интернет и обновите страницу.' : 'Не удалось загрузить часть исторической карты. Проверьте интернет и обновите страницу.'])]) })
+      instance.on('error', e => { console.error(kind, e.error); setErrors(s => [...new Set([...s, kind === 'modern' ? 'Chargement incomplet de la carte actuelle. Vérifiez la connexion et rechargez la page.' : 'Chargement incomplet de la carte historique. Vérifiez la connexion et rechargez la page.'])]) })
     }
     const resize = new ResizeObserver(() => { modern.resize(); historic.resize(); sync() })
     resize.observe(modernEl.current)
     return () => { resize.disconnect(); modern.remove(); historic.remove(); map.current = null; historicMap.current = null; locationMaps.current = [] }
   }, [])
   useEffect(() => {
-    const down = (e: KeyboardEvent) => { if (e.code === 'Space' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLButtonElement)) { e.preventDefault(); setPeek(true) } if(e.key === 'Escape') { setSources(false); setPlacesOpen(false) } }
+    const down = (e: KeyboardEvent) => { if (e.code === 'Space' && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLButtonElement)) { e.preventDefault(); setPeek(true) } if(e.key === 'Escape') { setSources(false); setPlacesOpen(false); setEpochsOpen(false) } }
     const up = (e: KeyboardEvent) => { if (e.code === 'Space') setPeek(false) }
     const blur = () => { setPeek(false); setCompareHeld(false) }
     window.addEventListener('keydown', down); window.addEventListener('keyup', up); window.addEventListener('blur', blur)
@@ -147,13 +155,13 @@ function App() {
     if (!historical) return
     const apply = () => {
       if (!historical.getLayer('history-1680')) return
-      const dates = [...YEARS.map(Number), TODAY]
+      const dates = [...enabled.map(Number), TODAY]
       const index = Math.min(dates.length - 2, Math.max(0, dates.findIndex((date, i) => i < dates.length - 1 && time < dates[i + 1])))
-      const start = time === TODAY ? 1954 : dates[index]
+      const start = time === TODAY ? dates[dates.length - 2] ?? TODAY : dates[index]
       const end = time === TODAY ? TODAY : dates[index + 1]
-      const fraction = (time - start) / (end - start)
+      const fraction = end === start ? 1 : (time - start) / (end - start)
       for (const period of YEARS) {
-        const value = mode !== 'time' ? (period === year ? 1 : 0)
+        const value = !enabled.includes(period) ? 0 : mode !== 'time' ? (period === year ? 1 : 0)
           : Number(period) === start ? (end === TODAY ? 1 - fraction : 1)
           : Number(period) === end ? fraction : 0
         for (const kind of ['overview', 'history']) {
@@ -165,21 +173,23 @@ function App() {
     apply()
     historical.on('style.load', apply)
     return () => { historical.off('style.load', apply) }
-  }, [mode, time, year])
+  }, [mode, time, year, enabled])
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const params = new URLSearchParams(location.hash.slice(1))
+      params.set('layers', enabled.join(','))
+      params.set('year', year)
       if (mode === 'time') { params.set('mode', 'time'); params.set('time', String(time)) }
       else { params.delete('mode'); params.delete('time') }
       replaceViewUrl('#' + params.toString())
     }, 400)
     return () => window.clearTimeout(timer)
-  }, [mode, time])
-  const dates = [...YEARS.map(Number), TODAY]
+  }, [mode, time, enabled, year])
+  const dates = [...enabled.map(Number), TODAY]
   const lower = dates.filter(date => date <= time).at(-1)!
   const upper = dates.find(date => date > time) ?? TODAY
-  const dateLabel = (date: number) => date === TODAY ? 'Сегодня' : String(date)
-  const timeLabel = dates.includes(time) ? (time === 1875 ? '1875 · Наводнение' : dateLabel(time)) : `${dateLabel(lower)} → ${dateLabel(upper)} · ${Math.round((time - lower) / (upper - lower) * 100)}%`
+  const dateLabel = (date: number) => date === TODAY ? 'Actuel' : String(date)
+  const timeLabel = dates.includes(time) ? (time === 1875 ? '1875 · Inondation' : dateLabel(time)) : `${dateLabel(lower)} → ${dateLabel(upper)} · ${Math.round((time - lower) / (upper - lower) * 100)}%`
   const changeYear = (next: Year) => {
     if (next === year) return
     yearRef.current = next
@@ -189,38 +199,47 @@ function App() {
     params.set('year', next)
     replaceViewUrl('#' + params.toString())
   }
-  const visibleMode = compareHeld ? 'overlay' : peek ? 'modern' : mode
+  const toggleEpoch = (value: Year) => {
+    const next = YEARS.filter(y => y === value ? !enabled.includes(y) : enabled.includes(y))
+    setEnabled(next)
+    if (!next.includes(year) && next.length) changeYear(next.reduce((a, b) => Math.abs(Number(a) - Number(year)) <= Math.abs(Number(b) - Number(year)) ? a : b))
+    setTime(t => Math.max(Number(next[0] ?? TODAY), t))
+  }
+  const visibleMode = enabled.length === 0 ? 'modern' : compareHeld ? 'overlay' : peek ? 'modern' : mode
   const go = (index: number) => map.current?.flyTo({ ...places[index], duration: 1000, essential: true })
-  const copy = async () => { try { await navigator.clipboard.writeText(location.href); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { setErrors(s => [...s, 'Скопируйте адрес страницы из адресной строки.']) } }
+  const copy = async () => { try { await navigator.clipboard.writeText(location.href); setCopied(true); setTimeout(() => setCopied(false), 2000) } catch { setErrors(s => [...s, 'Copiez le lien depuis la barre d’adresse.']) } }
   return <main tabIndex={-1}>
-    <div className="map" ref={modernEl} aria-label="Современная карта Тулузы" />
-    <div className="map historic-map" ref={oldEl} aria-label={mode === 'time' ? 'Исторические карты на временной шкале' : `Историческая карта Тулузы ${year} года`} style={{ opacity: compareHeld ? 0.2 : visibleMode === 'modern' ? 0 : visibleMode === 'overlay' ? opacity / 100 : 1, clipPath: visibleMode === 'split' ? `inset(0 ${100 - split}% 0 0)` : 'none' }} />
+    <div className="map" ref={modernEl} aria-label="Carte actuelle de Toulouse" />
+    <div className="map historic-map" ref={oldEl} aria-label={mode === 'time' ? 'Cartes historiques sur la frise' : `Carte historique de Toulouse en ${year}`} style={{ opacity: enabled.length === 0 ? 0 : compareHeld ? 0.2 : visibleMode === 'modern' ? 0 : visibleMode === 'overlay' ? opacity / 100 : 1, clipPath: visibleMode === 'split' ? `inset(0 ${100 - split}% 0 0)` : 'none' }} />
     <header className="masthead">
-      <a className="brand" href="/" aria-label="Toulouse сквозь время"><Layers size={20}/><span>Toulouse</span></a>
-      <div className="header-right"><div className="places-menu">
-        <button className="places-button" aria-expanded={placesOpen} aria-controls="places-popover" onClick={() => setPlacesOpen(v => !v)}><MapPin size={17}/>Места</button>
-        {placesOpen && <><button className="places-dismiss" tabIndex={-1} aria-label="Закрыть выбор места" onClick={() => setPlacesOpen(false)}/><div id="places-popover" className="places-popover"><select autoFocus aria-label="Перейти к месту" defaultValue="" onChange={e => { go(Number(e.target.value)); setPlacesOpen(false) }}><option value="" disabled>Выбрать место</option>{places.map((p, i) => <option key={p.name} value={i}>{p.name}</option>)}</select></div></>}
-      </div><button className="header-icon" onClick={copy} aria-label="Скопировать ссылку на место" title="Скопировать ссылку">{copied ? <Check size={17}/> : <Copy size={17}/>}</button><button className="source-button header-icon" onClick={() => setSources(true)} aria-label="О картах" title="О картах"><Info size={18}/></button></div>
+      <a className="brand" href="/" aria-label="Toulouse au fil du temps"><Layers size={20}/><span>Toulouse</span></a>
+      <div className="header-right"><div className="epochs-menu">
+        <button className="places-button" aria-expanded={epochsOpen} aria-controls="epochs-popover" onClick={() => { setEpochsOpen(v => !v); setPlacesOpen(false) }}><Layers size={17}/>Époques</button>
+        {epochsOpen && <><button className="epochs-dismiss" tabIndex={-1} aria-label="Fermer le choix des époques" onClick={() => setEpochsOpen(false)}/><div id="epochs-popover" className="epochs-popover" role="group" aria-label="Époques visibles">{YEARS.map(value => <label key={value}><input type="checkbox" checked={enabled.includes(value)} onChange={() => toggleEpoch(value)}/><span>{value}</span><small>{value === '1875' ? 'Inondation' : value === '1954' ? 'Vue aérienne' : 'Cadastre'}</small></label>)}<p>Les époques décochées sont ignorées par la frise.</p></div></>}
+      </div><div className="places-menu">
+        <button className="places-button" aria-expanded={placesOpen} aria-controls="places-popover" onClick={() => { setPlacesOpen(v => !v); setEpochsOpen(false) }}><MapPin size={17}/>Lieux</button>
+        {placesOpen && <><button className="places-dismiss" tabIndex={-1} aria-label="Fermer le choix du lieu" onClick={() => setPlacesOpen(false)}/><div id="places-popover" className="places-popover"><select autoFocus aria-label="Aller à un lieu" defaultValue="" onChange={e => { go(Number(e.target.value)); setPlacesOpen(false) }}><option value="" disabled>Choisir un lieu</option>{places.map((p, i) => <option key={p.name} value={i}>{p.name}</option>)}</select></div></>}
+      </div><button className="header-icon" onClick={copy} aria-label="Copier le lien vers ce lieu" title="Copier le lien">{copied ? <Check size={17}/> : <Copy size={17}/>}</button><button className="source-button header-icon" onClick={() => setSources(true)} aria-label="À propos des cartes" title="À propos des cartes"><Info size={18}/></button></div>
     </header>
-    {visibleMode === 'split' && <><div className="epoch-label old-label">{year === '1875' ? '1875 · Наводнение' : year} <span>{year === '1954' ? 'АЭРОФОТОСЪЁМКА' : 'ИСТОРИЧЕСКИЙ КАДАСТР'}</span></div><div className="epoch-label new-label"><span>СОВРЕМЕННАЯ КАРТА</span> Сегодня</div><div className="divider" style={{ left: `${split}%` }}><div className="divider-handle" role="slider" tabIndex={0} aria-label="Граница сравнения карт" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(split)} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId) }} onPointerMove={e => { if (e.currentTarget.hasPointerCapture(e.pointerId)) setSplit(Math.max(0, Math.min(100, e.clientX / window.innerWidth * 100))) }} onKeyDown={e => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) { e.preventDefault(); setSplit(s => e.key === 'Home' ? 0 : e.key === 'End' ? 100 : Math.max(0, Math.min(100, s + (e.key === 'ArrowLeft' ? -2 : 2)))) } }}><ArrowLeftRight size={21}/></div></div></>}
-    <button className="compare-hold" aria-label="Сверить с современной картой — удерживайте" aria-pressed={compareHeld} title="Удерживай, чтобы свериться с современными улицами"
+    {visibleMode === 'split' && <><div className="epoch-label old-label">{year === '1875' ? '1875 · Inondation' : year} <span>{year === '1954' ? 'VUE AÉRIENNE' : 'CADASTRE HISTORIQUE'}</span></div><div className="epoch-label new-label"><span>CARTE ACTUELLE</span> Actuel</div><div className="divider" style={{ left: `${split}%` }}><div className="divider-handle" role="slider" tabIndex={0} aria-label="Limite de comparaison" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(split)} onPointerDown={e => { e.currentTarget.setPointerCapture(e.pointerId) }} onPointerMove={e => { if (e.currentTarget.hasPointerCapture(e.pointerId)) setSplit(Math.max(0, Math.min(100, e.clientX / window.innerWidth * 100))) }} onKeyDown={e => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) { e.preventDefault(); setSplit(s => e.key === 'Home' ? 0 : e.key === 'End' ? 100 : Math.max(0, Math.min(100, s + (e.key === 'ArrowLeft' ? -2 : 2)))) } }}><ArrowLeftRight size={21}/></div></div></>}
+    <button className="compare-hold" aria-label="Maintenir pour comparer avec la carte actuelle" aria-pressed={compareHeld} title="Maintenez pour lire les rues actuelles"
       onPointerDown={e => { if (e.button !== 0 || !e.isPrimary) return; e.preventDefault(); e.currentTarget.focus(); e.currentTarget.setPointerCapture(e.pointerId); setCompareHeld(true) }}
       onPointerUp={() => setCompareHeld(false)} onPointerCancel={() => setCompareHeld(false)} onLostPointerCapture={() => setCompareHeld(false)}
       onBlur={() => setCompareHeld(false)} onContextMenu={e => e.preventDefault()}
       onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setCompareHeld(true) } if (e.key === 'Escape') setCompareHeld(false) }}
       onKeyUp={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setCompareHeld(false) } }}
-    ><Layers size={17}/><span>Сверить</span></button>
-    <div className="zoom-controls"><button className={geo.status !== 'off' ? 'location-active' : ''} aria-label={geo.status === 'off' ? 'Найти меня' : 'Выключить геопозицию'} title={geo.status === 'off' ? 'Найти меня' : 'Выключить геопозицию'} aria-pressed={geo.status !== 'off'} onClick={geo.toggle}><Navigation size={19} fill={geo.status === 'following' ? 'currentColor' : 'none'}/></button><div/><button aria-label="Приблизить" onClick={() => map.current?.zoomIn()}><Plus size={20}/></button><button aria-label="Отдалить" onClick={() => map.current?.zoomOut()}><Minus size={20}/></button><div/><button aria-label="Вернуться к Rue Ninau" onClick={() => go(0)}><RotateCcw size={18}/></button></div>
-    <section className="control-panel" aria-label="Сравнение карт"><span className="sr-only">{ready.modern && ready.historic ? 'Карты загружены' : 'Загружаем карты…'}</span>{!(ready.modern && ready.historic) && <span className="loading-dot" title="Загружаем карты…"/>}{mode !== 'time' && mode !== 'modern' && <div className="year-selector"><div role="group" aria-label="Исторический период">{YEARS.map(value => <button key={value} aria-label={`Карта ${value} года`} aria-pressed={year === value} className={year === value ? 'selected' : ''} onClick={() => changeYear(value)}>{value}</button>)}</div></div>}<div className="mode-buttons">{([['time', 'Время', null], ['split', 'Шторка', null], ['overlay', 'Наложение', null], ['historic', year, null], ['modern', 'Сегодня', null]] as const).map(([key, title, icon]) => <button key={key} aria-pressed={mode === key} className={mode === key ? 'active' : ''} onClick={() => setMode(key)}>{icon}{title}</button>)}</div>{mode === 'time' ? <div className="timeline"><div className="timeline-value" aria-live="polite" title="Смешивание карт, не реконструкция промежуточных лет">{timeLabel}</div><input aria-label="Путешествие по времени" aria-valuetext={timeLabel} type="range" min="1680" max={TODAY} step="1" value={time} onPointerDown={() => { timelinePointer.current = true }} onPointerUp={() => { timelinePointer.current = false }} onPointerCancel={() => { timelinePointer.current = false }} onBlur={() => { timelinePointer.current = false }} onKeyDown={() => { timelinePointer.current = false }} onChange={e => {
+    ><Layers size={17}/><span>Repères</span></button>
+    <div className="zoom-controls"><button className={geo.status !== 'off' ? 'location-active' : ''} aria-label={geo.status === 'off' ? 'Me localiser' : 'Désactiver la localisation'} title={geo.status === 'off' ? 'Me localiser' : 'Désactiver la localisation'} aria-pressed={geo.status !== 'off'} onClick={geo.toggle}><Navigation size={19} fill={geo.status === 'following' ? 'currentColor' : 'none'}/></button><div/><button aria-label="Zoom avant" onClick={() => map.current?.zoomIn()}><Plus size={20}/></button><button aria-label="Zoom arrière" onClick={() => map.current?.zoomOut()}><Minus size={20}/></button><div/><button aria-label="Revenir rue Ninau" onClick={() => go(0)}><RotateCcw size={18}/></button></div>
+    <section className="control-panel" aria-label="Comparaison des cartes"><span className="sr-only">{ready.modern && ready.historic ? 'Cartes chargées' : 'Chargement des cartes…'}</span>{!(ready.modern && ready.historic) && <span className="loading-dot" title="Chargement des cartes…"/>}{mode !== 'time' && mode !== 'modern' && <div className="year-selector"><div role="group" aria-label="Époque historique">{enabled.map(value => <button key={value} aria-label={`Carte de ${value}`} aria-pressed={year === value} className={year === value ? 'selected' : ''} onClick={() => changeYear(value)}>{value}</button>)}</div></div>}<div className="mode-buttons">{([['time', 'Frise', null], ['split', 'Rideau', null], ['overlay', 'Superposer', null], ['historic', year, null], ['modern', 'Actuel', null]] as const).map(([key, title, icon]) => <button key={key} aria-pressed={mode === key} className={mode === key ? 'active' : ''} onClick={() => setMode(key)}>{icon}{title}</button>)}</div>{mode === 'time' ? <div className="timeline"><div className="timeline-value" aria-live="polite" title="Transition entre cartes, pas une reconstitution des années intermédiaires">{timeLabel}</div><input key={dates.join(",")} aria-label="Voyage dans le temps" aria-valuetext={timeLabel} type="range" min={dates[0]} max={TODAY} disabled={!enabled.length} step="1" value={time} onPointerDown={() => { timelinePointer.current = true }} onPointerUp={() => { timelinePointer.current = false }} onPointerCancel={() => { timelinePointer.current = false }} onBlur={() => { timelinePointer.current = false }} onKeyDown={() => { timelinePointer.current = false }} onChange={e => {
           const value = Number(e.target.value)
           // A small magnetic zone for fingers/mouse; keyboard retains one-year steps.
-          const snap = timelinePointer.current ? dates.find(date => Math.abs(date - value) <= (TODAY - 1680) * 0.02) : undefined
+          const snap = timelinePointer.current ? dates.find(date => Math.abs(date - value) <= (TODAY - dates[0]) * 0.02) : undefined
           setTime(snap ?? value)
-        }}/><div className="timeline-ticks">{dates.map((date, i) => <button key={date} style={i === 0 ? { left: 0 } : i === dates.length - 1 ? { right: 0, left: 'auto' } : { left: ((date - 1680) / (TODAY - 1680) * 100) + '%', transform: 'translateX(-50%)' }} onClick={() => setTime(date)}>{dateLabel(date)}</button>)}</div></div> : (mode === 'overlay' || mode === 'split') && <div className="slider-row"><span>{mode === 'overlay' ? '' : year}</span><input aria-label={mode === 'overlay' ? 'Непрозрачность исторической карты' : 'Положение шторки'} type="range" min="0" max="100" value={mode === 'overlay' ? opacity : split} onChange={e => mode === 'overlay' ? setOpacity(Number(e.target.value)) : setSplit(Number(e.target.value))}/><span>{mode === 'overlay' ? `${opacity}%` : 'Сегодня'}</span></div>}</section>
-    {(geo.message || geo.status === 'locating') && <div className="location-notice" role="status"><span>{geo.message || 'Определяем твоё местоположение…'}</span><button aria-label="Скрыть сообщение о геопозиции" onClick={geo.dismiss}><X size={14}/></button></div>}
-    {errors.length > 0 && <div className="error-toast" role="alert">{errors.map(e => <p key={e}>{e}</p>)}<button onClick={() => location.reload()}>Повторить загрузку</button><button aria-label="Закрыть сообщение" onClick={() => setErrors([])}><X size={16}/></button></div>}
+        }}/><div className="timeline-ticks">{dates.map((date, i) => <button key={date} style={i === 0 ? { left: 0 } : i === dates.length - 1 ? { right: 0, left: 'auto' } : { left: ((date - dates[0]) / (TODAY - dates[0]) * 100) + '%', transform: 'translateX(-50%)' }} onClick={() => setTime(date)}>{dateLabel(date)}</button>)}</div></div> : (mode === 'overlay' || mode === 'split') && <div className="slider-row"><span>{mode === 'overlay' ? '' : year}</span><input aria-label={mode === 'overlay' ? 'Opacité de la carte historique' : 'Position du rideau'} type="range" min="0" max="100" value={mode === 'overlay' ? opacity : split} onChange={e => mode === 'overlay' ? setOpacity(Number(e.target.value)) : setSplit(Number(e.target.value))}/><span>{mode === 'overlay' ? `${opacity}%` : 'Actuel'}</span></div>}</section>
+    {(geo.message || geo.status === 'locating') && <div className="location-notice" role="status"><span>{geo.message || 'Localisation en cours…'}</span><button aria-label="Masquer le message de localisation" onClick={geo.dismiss}><X size={14}/></button></div>}
+    {errors.length > 0 && <div className="error-toast" role="alert">{errors.map(e => <p key={e}>{e}</p>)}<button onClick={() => location.reload()}>Recharger</button><button aria-label="Fermer le message" onClick={() => setErrors([])}><X size={16}/></button></div>}
     <footer><span className="coordinates">{coords}</span><span>{mode === 'time' || year === '1680' || year === '1830' ? <><a href={sourceUrl(year === '1680' ? '1680' : '1830')} target="_blank" rel="noreferrer">Makina Corpus</a> / <a href="https://data.toulouse-metropole.fr/" target="_blank" rel="noreferrer">Toulouse Métropole</a></> : null}{(mode === 'time' || year === '1875') && <>{mode === 'time' ? ' · ' : ''}<a href={FLOOD_SOURCE} target="_blank" rel="noreferrer">Archives Toulouse · 1875</a></>}{mode === 'time' ? ' · ' : ''}{(mode === 'time' || year === '1954') && <a href="https://www.ign.fr/" target="_blank" rel="noreferrer">© IGN · 1954</a>} <b>·</b> <a href="https://openfreemap.org/" target="_blank" rel="noreferrer">OpenFreeMap</a> © <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">OpenMapTiles</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a></span></footer>
-    {sources && <div className="modal-backdrop" onClick={() => setSources(false)}><section className="source-modal" role="dialog" aria-modal="true" aria-label="О картах и точности" onClick={e => e.stopPropagation()}><button autoFocus className="close-modal" aria-label="Закрыть источники" onClick={() => setSources(false)}><X/></button><div className="eyebrow">ИСТОЧНИКИ И ТОЧНОСТЬ</div><h2>Карты Тулузы</h2>{year === '1875' ? <><h3>Наводнение 23–24 июня 1875 года</h3><p>Оригинальный план Sirven / La Dépêche, Archives municipales de Toulouse, 20 Fi 45. Скан предоставлен на Mapas Milhaud. Синим отмечены затопленные места, красным — обрушившиеся дома.</p><p>Мы вручную совместили 15 ориентиров с современной картой. На трёх дополнительных проверочных точках расхождения составляют 14–27 м. У краёв точность ниже; это историческая иллюстрация, а не современная карта риска наводнения.</p></> : year === '1954' ? <><h3>Аэрофотосъёмка 1954 года</h3><p>Историческая чёрно-белая съёмка Тулузы из IGN / Edugéo. Используем готовый географически привязанный слой. При сильном приближении видны пиксели исходного снимка; за пределами покрытия остаётся современная карта.</p></> : <><h3>{year === '1680' ? 'Около 1680 года' : 'Кадастр 1830 года'}</h3><p>Карта Makina Corpus по историческому кадастру Toulouse Métropole. Это современная отрисовка исторических данных, а не оригинальный архивный скан. Используем готовые географически привязанные тайлы без дополнительного растяжения.</p></>}<a href={sourceUrl(year)} target="_blank" rel="noreferrer">Открыть карту-источник <ExternalLink size={14}/></a><h3>Управление</h3><p>На компьютере удерживай пробел, чтобы временно увидеть современную карту. Удерживай «Сверить», чтобы увидеть современные улицы со слабым наложением выбранной исторической карты. После отпускания вернётся прежний вид. Кнопка «Места» открывает переходы к кварталам.</p><h3>Режим «Время»</h3><p>Ползунок смешивает пять источников: 1680, 1830, план наводнения 1875 года, аэрофотосъёмку 1954 года и современную карту. Промежуточные положения показывают переход между картами, а не достоверный вид города в промежуточном году.</p><a href={sourceUrl('1680')} target="_blank" rel="noreferrer">Источник 1680</a> · <a href={sourceUrl('1830')} target="_blank" rel="noreferrer">Источник 1830</a> · <a href={FLOOD_SOURCE} target="_blank" rel="noreferrer">Источник 1875</a> · <a href={IGN_SOURCE} target="_blank" rel="noreferrer">Источник 1954 · IGN / Edugéo</a><h3>Современный город</h3><p>Векторная карта OpenFreeMap на основе OpenStreetMap. Дата обновления отдельных объектов различается; это не съёмка города на определённый день.</p><h3>Как читать несовпадения</h3><p>Они могут отражать изменения города или погрешности исторической реконструкции. Для кадастров 1680 и 1830 численная точность и контрольные точки исходной привязки не опубликованы вместе с тайлами. Совпадение каждого здания не гарантируется. За пределами исторического покрытия старые данные отсутствуют.</p><h3>Использование данных</h3><p>Официальный каталог указывает Licence Ouverte v2.0 для кадастрового набора. Отдельные условия оформления и хостинга тайлов Makina Corpus не подтверждены: эта версия предназначена для личной проверки концепции. Перед публичным запуском необходимо уточнить их или подготовить собственный слой из открытых данных.</p><a href={`https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-${year === '1680' ? '1680' : '1830'}/information/`} target="_blank" rel="noreferrer">Официальный каталог <ExternalLink size={14}/></a></section></div>}
+    {sources && <div className="modal-backdrop" onClick={() => setSources(false)}><section className="source-modal" role="dialog" aria-modal="true" aria-label="Cartes et précision" onClick={e => e.stopPropagation()}><button autoFocus className="close-modal" aria-label="Fermer les sources" onClick={() => setSources(false)}><X/></button><div className="eyebrow">SOURCES ET PRÉCISION</div><h2>Cartes de Toulouse</h2>{year === '1875' ? <><h3>Inondation des 23–24 juin 1875</h3><p>Plan original Sirven / La Dépêche, Archives municipales de Toulouse, 20 Fi 45. Numérisation disponible sur Mapas Milhaud. Le bleu indique les zones inondées ; le rouge, les maisons écroulées.</p><p>Le plan a été calé manuellement sur 15 repères. Sur trois points de contrôle indépendants, les écarts sont de 14 à 27 m. La précision diminue aux bords. Ce document historique ne décrit pas le risque actuel d’inondation.</p></> : year === '1954' ? <><h3>Vue aérienne de 1954</h3><p>Photographie aérienne en noir et blanc fournie par IGN / Edugéo, déjà géoréférencée. À fort zoom, les pixels du cliché deviennent visibles. Hors couverture, la carte actuelle reste affichée.</p></> : <><h3>{year === '1680' ? 'Vers 1680' : 'Cadastre de 1830'}</h3><p>Carte réalisée par Makina Corpus à partir du cadastre historique de Toulouse Métropole. Il s’agit d’un dessin actuel de données historiques, et non d’un scan d’archive. Les tuiles géoréférencées sont utilisées sans déformation supplémentaire.</p></>}<a href={sourceUrl(year)} target="_blank" rel="noreferrer">Ouvrir la carte source <ExternalLink size={14}/></a><h3>Utilisation</h3><p>Sur ordinateur, maintenez la barre d’espace pour afficher la carte actuelle. Maintenez « Repères » pour lire les rues actuelles avec une légère superposition historique. Relâchez pour revenir à la vue précédente. « Lieux » permet de rejoindre un quartier.</p><h3>Mode « Frise »</h3><p>La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les sources disponibles sont les cadastres de 1680 et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954. Les positions intermédiaires sont des transitions visuelles, pas des reconstitutions de ces années.</p><a href={sourceUrl('1680')} target="_blank" rel="noreferrer">Source 1680</a> · <a href={sourceUrl('1830')} target="_blank" rel="noreferrer">Source 1830</a> · <a href={FLOOD_SOURCE} target="_blank" rel="noreferrer">Source 1875</a> · <a href={IGN_SOURCE} target="_blank" rel="noreferrer">Source 1954 · IGN / Edugéo</a><h3>La ville actuelle</h3><p>Carte vectorielle OpenFreeMap issue d’OpenStreetMap. La date de mise à jour varie selon les objets ; ce n’est pas une photographie de la ville à une date précise.</p><h3>Comprendre les écarts</h3><p>Les écarts peuvent refléter les transformations de la ville ou les imprécisions des documents historiques. Pour les cadastres de 1680 et 1830, la précision et les points de calage ne sont pas publiés avec les tuiles. La concordance de chaque bâtiment n’est pas garantie. Les données anciennes sont absentes hors de leur couverture.</p><h3>Réutilisation des données</h3><p>Le catalogue officiel indique la Licence Ouverte v2.0 pour les données cadastrales. Les conditions propres au rendu et à l’hébergement des tuiles Makina Corpus restent à confirmer. Cette version sert à une exploration personnelle du concept ; une diffusion publique nécessiterait de clarifier ces conditions ou de produire une couche à partir des données ouvertes.</p><a href={`https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-${year === '1680' ? '1680' : '1830'}/information/`} target="_blank" rel="noreferrer">Catalogue officiel <ExternalLink size={14}/></a></section></div>}
   </main>
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>)

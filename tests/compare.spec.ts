@@ -1,8 +1,8 @@
 import {test,expect} from '@playwright/test'
 test('hold comparison restores split, overlay and timeline on release or cancellation',async({page})=>{
  await page.goto('/#year=1875&lon=1.4315&lat=43.599&z=15.6')
- await expect(page.getByText('Карты загружены',{exact:true})).toBeVisible({timeout:60000})
- const button=page.getByRole('button',{name:'Сверить с современной картой — удерживайте'})
+ await expect(page.getByText('Cartes chargées',{exact:true})).toBeVisible({timeout:60000})
+ const button=page.getByRole('button',{name:'Maintenir pour comparer avec la carte actuelle'})
  const layer=page.locator('.historic-map')
  const hold=async()=>{await button.hover();await page.mouse.down();await expect(layer).toHaveCSS('opacity','0.2');await expect(layer).toHaveCSS('clip-path','none')}
  await hold()
@@ -10,12 +10,12 @@ test('hold comparison restores split, overlay and timeline on release or cancell
  await page.mouse.up()
  await expect(layer).toHaveCSS('opacity','1')
  await expect(page.locator('.divider')).toBeVisible()
- await page.getByRole('button',{name:'Наложение',exact:true}).click()
- await page.getByRole('slider',{name:'Непрозрачность исторической карты'}).fill('72')
+ await page.getByRole('button',{name:'Superposer',exact:true}).click()
+ await page.getByRole('slider',{name:'Opacité de la carte historique'}).fill('72')
  await hold();await page.mouse.up()
  await expect(layer).toHaveCSS('opacity','0.72')
- await page.getByRole('button',{name:'Время',exact:true}).click()
- const time=page.getByRole('slider',{name:'Путешествие по времени'})
+ await page.getByRole('button',{name:'Frise',exact:true}).click()
+ const time=page.getByRole('slider',{name:'Voyage dans le temps'})
  await time.fill('1850')
  await page.setViewportSize({width:390,height:844})
  await hold()

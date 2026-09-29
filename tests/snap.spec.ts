@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 test('timeline snaps close to each source and releases for dragging and keyboard', async ({page}) => {
   await page.goto('/#mode=time&time=1830')
-  const slider = page.getByRole('slider', {name:'Путешествие по времени'})
+  const slider = page.getByRole('slider', {name:'Voyage dans le temps'})
   for (const width of [1440,390]) {
     await page.setViewportSize({width,height:844})
     const box = (await slider.boundingBox())!

@@ -19,7 +19,7 @@ export function useLocation(maps: React.RefObject<Map[]>) {
   useEffect(() => stop, [stop])
   const toggle = () => {
     if (watch.current !== null) { stop(); setMessage(''); return }
-    if (!navigator.geolocation) { setMessage('Этот браузер не поддерживает геопозицию.'); return }
+    if (!navigator.geolocation) { setMessage('Ce navigateur ne prend pas en charge la géolocalisation.'); return }
     if (!maps.current.length) return
     setMessage(''); setStatus('locating')
     const request = ++generation.current
@@ -27,35 +27,35 @@ export function useLocation(maps: React.RefObject<Map[]>) {
       if (request !== generation.current) return
       const { longitude: lon, latitude: lat, accuracy } = position.coords
       if (lon < 1.405 || lon > 1.48 || lat < 43.575 || lat > 43.635) {
-        stop(); setMessage('Ты сейчас за пределами центра Тулузы, который охватывает эта карта.'); return
+        stop(); setMessage('Vous êtes en dehors du centre de Toulouse couvert par cette carte.'); return
       }
       if (!markers.current.length) {
         markers.current = maps.current.map(map => {
           const el = document.createElement('div')
           el.className = 'location-dot'
           el.setAttribute('role', 'img')
-          el.setAttribute('aria-label', 'Моё местоположение')
+          el.setAttribute('aria-label', 'Ma position')
           return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map)
         })
       }
       markers.current.forEach(marker => {
         marker.getElement().style.opacity = '1'
         marker.setLngLat([lon, lat])
-        marker.getElement().title = `Моё местоположение · точность около ${Math.round(accuracy)} м`
+        marker.getElement().title = `Ma position · précision estimée : ${Math.round(accuracy)} m`
       })
       setStatus('following')
-      setMessage(`Геопозиция включена · точность около ${Math.round(accuracy)} м`)
+      setMessage(`Localisation active · précision estimée : ${Math.round(accuracy)} m`)
       maps.current[0]?.easeTo({ center: [lon, lat], duration: 600 })
     }, error => {
       if (request !== generation.current) return
       if (error.code === 1) {
         stop()
-        setMessage('Разреши доступ к геопозиции в настройках браузера и нажми «Найти меня» ещё раз.')
+        setMessage('Autorisez la géolocalisation dans le navigateur, puis appuyez à nouveau sur « Me localiser ».')
       } else {
         // A temporary GPS loss must not cancel the watch; it can recover on its own.
         setStatus('locating')
-        markers.current.forEach(marker => { marker.getElement().style.opacity = '0.4'; marker.getElement().title = 'Последнее известное положение — ждём новый сигнал' })
-        setMessage('Ждём сигнал геопозиции. Бледная точка — последнее известное положение. Для остановки нажми стрелку.')
+        markers.current.forEach(marker => { marker.getElement().style.opacity = '0.4'; marker.getElement().title = 'Dernière position connue — en attente du signal' })
+        setMessage('En attente du signal GPS. Le point pâle indique la dernière position connue. Appuyez sur la flèche pour arrêter.')
       }
     }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 })
   }
