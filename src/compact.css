@@ -1,0 +1,56 @@
+:root { --header-height: 46px; --footer-height: 28px }
+main { min-height: 320px }
+.map { inset: var(--header-height) 0 var(--footer-height) }
+.masthead { height: var(--header-height); padding: 0 16px }
+.brand { font-size: 20px; gap: 8px }
+.header-right { gap: 4px }
+.header-icon,.places-button { height: 40px; min-width: 40px; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 9px; border: 0; border-radius: 6px; background: none; font-size: 12px }
+.header-icon:hover,.places-button:hover { background: #e8ece2 }
+.places-menu { position: relative }
+.places-dismiss { position: fixed; inset: var(--header-height) 0 0; cursor: default }
+.places-popover { position: absolute; top: 44px; right: 0; width: 230px; padding: 12px; background: #faf9f2; border: 1px solid #d5d8cd; border-radius: 8px; box-shadow: 0 8px 25px #20302426 }
+.places-popover select { width: 100%; height: 42px; padding: 0 8px; border: 1px solid #d5d8cd; border-radius: 5px; background: #fffef8; color: inherit; font-size: 14px }
+.control-panel { bottom: calc(var(--footer-height) + 10px); padding: 8px 10px; width: 440px; border-radius: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px }
+.mode-buttons { order: 0; width: 100%; padding: 3px; gap: 2px }
+.mode-buttons button { min-height: 36px; padding: 7px 5px; font-size: 11px }
+.year-selector { order: 1; margin: 0; flex-shrink: 0 }
+.year-selector button { height: 36px; padding: 0 8px; font-size: 11px }
+.slider-row { order: 2; flex: 1; margin: 0; gap: 6px; min-width: 0 }
+.slider-row>span:first-child { display: none }
+.slider-row input { height: 30px; width: 100%; margin: 0 }
+.slider-row span { min-width: 30px; font-size: 10px; text-align: right }
+.timeline { width: 100%; margin: 0 }
+.timeline-value { font: 500 12px 'Golos Text',sans-serif; margin: 2px 0 }
+.timeline input { height: 24px; display: block }
+.timeline-ticks { height: 26px; margin: 0 }
+.timeline-ticks button { min-height: 26px; font-size: 10px; padding: 2px 0 }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0 }
+.loading-dot { position: absolute; right: 5px; top: 2px; width: 5px; height: 5px; background: #bd985e; border-radius: 50% }
+.zoom-controls { top: calc(var(--header-height) + 14px); right: 14px; padding: 3px }
+.zoom-controls button { width: 38px; height: 38px }
+.zoom-controls div { margin: 2px 4px }
+.location-notice { top: calc(var(--header-height) + 14px); right: 68px; max-width: 260px }
+.divider { top: var(--header-height); bottom: var(--footer-height) }
+.epoch-label { top: calc(var(--header-height) + 14px); font: 500 12px 'Golos Text',sans-serif; padding: 5px 9px }
+.epoch-label span { display: none }
+.old-label { left: 14px; display: block }
+.new-label { right: 70px }
+.maplibregl-ctrl-bottom-left { bottom: auto; top: 12px; left: 12px }
+.maplibregl-ctrl-scale { margin-top: 34px!important }
+footer { height: var(--footer-height); padding: 0 10px; font-size: 8px }
+.coordinates { display: none }
+.error-toast { top: calc(var(--header-height) + 70px) }
+@media(max-width:600px) {
+  :root { --header-height:44px }
+  .masthead { padding: 0 10px }
+  .brand { font-size: 18px }
+  .brand>svg { width: 18px }
+  .header-right { gap: 0 }
+  .control-panel { width: calc(100% - 20px); max-width: 430px; padding: 7px 8px; bottom: calc(var(--footer-height) + 8px); gap: 5px 8px }
+  .mode-buttons button { font-size: 10px; min-height: 36px }
+  .timeline-value { font-size: 12px }
+  .zoom-controls { right: 10px }
+  .location-notice { max-width: calc(100% - 84px) }
+  footer { font-size: 7px; line-height: 1.4 }
+  .source-modal { max-height: calc(100dvh - 32px) }
+}

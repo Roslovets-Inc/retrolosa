@@ -24,7 +24,7 @@ test('continuous timeline preserves view, endpoints, keyboard peek and shared st
   await page.reload()
   await expect(slider).toHaveValue('1755')
   await expect(page.getByText('Карты загружены', { exact: true })).toBeVisible({ timeout: 60000 })
-  await page.locator('h1').click()
+  await page.locator('main').focus()
   await page.keyboard.down('Space')
   await expect(page.locator('.historic-map')).toHaveCSS('opacity', '0')
   await page.keyboard.up('Space')
