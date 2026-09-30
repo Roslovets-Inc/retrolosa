@@ -33,6 +33,8 @@ import tavernier1631 from "./tavernier-1631.json";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import { useLocation } from "./useLocation";
 
+const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 const YEARS = ["1250", "1631", "1680", "1830", "1875", "1954"] as const;
 type Year = (typeof YEARS)[number];
 const epochLabel = (value: Year) => (value === "1250" ? "XIIIe" : value);
@@ -66,7 +68,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   const style: maplibregl.StyleSpecification = { version: 8, sources: {}, layers: [] };
   style.sources["history-1250"] = {
     type: "image",
-    url: "/openedition-13c/map.webp",
+    url: assetUrl("openedition-13c/map.webp"),
     coordinates: medieval13c.coordinates as [
       [number, number],
       [number, number],
@@ -86,7 +88,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   });
   style.sources["overview-1631"] = {
     type: "image",
-    url: `/tavernier-1631/overview.webp?v=${tavernier1631.revision}`,
+    url: assetUrl(`tavernier-1631/overview.webp?v=${tavernier1631.revision}`),
     coordinates: tavernier1631.coordinates as [
       [number, number],
       [number, number],
@@ -96,7 +98,9 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   };
   style.sources["history-1631"] = {
     type: "raster",
-    tiles: [location.origin + `/tavernier-1631/{z}/{x}/{y}.webp?v=${tavernier1631.revision}`],
+    tiles: [
+      location.origin + assetUrl(`tavernier-1631/{z}/{x}/{y}.webp?v=${tavernier1631.revision}`),
+    ],
     tileSize: 256,
     minzoom: 14,
     maxzoom: 17,
@@ -119,7 +123,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   for (const period of ["1680", "1830"] as const) {
     style.sources["overview-" + period] = {
       type: "image",
-      url: period === "1680" ? "/history-overview.png" : "/history-overview-1830.png",
+      url: assetUrl(period === "1680" ? "history-overview.png" : "history-overview-1830.png"),
       coordinates: (period === "1680" ? overviewCoordinates : overview1830) as [
         [number, number],
         [number, number],
@@ -160,7 +164,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   }
   style.sources["overview-1875"] = {
     type: "image",
-    url: "/flood-1875/overview.webp",
+    url: assetUrl("flood-1875/overview.webp"),
     coordinates: flood1875.coordinates as [
       [number, number],
       [number, number],
@@ -174,7 +178,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
     minzoom: 14,
     maxzoom: 17,
     bounds: flood1875.bounds as [number, number, number, number],
-    tiles: [location.origin + "/flood-1875/{z}/{x}/{y}.webp"],
+    tiles: [location.origin + assetUrl("flood-1875/{z}/{x}/{y}.webp")],
     attribution: "Archives municipales de Toulouse · 20 Fi 45 · Sirven / La Dépêche",
   };
   for (const kind of ["overview", "history"] as const)
@@ -677,7 +681,7 @@ function App() {
         </div>
       )}
       <header className="masthead">
-        <a className="brand" href="/" aria-label="Toulouse au fil du temps">
+        <a className="brand" href={import.meta.env.BASE_URL} aria-label="Toulouse au fil du temps">
           <Layers size={20} />
           <span>Toulouse</span>
         </a>
@@ -1238,7 +1242,11 @@ function App() {
                   la frise sert au classement ; la source date le plan du XIIIe siècle, sans année
                   précise.
                 </p>
-                <a href="/openedition-13c/figure-06.jpg" target="_blank" rel="noreferrer">
+                <a
+                  href={assetUrl("openedition-13c/figure-06.jpg")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Voir le dessin complet et sa légende <ExternalLink size={14} />
                 </a>
               </>

@@ -56,9 +56,28 @@ navigateur et `PLAYWRIGHT_PORT` d’isoler le serveur de tests.
 Les rapports sont dans `coverage/`, `playwright-report/` et `test-results/` ; les
 captures manuelles dans `.local/`.
 
-GitHub Actions exécute les mêmes commandes sur les PR et les pushes vers `main`,
-et conserve les diagnostics pendant sept jours. Aucun script ni workflow ne
-publie automatiquement le site.
+GitHub Actions vérifie, compile et publie le site à chaque push vers `main`,
+et conserve les diagnostics pendant sept jours. Une vérification ou un test en échec
+bloque la publication.
+
+## Publication GitHub Pages
+
+Le workflow unique `Deploy to GitHub Pages` (`.github/workflows/pages.yml`) se lance
+automatiquement à chaque push vers `main`. Il vérifie le projet, compile `dist/`,
+exécute les tests navigateur, puis publie avec les actions officielles GitHub Pages.
+Un lancement manuel reste disponible depuis **Actions → Deploy to GitHub Pages →
+Run workflow**, sur `main`. Les commandes locales et l’installation des dépendances
+ne déclenchent pas de publication.
+
+Après avoir envoyé le dépôt sur GitHub, sélectionner **Settings → Pages →
+Build and deployment → Source → GitHub Actions**. Les règles de protection de
+l’environnement `github-pages` doivent autoriser la branche `main`.
+
+Le chemin de base fourni par GitHub Pages est transmis à Vite via `VITE_BASE_PATH` ;
+les cartes, polices et liens fonctionnent aussi sous le chemin du dépôt. Pour
+reproduire cette compilation localement, définir `VITE_BASE_PATH=/toulouse-in-time/`
+avant `bun run build`, puis utiliser `bun run preview` et ouvrir ce chemin.
+La compilation locale utilise `/` par défaut.
 
 ## Dépendances et conventions
 

@@ -20,7 +20,9 @@ Examples:
 
 Do not publish or deploy this project to Sites unless the user explicitly requests publication or deployment for the current work. Requests to implement, fix, build, test, or commit changes do not authorize publication. Previous publication requests do not authorize future deployments.
 
-When publication is not explicitly requested, complete the work locally and report the result without deploying. Do not enable automatic publication on push. This project rule overrides any skill's default instruction to publish after edits.
+When Sites publication is not explicitly requested, complete the work locally and report the result without deploying to Sites. Do not enable automatic Sites publication on push. This project rule overrides any skill's default instruction to publish after edits.
+
+GitHub Pages publication is authorized automatically on every push to `main` through `.github/workflows/pages.yml`, after checks, build and browser tests pass.
 
 ## Development workflow
 
@@ -34,4 +36,4 @@ When publication is not explicitly requested, complete the work locally and repo
 - Keep the user interface and accessibility labels in French; use English code comments.
 - Keep unit tests under `tests/unit/*.test.ts` and Playwright scenarios under `tests/*.spec.ts`.
 - Do not edit generated raster assets as part of routine formatting or web builds. Asset generation is an explicit separate operation.
-- GitHub Actions mirrors local checks. Development commands, CI and dependency installation must never publish the site automatically.
+- GitHub Actions mirrors local checks. The Pages workflow checks, builds and deploys on pushes to `main`. Local development commands and dependency installation must never publish the site.
