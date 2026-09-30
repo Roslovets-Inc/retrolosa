@@ -8,7 +8,7 @@ import math
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 config = json.loads((ROOT / 'data/openedition-13c-control-points.json').read_text(encoding='utf-8'))
@@ -18,12 +18,7 @@ if not source.exists():
 assert hashlib.sha256(source.read_bytes()).hexdigest() == config['sha256']
 im = Image.open(source).convert('RGBA')
 scale = im.width / config['annotationWidth']
-mask = Image.new('L', im.size)
-draw = ImageDraw.Draw(mask)
-draw.polygon([(x * scale, y * scale) for x, y in config['mask']], fill=255)
-# The legend overlaps the reference cadastre; don't invent the hidden geometry.
-draw.rectangle((980 * scale, 982 * scale, im.width, 1540 * scale), fill=0)
-im.putalpha(mask)
+# Preserve the complete source drawing, including its original legend.
 points = [p for p in config['points'] if p['role'] == 'fit']
 a = np.linalg.solve(np.array([[*p['old'], 1] for p in points]), np.array([p['ref'] for p in points]))
 assert np.linalg.det(a[:2]) > 0

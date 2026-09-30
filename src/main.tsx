@@ -1238,7 +1238,7 @@ function App() {
                   Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle
                   indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
                   {medieval13c.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-                  La légende masquée laisse une zone transparente. Le repère 1250 dans les liens et
+                  La légende originale est conservée sur la carte. Le repère 1250 dans les liens et
                   la frise sert au classement ; la source date le plan du XIIIe siècle, sans année
                   précise.
                 </p>

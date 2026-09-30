@@ -11,7 +11,6 @@
     { "name": "Dalbade nave footprint", "old": [563, 1017], "ref": [661.43, 765.73], "role": "fit" },
     { "name": "Saint-Pierre-des-Cuisines footprint", "old": [216, 547], "ref": [534.9, 599.44], "role": "check" }
   ],
-  "mask": [[170,590],[205,125],[400,60],[600,115],[735,278],[762,508],[815,565],[990,600],[1035,910],[900,839],[980,1290],[720,1315],[530,1300],[425,1310],[320,1400],[175,1365],[100,1165],[90,990],[50,820],[22,450],[141,695],[60,310]],
   "method": "Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
   "dating": "XIIIe siècle; 1250 is a timeline ordering anchor, not an asserted survey year.",
   "rights": "F. Callède / Inrap / PCR Toulouse au Moyen Âge. Reuse authorization unconfirmed; attribution and source link do not establish permission. Integrated at user's request."

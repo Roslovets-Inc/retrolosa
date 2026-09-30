@@ -72,9 +72,10 @@ Le calage affine utilise trois repères conservés (Saint-Sernin, portail ouest 
 Saint-Étienne, nef de la Dalbade). Saint-Pierre-des-Cuisines est réservé au
 contrôle indépendant : écart de 3,2 m, sans garantie à l'échelle de toute la ville.
 Configuration reproductible : `data/openedition-13c-control-points.json` ;
-préparation explicite : `scripts/build-openedition-13c.py`. La légende est masquée
-du rendu et consultable dans le dessin original ; aucun détail caché n'est
-reconstitué. Le fichier WebP préparé pèse environ 642 ko, l'original environ 1,33 Mo.
+préparation explicite : `scripts/build-openedition-13c.py`. Le rendu conserve
+l’intégralité du dessin source, avec sa légende originale et les quartiers hors
+de l’enceinte, sans découpage ni zone transparente.
+Le fichier WebP préparé pèse environ 1,1 Mo, l'original environ 1,33 Mo.
 
 ### Vérification de la provenance et des droits, 30 septembre 2026
 

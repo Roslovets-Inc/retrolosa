@@ -2,6 +2,27 @@ import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
 
+test("medieval raster preserves the whole source map including its legend", async ({ page }) => {
+  await page.goto("/openedition-13c/figure-06.jpg");
+  const result = await page.evaluate(async () => {
+    const image = new Image();
+    image.src = "/openedition-13c/map.webp";
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext("2d")!;
+    context.drawImage(image, 0, 0);
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height);
+    let missingPixels = 0;
+    for (let index = 3; index < data.length; index += 4) {
+      if (data[index] !== 255) missingPixels++;
+    }
+    return missingPixels;
+  });
+  expect(result).toBe(0);
+});
+
 test("medieval reconstruction loads, identifies its period and restores shared settings", async ({
   page,
 }) => {
