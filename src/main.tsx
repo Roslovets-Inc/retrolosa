@@ -15,6 +15,9 @@ import {
   Navigation,
   Eye,
   Search,
+  Monitor,
+  Sun,
+  Moon,
 } from "lucide-react";
 import * as maplibregl from "maplibre-gl";
 import type { Map as MapInstance } from "maplibre-gl";
@@ -24,13 +27,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { CityWidget } from "./CityWidget";
+import { loadStateMajorTile } from "./etat-major";
 import flood1875 from "./flood-1875.json";
 import overview1830 from "./history-overview-1830.json";
+import overviewCoordinates from "./history-overview.json";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
-import overviewCoordinates from "./history-overview.json";
+import "./ui.css";
 import jourdan1860 from "./jourdan-1860.json";
 import laffont1904 from "./laffont-1904.json";
 import medieval13c from "./openedition-13c.json";
@@ -39,10 +44,29 @@ import antiquity from "./openedition-antiquite.json";
 import { mapBearing, nextBearing, readBearing, visibleEpoch } from "./orientation";
 import saget1777 from "./saget-1777.json";
 import tavernier1631 from "./tavernier-1631.json";
+import { appliedTheme, modernMapStyle, setThemePreference, useTheme } from "./theme";
+import type { Theme, ThemePreference } from "./theme";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  Popover,
+  Slider,
+  Tooltip,
+  TooltipProvider,
+  ToggleGroup,
+  ToggleItem,
+} from "./ui";
 import { useLocation } from "./useLocation";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+const themeLabels = { system: "système", light: "clair", dark: "sombre" };
+const nextTheme: Record<ThemePreference, ThemePreference> = {
+  system: "light",
+  light: "dark",
+  dark: "system",
+};
 
 const YEARS = [
   "450",
@@ -52,6 +76,7 @@ const YEARS = [
   "1680",
   "1777",
   "1830",
+  "1848",
   "1860",
   "1875",
   "1904",
@@ -72,23 +97,25 @@ const SAGET_SOURCE = "https://www.flickr.com/photos/archives-toulouse/2511115987
 const JOURDAN_SOURCE = jourdan1860.sourcePage;
 const LAFFONT_SOURCE = laffont1904.sourcePage;
 const sourceUrl = (year: Year) =>
-  year === "1860"
-    ? JOURDAN_SOURCE
-    : year === "1904"
-      ? LAFFONT_SOURCE
-      : year === "1777"
-        ? SAGET_SOURCE
-        : year === "450" || year === "1250" || year === "1550"
-          ? MEDIEVAL_SOURCE
-          : year === "1631"
-            ? TAVERNIER_SOURCE
-            : year === "1875"
-              ? FLOOD_SOURCE
-              : year === "1954"
-                ? IGN_SOURCE
-                : year === "1680"
-                  ? "https://tolosa1680.makina-corpus.com/"
-                  : "https://tolosa.makina-corpus.com/";
+  year === "1848"
+    ? "https://remonterletemps.ign.fr/telecharger/?lon=1.444&lat=43.604&z=13&layer=cartes_anciennes&collection=ETATMAJOR&year=1848"
+    : year === "1860"
+      ? JOURDAN_SOURCE
+      : year === "1904"
+        ? LAFFONT_SOURCE
+        : year === "1777"
+          ? SAGET_SOURCE
+          : year === "450" || year === "1250" || year === "1550"
+            ? MEDIEVAL_SOURCE
+            : year === "1631"
+              ? TAVERNIER_SOURCE
+              : year === "1875"
+                ? FLOOD_SOURCE
+                : year === "1954"
+                  ? IGN_SOURCE
+                  : year === "1680"
+                    ? "https://tolosa1680.makina-corpus.com/"
+                    : "https://tolosa.makina-corpus.com/";
 const TODAY = new Date().getFullYear();
 const mapCredit = (period: Year) =>
   period === "450" || period === "1250" || period === "1550"
@@ -101,11 +128,13 @@ const mapCredit = (period: Year) =>
           ? "Jourdan"
           : period === "1904"
             ? "Laffont"
-            : period === "1954"
-              ? "© IGN / Edugéo"
-              : period === "1875"
-                ? "Sirven / Archives Toulouse"
-                : "Toulouse Métropole / Makina Corpus";
+            : period === "1848"
+              ? "© IGN · État-major 1848"
+              : period === "1954"
+                ? "© IGN / Edugéo"
+                : period === "1875"
+                  ? "Sirven / Archives Toulouse"
+                  : "Toulouse Métropole / Makina Corpus";
 const initialTime = () => {
   const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
   return Number.isFinite(value) && value >= Number(YEARS[0]) && value <= TODAY
@@ -272,6 +301,25 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
       },
     );
   }
+  style.sources["history-1848"] = {
+    type: "raster",
+    tileSize: 256,
+    minzoom: 6,
+    maxzoom: 15,
+    bounds: [1.3, 43.49, 1.57, 43.75],
+    tiles: ["etat-major://{z}/{x}/{y}"],
+    attribution: "IGN · État-major · Minutes de 1848 · Licence Ouverte 2.0",
+  };
+  style.layers.push({
+    id: "history-1848",
+    type: "raster",
+    source: "history-1848",
+    paint: {
+      "raster-opacity": year === "1848" ? 1 : 0,
+      "raster-opacity-transition": { duration: 0 },
+      "raster-fade-duration": 0,
+    },
+  });
   style.sources["overview-1875"] = {
     type: "image",
     url: assetUrl("flood-1875/overview.webp"),
@@ -357,6 +405,7 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
   return style;
 }
 maplibregl.setWorkerUrl(workerUrl);
+maplibregl.addProtocol("etat-major", loadStateMajorTile);
 const protocol = new Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
 type Mode = "split" | "overlay" | "loupe";
@@ -424,6 +473,8 @@ function initialEnabled(): Year[] {
   return value === null ? [...YEARS] : YEARS.filter((year) => value.split(",").includes(year));
 }
 function App() {
+  const { selection: themePreference, theme } = useTheme();
+  const mapTheme = useRef<Theme | null>(null);
   const [alignedToMap, setAlignedToMap] = useState(() => initialView().bearing !== 0);
   const modernEl = useRef<HTMLDivElement>(null),
     oldEl = useRef<HTMLDivElement>(null);
@@ -462,27 +513,6 @@ function App() {
   const [shareFallback, setShareFallback] = useState("");
   const [placesOpen, setPlacesOpen] = useState(false);
   useEffect(() => {
-    if (!sources) return;
-    const trap = (event: KeyboardEvent) => {
-      if (event.key !== "Tab") return;
-      const items = document.querySelectorAll<HTMLElement>(".source-modal button, .source-modal a");
-      const first = items[0],
-        last = items[items.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last?.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first?.focus();
-      }
-    };
-    window.addEventListener("keydown", trap);
-    return () => {
-      window.removeEventListener("keydown", trap);
-      document.querySelector<HTMLButtonElement>(".source-button")?.focus();
-    };
-  }, [sources]);
-  useEffect(() => {
     if (!modernEl.current || !oldEl.current) return;
     let modern: MapInstance, historic: MapInstance;
     try {
@@ -500,7 +530,7 @@ function App() {
       modern = new maplibregl.Map({
         ...options,
         container: modernEl.current,
-        style: "https://tiles.openfreemap.org/styles/positron",
+        style: modernMapStyle(appliedTheme()),
       });
       historic = new maplibregl.Map({
         ...options,
@@ -514,6 +544,7 @@ function App() {
       return;
     }
     map.current = modern;
+    mapTheme.current = appliedTheme();
     historicMap.current = historic;
     locationMaps.current = [modern, historic];
     modern.touchZoomRotate.disableRotation();
@@ -570,20 +601,24 @@ function App() {
     };
   }, []);
   useEffect(() => {
+    if (!map.current || mapTheme.current === theme) return;
+    mapTheme.current = theme;
+    map.current.setStyle(modernMapStyle(theme));
+  }, [theme]);
+  useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (
         e.code === "Space" &&
-        !(e.target instanceof HTMLInputElement) &&
-        !(e.target instanceof HTMLButtonElement)
+        !e.defaultPrevented &&
+        !(
+          e.target instanceof HTMLElement &&
+          e.target.closest(
+            'input, button, select, textarea, [role="slider"], [role="dialog"], [role="radio"], [contenteditable="true"]',
+          )
+        )
       ) {
         e.preventDefault();
         setPeek(true);
-      }
-      if (e.key === "Escape") {
-        setSources(false);
-        setPlacesOpen(false);
-        setEpochsOpen(false);
-        setShareFallback("");
       }
     };
     const up = (e: KeyboardEvent) => {
@@ -654,9 +689,11 @@ function App() {
   const timeLabel = dates.includes(time)
     ? time === 1875
       ? "1875 · Inondation"
-      : time === 1550
-        ? "1550 · Héritages du parcellaire"
-        : dateLabel(time)
+      : time === 1848
+        ? "1848 · État-major"
+        : time === 1550
+          ? "1550 · Héritages du parcellaire"
+          : dateLabel(time)
     : `${dateLabel(lower)} → ${dateLabel(upper)}`;
   const toggleEpoch = (value: Year) => {
     const next = YEARS.filter((y) => (y === value ? !enabled.includes(y) : enabled.includes(y)));
@@ -742,7 +779,7 @@ function App() {
       />
       {visibleMode === "loupe" && opacity > 0 && (
         <div className="map loupe-overlay">
-          <button
+          <Button
             className="loupe-glass"
             aria-label="Déplacer la loupe historique"
             aria-describedby="loupe-help"
@@ -828,71 +865,81 @@ function App() {
           <span>Rétrolosa</span>
         </a>
         <div className="header-right">
-          <div className="places-menu">
-            <button
-              className="places-button"
-              aria-expanded={placesOpen}
-              aria-controls="places-popover"
-              onClick={() => {
-                setPlacesOpen((v) => !v);
-                setEpochsOpen(false);
+          <Button
+            type="button"
+            className="header-icon theme-toggle"
+            aria-label={`Thème : ${themeLabels[themePreference]}. Passer au thème ${themeLabels[nextTheme[themePreference]]}`}
+            data-tooltip={`Thème : ${themeLabels[themePreference]}. Passer au thème ${themeLabels[nextTheme[themePreference]]}`}
+            onClick={() => setThemePreference(nextTheme[themePreference])}
+          >
+            {themePreference === "system" ? (
+              <Monitor size={18} aria-hidden="true" />
+            ) : themePreference === "light" ? (
+              <Sun size={18} aria-hidden="true" />
+            ) : (
+              <Moon size={18} aria-hidden="true" />
+            )}
+          </Button>
+          <span className="sr-only" role="status">
+            Thème : {themeLabels[themePreference]}
+            {themePreference === "system" ? ` (${themeLabels[theme]})` : ""}
+          </span>
+          <Popover
+            open={placesOpen}
+            onOpenChange={(open) => {
+              setPlacesOpen(open);
+              if (open) setEpochsOpen(false);
+            }}
+            label="Choisir un lieu"
+            closeLabel="Fermer le choix du lieu"
+            className="places-popover"
+            align="end"
+            trigger={
+              <Button className="places-button" data-tooltip="Aller à un lieu">
+                <MapPin size={17} />
+                Lieux
+              </Button>
+            }
+          >
+            <select
+              aria-label="Aller à un lieu"
+              defaultValue=""
+              onChange={(event) => {
+                go(Number(event.target.value));
+                setPlacesOpen(false);
               }}
             >
-              <MapPin size={17} />
-              Lieux
-            </button>
-            {placesOpen && (
-              <>
-                <button
-                  className="places-dismiss"
-                  tabIndex={-1}
-                  aria-label="Fermer le choix du lieu"
-                  onClick={() => setPlacesOpen(false)}
-                />
-                <div id="places-popover" className="places-popover">
-                  <select
-                    autoFocus
-                    aria-label="Aller à un lieu"
-                    defaultValue=""
-                    onChange={(e) => {
-                      go(Number(e.target.value));
-                      setPlacesOpen(false);
-                    }}
-                  >
-                    <option value="" disabled>
-                      Choisir un lieu
-                    </option>
-                    {places.map((p, i) => (
-                      <option key={p.name} value={i}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </>
-            )}
-          </div>
-          <button
+              <option value="" disabled>
+                Choisir un lieu
+              </option>
+              {places.map((place, index) => (
+                <option key={place.name} value={index}>
+                  {place.name}
+                </option>
+              ))}
+            </select>
+          </Popover>
+          <Button
             className="header-icon"
             onClick={share}
             aria-label="Partager la vue"
-            title={copied ? "Lien copié" : "Partager la vue"}
+            data-tooltip={copied ? "Lien copié" : "Partager la vue"}
           >
             {copied ? <Check size={17} /> : <Share2 size={17} />}
-          </button>
+          </Button>
           {copied && (
             <span className="sr-only" aria-live="polite">
               Lien copié
             </span>
           )}
-          <button
+          <Button
             className="source-button header-icon"
             onClick={() => setSources(true)}
             aria-label="À propos des cartes"
-            title="À propos des cartes"
+            data-tooltip="À propos des cartes"
           >
             <Info size={18} />
-          </button>
+          </Button>
         </div>
       </header>
       <CityWidget
@@ -952,11 +999,12 @@ function App() {
         </>
       )}
       <div className="opacity-controls" role="group" aria-label="Transparence et comparaison">
-        <button
+        <Button
           className="compare-hold"
+          tooltipSide="left"
           aria-label="Maintenir pour comparer avec la carte actuelle"
           aria-pressed={compareHeld}
-          title="Maintenez pour lire les rues actuelles"
+          data-tooltip="Maintenez pour lire les rues actuelles"
           onPointerDown={(e) => {
             if (e.button !== 0 || !e.isPrimary) return;
             e.preventDefault();
@@ -984,51 +1032,55 @@ function App() {
           }}
         >
           <Eye size={20} />
-        </button>
-        <section
-          className="opacity-panel"
-          aria-label="Opacité"
-          title="Opacité de la carte historique"
-        >
-          <input
-            type="range"
-            aria-label="Opacité de la carte historique"
-            aria-valuetext={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
-            min="0"
-            max="100"
-            step="1"
+        </Button>
+        <section className="opacity-panel" aria-label="Opacité">
+          <Slider
             value={opacity}
+            onValueChange={setOpacity}
+            label="Opacité de la carte historique"
+            valueText={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
             disabled={!enabled.length}
-            onChange={(e) => setOpacity(Number(e.target.value))}
           />
           <output>{opacity}%</output>
         </section>
       </div>
       <div className="zoom-controls">
-        <button
+        <Button
           className={geo.status !== "off" ? "location-active" : ""}
           aria-label={geo.status === "off" ? "Me localiser" : "Désactiver la localisation"}
-          title={geo.status === "off" ? "Me localiser" : "Désactiver la localisation"}
+          tooltipSide="left"
+          data-tooltip={geo.status === "off" ? "Me localiser" : "Désactiver la localisation"}
           aria-pressed={geo.status !== "off"}
           onClick={geo.toggle}
         >
           <Navigation size={19} fill={geo.status === "following" ? "currentColor" : "none"} />
-        </button>
+        </Button>
         <div />
-        <button aria-label="Zoom avant" onClick={() => map.current?.zoomIn()}>
+        <Button
+          tooltipSide="left"
+          data-tooltip="Zoom avant"
+          aria-label="Zoom avant"
+          onClick={() => map.current?.zoomIn()}
+        >
           <Plus size={20} />
-        </button>
-        <button aria-label="Zoom arrière" onClick={() => map.current?.zoomOut()}>
+        </Button>
+        <Button
+          tooltipSide="left"
+          data-tooltip="Zoom arrière"
+          aria-label="Zoom arrière"
+          onClick={() => map.current?.zoomOut()}
+        >
           <Minus size={20} />
-        </button>
-        <button
+        </Button>
+        <Button
           className="orientation-button"
+          tooltipSide="left"
           aria-label={
             readingBearing === 0
               ? "Orientation : nord"
               : `Orientation : ${bearing === 0 ? "nord" : `${bearing}°`}. Tourner vers ${nextBearing(bearing, orientationEpoch) === 0 ? "le nord" : `${nextBearing(bearing, orientationEpoch)}°`}`
           }
-          title={
+          data-tooltip={
             readingBearing === 0
               ? "Ce plan est orienté au nord"
               : `Orientation : ${bearing === 0 ? "nord" : `${bearing}°`} · Cliquer pour tourner`
@@ -1042,11 +1094,12 @@ function App() {
         >
           <Compass size={18} style={{ transform: `rotate(${-bearing}deg)` }} />
           <span>{bearing === 0 ? "N" : `${bearing}°`}</span>
-        </button>
+        </Button>
         <div />
-        <button
+        <Button
           aria-label="Vue d’ensemble de Toulouse"
-          title="Vue d’ensemble de Toulouse"
+          tooltipSide="left"
+          data-tooltip="Vue d’ensemble de Toulouse"
           onClick={() =>
             map.current?.fitBounds(CITY_OVERVIEW, {
               padding: 30,
@@ -1057,106 +1110,100 @@ function App() {
           }
         >
           <RotateCcw size={18} />
-        </button>
+        </Button>
       </div>
-      {epochsOpen && (
-        <button
-          className="epochs-dismiss"
-          tabIndex={-1}
-          aria-label="Fermer le choix des époques"
-          onClick={() => setEpochsOpen(false)}
-        />
-      )}
       <div className="control-dock">
         <section className="control-panel" aria-label="Comparaison des cartes">
           <span className="sr-only">
             {ready.modern && ready.historic ? "Cartes chargées" : "Chargement des cartes…"}
           </span>
           {!(ready.modern && ready.historic) && (
-            <span className="loading-dot" title="Chargement des cartes…" />
+            <Tooltip text="Chargement des cartes…">
+              <span className="loading-dot" />
+            </Tooltip>
           )}
           <div className="timeline-tools">
-            <div className="epochs-menu">
-              <button
-                className="epochs-button"
-                aria-expanded={epochsOpen}
-                aria-controls="epochs-popover"
-                onClick={() => {
-                  setEpochsOpen((v) => !v);
-                  setPlacesOpen(false);
-                }}
-              >
-                <Layers size={17} />
-                <span>Époques</span>
-              </button>
-              {epochsOpen && (
-                <>
-                  <div
-                    id="epochs-popover"
-                    className="epochs-popover"
-                    role="group"
-                    aria-label="Époques visibles"
-                  >
-                    {YEARS.map((value) => (
-                      <label key={value}>
-                        <input
-                          type="checkbox"
-                          checked={enabled.includes(value)}
-                          onChange={() => toggleEpoch(value)}
-                        />
-                        <span>{epochLabel(value)}</span>
-                        <small>
-                          {value === "450" || value === "1250"
-                            ? "Reconstruction"
-                            : value === "1550"
-                              ? "Héritages du parcellaire"
-                              : value === "1860"
-                                ? "Plan de Jourdan"
-                                : value === "1904"
-                                  ? "Plan de Laffont"
-                                  : value === "1777"
-                                    ? "Plan de Saget"
-                                    : value === "1631"
-                                      ? "Plan · calage approximatif"
-                                      : value === "1875"
-                                        ? "Inondation"
-                                        : value === "1954"
-                                          ? "Vue aérienne"
-                                          : "Cadastre"}
-                        </small>
-                      </label>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="comparison-switch" role="group" aria-label="Forme de comparaison">
+            <Popover
+              open={epochsOpen}
+              onOpenChange={(open) => {
+                setEpochsOpen(open);
+                if (open) setPlacesOpen(false);
+              }}
+              label="Époques visibles"
+              closeLabel="Fermer le choix des époques"
+              className="epochs-popover"
+              side="top"
+              trigger={
+                <Button className="epochs-button" data-tooltip="Choisir les époques visibles">
+                  <Layers size={17} />
+                  <span>Époques</span>
+                </Button>
+              }
+            >
+              <div role="group" aria-label="Époques visibles">
+                {YEARS.map((value) => (
+                  <label key={value}>
+                    <Checkbox
+                      checked={enabled.includes(value)}
+                      onCheckedChange={() => toggleEpoch(value)}
+                    />
+                    <span>{epochLabel(value)}</span>
+                    <small>
+                      {value === "450" || value === "1250"
+                        ? "Reconstruction"
+                        : value === "1550"
+                          ? "Héritages du parcellaire"
+                          : value === "1848"
+                            ? "État-major · IGN"
+                            : value === "1860"
+                              ? "Plan de Jourdan"
+                              : value === "1904"
+                                ? "Plan de Laffont"
+                                : value === "1777"
+                                  ? "Plan de Saget"
+                                  : value === "1631"
+                                    ? "Plan · calage approximatif"
+                                    : value === "1875"
+                                      ? "Inondation"
+                                      : value === "1954"
+                                        ? "Vue aérienne"
+                                        : "Cadastre"}
+                    </small>
+                  </label>
+                ))}
+              </div>
+            </Popover>
+            <ToggleGroup
+              className="comparison-switch"
+              aria-label="Forme de comparaison"
+              value={mode}
+              onValueChange={(value) => setMode(value as Mode)}
+            >
               {(["overlay", "split", "loupe"] as const).map((shape) => (
-                <button
-                  key={shape}
-                  aria-label={
-                    shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
-                  }
-                  title={
-                    shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
-                  }
-                  aria-pressed={mode === shape}
-                  disabled={!enabled.length}
-                  onClick={() => setMode(shape)}
-                >
-                  {shape === "split" ? (
-                    <ArrowLeftRight size={16} />
-                  ) : shape === "loupe" ? (
-                    <Search size={16} />
-                  ) : (
-                    <Blend size={16} />
-                  )}
-                  <span>
-                    {shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"}
-                  </span>
-                </button>
+                <ToggleItem key={shape} value={shape} asChild disabled={!enabled.length}>
+                  <Button
+                    aria-label={
+                      shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
+                    }
+                    data-tooltip={
+                      shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"
+                    }
+                    disabled={!enabled.length}
+                  >
+                    {shape === "split" ? (
+                      <ArrowLeftRight size={16} />
+                    ) : shape === "loupe" ? (
+                      <Search size={16} />
+                    ) : (
+                      <Blend size={16} />
+                    )}
+                    <span>
+                      {shape === "split" ? "Rideau" : shape === "loupe" ? "Loupe" : "Superposition"}
+                    </span>
+                  </Button>
+                </ToggleItem>
               ))}
-            </div>
+            </ToggleGroup>
           </div>
           {mode === "loupe" && (
             <p className="sr-only" id="loupe-help">
@@ -1165,68 +1212,69 @@ function App() {
             </p>
           )}
           <div className="timeline">
-            <div
-              className="timeline-value sr-only"
-              aria-live="polite"
-              title="Transition entre cartes, pas une reconstitution des années intermédiaires"
-            >
+            <div className="timeline-value sr-only" aria-live="polite">
               {timeLabel}
             </div>
             <div className="timeline-range">
               <div
                 className="timeline-track"
                 style={{
-                  background: `linear-gradient(to right, #3e604d ${timePosition * 100}%, #d9dcda ${timePosition * 100}%)`,
+                  background: `linear-gradient(to right, var(--slider) ${timePosition * 100}%, var(--track) ${timePosition * 100}%)`,
                 }}
               />
               <div
                 className="timeline-thumb"
                 style={{ left: `calc(${timePosition * 100}% + ${8 - 16 * timePosition}px)` }}
               />
-              <input
-                key={dates.join(",")}
-                aria-label="Voyage dans le temps"
-                aria-valuetext={timeLabel}
-                type="range"
-                min={dates[0]}
-                max={TODAY}
-                disabled={!enabled.length}
-                step="1"
-                value={time}
-                onPointerDown={(e) => {
-                  if (e.button !== 0 || !e.isPrimary || !enabled.length) return;
-                  e.preventDefault();
-                  e.currentTarget.focus();
-                  e.currentTarget.setPointerCapture(e.pointerId);
-                  timelinePointer.current = true;
-                  moveTimeline(e.currentTarget, e.clientX);
-                }}
-                onPointerMove={(e) => {
-                  if (e.currentTarget.hasPointerCapture(e.pointerId))
+              <Tooltip
+                text="Voyage dans le temps · Utilisez les flèches pour ajuster l’année"
+                sideOffset={56}
+              >
+                <input
+                  key={dates.join(",")}
+                  aria-label="Voyage dans le temps"
+                  aria-valuetext={timeLabel}
+                  type="range"
+                  min={dates[0]}
+                  max={TODAY}
+                  disabled={!enabled.length}
+                  step="1"
+                  value={time}
+                  onPointerDown={(e) => {
+                    if (e.button !== 0 || !e.isPrimary || !enabled.length) return;
+                    e.preventDefault();
+                    e.currentTarget.focus();
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                    timelinePointer.current = true;
                     moveTimeline(e.currentTarget, e.clientX);
-                }}
-                onPointerUp={() => {
-                  timelinePointer.current = false;
-                }}
-                onPointerCancel={() => {
-                  timelinePointer.current = false;
-                }}
-                onBlur={() => {
-                  timelinePointer.current = false;
-                }}
-                onKeyDown={() => {
-                  timelinePointer.current = false;
-                }}
-                onChange={(e) => {
-                  const value = Number(e.target.value);
-                  // Keyboard input retains one-year steps.
-                  setTime(timelinePointer.current ? snapTimelineYear(value, dates) : value);
-                }}
-              />
+                  }}
+                  onPointerMove={(e) => {
+                    if (e.currentTarget.hasPointerCapture(e.pointerId))
+                      moveTimeline(e.currentTarget, e.clientX);
+                  }}
+                  onPointerUp={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onPointerCancel={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onBlur={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onKeyDown={() => {
+                    timelinePointer.current = false;
+                  }}
+                  onChange={(e) => {
+                    const value = Number(e.target.value);
+                    // Keyboard input retains one-year steps.
+                    setTime(timelinePointer.current ? snapTimelineYear(value, dates) : value);
+                  }}
+                />
+              </Tooltip>
             </div>
             <div className="timeline-ticks">
               {dates.map((date, index) => (
-                <button
+                <Button
                   key={date}
                   data-period={date}
                   aria-pressed={time === date}
@@ -1238,7 +1286,7 @@ function App() {
                   onClick={() => setTime(date)}
                 >
                   {dateLabel(date)}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -1247,9 +1295,9 @@ function App() {
       {(geo.message || geo.status === "locating") && (
         <div className="location-notice" role="status">
           <span>{geo.message || "Localisation en cours…"}</span>
-          <button aria-label="Masquer le message de localisation" onClick={geo.dismiss}>
+          <Button aria-label="Masquer le message de localisation" onClick={geo.dismiss}>
             <X size={14} />
-          </button>
+          </Button>
         </div>
       )}
       {errors.length > 0 && (
@@ -1257,10 +1305,10 @@ function App() {
           {errors.map((e) => (
             <p key={e}>{e}</p>
           ))}
-          <button onClick={() => location.reload()}>Recharger</button>
-          <button aria-label="Fermer le message" onClick={() => setErrors([])}>
+          <Button onClick={() => location.reload()}>Recharger</Button>
+          <Button aria-label="Fermer le message" onClick={() => setErrors([])}>
             <X size={16} />
-          </button>
+          </Button>
         </div>
       )}
       <footer>
@@ -1284,375 +1332,369 @@ function App() {
           </a>
         </span>
       </footer>
-      {shareFallback && (
-        <div className="modal-backdrop" onClick={() => setShareFallback("")}>
-          <section
-            className="source-modal share-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Partager la vue"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="close-modal"
-              aria-label="Fermer le partage"
-              onClick={() => setShareFallback("")}
-            >
-              <X />
-            </button>
-            <h2>Partager la vue</h2>
-            <p>Copiez ce lien pour retrouver cette vue de la carte.</p>
-            <input
-              autoFocus
-              readOnly
-              aria-label="Lien de partage"
-              value={shareFallback}
-              onFocus={(e) => e.currentTarget.select()}
-            />
-          </section>
-        </div>
-      )}
-      {sources && (
-        <div className="modal-backdrop" onClick={() => setSources(false)}>
-          <section
-            className="source-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Cartes et précision"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              autoFocus
-              className="close-modal"
-              aria-label="Fermer les sources"
-              onClick={() => setSources(false)}
-            >
-              <X />
-            </button>
-            <div className="eyebrow">SOURCES ET PRÉCISION</div>
-            <h2>Cartes de Toulouse</h2>
-            {year === "450" ? (
-              <>
-                <h3>Toulouse à la fin de l’Antiquité · reconstruction</h3>
-                <p>
-                  Figure 1 de l’étude de Quitterie Cazes, dessin de F. Callède. Le plan distingue
-                  les vestiges du Haut et du Bas Empire et les propositions de restitution des axes
-                  de la voirie antique. Le fond parcellaire et les églises servent de repères ; tous
-                  les éléments dessinés ne sont pas contemporains.
-                </p>
-                <p>
-                  La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans
-                  les liens et la frise sert uniquement au classement. La légende originale est
-                  conservée. Le calage affine utilise trois églises de référence ; le contrôle
-                  indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-                  {antiquity.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-                </p>
-                <a
-                  href={assetUrl("openedition-antiquite/figure-01.jpg")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Voir le dessin complet et sa légende <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1250" ? (
-              <>
-                <h3>Toulouse au XIIIe siècle · reconstruction</h3>
-                <p>
-                  Dessin de F. Callède, Inrap, PCR « Toulouse au Moyen Âge », illustration 6 de
-                  l’étude de Quitterie Cazes publiée dans Marquer la ville (2013), sur OpenEdition.
-                  Les positions connues et proposées sont distinguées dans la légende originale. Le
-                  fond parcellaire est un repère de lecture, pas un relevé exact du XIIIe siècle.
-                </p>
-                <p>
-                  Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle
-                  indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-                  {medieval13c.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-                  La légende originale est conservée sur la carte. Le repère 1250 dans les liens et
-                  la frise sert au classement ; la source date le plan du XIIIe siècle, sans année
-                  précise.
-                </p>
-                <a
-                  href={assetUrl("openedition-13c/figure-06.jpg")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Voir le dessin complet et sa légende <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1550" ? (
-              <>
-                <h3>1550 · Héritages du parcellaire</h3>
-                <p>
-                  Assemblage des figures 7 et 8 de l’étude de Quitterie Cazes, dessins de F. Callède
-                  / Inrap. Les limites rouges de la figure 7, d’orientation antique, complètent les
-                  limites bleues de la figure 8. Le fond et la légende de la figure 8 sont conservés
-                  ; le fond archéologique propre à la figure 7 reste dans l’original.
-                </p>
-                <p>
-                  1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond
-                  représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de
-                  Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à
-                  Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-                  {parcels1550.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-                </p>
-                <a
-                  href={assetUrl("openedition-1550/figure-07.jpg")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Figure 7 · Héritages antiques <ExternalLink size={14} />
-                </a>{" "}
-                <a
-                  href={assetUrl("openedition-1550/figure-08.jpg")}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Figure 8 · Héritages médiévaux <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1631" ? (
-              <>
-                <h3>Plan de Melchior Tavernier · 1631</h3>
-                <p>
-                  Plan de la ville de Tholose, Archives municipales de Toulouse, II 671.
-                  Numérisation originale de 7874 × 5884 pixels, domaine public.
-                </p>
-                <p>
-                  Calage révisé sur 22 repères au sol, avec une correction locale de la rue
-                  Nazareth. Quatre contrôles distincts autour de Nazareth et du Salin donnent des
-                  écarts de 8 à 39 m, sans établir la précision de toute la ville. Les monuments
-                  sont dessinés en perspective ; les toits et les bords restent moins fiables. Ce
-                  plan ne garantit pas une correspondance exacte rue par rue.
-                </p>
-                <p>Le feuillet complet conserve ses marges, son cartouche et sa légende.</p>
-                <a href={assetUrl("tavernier-1631/original.jpg")} target="_blank" rel="noreferrer">
-                  Voir le plan complet et sa légende <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1777" ? (
-              <>
-                <h3>Plan de Joseph Marie de Saget · 1777</h3>
-                <p>
-                  Plan de la ville de Toulouse dédié et présenté à Monsieur le frère du Roi. Dessin
-                  de Joseph Marie de Saget, gravure de Pierre Gabriel Berthault. Archives
-                  municipales de Toulouse, II 686 · domaine public. Numérisation originale de 5906 ×
-                  4047 pixels.
-                </p>
-                <p>
-                  Le plan complet conserve ses tables et sa légende. Calage affine manuel sur
-                  Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles
-                  distincts donnent des écarts de{" "}
-                  {saget1777.checkPoints.map((point) => point.errorMetres).join(" et ")} m. Ces
-                  repères ne garantissent pas la précision ailleurs ; la correspondance des rues
-                  reste approximative, surtout aux bords.
-                </p>
-                <a href={assetUrl("saget-1777/original.jpg")} target="_blank" rel="noreferrer">
-                  Voir le plan complet et sa légende <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1860" || year === "1904" ? (
-              <>
-                <h3>
-                  {year === "1860"
-                    ? "Plan de Jourdan et Rivière · vers 1860"
-                    : "Plan de Léon Laffont · 1904"}
-                </h3>
-                <p>
-                  {year === "1860"
-                    ? "Ville de Toulouse. Faubourgs. Banlieue. Dessin de Justin Jourdan, lithographie de Prosper Rivière. Archives municipales de Toulouse, 20 Fi 66 · domaine public."
-                    : "Plan de la ville de Toulouse. Dessin de Léon Laffont, lithographie de Pierre Rouy, édition Pagès et Carrère. Archives municipales de Toulouse, 20Fi57. Tirage de 1904."}
-                </p>
-                <p>
-                  {year === "1860"
-                    ? "Le plan montre le chemin de fer, les places et les faubourgs. Il comprend des changements réalisés et des alignements officiellement projetés, à distinguer avec la légende. Les cartes annexes et les vues de monuments sont conservées."
-                    : "Le plan couvre le centre et les faubourgs, notamment les Minimes, Bonnefoy, Saint-Cyprien et Saint-Michel. Le pont des Amidonniers y figure comme projet. Les numéros de grille, le titre et les marges sont conservés."}
-                </p>
-                <p>
-                  Calage affine manuel sur Saint-Sernin, Saint-Étienne et le Pont Neuf. Trois
-                  contrôles distincts au Taur, à Saint-Pierre-des-Cuisines et à la Dalbade donnent
-                  des écarts de{" "}
-                  {(year === "1860" ? jourdan1860 : laffont1904).checkPoints
-                    .map((point) => point.errorMetres)
-                    .join(", ")}{" "}
-                  m. Ces contrôles concernent le centre ; ils ne garantissent pas la précision aux
-                  faubourgs ni aux bords du document. Le feuillet complet est conservé.
-                </p>
-                <a
-                  href={assetUrl(
-                    (year === "1860" ? "jourdan-1860" : "laffont-1904") + "/original.jpg",
-                  )}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Voir le plan complet <ExternalLink size={14} />
-                </a>
-              </>
-            ) : year === "1875" ? (
-              <>
-                <h3>Inondation des 23–24 juin 1875</h3>
-                <p>
-                  Plan original Sirven / La Dépêche, Archives municipales de Toulouse, 20 Fi 45.
-                  Numérisation disponible sur Mapas Milhaud. Le bleu indique les zones inondées ; le
-                  rouge, les maisons écroulées.
-                </p>
-                <p>
-                  Le plan a été calé manuellement sur 15 repères. Sur trois points de contrôle
-                  indépendants, les écarts sont de 14 à 27 m. La précision diminue aux bords. Ce
-                  document historique ne décrit pas le risque actuel d’inondation.
-                </p>
-              </>
-            ) : year === "1954" ? (
-              <>
-                <h3>Vue aérienne de 1954</h3>
-                <p>
-                  Photographie aérienne en noir et blanc fournie par IGN / Edugéo, déjà
-                  géoréférencée. À fort zoom, les pixels du cliché deviennent visibles. Hors
-                  couverture, la carte actuelle reste affichée.
-                </p>
-              </>
-            ) : (
-              <>
-                <h3>{year === "1680" ? "Vers 1680" : "Cadastre de 1830"}</h3>
-                <p>
-                  Carte réalisée par Makina Corpus à partir du cadastre historique de Toulouse
-                  Métropole. Il s’agit d’un dessin actuel de données historiques, et non d’un scan
-                  d’archive. Les tuiles géoréférencées sont utilisées sans déformation
-                  supplémentaire.
-                </p>
-              </>
-            )}
-            <a href={sourceUrl(year)} target="_blank" rel="noreferrer">
-              Ouvrir la carte source <ExternalLink size={14} />
-            </a>
-            <h3>Population de Toulouse</h3>
+      <Dialog
+        open={Boolean(shareFallback)}
+        onOpenChange={(open) => {
+          if (!open) setShareFallback("");
+        }}
+        label="Partager la vue"
+        closeLabel="Fermer le partage"
+        className="share-modal"
+      >
+        <h2>Partager la vue</h2>
+        <p>Copiez ce lien pour retrouver cette vue de la carte.</p>
+        <input
+          readOnly
+          aria-label="Lien de partage"
+          value={shareFallback}
+          onFocus={(e) => e.currentTarget.select()}
+        />
+      </Dialog>
+      <Dialog
+        open={sources}
+        onOpenChange={setSources}
+        label="Cartes et précision"
+        closeLabel="Fermer les sources"
+      >
+        <div className="eyebrow">SOURCES ET PRÉCISION</div>
+        <h2>Cartes de Toulouse</h2>
+        {year === "450" ? (
+          <>
+            <h3>Toulouse à la fin de l’Antiquité · reconstruction</h3>
             <p>
-              Ordres de grandeur de la ville historique, puis de la commune, pas de la métropole.
-              Entre les repères documentés, le compteur interpole les valeurs et les arrondit au
-              millier. Les estimations anciennes sont incertaines et les périmètres varient. Pour
-              l’Antiquité, le repère est d’environ 20 000 habitants ; les variations du haut Moyen
-              Âge ne sont pas reconstituées. Après 2023, le dernier recensement est conservé.
+              Figure 1 de l’étude de Quitterie Cazes, dessin de F. Callède. Le plan distingue les
+              vestiges du Haut et du Bas Empire et les propositions de restitution des axes de la
+              voirie antique. Le fond parcellaire et les églises servent de repères ; tous les
+              éléments dessinés ne sont pas contemporains.
             </p>
             <p>
-              Sources :{" "}
-              <a
-                href="https://archives.toulouse.fr/place-saint-etienne/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Archives de Toulouse
-              </a>
-              ,{" "}
-              <a
-                href="https://www.persee.fr/doc/hes_0752-5702_1998_num_17_3_1997"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Laffont · Ancien Régime
-              </a>
-              ,{" "}
-              <a
-                href="https://fr.wikipedia.org/wiki/Toulouse#Démographie"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Recensements historiques
-              </a>
-              ,{" "}
-              <a
-                href="https://www.insee.fr/fr/statistiques/2011101?geo=COM-31555"
-                target="_blank"
-                rel="noreferrer"
-              >
-                INSEE · 1968–2023
-              </a>
-              .
-            </p>
-            <h3>Utilisation</h3>
-            <p>
-              Le bouton boussole alterne entre le nord et l’orientation du plan visible : 53° pour
-              1777 ou 84° pour 1631. Sur la frise, le plan qui apparaît devient la référence à
-              mi-transition. Les autres plans restent orientés au nord. Ces angles approchés
-              facilitent la lecture des légendes ; les déformations des anciens plans peuvent
-              subsister.
-            </p>
-            <p>
-              Sur ordinateur, maintenez la barre d’espace pour afficher la carte actuelle. Maintenez
-              le bouton avec l’icône œil pour lire les rues actuelles avec une légère superposition
-              historique. Relâchez pour revenir à la vue précédente. « Lieux » permet de rejoindre
-              un quartier. « Partager » crée un lien vers la vue actuelle, avec les époques et les
-              réglages choisis.
-            </p>
-            <h3>Frise et comparaison</h3>
-            <p>
-              La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
-              outils au-dessus permettent de choisir la superposition, le rideau ou la loupe sans
-              changer la date. Les sources disponibles sont les reconstructions de la fin de
-              l’Antiquité et du XIIIe siècle, les héritages du parcellaire de 1550, les plans de
-              1631 et 1777, les cadastres de 1680 et 1830, les plans de 1860 et 1904, le plan
-              d’inondation de 1875 et la vue aérienne de 1954. Les positions intermédiaires sont des
-              transitions visuelles, pas des reconstitutions de ces années.
-            </p>
-            <h3>Crédits de toutes les cartes</h3>
-            <ul className="source-credits">
-              {YEARS.map((period) => (
-                <li key={period}>
-                  <a href={sourceUrl(period)} target="_blank" rel="noreferrer">
-                    {epochLabel(period)} · {mapCredit(period)}
-                    {["1631", "1777", "1860", "1904"].includes(period) &&
-                      " / Archives municipales de Toulouse"}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <h3>La ville actuelle</h3>
-            <p>
-              Carte vectorielle OpenFreeMap issue d’OpenStreetMap. La date de mise à jour varie
-              selon les objets ; ce n’est pas une photographie de la ville à une date précise.
-            </p>
-            <p>
-              <a href="https://openfreemap.org/" target="_blank" rel="noreferrer">
-                OpenFreeMap
-              </a>{" "}
-              · ©{" "}
-              <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">
-                OpenMapTiles
-              </a>{" "}
-              · ©{" "}
-              <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
-                OpenStreetMap
-              </a>
-            </p>
-            <h3>Comprendre les écarts</h3>
-            <p>
-              Les écarts peuvent refléter les transformations de la ville ou les imprécisions des
-              documents historiques. Pour les cadastres de 1680 et 1830, la précision et les points
-              de calage ne sont pas publiés avec les tuiles. La concordance de chaque bâtiment n’est
-              pas garantie. Les données anciennes sont absentes hors de leur couverture.
-            </p>
-            <h3>Réutilisation des données</h3>
-            <p>
-              Le catalogue officiel indique la Licence Ouverte v2.0 pour les données cadastrales.
-              Les conditions propres au rendu et à l’hébergement des tuiles Makina Corpus restent à
-              confirmer. Cette version sert à une exploration personnelle du concept ; une diffusion
-              publique nécessiterait de clarifier ces conditions ou de produire une couche à partir
-              des données ouvertes.
+              La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans les
+              liens et la frise sert uniquement au classement. La légende originale est conservée.
+              Le calage affine utilise trois églises de référence ; le contrôle indépendant à
+              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+              {antiquity.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
             </p>
             <a
-              href={`https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-${year === "1680" ? "1680" : "1830"}/information/`}
+              href={assetUrl("openedition-antiquite/figure-01.jpg")}
               target="_blank"
               rel="noreferrer"
             >
-              Catalogue officiel <ExternalLink size={14} />
+              Voir le dessin complet et sa légende <ExternalLink size={14} />
             </a>
-          </section>
-        </div>
-      )}
+          </>
+        ) : year === "1250" ? (
+          <>
+            <h3>Toulouse au XIIIe siècle · reconstruction</h3>
+            <p>
+              Dessin de F. Callède, Inrap, PCR « Toulouse au Moyen Âge », illustration 6 de l’étude
+              de Quitterie Cazes publiée dans Marquer la ville (2013), sur OpenEdition. Les
+              positions connues et proposées sont distinguées dans la légende originale. Le fond
+              parcellaire est un repère de lecture, pas un relevé exact du XIIIe siècle.
+            </p>
+            <p>
+              Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle indépendant à
+              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+              {medieval13c.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs. La
+              légende originale est conservée sur la carte. Le repère 1250 dans les liens et la
+              frise sert au classement ; la source date le plan du XIIIe siècle, sans année précise.
+            </p>
+            <a href={assetUrl("openedition-13c/figure-06.jpg")} target="_blank" rel="noreferrer">
+              Voir le dessin complet et sa légende <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1550" ? (
+          <>
+            <h3>1550 · Héritages du parcellaire</h3>
+            <p>
+              Assemblage des figures 7 et 8 de l’étude de Quitterie Cazes, dessins de F. Callède /
+              Inrap. Les limites rouges de la figure 7, d’orientation antique, complètent les
+              limites bleues de la figure 8. Le fond et la légende de la figure 8 sont conservés ;
+              le fond archéologique propre à la figure 7 reste dans l’original.
+            </p>
+            <p>
+              1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond
+              représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de
+              Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à
+              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+              {parcels1550.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
+            </p>
+            <a href={assetUrl("openedition-1550/figure-07.jpg")} target="_blank" rel="noreferrer">
+              Figure 7 · Héritages antiques <ExternalLink size={14} />
+            </a>{" "}
+            <a href={assetUrl("openedition-1550/figure-08.jpg")} target="_blank" rel="noreferrer">
+              Figure 8 · Héritages médiévaux <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1631" ? (
+          <>
+            <h3>Plan de Melchior Tavernier · 1631</h3>
+            <p>
+              Plan de la ville de Tholose, Archives municipales de Toulouse, II 671. Numérisation
+              originale de 7874 × 5884 pixels, domaine public.
+            </p>
+            <p>
+              Calage révisé sur 22 repères au sol, avec une correction locale de la rue Nazareth.
+              Quatre contrôles distincts autour de Nazareth et du Salin donnent des écarts de 8 à 39
+              m, sans établir la précision de toute la ville. Les monuments sont dessinés en
+              perspective ; les toits et les bords restent moins fiables. Ce plan ne garantit pas
+              une correspondance exacte rue par rue.
+            </p>
+            <p>Le feuillet complet conserve ses marges, son cartouche et sa légende.</p>
+            <a href={assetUrl("tavernier-1631/original.jpg")} target="_blank" rel="noreferrer">
+              Voir le plan complet et sa légende <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1777" ? (
+          <>
+            <h3>Plan de Joseph Marie de Saget · 1777</h3>
+            <p>
+              Plan de la ville de Toulouse dédié et présenté à Monsieur le frère du Roi. Dessin de
+              Joseph Marie de Saget, gravure de Pierre Gabriel Berthault. Archives municipales de
+              Toulouse, II 686 · domaine public. Numérisation originale de 5906 × 4047 pixels.
+            </p>
+            <p>
+              Le plan complet conserve ses tables et sa légende. Calage affine manuel sur
+              Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles distincts
+              donnent des écarts de{" "}
+              {saget1777.checkPoints.map((point) => point.errorMetres).join(" et ")} m. Ces repères
+              ne garantissent pas la précision ailleurs ; la correspondance des rues reste
+              approximative, surtout aux bords.
+            </p>
+            <a href={assetUrl("saget-1777/original.jpg")} target="_blank" rel="noreferrer">
+              Voir le plan complet et sa légende <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1848" ? (
+          <>
+            <h3>Carte de l’état-major · 1848</h3>
+            <p>
+              Minutes en couleurs au 1 : 40 000, diffusées par IGN. Le catalogue officiel date de
+              1848 le feuillet 230 NO qui couvre le centre de Toulouse, ainsi que les cinq feuillets
+              voisins intersectant notre zone de navigation. La période « 1820–1866 » désigne la
+              série nationale, pas la date de Toulouse.
+            </p>
+            <p>
+              Le millésime 1848 est celui des minutes dans le catalogue. Des compléments ultérieurs,
+              notamment ferroviaires, peuvent figurer dans cette série : chaque objet dessiné n’est
+              donc pas nécessairement un état de 1848. La carte montre surtout le territoire, les
+              routes, les cultures et les villages autour de la ville ; elle ne donne pas la
+              précision d’un cadastre parcellaire.
+            </p>
+            <p>
+              Géoréférencement IGN affiné sur 30 repères conservés : carrefours, ponts, monuments et
+              axes autour du Grand Rond. Quinze contrôles indépendants vérifient ce recalage
+              progressif dans le centre. Les tuiles couvrent les niveaux de zoom 6 à 15 ; au-delà,
+              elles sont agrandies. Source IGN, Licence Ouverte 2.0 ; métadonnées vérifiées le 1er
+              octobre 2026.
+            </p>
+            <a
+              href="https://www.data.gouv.fr/datasets/scan-etat-major-r-40k-1"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Catalogue IGN et licence <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1860" || year === "1904" ? (
+          <>
+            <h3>
+              {year === "1860"
+                ? "Plan de Jourdan et Rivière · vers 1860"
+                : "Plan de Léon Laffont · 1904"}
+            </h3>
+            <p>
+              {year === "1860"
+                ? "Ville de Toulouse. Faubourgs. Banlieue. Dessin de Justin Jourdan, lithographie de Prosper Rivière. Archives municipales de Toulouse, 20 Fi 66 · domaine public."
+                : "Plan de la ville de Toulouse. Dessin de Léon Laffont, lithographie de Pierre Rouy, édition Pagès et Carrère. Archives municipales de Toulouse, 20Fi57. Tirage de 1904."}
+            </p>
+            <p>
+              {year === "1860"
+                ? "Le plan montre le chemin de fer, les places et les faubourgs. Il comprend des changements réalisés et des alignements officiellement projetés, à distinguer avec la légende. Les cartes annexes et les vues de monuments sont conservées."
+                : "Le plan couvre le centre et les faubourgs, notamment les Minimes, Bonnefoy, Saint-Cyprien et Saint-Michel. Le pont des Amidonniers y figure comme projet. Les numéros de grille, le titre et les marges sont conservés."}
+            </p>
+            <p>
+              Calage sur {(year === "1860" ? jourdan1860 : laffont1904).fitPointCount} repères
+              répartis entre le centre, les ponts du canal, Saint-Cyprien et le Grand Rond, dont le
+              bassin central et trois axes de rues autour du parc, avec une correction progressive
+              des déformations du plan. Quinze contrôles indépendants sur des carrefours, églises et
+              places donnent des écarts de{" "}
+              {(year === "1860" ? jourdan1860 : laffont1904).checkPoints
+                .map((point) => point.errorMetres)
+                .join(", ")}{" "}
+              m. Ces contrôles concernent le centre ; ils ne garantissent pas la précision aux
+              faubourgs ni aux bords du document. Le feuillet complet est conservé.
+            </p>
+            <a
+              href={assetUrl((year === "1860" ? "jourdan-1860" : "laffont-1904") + "/original.jpg")}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Voir le plan complet <ExternalLink size={14} />
+            </a>
+          </>
+        ) : year === "1875" ? (
+          <>
+            <h3>Inondation des 23–24 juin 1875</h3>
+            <p>
+              Plan original Sirven / La Dépêche, Archives municipales de Toulouse, 20 Fi 45.
+              Numérisation disponible sur Mapas Milhaud. Le bleu indique les zones inondées ; le
+              rouge, les maisons écroulées.
+            </p>
+            <p>
+              Le plan a été calé manuellement sur 15 repères. Sur trois points de contrôle
+              indépendants, les écarts sont de 14 à 27 m. La précision diminue aux bords. Ce
+              document historique ne décrit pas le risque actuel d’inondation.
+            </p>
+          </>
+        ) : year === "1954" ? (
+          <>
+            <h3>Vue aérienne de 1954</h3>
+            <p>
+              Photographie aérienne en noir et blanc fournie par IGN / Edugéo, déjà géoréférencée. À
+              fort zoom, les pixels du cliché deviennent visibles. Hors couverture, la carte
+              actuelle reste affichée.
+            </p>
+          </>
+        ) : (
+          <>
+            <h3>{year === "1680" ? "Vers 1680" : "Cadastre de 1830"}</h3>
+            <p>
+              Carte réalisée par Makina Corpus à partir du cadastre historique de Toulouse
+              Métropole. Il s’agit d’un dessin actuel de données historiques, et non d’un scan
+              d’archive. Les tuiles géoréférencées sont utilisées sans déformation supplémentaire.
+            </p>
+          </>
+        )}
+        <a href={sourceUrl(year)} target="_blank" rel="noreferrer">
+          Ouvrir la carte source <ExternalLink size={14} />
+        </a>
+        <h3>Population de Toulouse</h3>
+        <p>
+          Ordres de grandeur de la ville historique, puis de la commune, pas de la métropole. Entre
+          les repères documentés, le compteur interpole les valeurs et les arrondit au millier. Les
+          estimations anciennes sont incertaines et les périmètres varient. Pour l’Antiquité, le
+          repère est d’environ 20 000 habitants ; les variations du haut Moyen Âge ne sont pas
+          reconstituées. Après 2023, le dernier recensement est conservé.
+        </p>
+        <p>
+          Sources :{" "}
+          <a
+            href="https://archives.toulouse.fr/place-saint-etienne/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Archives de Toulouse
+          </a>
+          ,{" "}
+          <a
+            href="https://www.persee.fr/doc/hes_0752-5702_1998_num_17_3_1997"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Laffont · Ancien Régime
+          </a>
+          ,{" "}
+          <a
+            href="https://fr.wikipedia.org/wiki/Toulouse#Démographie"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Recensements historiques
+          </a>
+          ,{" "}
+          <a
+            href="https://www.insee.fr/fr/statistiques/2011101?geo=COM-31555"
+            target="_blank"
+            rel="noreferrer"
+          >
+            INSEE · 1968–2023
+          </a>
+          .
+        </p>
+        <h3>Utilisation</h3>
+        <p>
+          Le bouton boussole alterne entre le nord et l’orientation du plan visible : 53° pour 1777
+          ou 84° pour 1631. Sur la frise, le plan qui apparaît devient la référence à mi-transition.
+          Les autres plans restent orientés au nord. Ces angles approchés facilitent la lecture des
+          légendes ; les déformations des anciens plans peuvent subsister.
+        </p>
+        <p>
+          Sur ordinateur, maintenez la barre d’espace pour afficher la carte actuelle. Maintenez le
+          bouton avec l’icône œil pour lire les rues actuelles avec une légère superposition
+          historique. Relâchez pour revenir à la vue précédente. « Lieux » permet de rejoindre un
+          quartier. « Partager » crée un lien vers la vue actuelle, avec les époques et les réglages
+          choisis.
+        </p>
+        <h3>Frise et comparaison</h3>
+        <p>
+          La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
+          outils au-dessus permettent de choisir la superposition, le rideau ou la loupe sans
+          changer la date. Les sources disponibles sont les reconstructions de la fin de l’Antiquité
+          et du XIIIe siècle, les héritages du parcellaire de 1550, les plans de 1631 et 1777, les
+          cadastres de 1680 et 1830, l’état-major de 1848, les plans de 1860 et 1904, le plan
+          d’inondation de 1875 et la vue aérienne de 1954. Les positions intermédiaires sont des
+          transitions visuelles, pas des reconstitutions de ces années.
+        </p>
+        <h3>Crédits de toutes les cartes</h3>
+        <ul className="source-credits">
+          {YEARS.map((period) => (
+            <li key={period}>
+              <a href={sourceUrl(period)} target="_blank" rel="noreferrer">
+                {epochLabel(period)} · {mapCredit(period)}
+                {["1631", "1777", "1860", "1904"].includes(period) &&
+                  " / Archives municipales de Toulouse"}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <h3>La ville actuelle</h3>
+        <p>
+          Carte vectorielle OpenFreeMap issue d’OpenStreetMap. La date de mise à jour varie selon
+          les objets ; ce n’est pas une photographie de la ville à une date précise.
+        </p>
+        <p>
+          <a href="https://openfreemap.org/" target="_blank" rel="noreferrer">
+            OpenFreeMap
+          </a>{" "}
+          · ©{" "}
+          <a href="https://openmaptiles.org/" target="_blank" rel="noreferrer">
+            OpenMapTiles
+          </a>{" "}
+          · ©{" "}
+          <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">
+            OpenStreetMap
+          </a>
+        </p>
+        <h3>Comprendre les écarts</h3>
+        <p>
+          Les écarts peuvent refléter les transformations de la ville ou les imprécisions des
+          documents historiques. Pour les cadastres de 1680 et 1830, la précision et les points de
+          calage ne sont pas publiés avec les tuiles. La concordance de chaque bâtiment n’est pas
+          garantie. Les données anciennes sont absentes hors de leur couverture.
+        </p>
+        <h3>Réutilisation des données</h3>
+        <p>
+          Le catalogue officiel indique la Licence Ouverte v2.0 pour les données cadastrales. Les
+          conditions propres au rendu et à l’hébergement des tuiles Makina Corpus restent à
+          confirmer. Cette version sert à une exploration personnelle du concept ; une diffusion
+          publique nécessiterait de clarifier ces conditions ou de produire une couche à partir des
+          données ouvertes.
+        </p>
+        <a
+          href={`https://data.toulouse-metropole.fr/explore/dataset/parcellaire-de-${year === "1680" ? "1680" : "1830"}/information/`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Catalogue officiel <ExternalLink size={14} />
+        </a>
+      </Dialog>
     </main>
   );
 }
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <TooltipProvider delayDuration={320} skipDelayDuration={120}>
+      <App />
+    </TooltipProvider>
   </React.StrictMode>,
 );

@@ -7,7 +7,7 @@
     "width": 1536,
     "annotationWidth": 1200
   },
-  "method": "Affine transform in Web Mercator from three manually annotated preserved landmarks. Three withheld church checkpoints in the centre; no citywide accuracy claim. Full source sheet retained without masking.",
+  "method": "Retained least-squares affine sheet frame with dense street anchors and a regularized inverse thin-plate spline. Fixed boundaries and fifteen withheld checks; manual annotations, not a survey.",
   "sourcePath": ".local/laffont-1904-original.jpg",
   "sourceUrl": "https://archives.toulouse.fr/wp-content/uploads/sites/18/2026/09/20Fi57.jpg",
   "sourcePage": "https://archives.toulouse.fr/plans-anciens/#plan-laffont",
@@ -85,6 +85,628 @@
         765.73
       ],
       "role": "check"
+    },
+    {
+      "name": "Pont des Minimes centre",
+      "old": [
+        699,
+        578
+      ],
+      "ref": [
+        564.34,
+        303.11
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont du Bearnais centre",
+      "old": [
+        412,
+        714
+      ],
+      "ref": [
+        346,
+        404
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Matabiau centre",
+      "old": [
+        1015,
+        614
+      ],
+      "ref": [
+        812,
+        356
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Bayard centre",
+      "old": [
+        1041,
+        712
+      ],
+      "ref": [
+        844.1,
+        421.4
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Chateau d eau centre",
+      "old": [
+        697.5,
+        1138
+      ],
+      "ref": [
+        558.4,
+        739.7
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Porte Saint-Cyprien centre",
+      "old": [
+        558,
+        1182
+      ],
+      "ref": [
+        451,
+        759
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Patte d Oie junction",
+      "old": [
+        357,
+        1301
+      ],
+      "ref": [
+        305.3,
+        797.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Place du Capitole centre",
+      "old": [
+        845,
+        972
+      ],
+      "ref": [
+        674.5,
+        597.5
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Place Wilson centre",
+      "old": [
+        938,
+        942
+      ],
+      "ref": [
+        747.4,
+        585
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Grand Rond fountain centre",
+      "old": [
+        1055.3,
+        1238.6
+      ],
+      "ref": [
+        843.2,
+        813.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond north road axis",
+      "old": [
+        1049.0,
+        1208.3
+      ],
+      "ref": [
+        838.8,
+        791.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond south road axis",
+      "old": [
+        1059.5,
+        1268.5
+      ],
+      "ref": [
+        846.7,
+        836.8
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond rue de Tivoli road axis",
+      "old": [
+        1086.0,
+        1234.5
+      ],
+      "ref": [
+        868.3,
+        813.8
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond Paul-Sabatier junction",
+      "old": [
+        1078.5,
+        1219.5
+      ],
+      "ref": [
+        863.6,
+        798.8
+      ],
+      "role": "check",
+      "annotationNote": "Refined to the junction of the centreline of the northeast avenue and the circular road, rather than either edge of the avenue."
+    },
+    {
+      "name": "Pont Guilhemery centre",
+      "ref": [
+        911.87,
+        687.33
+      ],
+      "old": [
+        1149,
+        1076.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont des Demoiselles centre",
+      "ref": [
+        991.2,
+        1018.8
+      ],
+      "old": [
+        1239,
+        1496
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Lascrosses / boulevard Arcole axis",
+      "ref": [
+        539.5,
+        436.2
+      ],
+      "old": [
+        685.5,
+        755.7
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Sebastopol / boulevard Lascrosses axis",
+      "ref": [
+        442.8,
+        477.1
+      ],
+      "old": [
+        548.4,
+        793.8
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Allees Lafayette / boulevard Strasbourg axis",
+      "ref": [
+        774.5,
+        562.3
+      ],
+      "old": [
+        964,
+        889
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Riquet / Colombette axis",
+      "ref": [
+        896.3,
+        585
+      ],
+      "old": [
+        1142,
+        940
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Montaudran centre",
+      "ref": [
+        914.9,
+        744.8
+      ],
+      "old": [
+        1144.5,
+        1125.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Porte Saint-Etienne / boulevard Carnot axis",
+      "ref": [
+        831.5,
+        697
+      ],
+      "old": [
+        1040,
+        1071
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Filatiers / Trinite axis",
+      "ref": [
+        688.5,
+        716.1
+      ],
+      "old": [
+        868,
+        1106
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Filatiers / Maletache axis",
+      "ref": [
+        689.5,
+        744
+      ],
+      "old": [
+        875,
+        1140
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Nazareth / Perchepinte axis",
+      "ref": [
+        768,
+        772.5
+      ],
+      "old": [
+        965.5,
+        1192
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Lascrosses / Armand-Duportal axis",
+      "ref": [
+        490,
+        533
+      ],
+      "old": [
+        615,
+        884
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Gambetta / Romiguieres axis",
+      "ref": [
+        623,
+        589
+      ],
+      "old": [
+        789,
+        955
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "La Grave dome centre",
+      "ref": [
+        485,
+        686
+      ],
+      "old": [
+        604.3,
+        1066.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Filatiers / Polinaires axis",
+      "ref": [
+        692,
+        761
+      ],
+      "old": [
+        875,
+        1173.5
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Valade / De-la-Bastide axis",
+      "ref": [
+        571.5,
+        573.25
+      ],
+      "old": [
+        716.5,
+        930.5
+      ],
+      "role": "check",
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.",
+      "referenceNodeId": "243664960"
+    },
+    {
+      "name": "Lafayette / Remusat axis",
+      "ref": [
+        684.7,
+        581.8
+      ],
+      "old": [
+        856.5,
+        942
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Lafayette / Taur axis",
+      "ref": [
+        667,
+        584.3
+      ],
+      "old": [
+        829.3,
+        946
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Gambetta / Saint-Rome axis",
+      "ref": [
+        672.5,
+        610
+      ],
+      "old": [
+        845,
+        1000.7
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Lafayette / Wilson west road axis",
+      "ref": [
+        734,
+        583
+      ],
+      "old": [
+        924,
+        942
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond west road axis",
+      "ref": [
+        816.8,
+        815.2
+      ],
+      "old": [
+        1020.5,
+        1243.5
+      ],
+      "role": "fit",
+      "annotationUncertaintyMetres": 5
+    },
+    {
+      "name": "Velane / Montoulieu-Velane axis",
+      "ref": [
+        785.28,
+        801.53
+      ],
+      "old": [
+        982,
+        1221
+      ],
+      "role": "fit",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.",
+      "referenceNodeId": "344770417"
+    },
+    {
+      "name": "Taur / Perigord axis",
+      "ref": [
+        655.44,
+        530.97
+      ],
+      "old": [
+        819,
+        868
+      ],
+      "role": "fit",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.",
+      "referenceNodeId": "60960445"
+    },
+    {
+      "name": "Dalbade / Pont-de-Tounis axis",
+      "ref": [
+        652.93,
+        762.73
+      ],
+      "old": [
+        819,
+        1171.7
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.",
+      "referenceNodeId": "83794282"
+    },
+    {
+      "name": "Saint-Remesy / Pretres axis",
+      "ref": [
+        670.3,
+        777.3
+      ],
+      "old": [
+        841.5,
+        1191
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5
+    },
+    {
+      "name": "Grand Rond Jules-Guesde junction",
+      "ref": [
+        820.7,
+        824
+      ],
+      "old": [
+        1031.5,
+        1257.1
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5
+    },
+    {
+      "name": "Donne / Brasserie axis",
+      "ref": [
+        864.1,
+        778.9
+      ],
+      "old": [
+        1080.5,
+        1191.7
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5
+    },
+    {
+      "name": "Taur / Place-Saint-Sernin axis",
+      "ref": [
+        649.5,
+        510.17
+      ],
+      "old": [
+        812,
+        844.5
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.",
+      "referenceNodeId": "755995097"
+    },
+    {
+      "name": "Laque / Tour-du-Sac axis",
+      "ref": [
+        522,
+        765.8
+      ],
+      "old": [
+        651,
+        1194.5
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet."
+    },
+    {
+      "name": "Pont-Saint-Pierre / Reclusane axis",
+      "ref": [
+        475.5,
+        734
+      ],
+      "old": [
+        600.5,
+        1132.5
+      ],
+      "role": "check",
+      "annotationUncertaintyMetres": 5,
+      "annotationNote": "Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet."
+    },
+    {
+      "name": "Quilmery / Pont-Saint-Pierre axis",
+      "ref": [
+        490.52,
+        709.12
+      ],
+      "old": [
+        610.6,
+        1097.5
+      ],
+      "role": "fit",
+      "referenceNodeId": "243670364",
+      "annotationUncertaintyMetres": 5
+    },
+    {
+      "name": "Valade / Pargaminieres axis",
+      "ref": [
+        542.85,
+        610.01
+      ],
+      "old": [
+        677,
+        974
+      ],
+      "role": "fit",
+      "referenceNodeId": "226138346",
+      "annotationUncertaintyMetres": 5
+    }
+  ],
+  "annotationNotes": "Street-axis intersections, canal bridge centres and preserved monuments inspected on original scans against IGN PLANIGNV2. Excludes new street cuts and the projected Amidonniers bridge. Chateau d eau annotations corrected to the actual circular tower. Check points never participate in fitting. Capitole check refined to the centre of the open square, excluding facade and corner; four adjacent street-axis anchors added. Quarter survey: Dalbade, Taur, Royal garden, Grand Rond, Saint-Cyprien. Fifteen withheld landmarks. Paul-Sabatier and De-la-Bastide checks refined to actual road centrelines; comparisons use these identical revised annotations in both versions. Modern road coordinates cross-checked with OpenStreetMap nodes (2026-10-01); historical topology checked before matching. Tour-du-Sac through-junction excluded; retained junction on Rue de la Laque is withheld.",
+  "excludedLandmarks": [
+    {
+      "name": "Teinturiers / Tour-du-Sac axis",
+      "reason": "The modern through-junction is absent on the 1904 sheet: Rue du Tour du Sac ends before Rue des Teinturiers. Excluded consistently from all three comparisons."
+    },
+    {
+      "name": "Desparadoux / Paradis axis",
+      "reason": "Candidate anchor rejected: the illustrated church and indistinct street edges do not support a more reliable correspondence than the preceding field.",
+      "candidateOld": [
+        828.5,
+        1162
+      ],
+      "candidateRef": [
+        662.8,
+        754.5
+      ]
+    },
+    {
+      "name": "Dalbade / Saint-Jean axis",
+      "reason": "Candidate anchor rejected: the illustrated church and indistinct street edges do not support a more reliable correspondence than the preceding field.",
+      "candidateOld": [
+        826,
+        1195.5
+      ],
+      "candidateRef": [
+        657.12,
+        782.03
+      ]
+    },
+    {
+      "name": "Desparadoux / Joutx-Aigues axis",
+      "reason": "Candidate anchor rejected: the illustrated church and indistinct street edges do not support a more reliable correspondence than the preceding field.",
+      "candidateOld": [
+        828,
+        1145.5
+      ],
+      "candidateRef": [
+        663.9,
+        745.8
+      ]
     }
   ]
 }

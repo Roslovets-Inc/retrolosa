@@ -1,0 +1,238 @@
+{
+  "fitPoints": 37,
+  "fitResiduals": [
+    {
+      "name": "Saint-Sernin crossing",
+      "errorMetres": 0.3
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Pont des Minimes centre",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Pont du Bearnais centre",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Pont Matabiau centre",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Pont Bayard centre",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Chateau d eau centre",
+      "errorMetres": 0.5
+    },
+    {
+      "name": "Porte Saint-Cyprien centre",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Patte d Oie junction",
+      "errorMetres": 0.0
+    },
+    {
+      "name": "Grand Rond fountain centre",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Grand Rond north road axis",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Grand Rond south road axis",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Grand Rond rue de Tivoli road axis",
+      "errorMetres": 0.0
+    },
+    {
+      "name": "Pont Guilhemery centre",
+      "errorMetres": 2.2
+    },
+    {
+      "name": "Pont des Demoiselles centre",
+      "errorMetres": 0.5
+    },
+    {
+      "name": "Lascrosses / boulevard Arcole axis",
+      "errorMetres": 1.1
+    },
+    {
+      "name": "Sebastopol / boulevard Lascrosses axis",
+      "errorMetres": 1.3
+    },
+    {
+      "name": "Allees Lafayette / boulevard Strasbourg axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Riquet / Colombette axis",
+      "errorMetres": 4.3
+    },
+    {
+      "name": "Pont Montaudran centre",
+      "errorMetres": 1.0
+    },
+    {
+      "name": "Porte Saint-Etienne / boulevard Carnot axis",
+      "errorMetres": 0.7
+    },
+    {
+      "name": "Filatiers / Trinite axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Filatiers / Maletache axis",
+      "errorMetres": 0.8
+    },
+    {
+      "name": "Nazareth / Perchepinte axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Lascrosses / Armand-Duportal axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Gambetta / Romiguieres axis",
+      "errorMetres": 1.3
+    },
+    {
+      "name": "La Grave dome centre",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Lafayette / Remusat axis",
+      "errorMetres": 0.3
+    },
+    {
+      "name": "Lafayette / Taur axis",
+      "errorMetres": 1.5
+    },
+    {
+      "name": "Gambetta / Saint-Rome axis",
+      "errorMetres": 2.5
+    },
+    {
+      "name": "Lafayette / Wilson west road axis",
+      "errorMetres": 1.6
+    },
+    {
+      "name": "Grand Rond west road axis",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Velane / Montoulieu-Velane axis",
+      "errorMetres": 2.3
+    },
+    {
+      "name": "Taur / Perigord axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Quilmery / Pont-Saint-Pierre axis",
+      "errorMetres": 1.2
+    },
+    {
+      "name": "Valade / Pargaminieres axis",
+      "errorMetres": 0.1
+    }
+  ],
+  "independentChecks": [
+    {
+      "name": "Notre-Dame du Taur footprint",
+      "beforeMetres": 22.5,
+      "afterMetres": 24.8
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "beforeMetres": 8.8,
+      "afterMetres": 7.8
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "beforeMetres": 38.3,
+      "afterMetres": 38.1
+    },
+    {
+      "name": "Place du Capitole centre",
+      "beforeMetres": 6.9,
+      "afterMetres": 6.8
+    },
+    {
+      "name": "Place Wilson centre",
+      "beforeMetres": 12.5,
+      "afterMetres": 12.5
+    },
+    {
+      "name": "Grand Rond Paul-Sabatier junction",
+      "beforeMetres": 16.0,
+      "afterMetres": 15.6
+    },
+    {
+      "name": "Filatiers / Polinaires axis",
+      "beforeMetres": 25.9,
+      "afterMetres": 25.6
+    },
+    {
+      "name": "Valade / De-la-Bastide axis",
+      "beforeMetres": 12.1,
+      "afterMetres": 11.8
+    },
+    {
+      "name": "Dalbade / Pont-de-Tounis axis",
+      "beforeMetres": 4.3,
+      "afterMetres": 4.3
+    },
+    {
+      "name": "Saint-Remesy / Pretres axis",
+      "beforeMetres": 1.9,
+      "afterMetres": 2.0
+    },
+    {
+      "name": "Grand Rond Jules-Guesde junction",
+      "beforeMetres": 15.8,
+      "afterMetres": 21.0
+    },
+    {
+      "name": "Donne / Brasserie axis",
+      "beforeMetres": 19.9,
+      "afterMetres": 18.9
+    },
+    {
+      "name": "Taur / Place-Saint-Sernin axis",
+      "beforeMetres": 12.5,
+      "afterMetres": 8.3
+    },
+    {
+      "name": "Laque / Tour-du-Sac axis",
+      "beforeMetres": 38.2,
+      "afterMetres": 37.7
+    },
+    {
+      "name": "Pont-Saint-Pierre / Reclusane axis",
+      "beforeMetres": 39.4,
+      "afterMetres": 35.8
+    }
+  ],
+  "meanIndependentErrorMetres": {
+    "before": 18.3,
+    "after": 18.1
+  },
+  "minimumInverseJacobian": 0.4194,
+  "boundaryMaxDisplacementPixels": 0.0006,
+  "validationMethod": "Root solve of the actual 16-pixel renderer mesh; frozen street-baseline is the preceding 32-anchor regularized model, evaluated on identical current check annotations. Thirteen-anchor baseline retained as the affine frame; 1860 uses its soft prior, 1904 uses the frozen preceding 32-anchor field.",
+  "limitations": "Manual landmark annotation, not a survey. Validation concerns the control-point network; outskirts beyond it remain less reliable. Original full sheet and source JPEG retained."
+}

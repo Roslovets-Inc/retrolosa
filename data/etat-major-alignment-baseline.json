@@ -1,0 +1,94 @@
+{
+  "referenceZoom": 15,
+  "offsetPixels": [1.31584, 16.36096],
+  "method": "Local translation of the IGN Web Mercator mosaic, fitted to five manually inspected preserved landmarks in Toulouse. The source remains the live IGN WMTS; this correction is valid only within the source bounds. Grand Rond has a bounded local affine correction; the original IGN scan draws the park too wide.",
+  "annotationScale": 1.28,
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [649, 478],
+      "ref": [649.3, 494.5],
+      "role": "check"
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "old": [618, 700],
+      "ref": [621.7, 717.5],
+      "role": "fit"
+    },
+    {
+      "name": "Pont des Minimes centre",
+      "old": [570, 290],
+      "ref": [564.34, 303.11],
+      "role": "fit"
+    },
+    {
+      "name": "Pont du Bearnais centre",
+      "old": [354, 389],
+      "ref": [346, 404],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Matabiau centre",
+      "old": [808, 343],
+      "ref": [812, 356],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [781, 707],
+      "ref": [792.1, 712.3],
+      "role": "fit"
+    },
+    {
+      "name": "Place du Capitole centre",
+      "old": [677, 582],
+      "ref": [676.2, 598],
+      "role": "check"
+    }
+  ],
+  "localCorrection": {
+    "referenceOriginTiles": [16512, 11962],
+    "centre": [843.2, 813.6],
+    "innerRadius": 35,
+    "outerRadius": 140,
+    "inverseAffine": [
+      [1.5564875225554797, 0.02592075568909618],
+      [-0.08966956409331095, 1.138702577377823],
+      [-400.5422120537973, -150.69976193234018]
+    ],
+    "points": [
+      {
+        "name": "Grand Rond fountain centre",
+        "old": [838.1, 796.8],
+        "ref": [843.2, 813.6],
+        "role": "fit"
+      },
+      {
+        "name": "Grand Rond north road axis",
+        "old": [834.5, 772.5],
+        "ref": [838.8, 791.3],
+        "role": "fit"
+      },
+      {
+        "name": "Grand Rond south road axis",
+        "old": [842.7, 824.5],
+        "ref": [846.7, 836.8],
+        "role": "fit"
+      },
+      {
+        "name": "Grand Rond rue de Tivoli road axis",
+        "old": [878.0, 798.5],
+        "ref": [868.3, 813.8],
+        "role": "fit"
+      },
+      {
+        "name": "Grand Rond Paul-Sabatier junction",
+        "old": [876.5, 784.5],
+        "ref": [863.6, 804.5],
+        "role": "check"
+      }
+    ],
+    "method": "Local affine inverse over the fountain and three surrounding road axes. Full correction inside 35 annotation pixels, smoothly fading to the global translation at 140 pixels. One withheld junction checks the neighbourhood."
+  }
+}

@@ -77,12 +77,12 @@ test("defaults select the first enabled period and superposition while shared op
   await expect(
     page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe", exact: true }),
   ).toHaveText("XIIIe");
-  await expect(page.getByRole("button", { name: "Superposition", exact: true })).toHaveAttribute(
-    "aria-pressed",
+  await expect(page.getByRole("radio", { name: "Superposition", exact: true })).toHaveAttribute(
+    "aria-checked",
     "true",
   );
-  await expect(page.getByRole("button", { name: "Rideau", exact: true })).toHaveAttribute(
-    "aria-pressed",
+  await expect(page.getByRole("radio", { name: "Rideau", exact: true })).toHaveAttribute(
+    "aria-checked",
     "false",
   );
   await page.goto("/#layers=1830,1954");
@@ -95,8 +95,8 @@ test("defaults select the first enabled period and superposition while shared op
   await expect(
     page.locator(".timeline-ticks").getByRole("button", { name: "1680", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByRole("button", { name: "Rideau", exact: true })).toHaveAttribute(
-    "aria-pressed",
+  await expect(page.getByRole("radio", { name: "Rideau", exact: true })).toHaveAttribute(
+    "aria-checked",
     "true",
   );
 });

@@ -52,7 +52,12 @@ export function useLocation(maps: React.RefObject<Map[]>) {
         markers.current.forEach((marker) => {
           marker.getElement().style.opacity = "1";
           marker.setLngLat([lon, lat]);
-          marker.getElement().title = `Ma position · précision estimée : ${Math.round(accuracy)} m`;
+          marker
+            .getElement()
+            .setAttribute(
+              "aria-label",
+              `Ma position · précision estimée : ${Math.round(accuracy)} m`,
+            );
         });
         setStatus("following");
         setMessage(`Localisation active · précision estimée : ${Math.round(accuracy)} m`);
@@ -70,7 +75,9 @@ export function useLocation(maps: React.RefObject<Map[]>) {
           setStatus("locating");
           markers.current.forEach((marker) => {
             marker.getElement().style.opacity = "0.4";
-            marker.getElement().title = "Dernière position connue — en attente du signal";
+            marker
+              .getElement()
+              .setAttribute("aria-label", "Dernière position connue — en attente du signal");
           });
           setMessage(
             "En attente du signal GPS. Le point pâle indique la dernière position connue. Appuyez sur la flèche pour arrêter.",

@@ -1,0 +1,99 @@
+{
+  "source": "OpenStreetMap API v0.6",
+  "retrieved": "2026-10-01",
+  "attribution": "© OpenStreetMap contributors, ODbL",
+  "projection": "Reference mosaic zoom 15, tile origin [16512,11962], annotation scale 1.28",
+  "junctions": [
+    {
+      "nodeId": "344770417",
+      "ways": {
+        "Rue Montoulieu-Vélane": "8907415",
+        "Rue Vélane": "31006800"
+      },
+      "ref": [
+        785.28,
+        801.53
+      ]
+    },
+    {
+      "nodeId": "57179140",
+      "ways": {
+        "Rue Saint-Jean": "23303520",
+        "Rue de la Dalbade": "638212723"
+      },
+      "ref": [
+        657.12,
+        782.03
+      ]
+    },
+    {
+      "nodeId": "60960445",
+      "ways": {
+        "Rue du Taur": "349894872",
+        "Rue de Périgord": "8590425"
+      },
+      "ref": [
+        655.44,
+        530.97
+      ]
+    },
+    {
+      "nodeId": "83794282",
+      "ways": {
+        "Rue des Couteliers": "7813030",
+        "Rue Henry de Gorsse": "23303528",
+        "Rue de la Dalbade": "142212989",
+        "Rue du Pont de Tounis": "142212991"
+      },
+      "ref": [
+        652.93,
+        762.73
+      ]
+    },
+    {
+      "nodeId": "755995097",
+      "ways": {
+        "Allée du Père Marie-Antoine": "192389095",
+        "Rue du Taur": "755665019",
+        "Place Saint-Sernin": "1490816748"
+      },
+      "ref": [
+        649.5,
+        510.17
+      ]
+    },
+    {
+      "nodeId": "243664960",
+      "ways": {
+        "Rue Valade": "31005920",
+        "Rue de la Bastide": "149743201"
+      },
+      "ref": [
+        571.14,
+        573.07
+      ]
+    },
+    {
+      "nodeId": "243670364",
+      "ways": {
+        "Rue Quilmery": "22718260",
+        "Rue du Pont Saint-Pierre": "22903503"
+      },
+      "ref": [
+        490.52,
+        709.12
+      ]
+    },
+    {
+      "nodeId": "226138346",
+      "ways": {
+        "Rue Pargaminières": "5149956",
+        "Rue Valade": "1254711124"
+      },
+      "ref": [
+        542.85,
+        610.01
+      ]
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "annotationWidth": 1600,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536,
+    "annotationWidth": 1200
+  },
+  "method": "Least-squares Web Mercator affine fit over thirteen preserved landmarks, followed by a smooth thin-plate-spline correction with fixed sheet boundaries. Grand Rond fountain and three surrounding road axes explicitly anchored; seven independent checks excluded from fitting. Full source sheet retained without masking; no survey or suburban accuracy claim.",
+  "sourcePath": ".local/jourdan-1860-original.jpg",
+  "sourceUrl": "https://live.staticflickr.com/1702/24480515944_a322c149fd_o.jpg",
+  "sourcePage": "https://www.flickr.com/photos/archives-toulouse/24480515944/",
+  "sha256": "827a68694d8790e7b3e7df629226c99a067cb381dc1ac5b8248619fab04513b5",
+  "rights": "Archives municipales de Toulouse, 20 Fi 66. Domaine public, stated in official Flickr description. Justin Jourdan; Prosper Riviere.",
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        802,
+        397
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [
+        1013,
+        654
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "old": [
+        785,
+        691
+      ],
+      "ref": [
+        621.7,
+        717.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Notre-Dame du Taur footprint",
+      "old": [
+        839,
+        487
+      ],
+      "ref": [
+        669.89,
+        565.46
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "old": [
+        659,
+        546
+      ],
+      "ref": [
+        534.9,
+        599.44
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "old": [
+        850,
+        756
+      ],
+      "ref": [
+        661.43,
+        765.73
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Pont des Minimes centre",
+      "old": [
+        690,
+        173
+      ],
+      "ref": [
+        564.34,
+        303.11
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont du Bearnais centre",
+      "old": [
+        394,
+        337
+      ],
+      "ref": [
+        346,
+        404
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Matabiau centre",
+      "old": [
+        1002,
+        219
+      ],
+      "ref": [
+        812,
+        356
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Bayard centre",
+      "old": [
+        1044,
+        316
+      ],
+      "ref": [
+        844.1,
+        421.4
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Chateau d eau centre",
+      "old": [
+        700,
+        718
+      ],
+      "ref": [
+        558.4,
+        739.7
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Porte Saint-Cyprien centre",
+      "old": [
+        566,
+        767
+      ],
+      "ref": [
+        451,
+        759
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Patte d Oie junction",
+      "old": [
+        405,
+        844
+      ],
+      "ref": [
+        305.3,
+        797.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Place du Capitole centre",
+      "old": [
+        845,
+        524
+      ],
+      "ref": [
+        676.2,
+        598
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Place Wilson centre",
+      "old": [
+        941,
+        501
+      ],
+      "ref": [
+        747.4,
+        585
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Grand Rond fountain centre",
+      "old": [
+        1088.4,
+        787.3
+      ],
+      "ref": [
+        843.2,
+        813.6
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond north road axis",
+      "old": [
+        1085.7,
+        756.6
+      ],
+      "ref": [
+        838.8,
+        791.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond south road axis",
+      "old": [
+        1097.1,
+        820.0
+      ],
+      "ref": [
+        846.7,
+        836.8
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond rue de Tivoli road axis",
+      "old": [
+        1125.0,
+        789.7
+      ],
+      "ref": [
+        868.3,
+        813.8
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Grand Rond Paul-Sabatier junction",
+      "old": [
+        1118.5,
+        764.8
+      ],
+      "ref": [
+        863.6,
+        804.5
+      ],
+      "role": "check"
+    }
+  ]
+}

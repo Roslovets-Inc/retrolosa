@@ -31,7 +31,7 @@ test("loupe follows dragging and keyboard input and restores after comparison", 
   await page.keyboard.up("Enter");
   await expect(glass).toBeVisible();
   await expect(layer).toHaveCSS("clip-path", /circle\(/);
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await expect(glass).toHaveCount(0);
   await expect(page.locator(".divider")).toBeVisible();
 });

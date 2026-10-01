@@ -36,7 +36,7 @@ test("continuous timeline preserves view, endpoints, keyboard peek and shared st
   await page.keyboard.up("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.75");
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toBeVisible();
 
   await page.setViewportSize({ width: 390, height: 844 });

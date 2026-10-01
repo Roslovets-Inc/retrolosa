@@ -1,26 +1,76 @@
 {
   "sourcePage": "https://archives.toulouse.fr/plans-anciens/#plan-laffont",
   "coordinates": [
-    [1.4066879640264744, 43.63630837783838],
-    [1.475438177479333, 43.63169449067089],
-    [1.475933957520425, 43.571332110981594],
-    [1.407183744067595, 43.575950629822344]
+    [1.4075846221117843, 43.634295799981544],
+    [1.4760300287121595, 43.6303807764652],
+    [1.4757215864820807, 43.57363106887878],
+    [1.4072761798817623, 43.577549787223234]
   ],
   "checkPoints": [
     {
       "name": "Notre-Dame du Taur footprint",
-      "errorMetres": 25.0
+      "errorMetres": 24.8
     },
     {
       "name": "Saint-Pierre-des-Cuisines footprint",
-      "errorMetres": 47.8
+      "errorMetres": 7.8
     },
     {
       "name": "Notre-Dame de la Dalbade nave footprint",
-      "errorMetres": 24.9
+      "errorMetres": 38.1
+    },
+    {
+      "name": "Place du Capitole centre",
+      "errorMetres": 6.8
+    },
+    {
+      "name": "Place Wilson centre",
+      "errorMetres": 12.5
+    },
+    {
+      "name": "Grand Rond Paul-Sabatier junction",
+      "errorMetres": 15.6
+    },
+    {
+      "name": "Filatiers / Polinaires axis",
+      "errorMetres": 25.6
+    },
+    {
+      "name": "Valade / De-la-Bastide axis",
+      "errorMetres": 11.8
+    },
+    {
+      "name": "Dalbade / Pont-de-Tounis axis",
+      "errorMetres": 4.3
+    },
+    {
+      "name": "Saint-Remesy / Pretres axis",
+      "errorMetres": 2.0
+    },
+    {
+      "name": "Grand Rond Jules-Guesde junction",
+      "errorMetres": 21.0
+    },
+    {
+      "name": "Donne / Brasserie axis",
+      "errorMetres": 18.9
+    },
+    {
+      "name": "Taur / Place-Saint-Sernin axis",
+      "errorMetres": 8.3
+    },
+    {
+      "name": "Laque / Tour-du-Sac axis",
+      "errorMetres": 37.7
+    },
+    {
+      "name": "Pont-Saint-Pierre / Reclusane axis",
+      "errorMetres": 35.8
     }
   ],
-  "method": "Affine transform in Web Mercator from three manually annotated preserved landmarks. Three withheld church checkpoints in the centre; no citywide accuracy claim. Full source sheet retained without masking.",
+  "method": "Retained least-squares affine sheet frame with dense street anchors and a regularized inverse thin-plate spline. Fixed boundaries and fifteen withheld checks; manual annotations, not a survey.",
   "sourceSize": [3768, 4592],
-  "rasterSize": [3361, 4096]
+  "rasterSize": [3361, 4096],
+  "fitPointCount": 37,
+  "minimumInverseJacobian": 0.4194
 }

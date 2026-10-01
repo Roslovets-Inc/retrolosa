@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+
+import { setSlider } from "./ui";
 test("hold comparison restores split, overlay and timeline on release or cancellation", async ({
   page,
 }) => {
@@ -20,9 +22,9 @@ test("hold comparison restores split, overlay and timeline on release or cancell
   await expect(layer).toHaveCSS("opacity", "1");
   await expect(page.locator(".divider")).toBeVisible();
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("button", { name: "Superposition", exact: true }).click();
-  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("72");
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Superposition", exact: true }).click();
+  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 72);
   await hold();
   await page.mouse.up();
   await expect(layer).toHaveCSS("opacity", "0.72");

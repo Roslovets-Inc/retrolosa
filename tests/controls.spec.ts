@@ -1,14 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
+import { prepareOfflineMaps, setSlider } from "./ui";
 
 test("one timeline serves every comparison tool and fits mobile widths", async ({ page }) => {
   await prepareSharing(page);
-  await page.route(/^https:\/\//, async (route) => {
-    if (route.request().url().includes("tiles.openfreemap.org/styles/positron"))
-      await route.fulfill({ json: { version: 8, sources: {}, layers: [] } });
-    else await route.abort();
-  });
+  await prepareOfflineMaps(page);
   const dismiss = page.getByRole("button", { name: "Fermer le message" });
   await page.addLocatorHandler(
     dismiss,
@@ -27,7 +24,7 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
   await expect(page.getByRole("button", { name: "Frise", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Cartes", exact: true })).toHaveCount(0);
   await expect(page.locator(".masthead").getByRole("button", { name: "Époques" })).toHaveCount(0);
-  await transparency.fill("60");
+  await setSlider(transparency, 60);
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 700 });
     const height = (await panel.boundingBox())!.height;
@@ -43,7 +40,9 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
     await epochs.click();
     const menu = page.getByRole("group", { name: "Époques visibles" });
     await expect(menu).toBeVisible();
-    const menuBox = (await menu.boundingBox())!;
+    const menuBox = (await page
+      .getByRole("dialog", { name: "Époques visibles", exact: true })
+      .boundingBox())!;
     const epochBox = (await epochs.boundingBox())!;
     expect(menuBox.y).toBeGreaterThanOrEqual(44);
     expect(menuBox.y + menuBox.height).toBeLessThanOrEqual(epochBox.y);
@@ -58,10 +57,10 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
     });
     await expect(menu).toHaveCount(0);
     for (const tool of ["Superposition", "Rideau", "Loupe"]) {
-      await page.getByRole("button", { name: tool, exact: true }).click();
+      await page.getByRole("radio", { name: tool, exact: true }).click();
       await expect(timeline).toHaveValue("1777");
       await expect(timeline).toBeVisible();
-      await expect(transparency).toHaveValue("60");
+      await expect(transparency).toHaveAttribute("aria-valuenow", "60");
       await expect(layer).toHaveCSS("opacity", "0.6");
       expect((await panel.boundingBox())!.height).toBe(height);
       const tools = (await page.locator(".comparison-switch").boundingBox())!;
@@ -86,15 +85,15 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
   await page.goto(url);
   await page.reload();
   await expect(timeline).toHaveValue("1777");
-  await expect(page.getByRole("button", { name: "Loupe", exact: true })).toHaveAttribute(
-    "aria-pressed",
+  await expect(page.getByRole("radio", { name: "Loupe", exact: true })).toHaveAttribute(
+    "aria-checked",
     "true",
   );
   const hold = page.getByRole("button", { name: "Maintenir pour comparer avec la carte actuelle" });
   await hold.press("Enter");
   await expect(layer).toHaveCSS("opacity", "0.6");
   await expect(layer).toHaveCSS("clip-path", /circle\(/);
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   const divider = page.getByRole("slider", { name: "Limite de comparaison", exact: true });
   await divider.press("Home");
   await divider.press("ArrowRight");
@@ -104,14 +103,15 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
 test("legacy current-map links preserve transparency and keep the timeline available", async ({
   page,
 }) => {
+  await prepareOfflineMaps(page);
   await page.goto("/#mode=modern");
-  await expect(page.getByRole("button", { name: "Superposition", exact: true })).toHaveAttribute(
-    "aria-pressed",
+  await expect(page.getByRole("radio", { name: "Superposition", exact: true })).toHaveAttribute(
+    "aria-checked",
     "true",
   );
-  await expect(page.getByRole("slider", { name: "Opacité de la carte historique" })).toHaveValue(
-    "0",
-  );
+  await expect(
+    page.getByRole("slider", { name: "Opacité de la carte historique" }),
+  ).toHaveAttribute("aria-valuenow", "0");
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toBeVisible();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
 });
@@ -119,11 +119,7 @@ test("legacy current-map links preserve transparency and keep the timeline avail
 test("credits follow the visible blend while every source remains available in the dialog", async ({
   page,
 }) => {
-  await page.route(/^https:\/\//, async (route) => {
-    if (route.request().url().includes("tiles.openfreemap.org/styles/positron"))
-      await route.fulfill({ json: { version: 8, sources: {}, layers: [] } });
-    else await route.abort();
-  });
+  await prepareOfflineMaps(page);
   const dismiss = page.getByRole("button", { name: "Fermer le message" });
   await page.addLocatorHandler(dismiss, () => dismiss.click(), { noWaitAfter: true });
   await page.goto("/#time=1631&mode=overlay");
@@ -139,7 +135,7 @@ test("credits follow the visible blend while every source remains available in t
   await timeline.fill("1680");
   await expect(footer).not.toContainText("Tavernier");
   await expect(footer.getByRole("link")).toHaveCount(3);
-  await opacity.fill("0");
+  await setSlider(opacity, 0);
   await expect(footer.getByRole("link")).toHaveCount(2);
   await expect(footer.getByRole("link", { name: "OpenMapTiles", exact: true })).toBeVisible();
   await expect(footer.getByRole("link", { name: "OpenStreetMap", exact: true })).toHaveAttribute(
@@ -148,7 +144,7 @@ test("credits follow the visible blend while every source remains available in t
   );
   await page.getByRole("button", { name: "À propos des cartes" }).click();
   const dialog = page.getByRole("dialog", { name: "Cartes et précision" });
-  await expect(dialog.locator(".source-credits a")).toHaveCount(11);
+  await expect(dialog.locator(".source-credits a")).toHaveCount(12);
   await expect(dialog.locator(".source-credits")).toContainText("F. Callède / Inrap");
   await expect(dialog.locator(".source-credits")).toContainText("Archives municipales de Toulouse");
   await expect(dialog.getByRole("link", { name: "OpenFreeMap", exact: true })).toBeVisible();

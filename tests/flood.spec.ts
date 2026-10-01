@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
+import { setSlider } from "./ui";
 test.beforeEach(async ({ page }) => prepareSharing(page));
 test("1875 flood tiles, timeline and mobile controls", async ({ page }) => {
   const errors: string[] = [];
@@ -16,14 +17,14 @@ test("1875 flood tiles, timeline and mobile controls", async ({ page }) => {
   await expect.poll(() => tiles.includes(200), { timeout: 60000 }).toBeTruthy();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("button", { name: "Superposition", exact: true }).click();
-  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("100");
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Superposition", exact: true }).click();
+  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 100);
   await page.screenshot({ path: ".local/1875-desktop.png" });
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("button", { name: "Superposition", exact: true }).click();
-  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("50");
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Superposition", exact: true }).click();
+  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 50);
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.5");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: ".local/1875-mobile.png" });

@@ -1,0 +1,25 @@
+/* Shared application tokens; the specimen may scope them to a comparison card. */
+@import "../src/colors.css";
+.comparison-card[data-theme="dark"] {
+  color-scheme: dark;
+  --canvas: #171f1c;
+  --surface: #232e28;
+  --subtle: #1c2621;
+  --border: #405047;
+  --ink: #eeeade;
+  --muted: #aab8ab;
+  --primary: #a9c5ab;
+  --on-primary: #1c2c22;
+  --slider: var(--primary);
+  --track: #819087;
+  --hover: #334437;
+  --focus: #dfa06f;
+  --shadow: 0 8px 25px #00000033;
+  --shadow-panel: var(--shadow);
+  --shadow-small: 0 2px 8px #00000033;
+  --shadow-modal: 0 20px 80px #00000066;
+  --notice: #3c3024;
+  --notice-border: #a77d55;
+  --location: #8ec5f4;
+  --location-surface: #243e50;
+}

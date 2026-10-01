@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
+import { setSlider } from "./ui";
 test("address stays stable while sharing captures and restores the current view", async ({
   page,
 }) => {
@@ -12,9 +13,9 @@ test("address stays stable while sharing captures and restores the current view"
   await page.getByRole("combobox").selectOption({ label: "Saint-Cyprien" });
   await page.waitForTimeout(1200);
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("button", { name: "Superposition", exact: true }).click();
-  await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("42");
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Superposition", exact: true }).click();
+  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 42);
   await page.getByRole("button", { name: "Époques", exact: true }).click();
   await page.getByRole("checkbox", { name: "1830 Cadastre" }).uncheck();
   await page.keyboard.press("Escape");
@@ -27,7 +28,7 @@ test("address stays stable while sharing captures and restores the current view"
   expect(params.get("z")).toBe("15.60");
   expect(params.get("mode")).toBe("overlay");
   expect(params.get("opacity")).toBe("42");
-  expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1860,1875,1904,1954");
+  expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");
   await page.goto(overlay);
   await page.reload();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
@@ -43,9 +44,9 @@ test("address stays stable while sharing captures and restores the current view"
   await page.goto(timeline);
   await page.reload();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1850");
-  await expect(page.locator(".timeline-value")).toHaveText("1777 → 1860");
+  await expect(page.locator(".timeline-value")).toHaveText("1848 → 1860");
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison" }).focus();
   await page.keyboard.press("Home");
   for (let i = 0; i < 36; i++) await page.keyboard.press("ArrowRight");
@@ -87,4 +88,5 @@ test("native sharing cancellation preserves the address and blocked clipboard ex
   expect(page.url()).toBe(original);
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Partager la vue", exact: true })).toBeFocused();
 });

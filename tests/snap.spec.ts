@@ -24,14 +24,29 @@ test("timeline snaps close to each source and releases for dragging and keyboard
           1680,
           1777,
           1830,
+          1848,
           1860,
           1875,
           1904,
           1954,
           today,
         ]);
-    for (const year of [450, 1250, 1550, 1631, 1680, 1777, 1830, 1860, 1875, 1904, 1954, today]) {
-      const nearby = year === today ? year - 3 : year + 3;
+    for (const year of [
+      450,
+      1250,
+      1550,
+      1631,
+      1680,
+      1777,
+      1830,
+      1848,
+      1860,
+      1875,
+      1904,
+      1954,
+      today,
+    ]) {
+      const nearby = year === today ? year - 3 : year === 1848 ? year + 2 : year + 3;
       await page.mouse.move(x(nearby), box.y + box.height / 2);
       await page.mouse.down();
       await expect(slider).toHaveValue(String(year));

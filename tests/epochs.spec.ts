@@ -1,7 +1,11 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-test.beforeEach(async ({ page }) => prepareSharing(page));
+import { prepareOfflineMaps } from "./ui";
+test.beforeEach(async ({ page }) => {
+  await prepareSharing(page);
+  await prepareOfflineMaps(page);
+});
 test("epoch selection skips disabled sources, survives reload and permits an empty selection", async ({
   page,
 }) => {
@@ -26,7 +30,7 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
   await page.screenshot({ path: ".local/epochs-mobile.png" });
   await expect
     .poll(() => sharedView(page))
-    .toMatch(/layers=450%2C1250%2C1550%2C1631%2C1680%2C1777%2C1830%2C1860%2C1904%2C1954/);
+    .toMatch(/layers=450%2C1250%2C1550%2C1631%2C1680%2C1777%2C1830%2C1848%2C1860%2C1904%2C1954/);
   await page.goto(await sharedView(page));
   await page.reload();
   await page.getByRole("button", { name: "Époques", exact: true }).click();
@@ -39,6 +43,7 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
     "1680 Cadastre",
     "1777 Plan de Saget",
     "1830 Cadastre",
+    "1848 État-major · IGN",
     "1860 Plan de Jourdan",
     "1904 Plan de Laffont",
     "1954 Vue aérienne",

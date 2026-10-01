@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 
 import { eventsAt } from "./city-events";
 import { populationAt } from "./population";
+import { Button } from "./ui";
 
 const icons = {
   crown: Crown,
@@ -52,23 +53,23 @@ export function CityWidget({
   return (
     <section className="population-counter" aria-label="Toulouse à cette époque">
       <span>Toulouse · {label}</span>
-      <button
+      <Button
         className="population-value"
         onClick={onSources}
         aria-label={`Population estimée de Toulouse : environ ${populationAt(year)} habitants. Voir les sources`}
-        title="Population estimée de Toulouse · Voir les sources"
+        data-tooltip="Population estimée de Toulouse · Voir les sources"
       >
         <strong>
           ≈ {populationAt(year).toLocaleString("fr-FR")} <small>habitants</small>
         </strong>
-      </button>
+      </Button>
       <div className="city-events" role="group" aria-label="Repères historiques">
         {events.map((event) => {
           const Icon = icons[event.icon];
           return (
-            <button
+            <Button
               key={event.year}
-              title={`${event.year} · ${event.title}`}
+              data-tooltip={`${event.year} · ${event.title}`}
               aria-label={`${event.year} · ${event.title}`}
               aria-expanded={selected === event.year}
               aria-controls="city-event-detail"
@@ -76,19 +77,19 @@ export function CityWidget({
             >
               <Icon size={17} aria-hidden="true" />
               <span>{event.year}</span>
-            </button>
+            </Button>
           );
         })}
       </div>
       {active && (
         <div className="city-event-detail" id="city-event-detail">
-          <button
+          <Button
             className="event-close"
             aria-label="Fermer le repère historique"
             onClick={() => setSelected(null)}
           >
             <X size={15} />
-          </button>
+          </Button>
           <h3>
             {active.year} · {active.title}
           </h3>

@@ -1,7 +1,9 @@
+@import "./colors.css";
+
 :root {
   font-family: "Golos Text", sans-serif;
-  color: #263e36;
-  background: #efece3;
+  color: var(--ink);
+  background: var(--canvas);
   font-synthesis: none;
 }
 * {
@@ -33,7 +35,7 @@ button:focus-visible,
 a:focus-visible,
 select:focus-visible,
 input:focus-visible {
-  outline: 3px solid #bc7244;
+  outline: 3px solid var(--focus);
   outline-offset: 4px;
 }
 main {
@@ -57,8 +59,8 @@ main {
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  background: #f9f8f2;
-  border-bottom: 1px solid #dcded4;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   z-index: 5;
 }
 .brand {
@@ -72,7 +74,7 @@ main {
     serif;
 }
 .brand-icon {
-  border: 1px solid #c9d0c5;
+  border: 1px solid var(--border);
   width: 42px;
   height: 42px;
   display: grid;
@@ -99,14 +101,14 @@ main {
   font-weight: 600;
 }
 .edition {
-  color: #839087;
+  color: var(--muted);
 }
 .source-button {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  border: 1px solid #d9ded4;
+  border: 1px solid var(--border);
   border-radius: 7px;
   padding: 10px 14px;
 }
@@ -114,9 +116,9 @@ main {
   position: absolute;
   top: 106px;
   left: 32px;
-  background: rgba(249, 248, 242, 0.94);
+  background: var(--surface);
   padding: 24px 27px;
-  border: 1px solid #e1dfd3;
+  border: 1px solid var(--border);
   border-radius: 3px;
   box-shadow: 0 6px 26px #303a2510;
   max-width: 300px;
@@ -140,11 +142,11 @@ main {
 .intro p {
   font-size: 11px;
   line-height: 1.8;
-  color: #7b8075;
+  color: var(--muted);
   margin: 0 0 22px;
 }
 .place-select {
-  border-top: 1px solid #deded0;
+  border-top: 1px solid var(--border);
   padding-top: 15px;
   display: flex;
   align-items: center;
@@ -154,7 +156,7 @@ main {
   width: 100%;
   background: none;
   border: 0;
-  color: #354b40;
+  color: var(--ink);
   font-size: 12px;
   cursor: pointer;
 }
@@ -170,7 +172,7 @@ main {
   pointer-events: none;
   padding: 8px 15px;
   border-radius: 40px;
-  background: #faf9f0e8;
+  background: var(--surface);
   box-shadow: 0 2px 8px #0001;
 }
 .epoch-label span {
@@ -190,7 +192,7 @@ main {
   top: 78px;
   bottom: 30px;
   width: 2px;
-  background: #fcfbef;
+  background: var(--surface);
   box-shadow: 0 0 5px #3334;
   pointer-events: none;
 }
@@ -201,9 +203,9 @@ main {
   transform: translate(-50%, -50%);
   width: 44px;
   height: 44px;
-  border: 4px solid #faf9f1;
-  background: #334b40;
-  color: #fff;
+  border: 4px solid var(--surface);
+  background: var(--primary);
+  color: var(--on-primary);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -224,11 +226,11 @@ main {
   position: absolute;
   right: 32px;
   top: 44%;
-  border: 1px solid #d8dbcf;
-  background: #faf9f3;
+  border: 1px solid var(--border);
+  background: var(--surface);
   border-radius: 8px;
   padding: 5px;
-  box-shadow: 0 3px 12px #0001;
+  box-shadow: var(--shadow-small);
 }
 .zoom-controls button {
   width: 35px;
@@ -237,7 +239,7 @@ main {
   place-items: center;
 }
 .zoom-controls div {
-  border-top: 1px solid #dedfd5;
+  border-top: 1px solid var(--border);
   margin: 4px;
 }
 .control-panel {
@@ -246,11 +248,11 @@ main {
   left: 50%;
   transform: translateX(-50%);
   width: 470px;
-  background: #fbfaf5;
-  border: 1px solid #d5d8cd;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 19px 22px 10px;
-  box-shadow: 0 8px 36px #27332426;
+  box-shadow: var(--shadow-panel);
 }
 .panel-top {
   display: flex;
@@ -267,7 +269,7 @@ main {
   align-items: center;
   gap: 5px;
   font-size: 9px;
-  color: #859182;
+  color: var(--muted);
 }
 .live-state i {
   width: 5px;
@@ -281,7 +283,7 @@ main {
 .mode-buttons {
   display: flex;
   gap: 3px;
-  background: #eceee6;
+  background: var(--subtle);
   border-radius: 7px;
   padding: 4px;
 }
@@ -297,8 +299,8 @@ main {
   border-radius: 5px;
 }
 .mode-buttons button.active {
-  background: #2e4a3e;
-  color: #fff;
+  background: var(--primary);
+  color: var(--on-primary);
   box-shadow: 0 2px 4px #24392c30;
 }
 .slider-row {
@@ -307,12 +309,12 @@ main {
   gap: 13px;
   margin: 18px 0;
   font-size: 10px;
-  color: #7c826f;
+  color: var(--muted);
 }
 .slider-row input {
   flex: 1;
   min-width: 0;
-  accent-color: #3d5e49;
+  accent-color: var(--primary);
   height: 4px;
   cursor: pointer;
 }
@@ -323,10 +325,10 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid #e6e7dd;
+  border-top: 1px solid var(--border);
   padding-top: 9px;
   font-size: 9px;
-  color: #919787;
+  color: var(--muted);
 }
 .panel-bottom button {
   padding: 4px 0 3px 12px;
@@ -335,10 +337,10 @@ kbd {
   font:
     9px "Golos Text",
     sans-serif;
-  border: 1px solid #dbdecf;
+  border: 1px solid var(--border);
   border-radius: 3px;
   padding: 2px 5px;
-  color: #6f7869;
+  color: var(--muted);
   margin-right: 5px;
 }
 footer {
@@ -347,13 +349,13 @@ footer {
   left: 0;
   right: 0;
   height: 30px;
-  background: #f9f8f2;
+  background: var(--surface);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 22px;
   font-size: 9px;
-  color: #858b7f;
+  color: var(--muted);
 }
 footer a {
   color: inherit;
@@ -370,19 +372,20 @@ footer b {
   left: 22px;
 }
 .maplibregl-ctrl-scale {
-  background: #faf9efb0 !important;
+  color: var(--ink) !important;
+  background: var(--surface) !important;
   font:
     10px "Golos Text",
     sans-serif !important;
-  border-color: #596250 !important;
+  border-color: var(--muted) !important;
 }
 .error-toast {
   position: absolute;
   right: 24px;
   top: 160px;
   width: 300px;
-  background: #fff6e9;
-  border: 1px solid #bd9d77;
+  background: var(--notice);
+  border: 1px solid var(--notice-border);
   padding: 14px 18px;
   font-size: 12px;
   border-radius: 8px;
@@ -407,14 +410,14 @@ footer b {
   backdrop-filter: blur(4px);
 }
 .source-modal {
-  background: #faf9f2;
+  background: var(--surface);
   border-radius: 14px;
   padding: 36px;
   max-width: 580px;
   max-height: 90dvh;
   overflow: auto;
   position: relative;
-  box-shadow: 0 20px 80px #10281850;
+  box-shadow: var(--shadow-modal);
 }
 .close-modal {
   position: absolute;
@@ -433,11 +436,11 @@ footer b {
 .source-modal p {
   font-size: 12px;
   line-height: 1.8;
-  color: #697363;
+  color: var(--muted);
 }
 .source-modal a {
   font-size: 12px;
-  color: #426549;
+  color: var(--primary);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -584,15 +587,15 @@ footer b {
   height: 19px;
   border: 3px solid white;
   border-radius: 50%;
-  background: #287ccc;
+  background: var(--location);
   box-shadow:
     0 0 0 9px #287ccc25,
     0 1px 7px #0005;
   pointer-events: none;
 }
 .location-active {
-  color: #287ccc;
-  background: #e4edf2;
+  color: var(--location);
+  background: var(--location-surface);
   border-radius: 5px;
 }
 .location-notice {
@@ -603,13 +606,13 @@ footer b {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #faf9f3;
-  border: 1px solid #d8dbcf;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px 14px;
   font-size: 11px;
   line-height: 1.6;
-  box-shadow: 0 3px 12px #0001;
+  box-shadow: var(--shadow-small);
 }
 .location-notice button {
   display: flex;
@@ -629,22 +632,22 @@ footer b {
   justify-content: space-between;
   margin: 0 0 12px;
   font-size: 11px;
-  color: #7b8075;
+  color: var(--muted);
 }
 .year-selector > div {
   display: flex;
   gap: 4px;
 }
 .year-selector button {
-  border: 1px solid #d8dbcf;
+  border: 1px solid var(--border);
   padding: 6px 14px;
   border-radius: 5px;
   font-size: 12px;
 }
 .year-selector button.selected {
-  background: #e3e8db;
+  background: var(--hover);
   border-color: #95a78b;
-  color: #2e4a3e;
+  color: var(--primary);
   font-weight: 600;
 }
 
@@ -661,7 +664,7 @@ footer b {
 .timeline input {
   width: 100%;
   margin: 0;
-  accent-color: #3d5e49;
+  accent-color: var(--primary);
   cursor: ew-resize;
 }
 .timeline-ticks {
@@ -676,7 +679,7 @@ footer b {
 }
 .timeline p {
   font-size: 9px;
-  color: #858b7b;
+  color: var(--muted);
   text-align: center;
   line-height: 1.5;
   margin: 2px 0 12px;

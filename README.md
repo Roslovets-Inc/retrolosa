@@ -1,7 +1,16 @@
 # Rétrolosa
 
-Carte interactive de Toulouse en 1631, 1680, 1830, 1875, 1954 et aujourd’hui.
+Carte interactive de Toulouse à travers les siècles : reconstructions antiques et médiévales,
+plans historiques, état-major de 1848, photographie aérienne de 1954 et carte actuelle.
 React 19, TypeScript, Vite 8, MapLibre GL JS 6 et PMTiles 4. Interface en français.
+
+Les composants d’interface reposent sur Radix Primitives : infobulles, panneaux,
+dialogues, cases à cocher, sélection du mode et curseur d’opacité. Les wrappers
+de `src/ui.tsx` partagent les styles et les couleurs du projet, sans thème imposé
+par la bibliothèque. Radix gère le focus, le clavier, la fermeture et les collisions
+avec les bords de l’écran. La frise chronologique non linéaire et les outils
+cartographiques conservent leur comportement spécifique ; le choix d’un lieu
+utilise une liste native adaptée aux appareils mobiles.
 
 ## Licence
 

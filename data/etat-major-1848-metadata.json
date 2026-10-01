@@ -1,0 +1,286 @@
+{
+  "verifiedAt": "2026-10-01",
+  "publisher": "IGN",
+  "layer": "GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40",
+  "catalogueUrl": "https://www.data.gouv.fr/datasets/scan-etat-major-r-40k-1",
+  "catalogueQuery": {
+    "endpoint": "https://data.geopf.fr/wfs",
+    "typeName": "cartes_anciennes:image",
+    "dataset_identifier": "ETATMAJOR",
+    "intersectsBoundsWGS84": [
+      1.3,
+      43.49,
+      1.57,
+      43.75
+    ],
+    "geometryCRS": "EPSG:3857"
+  },
+  "centralSheet": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230NO_40K_1848",
+  "catalogueYear": 1848,
+  "dateMeaning": "Year recorded for the original minutes in the IGN catalogue, not the scan date. Later additions in this historical series may be visible.",
+  "matrixSet": "PM_6_15",
+  "minzoom": 6,
+  "maxzoom": 15,
+  "format": "image/jpeg",
+  "licence": "Licence Ouverte / Open Licence 2.0",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "image.988",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                171437.51500449,
+                5452609.86602195
+              ],
+              [
+                215791.61952031,
+                5452938.27705089
+              ],
+              [
+                215924.82442299,
+                5425160.67211961
+              ],
+              [
+                171703.79122646,
+                5424834.2515018
+              ],
+              [
+                171437.51500449,
+                5452609.86602195
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 988,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM218SE_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "MONTAUBAN",
+        "date": "1848",
+        "x": 193715,
+        "y": 5438893
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "image.989",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                127087.56270567,
+                5452062.66914252
+              ],
+              [
+                171437.51500449,
+                5452609.86602195
+              ],
+              [
+                171703.79122646,
+                5424834.2515018
+              ],
+              [
+                127486.87685109,
+                5424290.3506459
+              ],
+              [
+                127087.56270567,
+                5452062.66914252
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 989,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM218SO_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "MONTAUBAN",
+        "date": "1848",
+        "x": 149429,
+        "y": 5438456
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "image.1034",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                171703.79122646,
+                5424834.2515018
+              ],
+              [
+                215924.82442299,
+                5425160.67211961
+              ],
+              [
+                216056.80481128,
+                5397465.57986546
+              ],
+              [
+                171967.61841964,
+                5397141.10382328
+              ],
+              [
+                171703.79122646,
+                5424834.2515018
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 1034,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230NE_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "TOULOUSE",
+        "date": "1848",
+        "x": 193913,
+        "y": 5411157
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "image.1035",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                127486.87685109,
+                5424290.3506459
+              ],
+              [
+                171703.79122646,
+                5424834.2515018
+              ],
+              [
+                171967.61841964,
+                5397141.10382328
+              ],
+              [
+                127882.50632137,
+                5396600.47393609
+              ],
+              [
+                127486.87685109,
+                5424290.3506459
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 1035,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230NO_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "TOULOUSE",
+        "date": "1848",
+        "x": 149760,
+        "y": 5410723
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "image.1036",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                171967.61841964,
+                5397141.10382328
+              ],
+              [
+                216056.80481128,
+                5397465.57986546
+              ],
+              [
+                216187.56068516,
+                5369852.22187943
+              ],
+              [
+                172229.01884792,
+                5369529.69098101
+              ],
+              [
+                171967.61841964,
+                5397141.10382328
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 1036,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230SE_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "TOULOUSE",
+        "date": "1848",
+        "x": 194110,
+        "y": 5383504
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "image.1037",
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                127882.50632137,
+                5396600.47393609
+              ],
+              [
+                171967.61841964,
+                5397141.10382328
+              ],
+              [
+                172229.01884792,
+                5369529.69098101
+              ],
+              [
+                128274.48451235,
+                5368992.30730913
+              ],
+              [
+                127882.50632137,
+                5396600.47393609
+              ]
+            ]
+          ]
+        ]
+      },
+      "geometry_name": "geometry",
+      "properties": {
+        "fid": 1037,
+        "image_identifier": "IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230SO_40K_1848",
+        "dataset_identifier": "ETATMAJOR",
+        "titre": "TOULOUSE",
+        "date": "1848",
+        "x": 150089,
+        "y": 5383073
+      }
+    }
+  ]
+}

@@ -56,7 +56,6 @@ Les flux IGN ci-dessous restent à vérifier sur Toulouse avant intégration.
 | 2    | **1965–1980 — orthophotographies IGN**           | Compléter le grand intervalle entre 1954 et aujourd’hui. | Faible si la couverture locale convient : vérifier des tuiles de Toulouse et la date réelle de chaque prise de vue. Ne pas inventer un millésime unique « 1970 ». |
 | 4    | **1808 — changements depuis 1789**               | Lire les transformations autour de la Révolution.        | Moyen à élevé : vérifier la légende et distinguer état existant, changements et projets avant le calage.                                                          |
 | 5    | **1880–1881 — Perrossier, environs de Toulouse** | Étendre l’exploration aux faubourgs et aux environs.     | Élevé : plusieurs feuilles, assemblage et validation des raccords ; intérêt surtout hors du centre.                                                               |
-| 6    | **État-major — série 1820–1866**                 | Contexte territorial du XIXe siècle.                     | Faible à moyen si le flux convient ; identifier la feuille et sa date. Détail urbain à comparer avec notre cadastre de 1830.                                      |
 | 7    | **Cassini — XVIIIe siècle**                      | Campagne, voies et villages autour de Toulouse.          | Faible à moyen si le flux convient ; vérifier date et couverture. Peu adapté à la comparaison des rues du centre.                                                 |
 | 8    | **2000–2005 — orthophotographies IGN**           | Une étape récente avant le fond actuel.                  | Faible si la couverture et les dates locales sont établies. Moins prioritaire qu’une époque ancienne manquante.                                                   |
 
@@ -120,3 +119,5 @@ Pour chaque intégration : consigner source, date réelle, couverture, condition
 de réutilisation et attribution. Pour les scans : conserver les points de contrôle,
 comparer les transformations, tester des points indépendants et documenter les
 limites. Réutiliser l’outillage de 1875, mais jamais ses points ni sa déformation.
+
+État-major is now integrated as epoch 1848, verified against the six source sheets in the IGN catalogue. See [sources.md](sources.md#état-major-1848--verified-ign-catalogue-date).

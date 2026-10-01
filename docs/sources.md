@@ -7,7 +7,7 @@ The time slider is always available. Superposition, curtain and loupe are compar
 The footer credits only historical sheets participating in the visible timeline blend,
 including both sheets during a crossfade. It hides historical credits for the modern-only
 view and zero historical opacity. OpenMapTiles and OpenStreetMap remain visible with links;
-OpenFreeMap and the complete list of eleven historical sources and authors are available
+OpenFreeMap and the complete list of twelve historical sources and authors are available
 in the existing source dialog. Footer text is legible rather than compressed to 7px on mobile.
 OpenFreeMap explicitly permits omitting its own name from the on-map attribution:
 <https://openfreemap.org/#attribution>. OSM guidance is at
@@ -112,21 +112,93 @@ Fifteen fitting landmarks span bridges, churches, squares and road junctions. A 
 
 ## Jourdan and Rivière, circa 1860; Laffont, 1904
 
-Both complete original sheets are integrated as affine Web Mercator image layers,
+Both complete original sheets are integrated as corrected Web Mercator image layers,
 without cropping legends, margins, cartouches or inset maps. Full-resolution JPEGs
 are accessible from the source dialog. Source images, checksums, manual annotations
 and independent checks are recorded in `data/jourdan-1860-control-points.json` and
 `data/laffont-1904-control-points.json`. Run `scripts/build-city-plans.py` explicitly
-with numpy and Pillow to reproduce the assets; regular builds do not regenerate them.
+with numpy, scipy and Pillow to reproduce the assets; regular builds do not regenerate them.
 
-Three stable landmarks fit each layer (Saint-Sernin, Saint-Étienne and Pont Neuf).
-The withheld Taur, Saint-Pierre-des-Cuisines and Dalbade checks range from 11.8 to
-41.9 m for 1860 and 24.9 to 47.8 m for 1904. No suburban accuracy claim follows from
-these central checkpoints. Historical drawing distortion, folds and manual annotation
-remain limitations. The 1860 document includes officially proposed alignments;
-the 1904 document includes the projected Amidonniers bridge. These should not be
-read as completed construction merely because they appear on a dated map.
+Forty fitting landmarks on 1860 and thirty-seven on 1904 span preserved street
+junctions, canal bridges, Grand Rond and Saint-Cyprien. The quarter survey adds
+street axes around Dalbade, Taur, Jardin Royal, Rue Valade and Rue Quilmery.
+Modern junctions are cross-checked against OpenStreetMap node coordinates,
+recorded with attribution in `data/street-reference-junctions.json`.
+The modern Tour-du-Sac through-junction is absent on the 1904 sheet and is
+excluded consistently; its preserved junction on Rue de la Laque is withheld.
+Three ambiguous 1904 Dalbade candidates are also rejected and recorded.
+
+The affine sheet frame stays fixed. An inverse thin-plate spline corrects local
+geometry, with fixed sheet boundaries and soft prior samples restraining drift.
+The 1904 model preserves the preceding 32-anchor field between observations;
+new observations receive softer weight because the drawn street edges are less
+precise. A sampled inverse Jacobian rejects compression below 0.3.
+Fifteen independent church, square and street-junction checks evaluate the actual
+16-pixel renderer mesh. On identical revised annotations, mean error changes
+from 28.3 to 20.1 m for 1860 and from 18.3 to 18.1 m for 1904; maxima remain
+51.9 and 40.8 m. The 1904 gain is small, and some individual checks worsen.
+These manual checks do not establish survey accuracy or exact alignment of
+all streets. Fit residuals are not independent accuracy estimates.
+
+The immediately preceding fields are frozen in `data/*-street-baseline.json`;
+the original 13-anchor affine frame is retained in `data/*-alignment-baseline.json`.
+Full measurements are in `data/*-validation.json`. Source margins, legends,
+insets and unmodified JPEGs remain complete. The 1860 document includes
+proposed alignments; 1904 includes the projected Amidonniers bridge.
 
 Source provenance and reuse statements are detailed in [map-backlog.md](map-backlog.md).
 The periods participate in epoch selection, chronological blending and shared URLs.
 Mobile year buttons occupy two rows, with staggered timeline labels.
+
+## État-major 1848 — verified IGN catalogue date
+
+The new epoch uses `GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40` from the official
+`https://data.geopf.fr/wmts` service. JPEG tiles, 256 pixels, matrix set `PM_6_15`,
+zooms 6–15; higher map zooms overzoom the historical raster. IGN georeferencing is
+corrected over a dense network of 30 preserved street, bridge and monument
+anchors, including Grand Rond. A thin-plate spline inverse is sampled onto a
+shared grid every eight annotation pixels. Soft prior samples preserve the
+previous correction between anchors. At the mosaic boundary it returns to the
+earlier translation (about 4.5 m east and 58 m south); surrounding countryside
+is not newly fitted. Fifteen withheld landmarks and bridge approaches measure
+the actual bilinear grid: mean error 18.5 to 17.8 m, maximum 28.5 m after correction.
+The comparison uses the immediately preceding 22-anchor field, frozen in
+`data/etat-major-street-baseline.json`, and identical revised annotations.
+Some individual checks worsen; the low-resolution 1:40000 drawing remains
+approximate. Manual annotations are in `data/etat-major-control-points.json`,
+the initial translation/local-affine baseline in `data/etat-major-alignment-baseline.json`,
+and the full comparison in `data/etat-major-validation.json`. Run
+`scripts/build-etat-major-alignment.py` explicitly with numpy and scipy to
+export the runtime model in `src/etat-major-alignment.json`.
+`src/etat-major.ts` assembles
+neighbouring live IGN tiles before bilinear sampling through a shared world-coordinate
+inverse, avoiding seams. Sampled Jacobians check that the local warp does not fold.
+The correction is constant in ground units at every zoom, including overzoom.
+It is a local alignment, not a new survey or a correction validated across the
+surrounding countryside. The layer is limited to the application's navigation bounds
+[1.30, 43.49, 1.57, 43.75], whose intersecting source sheets were checked.
+
+On 2026-10-01, the official Remonter le temps catalogue WFS
+`https://data.geopf.fr/wfs`, type `cartes_anciennes:image`, dataset `ETATMAJOR`,
+returned central sheet **230 NO, TOULOUSE, date 1848**:
+`IGNF_SCAN_EM_40K_1-0__2009-07-02__SCAN_4EM230NO_40K_1848`.
+All six sheets intersecting the navigation bounds have catalogue date **1848**:
+Toulouse 230 NO, NE, SO and SE, and Montauban 218 SO and SE. Their complete
+properties and footprints in EPSG:3857 are stored in
+`data/etat-major-1848-metadata.json`. Query the geometry in EPSG:3857, not with
+unprojected longitude/latitude. The 2009 component in an image identifier is not
+the historical date. The national 1820–1866 series range is not the Toulouse date.
+
+1848 is the catalogue millésime of the coloured 1:40,000 minutes. The
+[official dataset](https://www.data.gouv.fr/datasets/scan-etat-major-r-40k-1)
+notes partial additions to the series, notably railways, until 1889. Do not
+interpret every depicted object as present in 1848 or label the raster as an
+unaltered survey from that year. This limit is explained in the source dialog.
+The [IGN FAQ](https://remonterletemps.ign.fr/faq) distinguishes the coloured
+minutes from the engraved 1:80,000 map and permits reuse under Licence Ouverte 2.0.
+Keep IGN attribution and the source/date information.
+
+A central Toulouse tile was successfully fetched (HTTP 200, JPEG, CORS `*`).
+The map covers the countryside as well as the city; it is useful for territorial
+comparison, without a cadastral precision claim. The new layer participates in
+chronological blends, source selection, north orientation and shared URLs.

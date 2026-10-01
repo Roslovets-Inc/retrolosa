@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rétrolosa — Guide de style</title>
+    <link rel="stylesheet" href="../public/fonts/fonts.css" />
+    <link rel="stylesheet" href="../src/colors.css" />
+    <style>
+      :root {
+        --radius: 10px;
+        --shadow: 0 8px 25px #20302426;
+        font-family: "Golos Text", sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 36px 24px;
+      }
+      main {
+        max-width: 1000px;
+        margin: auto;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        font:
+          500 clamp(30px, 5vw, 44px) "Literata",
+          Georgia,
+          serif;
+        margin: 8px 0;
+      }
+      h2 {
+        font-size: 14px;
+        margin: 0 0 16px;
+      }
+      p {
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 8px 0 0;
+      }
+      .intro {
+        max-width: 720px;
+      }
+      section {
+        padding-top: 24px;
+      }
+      .palette {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+      }
+      .swatch {
+        overflow: hidden;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+      .color {
+        height: 56px;
+        background: var(--swatch);
+        border-bottom: 1px solid var(--border);
+      }
+      .caption {
+        padding: 10px;
+      }
+      .caption strong {
+        display: block;
+        font-size: 12px;
+      }
+      code {
+        font:
+          11px ui-monospace,
+          monospace;
+      }
+      .caption small {
+        display: block;
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 5px;
+        line-height: 1.4;
+      }
+      .details {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 28px;
+      }
+      .panel {
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .tools {
+        display: flex;
+        gap: 8px;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      .epochs {
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0 14px;
+        background: var(--surface);
+        font-size: 12px;
+      }
+      .switch {
+        flex: 1;
+        display: flex;
+        gap: 4px;
+        background: var(--subtle);
+        padding: 3px;
+        border-radius: 6px;
+      }
+      .switch button {
+        flex: 1;
+        min-height: 36px;
+        border: 0;
+        border-radius: 4px;
+        background: transparent;
+        font-size: 11px;
+        padding: 0 8px;
+      }
+      button:hover {
+        background: var(--hover);
+        box-shadow: inset 0 0 0 1px var(--track);
+      }
+      .switch button[aria-pressed="true"] {
+        background: var(--primary);
+        color: var(--on-primary);
+        box-shadow: none;
+      }
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 4px;
+      }
+      input[type="range"] {
+        appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 4px;
+        background: linear-gradient(to right, var(--slider) 14%, var(--track) 14%);
+        margin: 22px 0 12px;
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: var(--slider);
+        box-shadow: 0 0 0 2px var(--surface);
+        border-radius: 50%;
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        background: var(--slider);
+        box-shadow: 0 0 0 2px var(--surface);
+        border: 0;
+        border-radius: 50%;
+      }
+      .ticks {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+      }
+      .states {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+      }
+      .state {
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        padding: 7px 10px;
+        font-size: 11px;
+        background: var(--surface);
+      }
+      .state.hover {
+        background: var(--hover);
+        border-color: var(--track);
+      }
+      .state.focus {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+      }
+      .sample-title {
+        font:
+          500 25px "Literata",
+          Georgia,
+          serif;
+      }
+      dl {
+        margin: 12px 0 0;
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      dt {
+        font-weight: 600;
+      }
+      dd {
+        margin: 0 0 10px;
+        color: var(--muted);
+      }
+      footer {
+        border-top: 1px solid var(--border);
+        margin-top: 24px;
+        padding-top: 12px;
+        font-size: 10px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      @media (max-width: 700px) {
+        body {
+          padding: 24px 16px;
+        }
+        .palette {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .details {
+          grid-template-columns: 1fr;
+        }
+        .tools {
+          flex-wrap: wrap;
+        }
+        .epochs {
+          min-height: 36px;
+        }
+      }
+      @media print {
+        body {
+          padding: 0;
+        }
+        .panel {
+          box-shadow: none;
+        }
+        * {
+          print-color-adjust: exact;
+        }
+        section,
+        .swatch {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">Rétrolosa / Identité visuelle / 01</div>
+        <h1>Le papier, la carte, le temps.</h1>
+        <p class="intro">
+          Une identité calme et patrimoniale : des fonds papier chaleureux, des verts sourds et une
+          touche de terre cuite. L’interface accompagne les cartes et laisse le premier rôle au
+          contenu historique.
+        </p>
+      </header>
+      <section aria-labelledby="palette-title">
+        <h2 id="palette-title">01 — Palette & rôles</h2>
+        <div class="palette">
+          <div class="swatch">
+            <div class="color" style="--swatch: #efece3"></div>
+            <div class="caption">
+              <strong>Papier</strong><code>#EFECE3 · canvas</code><small>Fond général</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #faf9f2"></div>
+            <div class="caption">
+              <strong>Ivoire</strong><code>#FAF9F2 · surface</code><small>Panneaux et menus</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #eceee6"></div>
+            <div class="caption">
+              <strong>Brume</strong><code>#ECEEE6 · subtle</code><small>Groupes de commandes</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #d5d8cd"></div>
+            <div class="caption">
+              <strong>Lichen</strong><code>#D5D8CD · border</code
+              ><small>Bordures et séparateurs</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #263e36"></div>
+            <div class="caption">
+              <strong>Encre verte</strong><code>#263E36 · ink</code
+              ><small>Texte principal et icônes</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #2f4b40"></div>
+            <div class="caption">
+              <strong>Forêt</strong><code>#2F4B40 · primary</code
+              ><small>Sélection · texte blanc</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #3e604d"></div>
+            <div class="caption">
+              <strong>Mousse</strong><code>#3E604D · slider</code><small>Curseur de la frise</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #dce3d4"></div>
+            <div class="caption">
+              <strong>Sauge</strong><code>#DCE3D4 · hover</code><small>Survol des commandes</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #5f6d62"></div>
+            <div class="caption">
+              <strong>Gris végétal</strong><code>#5F6D62 · muted</code
+              ><small>Texte secondaire</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: #bc7244"></div>
+            <div class="caption">
+              <strong>Terre cuite</strong><code>#BC7244 · focus</code
+              ><small>Repère de focus clavier</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: var(--track)"></div>
+            <div class="caption">
+              <strong>Piste</strong><code>#7B877E · track</code
+              ><small>Frise et contour de survol</small>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="color" style="--swatch: var(--on-primary)"></div>
+            <div class="caption">
+              <strong>Blanc</strong><code>#FFFFFF · on-primary</code
+              ><small>Texte sur sélection</small>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="details">
+        <section aria-labelledby="components-title">
+          <h2 id="components-title">02 — Composants & états</h2>
+          <div class="panel">
+            <div class="tools">
+              <button class="epochs" type="button">Époques</button>
+              <div class="switch" role="group" aria-label="Exemple de comparaison">
+                <button type="button" aria-pressed="true">Superposition</button>
+                <button type="button" aria-pressed="false">Rideau</button>
+                <button type="button" aria-pressed="false">Loupe</button>
+              </div>
+            </div>
+            <input type="range" min="0" max="100" value="14" aria-label="Exemple de frise" />
+            <div class="ticks">
+              <span>Ve</span><span>XIIIe</span><span>1550</span><span>1830</span><span>1904</span
+              ><span>Actuel</span>
+            </div>
+          </div>
+          <div class="states">
+            <span class="state">Repos</span><span class="state hover">Survol</span
+            ><span class="state focus">Focus clavier</span>
+          </div>
+          <p>
+            Les fonds clairs dominent. Réserver le vert dense à l’état sélectionné ; la terre cuite
+            au focus. Associer chaque état à un repère explicite : libellé, forme ou contour.
+          </p>
+        </section>
+        <section aria-labelledby="rules-title">
+          <h2 id="rules-title">03 — Typographie & matière</h2>
+          <div class="sample-title">Toulouse à travers le temps</div>
+          <dl>
+            <dt>Literata · identité</dt>
+            <dd>Signature et titres éditoriaux ; graisse 500–600.</dd>
+            <dt>Golos Text · interface</dt>
+            <dd>
+              Commandes et informations ; graisse 400–600. Le projet utilise des libellés compacts
+              de 10–14 px.
+            </dd>
+            <dt>Formes & relief</dt>
+            <dd>
+              Rayons : panneau 10 px, groupe 6 px, bouton 4 px. Bordures de 1 px. Ombre diffuse : 0
+              8px 25px #20302426.
+            </dd>
+            <dt>Rythme & iconographie</dt>
+            <dd>
+              Espacements courts de 4–10 px. Icônes Lucide au trait fin, 16–17 px dans les
+              commandes. Surfaces unies, sans texture décorative ajoutée.
+            </dd>
+          </dl>
+        </section>
+      </div>
+      <footer>
+        Guide synthétisé à partir de src/colors.css, src/style.css et src/compact.css. Les variables
+        sont partagées avec le projet. Texte secondaire : 5,17:1 sur ivoire et 4,66:1 sur brume ;
+        piste : 3,55:1 sur ivoire. Le spécimen illustre les états et n’agit pas sur la carte.
+      </footer>
+    </main>
+    <script>
+      document.querySelectorAll(".switch button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".switch button")
+            .forEach((item) => item.setAttribute("aria-pressed", String(item === button)));
+        });
+      });
+      document.querySelector('input[type="range"]').addEventListener("input", (event) => {
+        event.target.style.background = `linear-gradient(to right, var(--slider) ${event.target.value}%, var(--track) ${event.target.value}%)`;
+      });
+    </script>
+  </body>
+</html>

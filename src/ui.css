@@ -1,0 +1,102 @@
+.tooltip {
+  max-height: var(--radix-tooltip-content-available-height);
+}
+.ui-popover {
+  position: relative;
+  inset: auto;
+  z-index: 50;
+  max-width: calc(100vw - 20px);
+  max-height: min(520px, var(--radix-popover-content-available-height));
+  overflow: auto;
+  padding-top: 34px;
+}
+.popover-close {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 4px;
+}
+.popover-close:hover {
+  background: var(--hover);
+}
+.ui-backdrop {
+  position: fixed;
+}
+.ui-dialog {
+  position: fixed;
+  z-index: 21;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(580px, calc(100vw - 32px));
+}
+.ui-checkbox {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid var(--track);
+  border-radius: 3px;
+  background: var(--surface);
+}
+.ui-checkbox[data-state="checked"] {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+.ui-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 58px;
+  touch-action: none;
+  user-select: none;
+}
+.ui-slider-track {
+  position: relative;
+  background: var(--track);
+  width: 5px;
+  height: 100%;
+  border-radius: 4px;
+}
+.ui-slider-fill {
+  position: absolute;
+  width: 100%;
+  background: var(--slider);
+  border-radius: inherit;
+}
+.ui-slider-thumb {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--slider);
+  box-shadow: 0 0 0 2px var(--surface);
+  cursor: grab;
+}
+.ui-slider-thumb:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.ui-slider[data-disabled] {
+  opacity: 0.3;
+}
+.ui-slider[data-orientation="horizontal"] {
+  width: 80px;
+  height: 24px;
+}
+.ui-slider[data-orientation="horizontal"] .ui-slider-track {
+  width: 100%;
+  height: 5px;
+}
+.ui-slider[data-orientation="horizontal"] .ui-slider-fill {
+  height: 100%;
+  width: auto;
+}

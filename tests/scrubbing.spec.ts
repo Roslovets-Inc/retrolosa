@@ -29,7 +29,7 @@ test("rapid scrubbing survives browser history rate limits", async ({ page }) =>
   await slider.fill("1830");
   await expect(page.locator(".timeline-value")).toHaveText("1830");
   await expect.poll(() => sharedView(page)).toMatch(/time=1830/);
-  await expect(page.getByRole("button", { name: "Superposition", exact: true })).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Superposition", exact: true })).toBeVisible();
   expect(failures).toEqual([]);
 });
 
@@ -47,7 +47,7 @@ test("rejected history writes never blank the application", async ({ page }) => 
   await page.waitForTimeout(700);
   await expect(page.locator(".timeline-value")).toContainText("1875 → 1904");
 
-  await page.getByRole("button", { name: "Rideau", exact: true }).click();
+  await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }).click();
   await expect(
     page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }),
