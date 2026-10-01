@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { lazy, Suspense, useEffect, useReducer, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { CityWidget } from "./CityWidget";
@@ -7,7 +7,6 @@ import { ComparisonPanel } from "./components/ComparisonPanel";
 import { Header } from "./components/Header";
 import { MapTools } from "./components/MapTools";
 import { MapViewport } from "./components/MapViewport";
-import { SourcesDialog } from "./components/SourcesDialog";
 import { getEpoch } from "./epochs/catalog";
 import type { EpochId as Year } from "./epochs/catalog";
 import { Coordinates } from "./map/Coordinates";
@@ -28,6 +27,9 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 
 const TODAY = new Date().getFullYear();
+const SourcesDialog = lazy(() =>
+  import("./components/SourcesDialog").then((module) => ({ default: module.SourcesDialog })),
+);
 const viewReducer = (state: ViewState, action: ViewAction) => reduceViewState(state, action, TODAY);
 const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
 const mapCredit = (value: Year) => getEpoch(value).credit;
@@ -189,7 +191,9 @@ function App() {
           </a>
         </span>
       </footer>
-      <SourcesDialog year={year} open={sources} onOpenChange={setSources} />
+      <Suspense fallback={null}>
+        {sources && <SourcesDialog year={year} open={sources} onOpenChange={setSources} />}
+      </Suspense>
     </main>
   );
 }

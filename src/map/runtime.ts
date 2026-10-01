@@ -2,9 +2,10 @@ import { addProtocol, setWorkerUrl } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { Protocol } from "pmtiles";
 
-import { loadStateMajorTile } from "../etat-major";
+import { disposeStateMajorTiles, loadStateMajorTile } from "../etat-major";
 
 let initialized = false;
+export const disposeMapRuntime = disposeStateMajorTiles;
 export function initializeMapRuntime() {
   if (initialized) return;
   setWorkerUrl(workerUrl);

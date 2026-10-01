@@ -7,48 +7,48 @@ test("state-major correction keeps fractional tile seams opaque and cancels requ
 }) => {
   await page.route(/^https:\/\//, (route) => route.abort());
   await page.goto("/");
+  const fixtureBytes = await page.evaluate(async () => {
+    const canvas = new OffscreenCanvas(256, 256);
+    const context = canvas.getContext("2d")!;
+    context.fillStyle = "#397bad";
+    context.fillRect(0, 0, 256, 256);
+    return Array.from(
+      new Uint8Array(await (await canvas.convertToBlob({ type: "image/png" })).arrayBuffer()),
+    );
+  });
+  await page.route("https://data.geopf.fr/wmts?**", (route) =>
+    route.fulfill({ body: Buffer.from(fixtureBytes), contentType: "image/png" }),
+  );
   const result = await page.evaluate(async () => {
     const moduleUrl = "/src/etat-major.ts";
     const { loadStateMajorTile } = await import(moduleUrl);
     const fixture = new OffscreenCanvas(256, 256);
     const context = fixture.getContext("2d")!;
-    context.fillStyle = "#397bad";
-    context.fillRect(0, 0, 256, 256);
-    const blob = await fixture.convertToBlob({ type: "image/png" });
-    const originalFetch = window.fetch;
-    window.fetch = async (_url, options) => {
-      options?.signal?.throwIfAborted();
-      return new Response(blob);
-    };
-    try {
-      const alphas: number[] = [];
-      for (const [z, x, y] of [
-        [6, 32, 23],
-        [15, 16516, 11966],
-        [15, 16517, 11966],
-      ]) {
-        const { data } = await loadStateMajorTile(
-          { url: `etat-major://${z}/${x}/${y}` },
-          new AbortController(),
-        );
-        const bitmap = await createImageBitmap(new Blob([data], { type: "image/png" }));
-        context.drawImage(bitmap, 0, 0);
-        bitmap.close();
-        const pixels = context.getImageData(0, 0, 256, 256).data;
-        alphas.push(Math.min(...Array.from(pixels).filter((_value, index) => index % 4 === 3)));
-      }
-      const cancelled = new AbortController();
-      cancelled.abort();
-      let aborted = false;
-      try {
-        await loadStateMajorTile({ url: "etat-major://15/16515/11965" }, cancelled);
-      } catch (error) {
-        aborted = error instanceof DOMException && error.name === "AbortError";
-      }
-      return { alphas, aborted };
-    } finally {
-      window.fetch = originalFetch;
+    const alphas: number[] = [];
+    for (const [z, x, y] of [
+      [6, 32, 23],
+      [15, 16516, 11966],
+      [15, 16517, 11966],
+    ]) {
+      const { data } = await loadStateMajorTile(
+        { url: `etat-major://${z}/${x}/${y}` },
+        new AbortController(),
+      );
+      const bitmap = await createImageBitmap(new Blob([data], { type: "image/png" }));
+      context.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      const pixels = context.getImageData(0, 0, 256, 256).data;
+      alphas.push(Math.min(...Array.from(pixels).filter((_value, index) => index % 4 === 3)));
     }
+    const cancelled = new AbortController();
+    cancelled.abort();
+    let aborted = false;
+    try {
+      await loadStateMajorTile({ url: "etat-major://15/16515/11965" }, cancelled);
+    } catch (error) {
+      aborted = error instanceof DOMException && error.name === "AbortError";
+    }
+    return { alphas, aborted };
   });
   expect(result).toEqual({ alphas: [255, 255, 255], aborted: true });
 });

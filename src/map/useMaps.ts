@@ -4,7 +4,7 @@ import type { Theme } from "../theme";
 import { resolveTimeline } from "../view/presentation";
 import type { InitialView, ViewState } from "../view/state";
 import { MapController } from "./controller";
-import { initializeMapRuntime } from "./runtime";
+import { initializeMapRuntime, disposeMapRuntime } from "./runtime";
 
 export function useMaps(
   initial: InitialView,
@@ -31,7 +31,10 @@ export function useMaps(
     if (!modernEl.current || !oldEl.current) return;
     initializeMapRuntime();
     controller.mount(modernEl.current, oldEl.current);
-    return controller.unmount;
+    return () => {
+      controller.unmount();
+      disposeMapRuntime();
+    };
   }, [controller]);
   useEffect(() => {
     controller.setTheme(theme);

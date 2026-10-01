@@ -69,6 +69,19 @@ nouvelle tentative la supprime ; les sources désactivées ne bloquent plus la v
 « Réessayer » remplace les sources historiques en échec ou recharge le style
 actuel, en conservant les renderers, la caméra et l’état de comparaison.
 
+Le protocole État-major (`src/etat-major.ts`) valide les adresses et délègue les
+tuiles à `etat-major/client.ts`. Le worker démarre au premier besoin : il charge
+les images IGN, assemble les voisins et rééchantillonne les pixels. La géométrie
+pure reste dans `geometry.ts`, avec les mêmes contrôles de calage et de voisinage.
+Les résultats PNG sont transférés par `ArrayBuffer`, sans copie du buffer.
+
+Chaque requête possède un identifiant et un signal d’annulation. Le client rejette
+immédiatement une requête annulée ; le worker reçoit l’annulation et vérifie le
+signal entre les lots de lignes. Les bitmaps sont fermés dans `finally`. La
+fermeture des cartes termine le worker, rejette les requêtes en attente et retire
+les abonnements. Un échec du worker permet de créer un nouveau worker au prochain
+essai ; les erreurs des sources conservent leur statut HTTP.
+
 ## Interface et styles
 
 `main.tsx` compose les composants et conserve l’état partagé, les raccourcis
@@ -80,6 +93,7 @@ globaux et les services de carte. `src/components/` délimite les responsabilit�
 - `MapTools` expose la localisation, le zoom, l’orientation et l’opacité.
 - `ComparisonPanel` gère les gestes de la frise et les choix d’époques et de modes.
 - `SourcesDialog` présente les documents et leurs crédits à partir du catalogue.
+  Son module est chargé à la première ouverture.
 
 L’application conserve un seul choix de panneau ouvert (`places`, `epochs` ou
 aucun). Les états locaux des composants ne dupliquent pas l’état persistant de
@@ -113,7 +127,14 @@ Les scénarios de partage, de comparaison et de loupe utilisent des services
 externes simulés : ils vérifient les gestes et les états de l’interface sans
 dépendre de la disponibilité d’un fournisseur de cartes.
 
-Le traitement des tuiles État-major dans un worker et la réduction du bundle
-JavaScript constituent les prochaines étapes. Les variantes responsives restent
-explicites dans `app.css` ; toute réorganisation de leur cascade doit préserver
-les dimensions, le focus et l’accessibilité des contrôles.
+La configuration Vite sépare MapLibre, les dépendances d’interface et le code
+de l’application pour que le cache des bibliothèques survive aux changements
+de l’interface. MapLibre reste nécessaire au premier affichage : le découpage
+ne supprime pas le coût de cette dépendance. Les workers et les modules dynamiques
+respectent le chemin de déploiement configuré par `VITE_BASE_PATH`.
+
+Les variantes responsives restent explicites dans `app.css` ; toute réorganisation
+de leur cascade doit préserver les dimensions, le focus et l’accessibilité des
+contrôles. Le partage de détails du catalogue avec la vue conserve encore des
+textes de provenance dans le chargement initial ; une séparation supplémentaire
+devra préserver le contrat du catalogue et ses contrôles.
