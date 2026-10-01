@@ -22,6 +22,7 @@ export function useMaps(
         initial,
         theme,
         opacities: resolveTimeline(initial.state, today).opacities,
+        prepared: resolveTimeline(initial.state, today).prepared,
         assets: { baseUrl: import.meta.env.BASE_URL, origin: location.origin },
       }),
   );
@@ -40,7 +41,8 @@ export function useMaps(
     controller.setTheme(theme);
   }, [controller, theme]);
   useEffect(() => {
-    controller.setHistorical(resolveTimeline({ enabled, time }, today).opacities, historicVisible);
+    const timeline = resolveTimeline({ enabled, time }, today);
+    controller.setHistorical(timeline.opacities, historicVisible, timeline.prepared);
   }, [controller, enabled, time, today, historicVisible]);
   useEffect(() => {
     controller.setBearing(bearing);

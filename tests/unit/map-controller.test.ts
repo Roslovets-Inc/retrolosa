@@ -215,3 +215,30 @@ test("lost contexts block ready status and defer theme changes until restoration
     [...modern.handlers.values(), ...historic.handlers.values()].every((set) => set.size === 0),
   ).toBe(true);
 });
+
+test("prepared transparent neighbours survive snapped dates and do not block readiness", () => {
+  const controller = loaded();
+  const historic = fake.maps[1];
+  const prepared = ["450", "1250", "1550"] as const;
+  controller.setHistorical({ "1250": 1 }, true, prepared);
+  expect(Object.keys(historic.sources)).toEqual(["history-1250", "history-450", "history-1550"]);
+  expect(historic.getPaintProperty("history-1550")).toBe(0);
+  historic.emit("error", { sourceId: "history-1550", error: { status: 503 } });
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  expect(controller.loading.getSnapshot().failures).toEqual([]);
+  const source = historic.getSource("history-1550");
+  const additions = historic.additions;
+  controller.setHistorical({ "1250": 1, "1550": 0.3 }, true, prepared);
+  expect(controller.loading.getSnapshot().phase).toBe("error");
+  controller.setHistorical({ "1250": 1 }, true, prepared);
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  controller.setHistorical({ "1250": 1, "1550": 0.4 }, true, prepared);
+  expect(historic.getSource("history-1550")).toBe(source);
+  expect(historic.additions).toBe(additions);
+  expect(historic.layers.map((layer) => layer.id)).toEqual([
+    "history-450",
+    "history-1250",
+    "history-1550",
+  ]);
+  controller.unmount();
+});

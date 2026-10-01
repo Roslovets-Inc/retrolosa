@@ -67,10 +67,18 @@ abonnements. `useMaps.ts` relie leur cycle de vie à React ; un échec partiel d
 démarrage libère les ressources déjà créées. Les coordonnées ont leur propre
 abonnement dans `Coordinates.tsx`, sans rendre à nouveau toute l’application.
 
-Seules les époques qui contribuent à la date choisie sont installées. Pour une
-source avec vue d’ensemble et détails, seul le rendu correspondant au zoom est
-présent. Les changements d’opacité et les déplacements dans le même intervalle
-de zoom ne recréent pas les sources. Pendant une comparaison temporaire, les
+Les époques qui contribuent à la date choisie et leurs voisines immédiates parmi
+les époques activées sont installées : trois au plus à une date exacte, quatre
+entre deux dates. À la date actuelle, seule la dernière époque historique est
+préparée. Les voisines ont une opacité exactement nulle et ne contribuent ni aux
+crédits ni au statut de chargement visible. Cela prépare les sources dans les
+deux directions et évite de recréer les images à chaque passage par une date
+aimantée. Une source voisine peut encore attendre le réseau si le déplacement
+est plus rapide que son premier chargement ; les époques lointaines restent
+déchargées. Pour une source avec vue d’ensemble et détails, seul le rendu
+correspondant au zoom est présent. Les changements d’opacité et les déplacements
+dans le même intervalle de zoom ne recréent pas les sources conservées.
+Pendant une comparaison temporaire, les
 sources historiques restent disponibles mais ne bloquent pas le statut visible.
 
 `loading.ts` suit séparément les ressources requises et leurs échecs. Un événement
@@ -142,7 +150,11 @@ vérifications géométriques.
 Les tests du contrôleur simulent MapLibre pour vérifier les transitions, l’ordre
 des couches et la libération des ressources. `tests/map-loading.spec.ts` vérifie
 la reprise après une erreur réseau et l’absence de requêtes vers les archives
-inactives. Les tests avec services cartographiques réels restent distincts.
+lointaines. Le scénario de glissement maintient le pointeur enfoncé, traverse
+plusieurs fois une date aimantée et vérifie qu'une voisine n'est téléchargée
+qu'une seule fois. Son premier téléchargement est retenu pour vérifier qu'il
+commence en avance sans bloquer la carte déjà visible. Les tests avec services
+cartographiques réels restent distincts.
 
 Les scénarios de partage, de comparaison et de loupe utilisent des services
 externes simulés : ils vérifient les gestes et les états de l’interface sans

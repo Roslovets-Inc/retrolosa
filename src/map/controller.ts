@@ -43,6 +43,7 @@ export interface ControllerOptions {
   assets: AssetContext;
   theme: Theme;
   opacities: Opacities;
+  prepared?: readonly EpochId[];
 }
 
 /** Owns the renderers and their resources; construction itself has no browser effects. */
@@ -60,6 +61,7 @@ export class MapController {
   private historicalSignature = "";
   private deferredModernReload = false;
   private opacities: Opacities;
+  private prepared: readonly EpochId[];
   private historicVisible = true;
   private theme: Theme;
   private coordinates = "43.59768° N · 1.44954° E";
@@ -68,6 +70,7 @@ export class MapController {
   constructor(private options: ControllerOptions) {
     this.theme = options.theme;
     this.opacities = options.opacities;
+    this.prepared = options.prepared ?? [];
   }
   subscribeCoordinates = (listener: () => void) => {
     this.coordinateListeners.add(listener);
@@ -251,7 +254,12 @@ export class MapController {
     if (this.historicVisible && Object.values(this.opacities).some((opacity) => opacity! > 0)) {
       required.push(
         root("historic"),
-        ...[...this.historicSources].map((id) => resource("historic", id)),
+        ...[...this.historicSources]
+          .filter((id) => {
+            const epoch = id.split("-").at(-1)!;
+            return isEpochId(epoch) && (this.opacities[epoch] ?? 0) > 0;
+          })
+          .map((id) => resource("historic", id)),
       );
     }
     this.loading.require(required);
@@ -264,10 +272,15 @@ export class MapController {
     const variants = EPOCHS.flatMap(({ render }) =>
       render.kind === "overview" ? [zoom >= render.switchZoom] : [],
     );
-    const signature = JSON.stringify([this.opacities, variants]);
+    const signature = JSON.stringify([this.opacities, this.prepared, variants]);
     if (!retry.size && signature === this.historicalSignature) return;
     this.historicalSignature = signature;
-    const desired = activeHistoricalStyle(this.opacities, this.options.assets, historic.getZoom());
+    const desired = activeHistoricalStyle(
+      this.opacities,
+      this.options.assets,
+      historic.getZoom(),
+      this.prepared,
+    );
     const ids = new Set(Object.keys(desired.sources));
     const removed = new Set(
       [...this.historicSources].filter((id) => !ids.has(id) || retry.has(id)),
@@ -297,8 +310,9 @@ export class MapController {
     }
     this.refreshRequired();
   }
-  setHistorical(opacities: Opacities, visible: boolean) {
+  setHistorical(opacities: Opacities, visible: boolean, prepared: readonly EpochId[] = []) {
     this.opacities = opacities;
+    this.prepared = prepared;
     this.historicVisible = visible;
     this.reconcileHistory();
     this.refreshRequired();

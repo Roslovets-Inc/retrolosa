@@ -26,6 +26,12 @@ export function resolveTimeline(state: Pick<ViewState, "enabled" | "time">, toda
     ]),
   ) as Record<EpochId, number>;
   const active = enabled.filter((id) => opacities[id] > 0);
+  // Keep both directions warm around a snapped date without loading the entire catalogue.
+  const prepared = enabled.filter((_, index) =>
+    active.length
+      ? enabled.slice(Math.max(0, index - 1), index + 2).some((id) => active.includes(id))
+      : index === enabled.length - 1,
+  );
   const epoch = visibleEpoch(time, dates);
   // Keep a historical sheet for source details and the legacy year field at modernity.
   const year = (epoch === today ? enabled.at(-1) : String(epoch)) as EpochId | undefined;
@@ -40,6 +46,7 @@ export function resolveTimeline(state: Pick<ViewState, "enabled" | "time">, toda
     fraction,
     opacities,
     active,
+    prepared,
     epoch,
     year: year ?? EPOCH_IDS[0],
     timeLabel,

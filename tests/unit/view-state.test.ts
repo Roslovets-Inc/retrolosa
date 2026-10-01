@@ -188,6 +188,21 @@ test.each(EPOCH_IDS)("exact epoch %s renders and credits only its sheet", (id) =
   expect(presentation.year).toBe(id);
 });
 
+test("prepared neighbours follow enabled epochs and remain bounded around a crossfade", () => {
+  expect(resolveTimeline(state({ time: 1550 }), TODAY).prepared).toEqual(["1250", "1550", "1631"]);
+  expect(resolveTimeline(state({ time: 1590 }), TODAY).prepared).toEqual([
+    "1250",
+    "1550",
+    "1631",
+    "1680",
+  ]);
+  expect(
+    resolveTimeline(state({ enabled: ["1250", "1777", "1954"], time: 1777 }), TODAY).prepared,
+  ).toEqual(["1250", "1777", "1954"]);
+  expect(resolveTimeline(state({ time: TODAY }), TODAY).prepared).toEqual(["1954"]);
+  expect(resolveTimeline(state({ enabled: [], time: TODAY }), TODAY).prepared).toEqual([]);
+});
+
 test("crossfade preserves painter order and switches dominant sheet at midpoint", () => {
   const view = state({ enabled: ["1631", "1777"], time: 1704 });
   const presentation = derivePresentation(view, idle, TODAY);

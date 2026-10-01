@@ -77,17 +77,19 @@ export function historicalStyle(
   return style;
 }
 
-/** Only the contributing sheets at this zoom need sources or network requests. */
+/** Install contributing sheets and a bounded set of transparent neighbours at this zoom. */
 export function activeHistoricalStyle(
   opacities: Readonly<Partial<Record<EpochId, number>>>,
   assets: AssetContext,
   zoom: number,
+  prepared: readonly EpochId[] = [],
 ): StyleSpecification {
   const style = historicalStyle(opacities, assets);
   style.layers = style.layers.filter(
     (layer) =>
       layer.type === "raster" &&
-      Number(layer.paint?.["raster-opacity"]) > 0 &&
+      (Number(layer.paint?.["raster-opacity"]) > 0 ||
+        prepared.includes(layer.source.split("-").at(-1) as EpochId)) &&
       (layer.minzoom === undefined || zoom >= layer.minzoom) &&
       (layer.maxzoom === undefined || zoom < layer.maxzoom),
   );
