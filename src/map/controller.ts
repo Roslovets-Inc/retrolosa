@@ -58,6 +58,7 @@ export class MapController {
   private historicSources = new Set<string>();
   private modernSources = new Set<string>();
   private historicalSignature = "";
+  private deferredModernReload = false;
   private opacities: Opacities;
   private historicVisible = true;
   private theme: Theme;
@@ -187,23 +188,40 @@ export class MapController {
       );
     };
     const idle = () => this.refreshSettled(kind, instance);
+    const contextLost = () => {
+      this.styleReady[kind] = false;
+      this.loading.contextLost(kind, true);
+    };
+    const contextRestored = () => {
+      this.loading.loading(root(kind));
+      this.loading.contextLost(kind, false);
+      if (kind === "modern" && this.deferredModernReload) {
+        this.deferredModernReload = false;
+        this.reloadModern();
+      }
+    };
     instance.on("style.load", styleLoaded);
     instance.on("sourcedataloading", sourceLoading);
     instance.on("sourcedata", sourceData);
     instance.on("error", error);
     instance.on("idle", idle);
+    instance.on("webglcontextlost", contextLost);
+    instance.on("webglcontextrestored", contextRestored);
     this.subscriptions.push(() => {
       instance.off("style.load", styleLoaded);
       instance.off("sourcedataloading", sourceLoading);
       instance.off("sourcedata", sourceData);
       instance.off("error", error);
       instance.off("idle", idle);
+      instance.off("webglcontextlost", contextLost);
+      instance.off("webglcontextrestored", contextRestored);
     });
   }
   private isTracked(kind: MapKind, id: string) {
     return (kind === "historic" ? this.historicSources : this.modernSources).has(id);
   }
   private refreshSettled(kind: MapKind, instance: MapInstance) {
+    if (!this.styleReady[kind] || this.loading.isContextLost(kind)) return;
     const ids = kind === "historic" ? this.historicSources : this.modernSources;
     for (const id of ids) {
       if (instance.getSource(id))
@@ -292,6 +310,10 @@ export class MapController {
   }
   private reloadModern() {
     if (!this.modern) return;
+    if (this.loading.isContextLost("modern")) {
+      this.deferredModernReload = true;
+      return;
+    }
     this.styleReady.modern = false;
     for (const id of this.modernSources) this.loading.forget(resource("modern", id));
     this.modernSources.clear();
@@ -304,7 +326,9 @@ export class MapController {
       if (this.containers) this.mount(this.containers.modern, this.containers.historic);
       return;
     }
-    const failures = this.loading.failedResources();
+    const failures = this.loading
+      .failedResources()
+      .filter((failure) => !this.loading.isContextLost(failure.map));
     if (failures.some((failure) => failure.map === "modern")) this.reloadModern();
     if (failures.some((failure) => failure.map === "historic" && failure.id === "$style")) {
       this.styleReady.historic = false;
@@ -364,6 +388,7 @@ export class MapController {
     this.historicSources.clear();
     this.modernSources.clear();
     this.historicalSignature = "";
+    this.deferredModernReload = false;
     try {
       historic?.remove();
     } finally {

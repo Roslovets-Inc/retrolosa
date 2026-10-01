@@ -149,6 +149,14 @@ function App() {
         timeLabel={timeLabel}
         today={TODAY}
         phase={status.phase}
+        canRetry={
+          errors.length === 0 &&
+          status.resources.some(
+            (resource) =>
+              resource.state === "error" && !status.unavailableMaps.includes(resource.map),
+          )
+        }
+        onRetry={controller.retry}
         epochsOpen={openPanel === "epochs"}
         onEpochsOpenChange={(open) => setOpenPanel(open ? "epochs" : null)}
       />

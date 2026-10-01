@@ -54,6 +54,27 @@ test("snapshot identity is stable until visible state changes", () => {
   expect(loading.getSnapshot()).toBe(snapshot);
   expect(describeFailure({ ...modern, id: "$renderer" }, new Error()).kind).toBe("renderer");
 });
+
+test("context availability follows required maps and does not erase source failures", () => {
+  const loading = new MapLoading();
+  loading.require([modern, historic]);
+  loading.success(modern, true);
+  loading.fail(historic, { status: 503 });
+  loading.dismiss();
+  loading.contextLost("historic", true);
+  loading.settled(historic, true);
+  expect(loading.getSnapshot().phase).toBe("unavailable");
+  expect(loading.getSnapshot().unavailableMaps).toEqual(["historic"]);
+  loading.require([modern]);
+  expect(loading.getSnapshot().phase).toBe("ready");
+  loading.require([modern, historic]);
+  expect(loading.getSnapshot().phase).toBe("unavailable");
+  loading.contextLost("historic", false);
+  expect(loading.getSnapshot().phase).toBe("error");
+  expect(loading.failedResources()).toEqual([historic]);
+  loading.clear();
+  expect(loading.isContextLost("historic")).toBe(false);
+});
 test("only contributing sources are installed, using the current zoom variant", () => {
   const assets = { baseUrl: "/", origin: "https://example.test" };
   expect(

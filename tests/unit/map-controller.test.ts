@@ -186,3 +186,32 @@ test("retry replaces only the failed historical source and idle cannot conceal i
   expect(controller.loading.getSnapshot().phase).toBe("ready");
   controller.unmount();
 });
+
+test("lost contexts block ready status and defer theme changes until restoration", () => {
+  const controller = loaded();
+  const modern = fake.maps[0];
+  modern.emit("webglcontextlost");
+  modern.emit("idle");
+  controller.setTheme("dark");
+  expect(modern.styleChanges).toBe(0);
+  expect(controller.loading.getSnapshot().phase).toBe("unavailable");
+  modern.emit("webglcontextrestored");
+  expect(modern.styleChanges).toBe(1);
+  expect(controller.loading.getSnapshot().phase).toBe("loading");
+  modern.emit("style.load");
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  const historic = fake.maps[1];
+  historic.emit("webglcontextlost");
+  controller.setHistorical({ "1550": 1 }, true);
+  expect(Object.keys(historic.sources)).toEqual(["history-1250"]);
+  historic.emit("webglcontextrestored");
+  expect(controller.loading.getSnapshot().phase).toBe("loading");
+  historic.emit("style.load");
+  expect(Object.keys(historic.sources)).toEqual(["history-1550"]);
+  historic.emit("idle");
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  controller.unmount();
+  expect(
+    [...modern.handlers.values(), ...historic.handlers.values()].every((set) => set.size === 0),
+  ).toBe(true);
+});

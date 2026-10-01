@@ -205,16 +205,29 @@ headless, avec les services cartographiques simulés :
    fermeture pendant un import en attente. Une vérification supplémentaire sur
    la sortie de `bun run build` simule le même 503 pour le chunk de production
    et confirme sa récupération après recharge.
-2. **P2 — Nouvelle tentative après fermeture d'une erreur.** Une réponse 503
+2. **P2 corrigé — Nouvelle tentative après fermeture d'une erreur.** Une réponse 503
    pour `openedition-13c/map.webp` affiche une alerte. « Fermer le message »
    retire aussi l'unique bouton « Réessayer », tandis que le store conserve
-   la ressource en échec. Préserver un accès discret et accessible à la
-   nouvelle tentative indépendamment de la visibilité du message.
-3. **P2 — Statut lors de la perte du contexte graphique.** Après chargement,
+   la ressource en échec. Une commande « Réessayer » reste maintenant accessible
+   au-dessus de la comparaison quand les erreurs sont masquées. Le scénario
+   mobile de `map-loading` ferme l'alerte puis rétablit l'image sans remplacer
+   le canevas ni modifier l'adresse.
+3. **P2 corrigé — Statut lors de la perte du contexte graphique.** Après chargement,
    `WEBGL_lose_context.loseContext()` sur la carte actuelle laisse le texte
-   « Cartes chargées » alors que `isContextLost()` est vrai. Le contrôleur
-   ne suit pas ces événements. Représenter l'indisponibilité puis la
-   restauration dans le statut ; MapLibre conserve sa gestion de restauration.
+   « Cartes chargées » alors que `isContextLost()` était vrai. Le contrôleur suit
+   maintenant `webglcontextlost` et `webglcontextrestored`. Le store conserve
+   les erreurs réseau séparément et signale `unavailable` seulement si une carte
+   requise a perdu son contexte. Un message visible indique l'attente de la
+   restauration graphique ; après restauration, le statut attend le chargement
+   du style et des sources. MapLibre restaure lui-même le contexte et son style.
+   Le contrôleur évite les accès au style détruit, applique les changements
+   historiques après restauration et diffère les changements de thème moderne.
+   Les scénarios navigateur provoquent réellement la perte et la restauration
+   de chacune des deux cartes ; les tests unitaires couvrent aussi les sources
+   cachées, les erreurs conservées et le nettoyage des abonnements.
+
+La correction des deux P2 est vérifiée par `bun run check` (145 tests unitaires),
+les huit scénarios de `map-loading`, `compact` et `ui`, et `bun run build`.
 
 La vérification du changement de dépendances comprend `bun run check` (143
 tests unitaires), les cinq scénarios de `orientation`, `ui` et `compact`, et

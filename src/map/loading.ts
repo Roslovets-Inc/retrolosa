@@ -1,5 +1,5 @@
 export type MapKind = "modern" | "historic";
-export type LoadState = "loading" | "ready" | "error";
+export type LoadState = "loading" | "ready" | "error" | "unavailable";
 export interface MapResource {
   map: MapKind;
   id: string;
@@ -16,6 +16,7 @@ export interface ResourceState extends MapResource {
 }
 export interface MapLoadSnapshot {
   phase: LoadState;
+  unavailableMaps: readonly MapKind[];
   resources: readonly ResourceState[];
   failures: readonly MapFailure[];
 }
@@ -47,8 +48,14 @@ export class MapLoading {
   private entries = new Map<string, TrackedResource>();
   private required = new Set<string>();
   private dismissed = new Set<string>();
+  private lostContexts = new Set<MapKind>();
   private listeners = new Set<() => void>();
-  private snapshot: MapLoadSnapshot = { phase: "loading", resources: [], failures: [] };
+  private snapshot: MapLoadSnapshot = {
+    phase: "loading",
+    unavailableMaps: [],
+    resources: [],
+    failures: [],
+  };
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
     return () => {
@@ -78,12 +85,17 @@ export class MapLoading {
     const failures = entries
       .flatMap((entry) => [...entry.failures.values()])
       .filter((failure) => !this.dismissed.has(failure.key));
-    const phase = resources.some((resource) => resource.state === "error")
-      ? "error"
-      : resources.every((resource) => resource.state === "ready")
-        ? "ready"
-        : "loading";
-    const next: MapLoadSnapshot = { phase, resources, failures };
+    const unavailableMaps = (["modern", "historic"] as const).filter(
+      (map) => this.lostContexts.has(map) && resources.some((resource) => resource.map === map),
+    );
+    const phase = unavailableMaps.length
+      ? "unavailable"
+      : resources.some((resource) => resource.state === "error")
+        ? "error"
+        : resources.every((resource) => resource.state === "ready")
+          ? "ready"
+          : "loading";
+    const next: MapLoadSnapshot = { phase, unavailableMaps, resources, failures };
     if (JSON.stringify(next) === JSON.stringify(this.snapshot)) return;
     this.snapshot = next;
     this.listeners.forEach((listener) => listener());
@@ -91,6 +103,14 @@ export class MapLoading {
   require(resources: readonly MapResource[]) {
     resources.forEach((resource) => this.entry(resource));
     this.required = new Set(resources.map(resourceKey));
+    this.publish();
+  }
+  isContextLost(map: MapKind) {
+    return this.lostContexts.has(map);
+  }
+  contextLost(map: MapKind, lost: boolean) {
+    if (lost) this.lostContexts.add(map);
+    else this.lostContexts.delete(map);
     this.publish();
   }
   loading(resource: MapResource) {
@@ -140,6 +160,7 @@ export class MapLoading {
     });
   }
   clear() {
+    this.lostContexts.clear();
     this.entries.clear();
     this.required.clear();
     this.dismissed.clear();

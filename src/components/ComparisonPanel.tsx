@@ -15,6 +15,8 @@ export function ComparisonPanel({
   timeLabel,
   today,
   phase,
+  canRetry,
+  onRetry,
   epochsOpen,
   onEpochsOpenChange,
 }: {
@@ -24,6 +26,8 @@ export function ComparisonPanel({
   timeLabel: string;
   today: number;
   phase: LoadState;
+  canRetry: boolean;
+  onRetry: () => void;
   epochsOpen: boolean;
   onEpochsOpenChange: (open: boolean) => void;
 }) {
@@ -45,13 +49,23 @@ export function ComparisonPanel({
     <>
       <div className="control-dock">
         <section className="control-panel" aria-label="Comparaison des cartes">
-          <span className="sr-only">
+          <span className="sr-only" role="status">
             {phase === "ready"
               ? "Cartes chargées"
               : phase === "error"
                 ? "Chargement incomplet des cartes"
-                : "Chargement des cartes…"}
+                : phase === "unavailable"
+                  ? "Affichage des cartes interrompu"
+                  : "Chargement des cartes…"}
           </span>
+          {(phase === "unavailable" || canRetry) && (
+            <div className="map-status">
+              {phase === "unavailable" && (
+                <span>Affichage interrompu · En attente de la restauration graphique.</span>
+              )}
+              {canRetry && <Button onClick={onRetry}>Réessayer</Button>}
+            </div>
+          )}
           {phase === "loading" && (
             <Tooltip text="Chargement des cartes…">
               <span className="loading-dot" />
