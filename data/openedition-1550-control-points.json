@@ -1,0 +1,22 @@
+{
+  "sourcePage": "https://books.openedition.org/psorbonne/3296",
+  "sources": [
+    { "number": 7, "sha256": "02d42ac6a62b535ebfaafcfa05f3b5aaf31f886ddb053a4f1021e4332b7379cd" },
+    { "number": 8, "sha256": "12d8840967b9fa374672e793b18e96f41d9584d910e626a5514020ac1b519092" }
+  ],
+  "registration": {
+    "translation7To8": [-5.6666666667, -23.6666666667],
+    "checks": [
+      { "name": "Saint-Sernin", "translation": [-5, -24], "correlation": 0.9204 },
+      { "name": "Saint-Étienne", "translation": [-6, -23], "correlation": 0.9513 },
+      { "name": "Dalbade", "translation": [-6, -24], "correlation": 0.9079 }
+    ]
+  },
+  "reference": { "z": 15, "x0": 16512, "y0": 11962, "width": 1536, "annotationWidth": 1200 },
+  "points": [
+    { "name": "Saint-Sernin crossing", "pixel": [1036, 396], "ref": [649.3, 494.5], "role": "fit" },
+    { "name": "Saint-Étienne west portal", "pixel": [1694, 1439], "ref": [792.1, 712.3], "role": "fit" },
+    { "name": "Dalbade nave footprint", "pixel": [1060, 1678], "ref": [661.43, 765.73], "role": "fit" },
+    { "name": "Saint-Pierre-des-Cuisines footprint", "pixel": [474, 878], "ref": [534.9, 599.44], "role": "check" }
+  ]
+}

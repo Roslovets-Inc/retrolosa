@@ -40,7 +40,9 @@ Premier candidat : **Toulouse au XIIIe siècle, figure 6**, puis Antiquité tard
 une carte antique. La figure 12 présente une contradiction de datation à résoudre.
 
 La figure 6 du XIIIe siècle est maintenant intégrée au site, avec
-un calage affine et des liens de source. Les autres
+un calage affine et des liens de source. Les limites parcellaires des figures 7 et 8
+sont également assemblées dans une couche locale « 1550 · Héritages du parcellaire ».
+Les autres
 candidats nécessitent un calage, des masques et, pour les dessins multiphases,
 une extraction des éléments contemporains. **L’autorisation de republier les
 illustrations et leurs adaptations reste à obtenir** : la licence du texte

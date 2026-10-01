@@ -1,0 +1,19 @@
+{
+  "sourcePage": "https://books.openedition.org/psorbonne/3296",
+  "coordinates": [
+    [1.4299474965179684, 43.61160685891167],
+    [1.452809771077824, 43.611963651416595],
+    [1.45362339676754, 43.58955122309041],
+    [1.4307611222077128, 43.58919429765001]
+  ],
+  "label": "1550 · Héritages du parcellaire",
+  "sourceSize": [1999, 2662],
+  "checkPoints": [
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "errorMetres": 1.8
+    }
+  ],
+  "registrationMaxErrorPixels": 0.75,
+  "method": "Figure 8 with registered red parcel boundaries from figure 7. Affine Web Mercator fit on three churches; one withheld checkpoint. Manual annotation, not survey-grade."
+}

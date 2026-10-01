@@ -29,13 +29,14 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
 import medieval13c from "./openedition-13c.json";
+import parcels1550 from "./openedition-1550.json";
 import tavernier1631 from "./tavernier-1631.json";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import { useLocation } from "./useLocation";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-const YEARS = ["1250", "1631", "1680", "1830", "1875", "1954"] as const;
+const YEARS = ["1250", "1550", "1631", "1680", "1830", "1875", "1954"] as const;
 type Year = (typeof YEARS)[number];
 const epochLabel = (value: Year) => (value === "1250" ? "XIIIe" : value);
 const initialYear = (): Year => {
@@ -48,7 +49,7 @@ const FLOOD_SOURCE =
 const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
 const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
 const sourceUrl = (year: Year) =>
-  year === "1250"
+  year === "1250" || year === "1550"
     ? MEDIEVAL_SOURCE
     : year === "1631"
       ? TAVERNIER_SOURCE
@@ -82,6 +83,26 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
     source: "history-1250",
     paint: {
       "raster-opacity": year === "1250" ? 1 : 0,
+      "raster-opacity-transition": { duration: 0 },
+      "raster-fade-duration": 0,
+    },
+  });
+  style.sources["history-1550"] = {
+    type: "image",
+    url: assetUrl("openedition-1550/map.webp"),
+    coordinates: parcels1550.coordinates as [
+      [number, number],
+      [number, number],
+      [number, number],
+      [number, number],
+    ],
+  };
+  style.layers.push({
+    id: "history-1550",
+    type: "raster",
+    source: "history-1550",
+    paint: {
+      "raster-opacity": year === "1550" ? 1 : 0,
       "raster-opacity-transition": { duration: 0 },
       "raster-fade-duration": 0,
     },
@@ -510,7 +531,9 @@ function App() {
   const timeLabel = dates.includes(time)
     ? time === 1875
       ? "1875 · Inondation"
-      : dateLabel(time)
+      : time === 1550
+        ? "1550 · Héritages du parcellaire"
+        : dateLabel(time)
     : `${dateLabel(lower)} → ${dateLabel(upper)}`;
   const changeYear = (next: Year) => {
     if (next === year) return;
@@ -579,7 +602,9 @@ function App() {
             ? "Cartes historiques sur la frise"
             : year === "1250"
               ? "Reconstruction de Toulouse au XIIIe siècle"
-              : `Carte historique de Toulouse en ${year}`
+              : year === "1550"
+                ? "Héritages du parcellaire de 1550"
+                : `Carte historique de Toulouse en ${year}`
         }
         style={{
           opacity:
@@ -724,13 +749,15 @@ function App() {
                       <small>
                         {value === "1250"
                           ? "Reconstruction"
-                          : value === "1631"
-                            ? "Plan · calage approximatif"
-                            : value === "1875"
-                              ? "Inondation"
-                              : value === "1954"
-                                ? "Vue aérienne"
-                                : "Cadastre"}
+                          : value === "1550"
+                            ? "Héritages du parcellaire"
+                            : value === "1631"
+                              ? "Plan · calage approximatif"
+                              : value === "1875"
+                                ? "Inondation"
+                                : value === "1954"
+                                  ? "Vue aérienne"
+                                  : "Cadastre"}
                       </small>
                     </label>
                   ))}
@@ -813,9 +840,11 @@ function App() {
             <span>
               {year === "1250"
                 ? "RECONSTRUCTION"
-                : year === "1954"
-                  ? "VUE AÉRIENNE"
-                  : "CADASTRE HISTORIQUE"}
+                : year === "1550"
+                  ? "HÉRITAGES DU PARCELLAIRE"
+                  : year === "1954"
+                    ? "VUE AÉRIENNE"
+                    : "CADASTRE HISTORIQUE"}
             </span>
           </div>
           <div className="epoch-label new-label">
@@ -1127,6 +1156,14 @@ function App() {
               {mode === "time" ? " · " : ""}
             </>
           )}
+          {(mode === "time" || year === "1550") && (
+            <>
+              <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
+                1550 · Héritages · F. Callède / Inrap
+              </a>
+              {mode === "time" ? " · " : ""}
+            </>
+          )}
           {(mode === "time" || year === "1631") && (
             <>
               <a href={TAVERNIER_SOURCE} target="_blank" rel="noreferrer">
@@ -1250,6 +1287,37 @@ function App() {
                   Voir le dessin complet et sa légende <ExternalLink size={14} />
                 </a>
               </>
+            ) : year === "1550" ? (
+              <>
+                <h3>1550 · Héritages du parcellaire</h3>
+                <p>
+                  Assemblage des figures 7 et 8 de l’étude de Quitterie Cazes, dessins de F. Callède
+                  / Inrap. Les limites rouges de la figure 7, d’orientation antique, complètent les
+                  limites bleues de la figure 8. Le fond et la légende de la figure 8 sont conservés
+                  ; le fond archéologique propre à la figure 7 reste dans l’original.
+                </p>
+                <p>
+                  1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond
+                  représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de
+                  Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à
+                  Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+                  {parcels1550.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
+                </p>
+                <a
+                  href={assetUrl("openedition-1550/figure-07.jpg")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Figure 7 · Héritages antiques <ExternalLink size={14} />
+                </a>{" "}
+                <a
+                  href={assetUrl("openedition-1550/figure-08.jpg")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Figure 8 · Héritages médiévaux <ExternalLink size={14} />
+                </a>
+              </>
             ) : year === "1631" ? (
               <>
                 <h3>Plan de Melchior Tavernier · 1631</h3>
@@ -1313,13 +1381,17 @@ function App() {
             <h3>Mode « Frise »</h3>
             <p>
               La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
-              sources disponibles sont la reconstruction du XIIIe siècle, le plan de 1631, les
-              cadastres de 1680 et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954.
-              Les positions intermédiaires sont des transitions visuelles, pas des reconstitutions
-              de ces années.
+              sources disponibles sont la reconstruction du XIIIe siècle, les héritages du
+              parcellaire de 1550, le plan de 1631, les cadastres de 1680 et 1830, le plan
+              d’inondation de 1875 et la vue aérienne de 1954. Les positions intermédiaires sont des
+              transitions visuelles, pas des reconstitutions de ces années.
             </p>
             <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
               Source XIIIe siècle · figure 6
+            </a>{" "}
+            ·{" "}
+            <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
+              Source 1550 · figures 7 et 8
             </a>{" "}
             ·{" "}
             <a href={TAVERNIER_SOURCE} target="_blank" rel="noreferrer">

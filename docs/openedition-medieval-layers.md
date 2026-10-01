@@ -77,6 +77,34 @@ l’intégralité du dessin source, avec sa légende originale et les quartiers 
 de l’enceinte, sans découpage ni zone transparente.
 Le fichier WebP préparé pèse environ 1,1 Mo, l'original environ 1,33 Mo.
 
+### Couche 1550 — assemblage des figures 7 et 8, 1er octobre 2026
+
+La couche « 1550 · Héritages du parcellaire » est intégrée localement au choix
+des époques et à la frise. Elle conserve toute la figure 8 et ajoute les limites
+parcellaires rouges de la figure 7. Le fond archéologique et les annotations
+propres à la figure 7 restent consultables dans son original ; ils ne sont pas
+superposés au fond médiéval. Une explication des deux couleurs est ajoutée sous
+le dessin, sans découper le plan ni sa légende.
+
+Les deux scans mesurent 1999 × 2482 pixels. Une comparaison locale des motifs
+des trois églises sur les canaux achromatiques donne les translations (-5, -24),
+(-6, -23) et (-6, -24) pixels, avec des corrélations de 0,91 à 0,95.
+La translation moyenne de la figure 7 vers la figure 8 est (-5,67, -23,67) pixels ;
+l’écart maximal sur ces trois repères est de 0,75 pixel. Ce contrôle ne prouve
+pas une concordance parfaite sur tout le plan.
+
+Le calage affine de la figure 8 utilise les mêmes repères géographiques que la
+figure 6. Saint-Pierre-des-Cuisines, non utilisé pour l’ajustement, donne un écart
+de 1,8 m. L’annotation est manuelle ; ce chiffre ne garantit pas la précision
+ailleurs. 1550 date la base cadastrale restituée, pas tous les objets représentés.
+La frise montre une transition graphique, pas une reconstruction historique des
+années intermédiaires.
+
+Configuration : `data/openedition-1550-control-points.json` ; génération explicite :
+`scripts/build-openedition-1550.py`. Les empreintes SHA-256 des originaux sont
+vérifiées avant la génération. Les ressources sont dans `public/openedition-1550/`.
+Aucune publication n’a été effectuée pour cette intégration.
+
 ### Vérification de la provenance et des droits, 30 septembre 2026
 
 La mention « tous droits réservés » n'identifie pas OpenEdition comme titulaire des droits. Les légendes attribuent les dessins à **F. Callède** ; le crédit intégré au plan général n°6 mentionne F. Callède, Inrap et le PCR « Toulouse au Moyen Âge ». La [notice bibliographique de la BnF](https://catalogue.bnf.fr/ark:/12148/cb42328162f) donne le nom **Fabien Callède** parmi les auteurs de la synthèse de 2010. L'[atlas officiel de l'Inrap](https://multimedia.inrap.fr/atlas/Grand-Toulouse/sites/3237/Le-Barricou) crédite aussi Fabien Callède pour d'autres dessins. Ces éléments identifient la provenance et le créateur probable, mais ne prouvent pas la répartition actuelle des droits patrimoniaux entre dessinateur, institution et éditeurs.
