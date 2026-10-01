@@ -1,5 +1,6 @@
 import { stateMajorTileOffsets, stateMajorSourcePixel } from "./geometry";
 import type { TileCoordinates } from "./messages";
+import { sourceTiles } from "./source-tiles";
 export async function renderStateMajorTile(
   tile: TileCoordinates,
   signal: AbortSignal,
@@ -13,12 +14,14 @@ export async function renderStateMajorTile(
   const results = await Promise.allSettled(
     stateMajorTileOffsets(z, tile.x, tile.y).map(async (piece) => {
       const url = `https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40&STYLE=normal&FORMAT=image/jpeg&TILEMATRIXSET=PM_6_15&TILEMATRIX=${z}&TILEROW=${piece.y}&TILECOL=${piece.x}`;
-      const response = await fetch(url, { signal: signal });
-      if (!response.ok)
-        throw Object.assign(new Error(`IGN state-major tile: ${response.status}`), {
-          status: response.status,
-        });
-      return { ...piece, bitmap: await createImageBitmap(await response.blob()) };
+      const blob = await sourceTiles.load(url, signal);
+      signal.throwIfAborted();
+      try {
+        return { ...piece, bitmap: await createImageBitmap(blob) };
+      } catch (error) {
+        sourceTiles.invalidate(url, blob);
+        throw error;
+      }
     }),
   );
   try {

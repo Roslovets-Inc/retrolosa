@@ -1,6 +1,55 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareOfflineMaps, waitForApp } from "./ui";
+
+test("adjacent corrected tiles share IGN fetches and reuse compressed images on a repeat", async ({
+  page,
+}) => {
+  await prepareOfflineMaps(page);
+  const requests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("LAYER=GEOGRAPHICALGRIDSYSTEMS.ETATMAJOR40"))
+      requests.push(request.url());
+  });
+  await page.goto("/#year=1250");
+  await waitForApp(page);
+  const result = await page.evaluate(async () => {
+    const moduleUrl = "/src/etat-major.ts";
+    const { loadStateMajorTile, stateMajorTileOffsets, disposeStateMajorTiles } = await import(
+      moduleUrl
+    );
+    const tiles = [
+      [15, 16516, 11966],
+      [15, 16517, 11966],
+    ];
+    const pieces = tiles.map(
+      ([z, x, y]) => stateMajorTileOffsets(z, x, y) as { x: number; y: number }[],
+    );
+    const unique = new Set(pieces.flatMap((items) => items.map(({ x, y }) => `${x}/${y}`))).size;
+    try {
+      const outputs = await Promise.all(
+        tiles.map(([z, x, y]) =>
+          loadStateMajorTile({ url: `etat-major://${z}/${x}/${y}` }, new AbortController()),
+        ),
+      );
+      const repeat = await loadStateMajorTile(
+        { url: "etat-major://15/16516/11966" },
+        new AbortController(),
+      );
+      return {
+        unique,
+        unshared: pieces.flat().length,
+        sizes: [...outputs, repeat].map((output) => output.data.byteLength),
+      };
+    } finally {
+      disposeStateMajorTiles();
+    }
+  });
+  expect(result.unique).toBeLessThan(result.unshared);
+  expect(requests).toHaveLength(result.unique);
+  expect(new Set(requests).size).toBe(result.unique);
+  expect(result.sizes.every((size) => size > 0)).toBe(true);
+});
 test("active worker fetches are cancelled and a fresh worker can render after disposal", async ({
   page,
 }) => {

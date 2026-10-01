@@ -92,6 +92,17 @@ fermeture des cartes termine le worker, rejette les requêtes en attente et reti
 les abonnements. Un échec du worker permet de créer un nouveau worker au prochain
 essai ; les erreurs des sources conservent leur statut HTTP.
 
+`etat-major/source-tiles.ts` partage les téléchargements IGN entre les tuiles
+corrigées. La file limite les téléchargements à six à la fois. Un consommateur
+annulé quitte la requête partagée ; seul le départ du dernier consommateur
+annule le téléchargement ou retire la tâche de la file.
+
+Le cache LRU conserve les images compressées (`Blob`), au maximum 64 éléments
+et 8 Mio. Les bitmaps décodés appartiennent toujours à chaque rendu et sont
+fermés après usage. Les réponses en échec et les images impossibles à décoder
+ne sont pas réutilisées. Ce budget concerne le cache, pas les buffers temporaires
+du rééchantillonnage. La terminaison du worker libère aussi son cache.
+
 ## Interface et styles
 
 `main.tsx` compose les composants et conserve l’état partagé, les raccourcis
@@ -137,6 +148,12 @@ Les scénarios de partage, de comparaison et de loupe utilisent des services
 externes simulés : ils vérifient les gestes et les états de l’interface sans
 dépendre de la disponibilité d’un fournisseur de cartes.
 
+Les tests de `SourceTiles` vérifient le partage, l’annulation des consommateurs,
+la file, les budgets LRU et les nouvelles tentatives après un échec. Le scénario
+worker mesure les requêtes réelles : pour la paire de tuiles testée, six images
+IGN distinctes remplacent dix téléchargements séparés, et un second rendu
+réutilise ces images sans nouveau téléchargement. Les services IGN y sont simulés.
+
 `tests/source-loading.spec.ts` vérifie que les descriptions et le rapport de
 validation État-major ne sont pas demandés à l’ouverture de l’application, puis
 apparaissent à l’ouverture des sources. Une deuxième époque réutilise le module
@@ -151,6 +168,5 @@ respectent le chemin de déploiement configuré par `VITE_BASE_PATH`.
 
 Les variantes responsives restent explicites dans `app.css` ; toute réorganisation
 de leur cascade doit préserver les dimensions, le focus et l’accessibilité des
-contrôles. Les prochaines vérifications concernent les requêtes IGN voisines,
-leur parallélisme et la mesure du bénéfice d’un cache borné, ainsi que les
-dépendances des composants envers les contrôleurs cartographiques.
+contrôles. Les prochaines vérifications concernent les dépendances des composants
+envers les contrôleurs cartographiques et les services cartographiques réels.
