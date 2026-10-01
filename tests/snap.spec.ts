@@ -16,8 +16,8 @@ test("timeline snaps close to each source and releases for dragging and keyboard
       box.x +
       8 +
       (box.width - 16) *
-        timelinePosition(year, [450, 1250, 1550, 1631, 1680, 1830, 1875, 1954, today]);
-    for (const year of [450, 1250, 1550, 1631, 1680, 1830, 1875, 1954, today]) {
+        timelinePosition(year, [450, 1250, 1550, 1631, 1680, 1777, 1830, 1875, 1954, today]);
+    for (const year of [450, 1250, 1550, 1631, 1680, 1777, 1830, 1875, 1954, today]) {
       const nearby = year === today ? year - 3 : year + 3;
       await page.mouse.move(x(nearby), box.y + box.height / 2);
       await page.mouse.down();

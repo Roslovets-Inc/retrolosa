@@ -31,13 +31,14 @@ import "./compact.css";
 import medieval13c from "./openedition-13c.json";
 import parcels1550 from "./openedition-1550.json";
 import antiquity from "./openedition-antiquite.json";
+import saget1777 from "./saget-1777.json";
 import tavernier1631 from "./tavernier-1631.json";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import { useLocation } from "./useLocation";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-const YEARS = ["450", "1250", "1550", "1631", "1680", "1830", "1875", "1954"] as const;
+const YEARS = ["450", "1250", "1550", "1631", "1680", "1777", "1830", "1875", "1954"] as const;
 type Year = (typeof YEARS)[number];
 const epochLabel = (value: Year) => (value === "450" ? "Ve" : value === "1250" ? "XIIIe" : value);
 const initialYear = (): Year => {
@@ -49,18 +50,21 @@ const FLOOD_SOURCE =
   "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/";
 const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
 const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
+const SAGET_SOURCE = "https://www.flickr.com/photos/archives-toulouse/25111159875/";
 const sourceUrl = (year: Year) =>
-  year === "450" || year === "1250" || year === "1550"
-    ? MEDIEVAL_SOURCE
-    : year === "1631"
-      ? TAVERNIER_SOURCE
-      : year === "1875"
-        ? FLOOD_SOURCE
-        : year === "1954"
-          ? IGN_SOURCE
-          : year === "1680"
-            ? "https://tolosa1680.makina-corpus.com/"
-            : "https://tolosa.makina-corpus.com/";
+  year === "1777"
+    ? SAGET_SOURCE
+    : year === "450" || year === "1250" || year === "1550"
+      ? MEDIEVAL_SOURCE
+      : year === "1631"
+        ? TAVERNIER_SOURCE
+        : year === "1875"
+          ? FLOOD_SOURCE
+          : year === "1954"
+            ? IGN_SOURCE
+            : year === "1680"
+              ? "https://tolosa1680.makina-corpus.com/"
+              : "https://tolosa.makina-corpus.com/";
 const TODAY = new Date().getFullYear();
 const initialTime = () => {
   const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
@@ -165,6 +169,28 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
     });
   }
   for (const period of ["1680", "1830"] as const) {
+    if (period === "1830") {
+      style.sources["history-1777"] = {
+        type: "image",
+        url: assetUrl("saget-1777/map.webp"),
+        coordinates: saget1777.coordinates as [
+          [number, number],
+          [number, number],
+          [number, number],
+          [number, number],
+        ],
+      };
+      style.layers.push({
+        id: "history-1777",
+        type: "raster",
+        source: "history-1777",
+        paint: {
+          "raster-opacity": year === "1777" ? 1 : 0,
+          "raster-opacity-transition": { duration: 0 },
+          "raster-fade-duration": 0,
+        },
+      });
+    }
     style.sources["overview-" + period] = {
       type: "image",
       url: assetUrl(period === "1680" ? "history-overview.png" : "history-overview-1830.png"),
@@ -776,13 +802,15 @@ function App() {
                           ? "Reconstruction"
                           : value === "1550"
                             ? "Héritages du parcellaire"
-                            : value === "1631"
-                              ? "Plan · calage approximatif"
-                              : value === "1875"
-                                ? "Inondation"
-                                : value === "1954"
-                                  ? "Vue aérienne"
-                                  : "Cadastre"}
+                            : value === "1777"
+                              ? "Plan de Saget"
+                              : value === "1631"
+                                ? "Plan · calage approximatif"
+                                : value === "1875"
+                                  ? "Inondation"
+                                  : value === "1954"
+                                    ? "Vue aérienne"
+                                    : "Cadastre"}
                       </small>
                     </label>
                   ))}
@@ -1208,6 +1236,14 @@ function App() {
               {mode === "time" ? " · " : ""}
             </>
           )}
+          {(mode === "time" || year === "1777") && (
+            <>
+              <a href={SAGET_SOURCE} target="_blank" rel="noreferrer">
+                Saget · 1777 · Archives municipales de Toulouse
+              </a>
+              {mode === "time" ? " · " : ""}
+            </>
+          )}
           {mode === "time" || year === "1680" || year === "1830" ? (
             <>
               <a
@@ -1393,6 +1429,27 @@ function App() {
                   plan ne garantit pas une correspondance exacte rue par rue.
                 </p>
               </>
+            ) : year === "1777" ? (
+              <>
+                <h3>Plan de Joseph Marie de Saget · 1777</h3>
+                <p>
+                  Plan de la ville de Toulouse dédié et présenté à Monsieur le frère du Roi. Dessin
+                  de Joseph Marie de Saget, gravure de Pierre Gabriel Berthault. Archives
+                  municipales de Toulouse, II 686 · domaine public. Numérisation originale de 5906 ×
+                  4047 pixels.
+                </p>
+                <p>
+                  Le plan complet conserve ses tables et sa légende. Calage affine manuel sur
+                  Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles
+                  distincts donnent des écarts de{" "}
+                  {saget1777.checkPoints.map((point) => point.errorMetres).join(" et ")} m. Ces
+                  repères ne garantissent pas la précision ailleurs ; la correspondance des rues
+                  reste approximative, surtout aux bords.
+                </p>
+                <a href={assetUrl("saget-1777/original.jpg")} target="_blank" rel="noreferrer">
+                  Voir le plan complet et sa légende <ExternalLink size={14} />
+                </a>
+              </>
             ) : year === "1875" ? (
               <>
                 <h3>Inondation des 23–24 juin 1875</h3>
@@ -1442,9 +1499,10 @@ function App() {
             <p>
               La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
               sources disponibles sont les reconstructions de la fin de l’Antiquité et du XIIIe
-              siècle, les héritages du parcellaire de 1550, le plan de 1631, les cadastres de 1680
-              et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954. Les positions
-              intermédiaires sont des transitions visuelles, pas des reconstitutions de ces années.
+              siècle, les héritages du parcellaire de 1550, les plans de 1631 et 1777, les cadastres
+              de 1680 et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954. Les
+              positions intermédiaires sont des transitions visuelles, pas des reconstitutions de
+              ces années.
             </p>
             <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
               Source XIIIe siècle · figure 6
@@ -1460,6 +1518,10 @@ function App() {
             ·{" "}
             <a href={sourceUrl("1680")} target="_blank" rel="noreferrer">
               Source 1680
+            </a>{" "}
+            ·{" "}
+            <a href={SAGET_SOURCE} target="_blank" rel="noreferrer">
+              Source 1777
             </a>{" "}
             ·{" "}
             <a href={sourceUrl("1830")} target="_blank" rel="noreferrer">

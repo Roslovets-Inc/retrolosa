@@ -1,0 +1,22 @@
+{
+  "sourcePage": "https://www.flickr.com/photos/archives-toulouse/25111159875/",
+  "coordinates": [
+    [1.4319540909690431, 43.636099724530155],
+    [1.485814865614003, 43.58393022019329],
+    [1.4346748273182186, 43.5581367965311],
+    [1.3808140526733155, 43.610328658826894]
+  ],
+  "checkPoints": [
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "errorMetres": 36.2
+    },
+    {
+      "name": "Pont Neuf left-bank abutment",
+      "errorMetres": 58.8
+    }
+  ],
+  "method": "Affine transform in Web Mercator from three manually annotated landmarks. Two independent checkpoints; not survey-grade. Entire original retained, including tables and margins.",
+  "sourceSize": [5906, 4047],
+  "rasterSize": [4096, 2807]
+}

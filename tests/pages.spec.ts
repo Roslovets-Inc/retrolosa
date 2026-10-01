@@ -33,6 +33,8 @@ test("local assets and navigation work under the deployment base path", async ({
     "openedition-1550/figure-07.jpg",
     "openedition-1550/figure-08.jpg",
     "tavernier-1631/overview.webp",
+    "saget-1777/map.webp",
+    "saget-1777/original.jpg",
     "flood-1875/overview.webp",
     "history-overview.png",
     "history-overview-1830.png",

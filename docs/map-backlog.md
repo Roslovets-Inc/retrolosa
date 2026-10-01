@@ -1,3 +1,20 @@
+## Plan de Saget intégré — 1 octobre 2026
+
+Le plan de **1777**, Archives municipales de Toulouse **II 686**, est intégré entre
+1680 et 1830. Le scan couleur complet (5906 × 4047 pixels), ses tables et sa
+légende sont conservés. Source officielle :
+[Archives municipales](https://www.flickr.com/photos/archives-toulouse/25111159875/),
+domaine public. Dessin Joseph Marie de Saget, gravure Pierre Gabriel Berthault.
+
+Le raster affiché mesure 4096 × 2807 pixels ; le JPEG original reste accessible.
+Le calage affine utilise Saint-Sernin, le portail occidental de Saint-Étienne et
+la rive droite du Pont Neuf. Deux contrôles distincts donnent 36,2 m à
+Saint-Pierre-des-Cuisines et 58,8 m sur la rive gauche du Pont Neuf. Ce sont des
+contrôles locaux, pas une mesure de précision globale. Les annotations manuelles
+et les déformations du document limitent la comparaison rue par rue.
+Configuration : `data/saget-1777-control-points.json` ; génération explicite :
+`scripts/build-saget-1777.py` (numpy et Pillow). Aucun téléchargement automatique.
+
 # Cartes à ajouter — revue du 29 septembre 2026
 
 Déjà intégrés : reconstruction du **XIIIe siècle** (OpenEdition, figure 6), plan Tavernier de **1631** (calage approximatif), cadastres interprétés de **1680 et 1830**, plan d’inondation de
@@ -10,18 +27,17 @@ Les flux IGN ci-dessous restent à vérifier sur Toulouse avant intégration.
 
 ## Priorités proposées
 
-| Rang | Source                                           | Intérêt pour le site                                                                 | Effort estimé et prochaine vérification                                                                                                                           |
-| ---- | ------------------------------------------------ | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | **1777 — plan de Saget**                         | Nouvelle époque entre 1680 et 1830 ; ville avant les transformations du XIXe siècle. | Moyen à élevé : obtenir le meilleur scan, masquer les marges, sélectionner des points stables et valider le calage. Aucune annotation réutilisable confirmée.     |
-| 2    | **1965–1980 — orthophotographies IGN**           | Compléter le grand intervalle entre 1954 et aujourd’hui.                             | Faible si la couverture locale convient : vérifier des tuiles de Toulouse et la date réelle de chaque prise de vue. Ne pas inventer un millésime unique « 1970 ». |
-| 3    | **1860 — Jourdan et Rivière**                    | Étape intermédiaire entre 1830 et 1875.                                              | Moyen : scan et calage manuel ; comparer les points de contrôle indépendants.                                                                                     |
-| 4    | **1808 — changements depuis 1789**               | Lire les transformations autour de la Révolution.                                    | Moyen à élevé : vérifier la légende et distinguer état existant, changements et projets avant le calage.                                                          |
-| 5    | **1880–1881 — Perrossier, environs de Toulouse** | Étendre l’exploration aux faubourgs et aux environs.                                 | Élevé : plusieurs feuilles, assemblage et validation des raccords ; intérêt surtout hors du centre.                                                               |
-| 6    | **État-major — série 1820–1866**                 | Contexte territorial du XIXe siècle.                                                 | Faible à moyen si le flux convient ; identifier la feuille et sa date. Détail urbain à comparer avec notre cadastre de 1830.                                      |
-| 7    | **Cassini — XVIIIe siècle**                      | Campagne, voies et villages autour de Toulouse.                                      | Faible à moyen si le flux convient ; vérifier date et couverture. Peu adapté à la comparaison des rues du centre.                                                 |
-| 8    | **2000–2005 — orthophotographies IGN**           | Une étape récente avant le fond actuel.                                              | Faible si la couverture et les dates locales sont établies. Moins prioritaire qu’une époque ancienne manquante.                                                   |
+| Rang | Source                                           | Intérêt pour le site                                     | Effort estimé et prochaine vérification                                                                                                                           |
+| ---- | ------------------------------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2    | **1965–1980 — orthophotographies IGN**           | Compléter le grand intervalle entre 1954 et aujourd’hui. | Faible si la couverture locale convient : vérifier des tuiles de Toulouse et la date réelle de chaque prise de vue. Ne pas inventer un millésime unique « 1970 ». |
+| 3    | **1860 — Jourdan et Rivière**                    | Étape intermédiaire entre 1830 et 1875.                  | Moyen : scan et calage manuel ; comparer les points de contrôle indépendants.                                                                                     |
+| 4    | **1808 — changements depuis 1789**               | Lire les transformations autour de la Révolution.        | Moyen à élevé : vérifier la légende et distinguer état existant, changements et projets avant le calage.                                                          |
+| 5    | **1880–1881 — Perrossier, environs de Toulouse** | Étendre l’exploration aux faubourgs et aux environs.     | Élevé : plusieurs feuilles, assemblage et validation des raccords ; intérêt surtout hors du centre.                                                               |
+| 6    | **État-major — série 1820–1866**                 | Contexte territorial du XIXe siècle.                     | Faible à moyen si le flux convient ; identifier la feuille et sa date. Détail urbain à comparer avec notre cadastre de 1830.                                      |
+| 7    | **Cassini — XVIIIe siècle**                      | Campagne, voies et villages autour de Toulouse.          | Faible à moyen si le flux convient ; vérifier date et couverture. Peu adapté à la comparaison des rues du centre.                                                 |
+| 8    | **2000–2005 — orthophotographies IGN**           | Une étape récente avant le fond actuel.                  | Faible si la couverture et les dates locales sont établies. Moins prioritaire qu’une époque ancienne manquante.                                                   |
 
-Pour une prochaine carte ancienne dessinée, privilégier **1777**. Pour une
+Pour une prochaine carte ancienne dessinée, examiner **1860**. Pour une
 intégration potentiellement rapide, vérifier d’abord **1965–1980**. Ces deux
 recommandations sont notre jugement, pas une garantie de qualité des sources.
 

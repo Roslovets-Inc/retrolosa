@@ -1,0 +1,78 @@
+{
+  "sourcePath": ".local/saget-1777-original.jpg",
+  "sourceUrl": "https://live.staticflickr.com/1517/25111159875_2f81577056_o.jpg",
+  "sourcePage": "https://www.flickr.com/photos/archives-toulouse/25111159875/",
+  "sha256": "d604b210c63806b42b74346bbb878ae741bfab11b1e08bc8ffa2975181b6f911",
+  "annotationWidth": 3200,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536,
+    "annotationWidth": 1200
+  },
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        1318,
+        524
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [
+        1827,
+        555
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "old": [
+        1645,
+        825
+      ],
+      "ref": [
+        621.7,
+        717.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "old": [
+        1374,
+        819
+      ],
+      "ref": [
+        534.9,
+        599.44
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Pont Neuf left-bank abutment",
+      "old": [
+        1600,
+        924
+      ],
+      "ref": [
+        558,
+        739
+      ],
+      "role": "check"
+    }
+  ],
+  "method": "Affine transform in Web Mercator from three manually annotated landmarks. Two independent checkpoints; not survey-grade. Entire original retained, including tables and margins.",
+  "rights": "Archives municipales de Toulouse, II 686. Domaine public. Joseph Marie de Saget; engraving by Pierre Gabriel Berthault."
+}
