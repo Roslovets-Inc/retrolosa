@@ -1,252 +1,230 @@
-# Architecture de l’exploration
+# Exploration architecture
 
-## Époques et sources
+## Epochs and sources
 
-`src/epochs/catalog.ts` décrit les époques dans l’ordre chronologique. Il fournit
-les libellés, les crédits, les orientations et les sources. Cet ordre est aussi
-l’ordre de dessin : une carte plus récente est dessinée au-dessus de la précédente.
-`details.ts` contient les textes de provenance et les liens vers les documents.
-Il est importé par le contenu du dialogue de sources, chargé à la demande, et jamais par le
-catalogue. `getEpochDetails(id)` fournit la description ; `getEpoch(id)` reste
-limité aux données de présentation et de rendu. `Record<EpochId, EpochDetails>`
-exige une description pour chaque époque du catalogue.
+`src/epochs/catalog.ts` describes epochs in chronological order, providing labels,
+credits, orientations and sources. This is also painter order: a newer map is drawn
+above its predecessor. `details.ts` contains provenance text and document links.
+It is imported by the lazily loaded source-dialog content, never by the catalogue.
+`getEpochDetails(id)` provides the description; `getEpoch(id)` remains limited to
+presentation and rendering data. `Record<EpochId, EpochDetails>` requires a description
+for every catalogue epoch.
 
-Les nombres de points de contrôle disponibles sont tirés des métadonnées.
-Le catalogue importe explicitement les coordonnées, les emprises, les révisions
-et les adresses nécessaires aux cartes. Les descriptions importent seulement
-les champs utilisés dans leurs textes ; les annotations complètes ne sont pas
-nécessaires au rendu. Les fichiers géographiques restent les sources communes,
-sans copier leurs valeurs dans un deuxième catalogue.
+Available control-point counts come from metadata. The catalogue explicitly imports
+the coordinates, bounds, revisions and addresses needed by maps. Descriptions import
+only fields used in their text; complete annotations are unnecessary for rendering.
+Geographic files remain the shared sources, without copying their values into a
+second catalogue.
 
-`types.ts` définit les variantes de rendu : image, tuiles, archive PMTiles et
-image d’ensemble suivie d’une source détaillée. Les coordonnées et les emprises
-importées sont validées avant leur utilisation.
+`types.ts` defines rendering variants: image, tiles, PMTiles archive, and overview
+image followed by a detailed source. Imported coordinates and bounds are validated
+before use.
 
-`sources.ts` traduit ce catalogue en style MapLibre. Le chemin de déploiement et
-l’origine sont des paramètres explicites ; ce module ne lit pas `location`.
-Les identifiants de couches sont fournis par `epochLayerIds`, sans dépendance
-à une époque particulière pour appliquer les transparences.
+`sources.ts` translates the catalogue into a MapLibre style. Deployment path and
+origin are explicit parameters; this module does not read `location`.
+`epochLayerIds` provides layer identifiers, so opacity handling does not depend
+on a particular epoch.
 
-Pour ajouter une époque :
+To add an epoch:
 
-1. Préparer explicitement les assets et leurs métadonnées géographiques.
-2. Ajouter son texte de provenance dans `details.ts` et sa définition dans le
-   catalogue, à sa place chronologique.
-3. Choisir une variante de rendu existante, avec les emprises et zooms pertinents.
-4. Exécuter `bun run check` et les scénarios navigateur concernés.
+1. Explicitly prepare assets and their geographic metadata.
+2. Add provenance text in `details.ts` and the definition in chronological order
+   in the catalogue.
+3. Choose an existing rendering variant with appropriate bounds and zooms.
+4. Run `bun run check` and relevant browser scenarios.
 
-## État et présentation
+## State and presentation
 
-`src/view/state.ts` contient l’état persistant de la vue et ses transitions.
-Le reducer modifie les époques et le temps dans une seule transition. La
-normalisation trie et déduplique les époques et borne les valeurs numériques.
-Une sélection vide représente la ville actuelle. Réactiver une époque conserve
-le temps actuel ; le visiteur peut ensuite choisir cette époque sur la frise.
+`src/view/state.ts` contains persistent view state and transitions. The reducer
+updates epochs and time in a single transition. Normalization sorts and deduplicates
+epochs and bounds numeric values. An empty selection represents the current city.
+Re-enabling an epoch preserves the selected time; visitors can then select that
+epoch on the timeline.
 
-Le fragment d’URL est lu une seule fois au démarrage avec `parseViewState`.
-`serializeViewState` produit le lien de partage à partir de l’état et de la caméra
-vivante, sans modifier l’adresse. Les anciens modes `modern`, `historic` et `time`
-restent compatibles. Le champ historique `year` est conservé dans les liens.
-L’année actuelle est un paramètre explicite des fonctions de calcul.
+The URL fragment is read once at startup with `parseViewState`.
+`serializeViewState` produces a sharing link from state and the live camera,
+without changing the address. Legacy `modern`, `historic` and `time` modes remain
+compatible. The historical `year` field is retained in links. The current year is
+an explicit parameter of calculation functions.
 
-`src/view/presentation.ts` calcule les couches actives, leurs transparences,
-l’époque dominante, les libellés, les crédits et l’orientation. Entre deux
-cartes historiques, la précédente reste opaque et la suivante apparaît
-progressivement au-dessus : les deux coefficients ne doivent pas être normalisés
-pour totaliser un. Vers la ville actuelle, la dernière carte historique disparaît
-progressivement. À l’arrivée, aucun crédit historique n’est affiché.
+`src/view/presentation.ts` calculates active layers, opacities, the dominant epoch,
+labels, credits and orientation. Between historical maps, the preceding sheet stays
+opaque while the next fades in above it: their coefficients must not be normalized
+to sum to one. Towards the current city, the last historical map fades out.
+At the endpoint, no historical credit is displayed.
 
-Les actions temporaires de comparaison sont distinctes de l’état partagé.
-Elles changent la présentation sans remplacer le mode, l’opacité ou le temps
-choisis. Elles ne tournent pas la caméra à chaque pression et relâchement.
+Temporary comparison actions are separate from shared state. They change presentation
+without replacing the selected mode, opacity or time. They do not rotate the camera
+on every press and release.
 
-## Cycle de vie des cartes
+## Map lifecycle
 
-`src/map/controller.ts` possède les deux renderers, leur synchronisation et leurs
-abonnements. `useMaps.ts` relie leur cycle de vie à React ; un échec partiel du
-démarrage libère les ressources déjà créées. Les coordonnées ont leur propre
-abonnement dans `Coordinates.tsx`, sans rendre à nouveau toute l’application.
+`src/map/controller.ts` owns both renderers, synchronization and subscriptions.
+`useMaps.ts` connects their lifecycle to React; a partial startup failure releases
+resources already created. Coordinates have their own subscription in
+`Coordinates.tsx`, without rerendering the entire application.
 
-Les époques qui contribuent à la date choisie et leurs voisines immédiates parmi
-les époques activées sont installées : trois au plus à une date exacte, quatre
-entre deux dates. À la date actuelle, seule la dernière époque historique est
-préparée. Les voisines ont une opacité exactement nulle et ne contribuent ni aux
-crédits ni au statut de chargement visible. Cela prépare les sources dans les
-deux directions et évite de recréer les images à chaque passage par une date
-aimantée. Une source voisine peut encore attendre le réseau si le déplacement
-est plus rapide que son premier chargement ; les époques lointaines restent
-déchargées. Pour une source avec vue d’ensemble et détails, seul le rendu
-correspondant au zoom est présent. Les changements d’opacité et les déplacements
-dans le même intervalle de zoom ne recréent pas les sources conservées.
-Pendant une comparaison temporaire, les
-sources historiques restent disponibles mais ne bloquent pas le statut visible.
+Epochs contributing to the selected date and their immediate enabled neighbours are
+installed: at most three at an exact date, four between dates. At the current date,
+only the last historical epoch is prepared. Neighbours have exactly zero opacity
+and contribute neither credits nor visible loading status. This prepares sources
+in both directions and avoids recreating images whenever a snapped date is crossed.
+A neighbouring source may still wait for the network if movement outpaces its first
+load; distant epochs remain unloaded. For an overview/detail source, only the
+rendering appropriate to the zoom is present. Opacity changes and movement within
+the same zoom interval do not recreate retained sources. During temporary comparison,
+historical sources remain available but do not block visible status.
 
-`loading.ts` suit séparément les ressources requises et leurs échecs. Un événement
-`idle` ne supprime jamais une erreur. La réussite de la même requête ou une
-nouvelle tentative la supprime ; les sources désactivées ne bloquent plus la vue.
-« Réessayer » remplace les sources historiques en échec ou recharge le style
-actuel, en conservant les renderers, la caméra et l’état de comparaison.
+`loading.ts` tracks required resources and failures separately. An `idle` event
+never clears an error. Success for the same request or a retry clears it; disabled
+sources no longer block the view. “Réessayer” replaces failed historical sources
+or reloads the current style, preserving renderers, camera and comparison state.
 
-Le protocole État-major (`src/etat-major.ts`) valide les adresses et délègue les
-tuiles à `etat-major/client.ts`. Le worker démarre au premier besoin : il charge
-les images IGN, assemble les voisins et rééchantillonne les pixels. La géométrie
-pure reste dans `geometry.ts`, avec les mêmes contrôles de calage et de voisinage.
-Les résultats PNG sont transférés par `ArrayBuffer`, sans copie du buffer.
+The État-major protocol (`src/etat-major.ts`) validates addresses and delegates tiles
+to `etat-major/client.ts`. The worker starts on first demand: it loads IGN images,
+assembles neighbours and resamples pixels. Pure geometry remains in `geometry.ts`,
+with the same alignment and neighbourhood checks. PNG results are transferred by
+`ArrayBuffer`, without copying the buffer.
 
-Chaque requête possède un identifiant et un signal d’annulation. Le client rejette
-immédiatement une requête annulée ; le worker reçoit l’annulation et vérifie le
-signal entre les lots de lignes. Les bitmaps sont fermés dans `finally`. La
-fermeture des cartes termine le worker, rejette les requêtes en attente et retire
-les abonnements. Un échec du worker permet de créer un nouveau worker au prochain
-essai ; les erreurs des sources conservent leur statut HTTP.
+Every request has an identifier and cancellation signal. The client immediately
+rejects a cancelled request; the worker receives cancellation and checks the signal
+between row batches. Bitmaps are closed in `finally`. Map disposal terminates the
+worker, rejects pending requests and removes subscriptions. Worker failure allows
+a new worker on the next attempt; source errors retain their HTTP status.
 
-`etat-major/source-tiles.ts` partage les téléchargements IGN entre les tuiles
-corrigées. La file limite les téléchargements à six à la fois. Un consommateur
-annulé quitte la requête partagée ; seul le départ du dernier consommateur
-annule le téléchargement ou retire la tâche de la file.
+`etat-major/source-tiles.ts` shares IGN downloads between corrected tiles.
+The queue limits downloads to six at once. A cancelled consumer leaves the shared
+request; only the last consumer's departure cancels the download or removes the
+queued task.
 
-Le cache LRU conserve les images compressées (`Blob`), au maximum 64 éléments
-et 8 Mio. Les bitmaps décodés appartiennent toujours à chaque rendu et sont
-fermés après usage. Les réponses en échec et les images impossibles à décoder
-ne sont pas réutilisées. Ce budget concerne le cache, pas les buffers temporaires
-du rééchantillonnage. La terminaison du worker libère aussi son cache.
+The LRU cache retains compressed images (`Blob`), with limits of 64 entries and
+8 MiB. Decoded bitmaps always belong to each render and are closed after use.
+Failed responses and undecodable images are not reused. This budget covers the
+cache, rather than temporary resampling buffers. Worker termination also releases
+its cache.
 
-## Interface et styles
+## Interface and styles
 
-`main.tsx` compose les composants et conserve l’état partagé, les raccourcis
-globaux et les services de carte. `src/components/` délimite les responsabilités :
+`main.tsx` composes components and retains shared state, global shortcuts and map
+services. `src/components/` separates responsibilities:
 
-- `Header` gère les lieux, le thème et le partage, avec nettoyage du minuteur de
-  confirmation. Le lien est fourni par l’application à partir de sa vue courante.
-- `MapViewport` possède la position et les gestes de la loupe, et affiche le rideau.
-- `MapTools` expose la localisation, le zoom, l’orientation et l’opacité.
-- `ComparisonPanel` gère les gestes de la frise et les choix d’époques et de modes.
-- `SourcesPanel` conserve la coque du dialogue, son focus et sa limite d'erreur
-  dans le code initial. `SourcesContent`, exporté par `SourcesDialog.tsx`, présente
-  les documents et leurs crédits ; son module est chargé à la première ouverture.
+- `Header` handles places, theme and sharing, cleaning up the confirmation timer.
+  The application supplies the link from its current view.
+- `MapViewport` owns loupe position and gestures, and displays the curtain.
+- `MapTools` exposes location, zoom, orientation and opacity.
+- `ComparisonPanel` handles timeline gestures and epoch/mode choices.
+- `SourcesPanel` retains the dialog shell, focus and error boundary in the initial
+  code. `SourcesContent`, exported by `SourcesDialog.tsx`, presents documents and
+  credits; its module loads on first opening.
 
-L’application conserve un seul choix de panneau ouvert (`places`, `epochs` ou
-aucun). Les états locaux des composants ne dupliquent pas l’état persistant de
-la vue et ne participent pas au lien de partage.
+The application retains one open-panel selection (`places`, `epochs` or none).
+Local component state does not duplicate persistent view state or participate in
+the sharing link.
 
-`style.css` est l’unique point d’entrée des styles du projet : `colors.css` pour
-les couleurs, `base.css` pour les règles globales, `app.css` pour l’application
-et ses variantes responsives, `ui.css` pour les primitives Radix. Le fichier
-`compact.css` et les règles du précédent écran ont été supprimés. Les règles
-restantes conservent leur ordre de cascade ; les déclarations déjà dominées par
-une règle identique ultérieure ont été retirées.
+`style.css` is the single entry point for project styles: `colors.css` for colours,
+`base.css` for global rules, `app.css` for the application and responsive variants,
+and `ui.css` for Radix primitives. `compact.css` and rules for the previous screen
+were removed. Remaining rules retain their cascade order; declarations already
+overridden by an identical later rule were removed.
 
-## Vérification et limites actuelles
+Documentation and code comments use English. The website interface, user-facing
+content and accessibility labels remain in French; additional interface languages
+are planned for later.
 
-Les contrats du catalogue et de la vue sont testés sous Node, sans démarrer React
-ni MapLibre. La couverture obligatoire à 100 % concerne `timeline.ts` et les
-modules de `src/view/`. Les scénarios de `tests/view-state.spec.ts` vérifient
-leur intégration dans le navigateur avec les services externes simulés.
+## Verification and current limits
 
-Les tests État-major séparent la cohérence des annotations et du rapport, le
-suivi de chaque repère, les contrôles indépendants, les voisins des tuiles et
-l’absence de repliement. Le nombre de points peut évoluer sans désactiver les
-vérifications géométriques.
+Catalogue and view contracts are tested under Node without starting React or MapLibre.
+Mandatory 100% coverage applies to `timeline.ts` and `src/view/` modules.
+`tests/view-state.spec.ts` scenarios verify their browser integration with simulated
+external services.
 
-Les tests du contrôleur simulent MapLibre pour vérifier les transitions, l’ordre
-des couches et la libération des ressources. `tests/map-loading.spec.ts` vérifie
-la reprise après une erreur réseau et l’absence de requêtes vers les archives
-lointaines. Le scénario de glissement maintient le pointeur enfoncé, traverse
-plusieurs fois une date aimantée et vérifie qu'une voisine n'est téléchargée
-qu'une seule fois. Son premier téléchargement est retenu pour vérifier qu'il
-commence en avance sans bloquer la carte déjà visible. Les tests avec services
-cartographiques réels restent distincts.
+État-major tests separately cover annotation/report consistency, every landmark,
+independent checks, tile neighbours and absence of folds. Point counts can change
+without disabling geometric checks.
 
-Les scénarios de partage, de comparaison et de loupe utilisent des services
-externes simulés : ils vérifient les gestes et les états de l’interface sans
-dépendre de la disponibilité d’un fournisseur de cartes.
+Controller tests simulate MapLibre to verify transitions, layer order and resource
+cleanup. `tests/map-loading.spec.ts` checks recovery after network failure and
+absence of requests to distant archives. The dragging scenario holds the pointer
+down, crosses a snapped date repeatedly and verifies that a neighbour downloads
+only once. Its first download is delayed to check that it starts early without
+blocking the already visible map. Tests using real map services remain separate.
 
-Les tests de `SourceTiles` vérifient le partage, l’annulation des consommateurs,
-la file, les budgets LRU et les nouvelles tentatives après un échec. Le scénario
-worker mesure les requêtes réelles : pour la paire de tuiles testée, six images
-IGN distinctes remplacent dix téléchargements séparés, et un second rendu
-réutilise ces images sans nouveau téléchargement. Les services IGN y sont simulés.
+Sharing, comparison and loupe scenarios use simulated external services: they verify
+UI gestures and state without depending on a map provider's availability.
 
-`tests/source-loading.spec.ts` vérifie que les descriptions et le rapport de
-validation État-major ne sont pas demandés à l’ouverture de l’application, puis
-apparaissent à l’ouverture des sources. Une deuxième époque réutilise le module
-déjà chargé. Le test unitaire des descriptions contrôle la couverture du catalogue,
-les textes interpolés et les liens ; le scénario de la vue vérifie chaque époque.
+`SourceTiles` tests check sharing, consumer cancellation, queuing, LRU budgets and
+retries after failure. The worker scenario measures actual requests: for the tested
+tile pair, six distinct IGN images replace ten separate downloads, and a second
+render reuses them without additional downloads. IGN services are simulated there.
 
-La configuration Vite sépare MapLibre, les dépendances d’interface et le code
-de l’application pour que le cache des bibliothèques survive aux changements
-de l’interface. MapLibre reste nécessaire au premier affichage : le découpage
-ne supprime pas le coût de cette dépendance. Les workers et les modules dynamiques
-respectent le chemin de déploiement configuré par `VITE_BASE_PATH`.
+`tests/source-loading.spec.ts` verifies that descriptions and the État-major
+validation report are not requested at startup, then appear when sources open.
+A second epoch reuses the loaded module. Description unit tests check catalogue
+coverage, interpolated text and links; the view scenario checks every epoch.
 
-Les variantes responsives restent explicites dans `app.css` ; toute réorganisation
-de leur cascade doit préserver les dimensions, le focus et l’accessibilité des
-contrôles.
+Vite separates MapLibre, UI dependencies and application code so library caches
+survive UI changes. MapLibre remains necessary for initial display: splitting does
+not remove its cost. Workers and dynamic modules respect the deployment path
+configured by `VITE_BASE_PATH`.
 
-## Bilan du refactoring et travaux restants
+Responsive variants remain explicit in `app.css`; any cascade reorganization must
+preserve control dimensions, focus and accessibility.
 
-Le catalogue, les transitions de vue, la présentation, le contrôleur cartographique
-et le traitement des tuiles ont maintenant des responsabilités distinctes.
-Les composants de `src/components` ne dépendent ni de `MapController` ni de
-MapLibre. `MapTools` reçoit des commandes explicites ; `Coordinates` reçoit une
-fonction d'abonnement et une lecture de valeur. La composition de ces dépendances reste
-dans `main.tsx`. La géolocalisation reste un adaptateur MapLibre dans `useLocation`.
-Les actions de vue partagées avec les panneaux appartiennent au modèle de vue.
+## Refactoring results and remaining work
 
-Les descriptions sont chargées à la demande ; les images IGN sont partagées,
-avec une concurrence et un cache bornés. Ces limites ne couvrent pas la mémoire
-des images décodées et des canevas temporaires. Les contrôles de couverture à
-100 % concernent seulement les trois fichiers de chronologie et d'état de vue,
-pas l'ensemble du projet.
+The catalogue, view transitions, presentation, map controller and tile processing
+now have distinct responsibilities. Components in `src/components` depend on
+neither `MapController` nor MapLibre. `MapTools` receives explicit commands;
+`Coordinates` receives a subscription function and a value reader. These dependencies
+are composed in `main.tsx`. Geolocation remains a MapLibre adapter in `useLocation`.
+View actions shared with panels belong to the view model.
 
-L'audit local du 1er octobre 2026 a reproduit les problèmes suivants dans Edge
-headless, avec les services cartographiques simulés :
+Descriptions load on demand; IGN images are shared with bounded concurrency and cache.
+These limits do not cover decoded-image or temporary-canvas memory. The 100% coverage
+checks concern only the three timeline and view-state files, rather than the whole project.
 
-1. **P1 corrigé — Échec du module du dialogue.** Une réponse HTTP 503 pour
-   `SourcesDialog.tsx` retirait tout le `<main>`. La coque `SourcesPanel` reste
-   maintenant dans le code initial : elle conserve le dialogue, le focus et
-   la fermeture pendant le chargement ou une erreur. Une limite d'erreur locale
-   protège le contenu différé. Le message propose de continuer sur la carte ou
-   de recharger l'application en sérialisant la vue et la caméra actuelles dans
-   l'adresse. Cette recharge renouvelle le chargement des modules, y compris
-   après un déploiement qui remplace les fichiers ; recréer seulement `lazy`
-   ne garantit pas un nouveau téléchargement d'un import déjà rejeté.
-   `tests/source-loading.spec.ts` simule le HTTP 503, vérifie la fermeture et le
-   retour du focus, modifie la date puis rétablit le module avant la recharge.
-   Le dialogue reste protégé si le service est encore indisponible.
-   Les cinq scénarios locaux de `source-loading` et `ui` passent, dont la
-   fermeture pendant un import en attente. Une vérification supplémentaire sur
-   la sortie de `bun run build` simule le même 503 pour le chunk de production
-   et confirme sa récupération après recharge.
-2. **P2 corrigé — Nouvelle tentative après fermeture d'une erreur.** Une réponse 503
-   pour `openedition-13c/map.webp` affiche une alerte. « Fermer le message »
-   retire aussi l'unique bouton « Réessayer », tandis que le store conserve
-   la ressource en échec. Une commande « Réessayer » reste maintenant accessible
-   au-dessus de la comparaison quand les erreurs sont masquées. Le scénario
-   mobile de `map-loading` ferme l'alerte puis rétablit l'image sans remplacer
-   le canevas ni modifier l'adresse.
-3. **P2 corrigé — Statut lors de la perte du contexte graphique.** Après chargement,
-   `WEBGL_lose_context.loseContext()` sur la carte actuelle laisse le texte
-   « Cartes chargées » alors que `isContextLost()` était vrai. Le contrôleur suit
-   maintenant `webglcontextlost` et `webglcontextrestored`. Le store conserve
-   les erreurs réseau séparément et signale `unavailable` seulement si une carte
-   requise a perdu son contexte. Un message visible indique l'attente de la
-   restauration graphique ; après restauration, le statut attend le chargement
-   du style et des sources. MapLibre restaure lui-même le contexte et son style.
-   Le contrôleur évite les accès au style détruit, applique les changements
-   historiques après restauration et diffère les changements de thème moderne.
-   Les scénarios navigateur provoquent réellement la perte et la restauration
-   de chacune des deux cartes ; les tests unitaires couvrent aussi les sources
-   cachées, les erreurs conservées et le nettoyage des abonnements.
+The local audit on 2026-10-01 reproduced the following issues in headless Edge with
+simulated map services:
 
-La correction des deux P2 est vérifiée par `bun run check` (145 tests unitaires),
-les huit scénarios de `map-loading`, `compact` et `ui`, et `bun run build`.
+1. **P1 fixed — Dialog module failure.** An HTTP 503 response for `SourcesDialog.tsx`
+   removed the entire `<main>`. The `SourcesPanel` shell now remains in the initial
+   code, preserving the dialog, focus and dismissal during loading or failure.
+   A local error boundary protects deferred content. The message offers continuing
+   on the map or reloading the application after serializing the current view and
+   camera into the address. Reloading renews module loading, including after a
+   deployment replaces files; merely recreating `lazy` does not guarantee another
+   download of an already rejected import. `tests/source-loading.spec.ts` simulates
+   HTTP 503, checks dismissal and focus return, changes the date, then restores
+   the module before reloading. The dialog remains protected if the service is
+   still unavailable. All five local `source-loading` and `ui` scenarios pass,
+   including dismissal during a pending import. An additional check against
+   `bun run build` output simulates the same 503 for the production chunk and
+   confirms recovery after reload.
+2. **P2 fixed — Retry after dismissing an error.** A 503 response for
+   `openedition-13c/map.webp` displays an alert. “Fermer le message” also removed
+   the only “Réessayer” button while the store retained the failed resource.
+   A “Réessayer” command now remains available above comparison controls when
+   errors are hidden. The mobile `map-loading` scenario dismisses the alert and
+   restores the image without replacing the canvas or changing the address.
+3. **P2 fixed — Status during graphics-context loss.** After loading,
+   `WEBGL_lose_context.loseContext()` on the current map left “Cartes chargées”
+   displayed while `isContextLost()` was true. The controller now tracks
+   `webglcontextlost` and `webglcontextrestored`. The store retains network
+   errors separately and reports `unavailable` only if a required map has lost
+   its context. A visible message indicates pending graphics restoration;
+   after restoration, status waits for style and source loading. MapLibre restores
+   its own context and style. The controller avoids accessing the destroyed style,
+   applies historical changes after restoration and defers modern theme changes.
+   Browser scenarios actually trigger loss and restoration on both maps; unit
+   tests also cover hidden sources, retained errors and subscription cleanup.
 
-La vérification du changement de dépendances comprend `bun run check` (143
-tests unitaires), les cinq scénarios de `orientation`, `ui` et `compact`, et
-`bun run build`. Un contrôle navigateur supplémentaire vérifie les deux
-marqueurs de géolocalisation et leur suppression à l'arrêt du suivi.
-Ces contrôles hors ligne ne valident pas la disponibilité réelle d'IGN,
-d'OpenFreeMap ou des archives PMTiles distantes. Il reste à vérifier ces
-services séparément et à mesurer la mémoire et le temps de rendu sur un
-appareil mobile avant de justifier un nouveau travail de performance.
+The two P2 fixes were verified with `bun run check` (145 unit tests), eight
+`map-loading`, `compact` and `ui` scenarios, and `bun run build`.
+
+Dependency-change verification includes `bun run check` (143 unit tests), five
+`orientation`, `ui` and `compact` scenarios, and `bun run build`.
+An additional browser check verifies both geolocation markers and their removal
+when tracking stops. These offline checks do not validate actual IGN, OpenFreeMap
+or remote PMTiles availability. Those services remain to be checked separately,
+and memory and rendering time must be measured on mobile hardware before further
+performance work is justified.

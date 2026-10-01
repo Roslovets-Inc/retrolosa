@@ -1,156 +1,148 @@
 # Rétrolosa
 
-Carte interactive de Toulouse à travers les siècles : reconstructions antiques et médiévales,
-plans historiques, état-major de 1848, photographie aérienne de 1954 et carte actuelle.
-React 19, TypeScript, Vite 8, MapLibre GL JS 6 et PMTiles 4. Interface en français.
+An interactive map of Toulouse through the centuries: ancient and medieval reconstructions,
+historical plans, the 1848 État-major map, 1954 aerial photography and the present-day map.
+React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is in French.
 
-Les composants d’interface reposent sur Radix Primitives : infobulles, panneaux,
-dialogues, cases à cocher, sélection du mode et curseur d’opacité. Les wrappers
-de `src/ui.tsx` partagent les styles et les couleurs du projet, sans thème imposé
-par la bibliothèque. Radix gère le focus, le clavier, la fermeture et les collisions
-avec les bords de l’écran. La frise chronologique non linéaire et les outils
-cartographiques conservent leur comportement spécifique ; le choix d’un lieu
-utilise une liste native adaptée aux appareils mobiles.
+UI components use Radix Primitives: tooltips, panels, dialogs, checkboxes, mode selection
+and the opacity slider. Wrappers in `src/ui.tsx` share project styles and colours without
+a library-imposed theme. Radix handles focus, keyboard input, dismissal and screen-edge
+collisions. The nonlinear timeline and map tools retain their specific behaviour;
+place selection uses a native list suited to mobile devices.
 
-## Licence
+## Language policy
 
-Copyright (C) 2026 Pavel Roslovets et les contributeurs de Rétrolosa.
+English is the primary development language for all project documentation, including
+README, and code comments. Keep the website interface, user-facing content and accessibility
+labels in French for now. Additional interface languages are planned for later.
+Preserve original source titles, proper names and quoted UI labels where needed.
 
-Le code et la documentation originale du projet sont distribués sous
-**GNU Affero General Public License, version 3 ou ultérieure**
-(`AGPL-3.0-or-later`). Voir [LICENSE](LICENSE) et le [périmètre de la licence](docs/licensing.md).
-L’utilisation, la modification et la redistribution, y compris commerciales, sont autorisées
-dans les conditions de cette licence. Les versions dérivées doivent conserver ces libertés ;
-une version modifiée accessible par le réseau doit proposer son code source aux utilisateurs.
+## License
 
-Les cartes, photographies, données, polices et autres éléments tiers conservent leurs droits
-et conditions propres. La licence du logiciel ne constitue pas une autorisation de les réutiliser.
+Copyright (C) 2026 Pavel Roslovets and the Rétrolosa contributors.
 
-## Démarrage
+The code and original documentation are distributed under the **GNU Affero General Public
+License, version 3 or later** (`AGPL-3.0-or-later`). See [LICENSE](LICENSE) and the
+[license scope](docs/licensing.md). Use, modification and redistribution, including
+commercial use, are allowed under its terms. Derived versions must preserve these freedoms;
+a modified version accessible over a network must offer its source code to users.
 
-Prérequis : Bun 1.4.2 et Node.js 22.12+ ; `.nvmrc` et la CI utilisent Node 24.
-Exécuter les commandes depuis la racine du dépôt.
+Maps, photographs, data, fonts and other third-party materials retain their own rights
+and terms. The software license does not grant permission to reuse them.
+
+## Getting started
+
+Requirements: Bun 1.4.2 and Node.js 22.12+; `.nvmrc` and CI use Node 24.
+Run commands from the repository root.
 
 ```sh
 bun install --frozen-lockfile
 bun run dev
 ```
 
-Ouvrir http://127.0.0.1:5173. Les cartes nécessitent Internet.
-`bun start` et `bun local` sont des alias de développement.
+Open http://127.0.0.1:5173. Maps require Internet access.
+`bun start` and `bun local` are development aliases.
 
-## Commandes
+## Commands
 
-| Commande              | Usage                                           |
-| --------------------- | ----------------------------------------------- |
-| `bun run dev`         | Serveur local                                   |
-| `bun run check`       | Format, lint, types et tests unitaires          |
-| `bun run prep`        | Formatage, corrections lint, puis vérifications |
-| `bun run build`       | Types et compilation de production              |
-| `bun run preview`     | Prévisualisation de la compilation              |
-| `bun run test`        | Vitest avec couverture                          |
-| `bun run test:watch`  | Vitest en continu                               |
-| `bun run test:e2e`    | Tests navigateur Playwright                     |
-| `bun run test:e2e:ui` | Interface Playwright                            |
-| `bun run verify`      | Vérifications, compilation et tests navigateur  |
+| Command               | Purpose                                |
+| --------------------- | -------------------------------------- |
+| `bun run dev`         | Local development server               |
+| `bun run check`       | Formatting, lint, types and unit tests |
+| `bun run prep`        | Formatting, lint fixes, then checks    |
+| `bun run build`       | Type checking and production build     |
+| `bun run preview`     | Preview the production build           |
+| `bun run test`        | Vitest with coverage                   |
+| `bun run test:watch`  | Vitest in watch mode                   |
+| `bun run test:e2e`    | Playwright browser tests               |
+| `bun run test:e2e:ui` | Playwright UI                          |
+| `bun run verify`      | Checks, build and browser tests        |
 
-Format et lint sont disponibles séparément : `bun run format`,
+Formatting and linting are also available separately: `bun run format`,
 `bun run format:check`, `bun run lint`, `bun run lint:fix`, `bun run typecheck`.
-Transmettre les arguments directement :
-`bun run test:e2e tests/share.spec.ts --workers=1`.
-Utiliser `bun run test` pour Vitest ; `bun test` appelle le runner natif de Bun.
+Pass arguments directly: `bun run test:e2e tests/share.spec.ts --workers=1`.
+Use `bun run test` for Vitest; `bun test` invokes Bun's native runner.
 
-## Qualité
+## Quality
 
-Le socle s’inspire de PumpRoom-UI : Bun, Oxfmt, Oxlint avec le plugin officiel
-React Hooks et Vitest. Les avertissements lint font échouer la vérification.
-Oxfmt impose les fins de ligne LF et exclut les cartes et données générées.
-TypeScript vérifie l’application, les tests et les configurations.
+The tooling follows PumpRoom-UI: Bun, Oxfmt, Oxlint with the official React Hooks plugin,
+and Vitest. Lint warnings fail the checks. Oxfmt enforces LF line endings and excludes
+generated maps and data. TypeScript checks the application, tests and configuration.
 
-Vitest vérifie notamment le catalogue, les transitions de vue, la frise, les
-contrôleurs et le worker. Le seuil de couverture de 100 % concerne uniquement
-`src/timeline.ts` et les modules de `src/view/`, pas toute l’application.
-Playwright vérifie les cartes, les modes de comparaison, le partage et le mobile.
-Certains tests navigateur utilisent les services réels et nécessitent Internet ;
-les scénarios d'interface et de reprise utilisant `prepareOfflineMaps` simulent
-les services externes. Les vérifications hors ligne fonctionnent après
-installation des dépendances et du navigateur.
+Vitest covers the catalogue, view transitions, timeline, controllers and worker.
+The 100% coverage threshold applies only to `src/timeline.ts` and the modules in
+`src/view/`, rather than the whole application. Playwright checks maps, comparison
+modes, sharing and mobile behaviour. Some browser tests use real services and need
+Internet access; UI and recovery scenarios using `prepareOfflineMaps` simulate external
+services. Offline checks work after installing dependencies and the browser.
 
-Sur Windows, Playwright utilise Edge. Sur Linux et macOS, installer Chromium :
-`bun x playwright install chromium`. `PLAYWRIGHT_CHANNEL` permet de choisir le
-navigateur et `PLAYWRIGHT_PORT` d’isoler le serveur de tests.
-Les rapports sont dans `coverage/`, `playwright-report/` et `test-results/` ; les
-captures manuelles dans `.local/`.
+On Windows, Playwright uses Edge. On Linux and macOS, install Chromium with
+`bun x playwright install chromium`. `PLAYWRIGHT_CHANNEL` selects the browser and
+`PLAYWRIGHT_PORT` isolates the test server. Reports go in `coverage/`,
+`playwright-report/` and `test-results/`; manual screenshots go in `.local/`.
 
-GitHub Actions vérifie, compile et publie le site à chaque push vers `main`,
-et conserve les diagnostics pendant sept jours. Une vérification ou un test en échec
-bloque la publication.
+GitHub Actions checks, builds and publishes the site on every push to `main`,
+and retains diagnostics for seven days. A failed check or test blocks publication.
 
-## Publication GitHub Pages
+## GitHub Pages publication
 
-Le workflow unique `Deploy to GitHub Pages` (`.github/workflows/pages.yml`) se lance
-automatiquement à chaque push vers `main`. Il vérifie le projet, compile `dist/`,
-publie ensuite avec les actions officielles GitHub Pages. Les tests navigateur
-s'exécutent localement ; la CI ne les lance pas et n'installe pas de navigateur.
-Un lancement manuel reste disponible depuis **Actions → Deploy to GitHub Pages →
-Run workflow**, sur `main`. Les commandes locales et l’installation des dépendances
-ne déclenchent pas de publication.
+The single `Deploy to GitHub Pages` workflow (`.github/workflows/pages.yml`) runs
+automatically on every push to `main`. It checks the project, builds `dist/` and
+publishes with the official GitHub Pages actions. Browser tests run locally;
+CI neither runs them nor installs a browser. Manual execution remains available under
+**Actions → Deploy to GitHub Pages → Run workflow**, on `main`.
+Local commands and dependency installation do not trigger publication.
 
-Après avoir envoyé le dépôt sur GitHub, sélectionner **Settings → Pages →
-Build and deployment → Source → GitHub Actions**. Les règles de protection de
-l’environnement `github-pages` doivent autoriser la branche `main`.
+After uploading the repository to GitHub, select **Settings → Pages → Build and
+deployment → Source → GitHub Actions**. The `github-pages` environment protection
+rules must allow the `main` branch.
 
-Le chemin de base fourni par GitHub Pages est transmis à Vite via `VITE_BASE_PATH` ;
-les cartes, polices et liens fonctionnent aussi sous le chemin du dépôt. Pour
-reproduire cette compilation localement, définir `VITE_BASE_PATH=/nom-du-depot/`
-avant `bun run build` et conserver cette même variable pour `bun run preview`,
-puis ouvrir ce chemin. Remplacer `nom-du-depot` par le nom réel du dépôt.
-La compilation locale utilise `/` par défaut.
+GitHub Pages supplies the base path to Vite through `VITE_BASE_PATH`; maps, fonts and
+links also work under the repository path. To reproduce this build locally, set
+`VITE_BASE_PATH=/repository-name/` before `bun run build`, retain the same variable
+for `bun run preview`, and open that path. Replace `repository-name` with the actual
+repository name. Local builds use `/` by default.
 
-## Dépendances et conventions
+## Dependencies and conventions
 
-`bun.lock` est le seul lockfile. Ajouter des dépendances avec `bun add` ou
-`bun add --dev`, puis inclure `package.json` et `bun.lock`. `bunfig.toml` fixe
-les nouvelles versions et une ancienneté minimale de cinq jours.
-Les règles des agents et les Semantic / Conventional Commits sont définis
-dans [AGENTS.md](AGENTS.md). Toute publication Sites nécessite une demande
-explicite pour les changements concernés.
+`bun.lock` is the only lockfile. Add dependencies with `bun add` or `bun add --dev`,
+then include `package.json` and `bun.lock`. `bunfig.toml` pins new versions and requires
+a minimum release age of five days. Agent rules and Semantic / Conventional Commits are
+defined in [AGENTS.md](AGENTS.md). Sites publication requires an explicit request for
+the changes concerned.
 
-## Cartes et utilisation
+## Maps and usage
 
-Frise continue, rideau, fondu avec transparence et vue actuelle. Les époques décochées
-sont ignorées par la frise. Maintenir le bouton œil affiche les rues actuelles
-avec une légère superposition historique. La géolocalisation est facultative.
-La navigation est limitée à Toulouse ; le retour à la vue d’ensemble montre
-le centre. Le partage crée explicitement un lien sans modifier l’adresse.
+Continuous timeline, curtain, transparent overlay and current view. Unchecked epochs
+are skipped by the timeline. Holding the eye button shows current streets with a faint
+historical overlay. Geolocation is optional. Navigation is limited to Toulouse;
+resetting the overview shows the centre. Sharing explicitly creates a link without
+changing the address.
 
-Le plan Tavernier de 1631 est un scan des Archives municipales, recalé sur
-22 repères au sol. Quatre contrôles distincts autour de Nazareth et du Salin donnent 8 à 39 mètres
-d’écart ; ils ne représentent pas la précision de toute la ville.
-Les cadastres 1680/1830 sont des rendus modernes de Makina Corpus / Toulouse
-Métropole. Le plan d’inondation de 1875 est un scan calé manuellement.
-La photographie de 1954 vient d’IGN / Edugéo ; le fond actuel d’OpenFreeMap / OSM.
+The 1631 Tavernier plan is a Municipal Archives scan aligned with 22 ground landmarks.
+Four independent checks around Nazareth and Salin show errors of 8–39 metres; they
+do not represent citywide accuracy. The 1680/1830 cadastres are modern renderings by
+Makina Corpus / Toulouse Métropole. The 1875 flood plan is a manually aligned scan.
+The 1954 photograph comes from IGN / Edugéo; the current basemap from OpenFreeMap / OSM.
 
-Voir [sources et précision](docs/sources.md) et [cartes restantes](docs/map-backlog.md).
-Les générateurs Python sont séparés du build web ; les assets préparés sont
-inclus dans le dépôt.
+See [sources and accuracy](docs/sources.md) and [remaining maps](docs/map-backlog.md).
+Python generators are separate from the web build; prepared assets are included in the repository.
 
-## Documentation et reprise du projet
+## Documentation and project handoff
 
-Pour travailler dans un nouveau chat ou après déplacement du dépôt, commencer
-par [AGENTS.md](AGENTS.md), le [contexte du projet](docs/project-context.md) et
-l'[architecture](docs/architecture.md). Le contexte décrit les contrats à
-préserver, la validation récente, les travaux restants et la procédure de
-transfert ou de changement de nom. Les chemins documentés sont relatifs au dépôt.
+When working in a new chat or after moving the repository, start with [AGENTS.md](AGENTS.md),
+[project context](docs/project-context.md) and [architecture](docs/architecture.md).
+The context describes contracts to preserve, recent validation, remaining work and the
+procedure for moving or renaming the checkout. Documented paths are repository-relative.
 
-| Document                                                           | Contenu                                                              |
-| ------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| [Architecture](docs/architecture.md)                               | Modules, frise, sources, workers, chargement et reprise après erreur |
-| [Sources](docs/sources.md)                                         | Provenance des cartes, calage et limites de précision                |
-| [Reconstructions OpenEdition](docs/openedition-medieval-layers.md) | Inventaire et choix des figures antiques et médiévales               |
-| [Orientation](docs/orientation.md)                                 | Nord, orientation de lecture et synchronisation                      |
-| [Population](docs/population.md)                                   | Estimations, interpolation et périmètres des données                 |
-| [Widget historique](docs/city-widget.md)                           | Événements et limites de la surface bâtie                            |
-| [Cartes à ajouter](docs/map-backlog.md)                            | Recherche de nouvelles sources, avec dates d'intégration             |
-| [Licences](docs/licensing.md)                                      | Licence du code et conditions distinctes des ressources tierces      |
-| [Guide de style](docs/style-guide.html)                            | Référence visuelle ; les styles exécutés restent dans `src/`         |
+| Document                                                           | Contents                                                        |
+| ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| [Architecture](docs/architecture.md)                               | Modules, timeline, sources, workers, loading and error recovery |
+| [Sources](docs/sources.md)                                         | Map provenance, alignment and accuracy limits                   |
+| [OpenEdition reconstructions](docs/openedition-medieval-layers.md) | Inventory and selection of ancient and medieval figures         |
+| [Orientation](docs/orientation.md)                                 | North, reading orientation and synchronization                  |
+| [Population](docs/population.md)                                   | Estimates, interpolation and data boundaries                    |
+| [City widget](docs/city-widget.md)                                 | Events and limitations of built-up area measurements            |
+| [Map backlog](docs/map-backlog.md)                                 | Research into new sources, with integration dates               |
+| [Licensing](docs/licensing.md)                                     | Code license and separate third-party resource terms            |
+| [Style guide](docs/style-guide.html)                               | Visual reference; runtime styles remain in `src/`               |

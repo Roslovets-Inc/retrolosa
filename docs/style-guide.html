@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rétrolosa — Guide de style</title>
+    <title>Rétrolosa — Style guide</title>
     <link rel="stylesheet" href="../public/fonts/fonts.css" />
     <link rel="stylesheet" href="../src/colors.css" />
     <style>
@@ -265,154 +265,153 @@
   <body>
     <main>
       <header>
-        <div class="eyebrow">Rétrolosa / Identité visuelle / 01</div>
-        <h1>Le papier, la carte, le temps.</h1>
+        <div class="eyebrow">Rétrolosa / Visual identity / 01</div>
+        <h1>Paper, maps, time.</h1>
         <p class="intro">
-          Une identité calme et patrimoniale : des fonds papier chaleureux, des verts sourds et une
-          touche de terre cuite. L’interface accompagne les cartes et laisse le premier rôle au
-          contenu historique.
+          A calm identity rooted in heritage: warm paper backgrounds, muted greens and a touch of
+          terracotta. The interface supports the maps and gives historical content the leading role.
         </p>
       </header>
       <section aria-labelledby="palette-title">
-        <h2 id="palette-title">01 — Palette & rôles</h2>
+        <h2 id="palette-title">01 — Palette & roles</h2>
         <div class="palette">
           <div class="swatch">
             <div class="color" style="--swatch: #efece3"></div>
             <div class="caption">
-              <strong>Papier</strong><code>#EFECE3 · canvas</code><small>Fond général</small>
+              <strong>Paper</strong><code>#EFECE3 · canvas</code><small>General background</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #faf9f2"></div>
             <div class="caption">
-              <strong>Ivoire</strong><code>#FAF9F2 · surface</code><small>Panneaux et menus</small>
+              <strong>Ivory</strong><code>#FAF9F2 · surface</code><small>Panels and menus</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #eceee6"></div>
             <div class="caption">
-              <strong>Brume</strong><code>#ECEEE6 · subtle</code><small>Groupes de commandes</small>
+              <strong>Mist</strong><code>#ECEEE6 · subtle</code><small>Control groups</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #d5d8cd"></div>
             <div class="caption">
               <strong>Lichen</strong><code>#D5D8CD · border</code
-              ><small>Bordures et séparateurs</small>
+              ><small>Borders and separators</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #263e36"></div>
             <div class="caption">
-              <strong>Encre verte</strong><code>#263E36 · ink</code
-              ><small>Texte principal et icônes</small>
+              <strong>Green ink</strong><code>#263E36 · ink</code><small>Main text and icons</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #2f4b40"></div>
             <div class="caption">
-              <strong>Forêt</strong><code>#2F4B40 · primary</code
-              ><small>Sélection · texte blanc</small>
+              <strong>Forest</strong><code>#2F4B40 · primary</code
+              ><small>Selection · white text</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #3e604d"></div>
             <div class="caption">
-              <strong>Mousse</strong><code>#3E604D · slider</code><small>Curseur de la frise</small>
+              <strong>Moss</strong><code>#3E604D · slider</code><small>Timeline slider</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #dce3d4"></div>
             <div class="caption">
-              <strong>Sauge</strong><code>#DCE3D4 · hover</code><small>Survol des commandes</small>
+              <strong>Sage</strong><code>#DCE3D4 · hover</code><small>Control hover</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #5f6d62"></div>
             <div class="caption">
-              <strong>Gris végétal</strong><code>#5F6D62 · muted</code
-              ><small>Texte secondaire</small>
+              <strong>Botanical grey</strong><code>#5F6D62 · muted</code
+              ><small>Secondary text</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: #bc7244"></div>
             <div class="caption">
-              <strong>Terre cuite</strong><code>#BC7244 · focus</code
-              ><small>Repère de focus clavier</small>
+              <strong>Terracotta</strong><code>#BC7244 · focus</code
+              ><small>Keyboard focus indicator</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: var(--track)"></div>
             <div class="caption">
-              <strong>Piste</strong><code>#7B877E · track</code
-              ><small>Frise et contour de survol</small>
+              <strong>Track</strong><code>#7B877E · track</code
+              ><small>Timeline and hover outline</small>
             </div>
           </div>
           <div class="swatch">
             <div class="color" style="--swatch: var(--on-primary)"></div>
             <div class="caption">
-              <strong>Blanc</strong><code>#FFFFFF · on-primary</code
-              ><small>Texte sur sélection</small>
+              <strong>White</strong><code>#FFFFFF · on-primary</code
+              ><small>Text on selection</small>
             </div>
           </div>
         </div>
       </section>
       <div class="details">
         <section aria-labelledby="components-title">
-          <h2 id="components-title">02 — Composants & états</h2>
-          <div class="panel">
+          <h2 id="components-title">02 — Components & states</h2>
+          <p>
+            The specimen retains French website labels. Documentation and code comments use English.
+          </p>
+          <div class="panel" lang="fr">
             <div class="tools">
               <button class="epochs" type="button">Époques</button>
-              <div class="switch" role="group" aria-label="Exemple de comparaison">
+              <div class="switch" role="group" aria-label="Comparison example">
                 <button type="button" aria-pressed="true">Superposition</button>
                 <button type="button" aria-pressed="false">Rideau</button>
                 <button type="button" aria-pressed="false">Loupe</button>
               </div>
             </div>
-            <input type="range" min="0" max="100" value="14" aria-label="Exemple de frise" />
+            <input type="range" min="0" max="100" value="14" aria-label="Timeline example" />
             <div class="ticks">
               <span>Ve</span><span>XIIIe</span><span>1550</span><span>1830</span><span>1904</span
               ><span>Actuel</span>
             </div>
           </div>
           <div class="states">
-            <span class="state">Repos</span><span class="state hover">Survol</span
-            ><span class="state focus">Focus clavier</span>
+            <span class="state">Default</span><span class="state hover">Hover</span
+            ><span class="state focus">Keyboard focus</span>
           </div>
           <p>
-            Les fonds clairs dominent. Réserver le vert dense à l’état sélectionné ; la terre cuite
-            au focus. Associer chaque état à un repère explicite : libellé, forme ou contour.
+            Light backgrounds dominate. Reserve deep green for selection and terracotta for focus.
+            Give each state an explicit indicator: a label, shape or outline.
           </p>
         </section>
         <section aria-labelledby="rules-title">
-          <h2 id="rules-title">03 — Typographie & matière</h2>
-          <div class="sample-title">Toulouse à travers le temps</div>
+          <h2 id="rules-title">03 — Typography & materials</h2>
+          <div class="sample-title" lang="fr">Toulouse à travers le temps</div>
           <dl>
-            <dt>Literata · identité</dt>
-            <dd>Signature et titres éditoriaux ; graisse 500–600.</dd>
+            <dt>Literata · identity</dt>
+            <dd>Brand signature and editorial headings; weight 500–600.</dd>
             <dt>Golos Text · interface</dt>
             <dd>
-              Commandes et informations ; graisse 400–600. Le projet utilise des libellés compacts
-              de 10–14 px.
+              Controls and information; weight 400–600. The project uses compact labels at 10–14 px.
             </dd>
-            <dt>Formes & relief</dt>
+            <dt>Shapes & depth</dt>
             <dd>
-              Rayons : panneau 10 px, groupe 6 px, bouton 4 px. Bordures de 1 px. Ombre diffuse : 0
-              8px 25px #20302426.
+              Radii: panel 10 px, group 6 px, button 4 px. Borders: 1 px. Soft shadow: 0 8px 25px
+              #20302426.
             </dd>
-            <dt>Rythme & iconographie</dt>
+            <dt>Spacing & iconography</dt>
             <dd>
-              Espacements courts de 4–10 px. Icônes Lucide au trait fin, 16–17 px dans les
-              commandes. Surfaces unies, sans texture décorative ajoutée.
+              Compact spacing of 4–10 px. Thin-stroke Lucide icons, 16–17 px in controls. Solid
+              surfaces without added decorative texture.
             </dd>
           </dl>
         </section>
       </div>
       <footer>
-        Guide synthétisé à partir de src/colors.css, src/base.css, src/app.css et src/ui.css. Les
-        variables sont partagées avec le projet. Texte secondaire : 5,17:1 sur ivoire et 4,66:1 sur
-        brume ; piste : 3,55:1 sur ivoire. Le spécimen illustre les états et n’agit pas sur la
-        carte.
+        Guide derived from src/colors.css, src/base.css, src/app.css and src/ui.css. Variables are
+        shared with the project. Secondary text: 5.17:1 on ivory and 4.66:1 on mist; track: 3.55:1
+        on ivory. The specimen illustrates states and does not control the map.
       </footer>
     </main>
     <script>

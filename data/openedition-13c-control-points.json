@@ -12,6 +12,6 @@
     { "name": "Saint-Pierre-des-Cuisines footprint", "old": [216, 547], "ref": [534.9, 599.44], "role": "check" }
   ],
   "method": "Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
-  "dating": "XIIIe siècle; 1250 is a timeline ordering anchor, not an asserted survey year.",
+  "dating": "Thirteenth century; 1250 is a timeline ordering anchor, not an asserted survey year.",
   "rights": "F. Callède / Inrap / PCR Toulouse au Moyen Âge. Reuse authorization unconfirmed; attribution and source link do not establish permission. Integrated at user's request."
 }

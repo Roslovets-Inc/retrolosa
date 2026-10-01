@@ -1,138 +1,199 @@
-# Reconstructions antiques et médiévales — OpenEdition 3296
+# Ancient and medieval reconstructions — OpenEdition 3296
 
-Inventaire du 30 septembre 2026. Les 12 illustrations originales ont été téléchargées et vérifiées. Elles restent dans `.local/openedition-3296/originals/`, hors des ressources publiques du site. Une galerie locale est disponible dans `.local/openedition-3296/index.html` ; le manifeste reproductible est dans `data/openedition-3296-catalog.json`.
+Inventory dated 2026-09-30. All 12 original illustrations were downloaded and checked.
+They remain in `.local/openedition-3296/originals/`, outside the site's public resources.
+A local gallery is available at `.local/openedition-3296/index.html`; the reproducible
+manifest is in `data/openedition-3296-catalog.json`.
 
-`.local/` est ignoré par Git : ces fichiers et la galerie peuvent être absents
-d'un nouveau clone. Conserver les originaux séparément lors d'un transfert si
-une régénération est prévue ; leur absence ne bloque pas le build du site avec
-les assets déjà suivis dans `public/`.
+`.local/` is ignored by Git: these files and the gallery may be absent from a new clone.
+Preserve originals separately during a transfer if regeneration is planned; their
+absence does not block the site build using assets already tracked in `public/`.
 
-## Source et nature des documents
+## Source
 
-[Quitterie Cazes, « Toulouse au Moyen Âge : les pouvoirs dans la ville »](https://books.openedition.org/psorbonne/3296), dans _Marquer la ville_, 2013, p. 341–366. Dessins de F. Callède, issus des recherches sur Toulouse au Moyen Âge, notamment du programme collectif et de la synthèse dirigée par Jean Catalo et Quitterie Cazes en 2010.
+[Quitterie Cazes, “Toulouse au Moyen Âge : les pouvoirs dans la ville”](https://books.openedition.org/psorbonne/3296),
+in _Marquer la ville_, 2013, pp. 341–366. Drawings by F. Callède, based on research
+into medieval Toulouse, notably the collective programme and the synthesis edited
+by Jean Catalo and Quitterie Cazes in 2010.
 
-Ces documents sont des **reconstructions scientifiques récentes**, avec des éléments connus et des propositions. Ils ne sont pas des cartes dessinées à l'époque représentée. Plusieurs utilisent le parcellaire de 1550 comme support analytique. Le fond de référence, les vestiges plus anciens et les éléments postérieurs ne sont pas tous contemporains du sujet.
+These documents are **recent scholarly reconstructions**, combining known elements
+and proposals. They are not maps drawn in the period represented. Several use the
+1550 parcel layout as an analytical base. The reference background, older remains
+and later elements are not all contemporary with the subject.
 
-## Catalogue des 12 illustrations
+## Inventory of the 12 figures
 
-| N°  | Sujet                                              | Datation exploitable                                                                       | Utilisation proposée et précautions                                                                                                                                                         |
-| --- | -------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Toulouse à la fin de l'Antiquité                   | Antiquité tardive ; vestiges du Haut et du Bas Empire distingués                           | Plan général de référence antique, avec palais des Goths. Ce n'est pas un instantané homogène du IIIe ou du IVe siècle. Séparer les vestiges et les restitutions d'axes.                    |
-| 2   | Saint-Sernin et son enclos                         | XIIe siècle, agrandissement au XIVe, constructions romanes et du bas Moyen Âge             | Détail pour les couches médiévales ; extraire les phases et exclure les éléments postérieurs du rendu d'une époque ancienne.                                                                |
-| 3   | Saint-Pierre-des-Cuisines                          | 1050, vers 1100, 1150, 1180, bas Moyen Âge                                                 | Série de phases du bâtiment. Ne pas cumuler tous les murs comme s'ils avaient coexisté.                                                                                                     |
-| 4   | Quartier canonial de Saint-Étienne                 | État roman, extensions au XIIIe, éléments postérieurs                                      | Détail pour XIIe/XIIIe siècles après séparation des phases ; le dessin comporte aussi des éléments plus tardifs.                                                                            |
-| 5   | Monastère de la Daurade                            | Vue vers 1760 ; phases 1050, première et seconde moitié du XIIe, bas Moyen Âge             | Fragment autonome vers 1760. Pour le Moyen Âge, réutiliser uniquement les phases explicitement datées, avec leur contexte vérifié.                                                          |
-| 6   | Toulouse au XIIIe siècle                           | XIIIe siècle, sans année unique                                                            | Meilleur premier plan général médiéval. La légende distingue positions connues et proposées ; préserver cette distinction.                                                                  |
-| 7   | Orientations d'origine antique dans le parcellaire | Cadastre restitué de 1550                                                                  | Analyse des héritages antiques, pas une carte des parcelles antiques. Complément thématique à la figure 8.                                                                                  |
-| 8   | Autres orientations du parcellaire                 | Cadastre restitué de 1550 ; tracés attribués au Moyen Âge                                  | Analyse des héritages médiévaux. Combinaison possible avec 7 après vérification de leur fond commun.                                                                                        |
-| 9   | Formation du bourg Saint-Sernin                    | Vers 1107, vers 1150, après 1150, extension après 1191 ; support cadastral de 1550         | Meilleure base pour un fragment du nord de Toulouse au XIIe siècle. Séparer les phases de croissance et vérifier les enceintes représentées.                                                |
-| 10  | Palais des Goths, Saint-Pierre et galerie          | Ve siècle                                                                                  | Détail antique local, à raccorder à 1. Le contexte cadastral sert au calage, pas à représenter les rues du Ve siècle.                                                                       |
-| 11  | Porte et château Narbonnais avec fossés            | Fin du XIIe siècle                                                                         | Détail méridional du pouvoir comtal. Accès possibles et porte incertaine restent des hypothèses.                                                                                            |
-| 12  | Palais royal et secteur du Salin                   | Datation contradictoire : légende fin XIIe ; texte §23 après 1271, travaux achevés en 1287 | Candidat pour la fin du XIIIe, **à confirmer**. Ne pas l'intégrer automatiquement à la même époque que 11. Vérifier aussi les institutions voisines avant d'affecter tout le dessin à 1287. |
+| No. | Subject                                   | Usable dating                                                                                                  | Proposed use and precautions                                                                                                                                               |
+| --- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Toulouse at the end of Antiquity          | Late Antiquity; Early and Late Roman Empire remains distinguished                                              | General ancient reference plan, including the Gothic palace. Not a uniform third- or fourth-century snapshot. Separate remains from reconstructed street axes.             |
+| 2   | Saint-Sernin and its enclosure            | Twelfth century, fourteenth-century enlargement, Romanesque and late medieval buildings                        | Detail for medieval layers; extract phases and exclude later elements from an earlier-period rendering.                                                                    |
+| 3   | Saint-Pierre-des-Cuisines                 | 1050, circa 1100, 1150, 1180, Late Middle Ages                                                                 | Building-phase series. Do not combine all walls as though they coexisted.                                                                                                  |
+| 4   | Saint-Étienne canonical quarter           | Romanesque state, thirteenth-century extensions, later elements                                                | Twelfth-/thirteenth-century detail after phase separation; the drawing also includes later elements.                                                                       |
+| 5   | Daurade monastery                         | View circa 1760; phases in 1050, first and second halves of the twelfth century, Late Middle Ages              | Standalone fragment circa 1760. For medieval use, reuse only explicitly dated phases with verified context.                                                                |
+| 6   | Toulouse in the thirteenth century        | Thirteenth century, without a single year                                                                      | Best first general medieval plan. The legend distinguishes known and proposed locations; preserve that distinction.                                                        |
+| 7   | Ancient orientations in the parcel layout | Reconstructed 1550 cadastre                                                                                    | Analysis of ancient inheritance, not a map of ancient parcels. Thematic complement to figure 8.                                                                            |
+| 8   | Other parcel-layout orientations          | Reconstructed 1550 cadastre; layouts attributed to the Middle Ages                                             | Analysis of medieval inheritance. Potential combination with 7 after checking their shared background.                                                                     |
+| 9   | Formation of the Saint-Sernin borough     | Circa 1107, circa 1150, after 1150, extension after 1191; 1550 cadastral base                                  | Best basis for a northern Toulouse fragment in the twelfth century. Separate growth phases and check depicted enclosures.                                                  |
+| 10  | Gothic palace, Saint-Pierre and gallery   | Fifth century                                                                                                  | Local ancient detail to connect to 1. Cadastral context supports alignment, rather than representing fifth-century streets.                                                |
+| 11  | Narbonnais gate and castle with moats     | Late twelfth century                                                                                           | Southern detail of comital power. Possible access routes and the uncertain gate remain hypotheses.                                                                         |
+| 12  | Royal palace and Salin area               | Contradictory dating: caption says late twelfth century; paragraph 23 says after 1271, works completed in 1287 | Late-thirteenth-century candidate, **to be confirmed**. Do not automatically combine it with 11. Check neighbouring institutions before dating the entire drawing to 1287. |
 
-## Regroupement proposé
+## Proposed grouping
 
-Les cinq périodes de recherche évoquées dans l'article (400–1050, 1050–1190, 1190–1271, 1271–1350, 1350–1480) sont utiles comme catégories. Les illustrations seules ne permettent pas de produire cinq états complets de la ville.
+The five research periods discussed in the chapter (400–1050, 1050–1190, 1190–1271,
+1271–1350, 1350–1480) are useful categories. The illustrations alone cannot produce
+five complete city states.
 
-| Groupe proposé                      | Sources                                                   | Couverture et présentation                                                                                                                                                                  |
-| ----------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Antiquité tardive**               | 1 + détail 10                                             | Plan général de restitution et détail du Ve siècle. Afficher les phases/hypothèses ; ne pas inventer une année exacte pour tout le plan.                                                    |
-| **XIe–XIIe siècles**                | 9 + phases de 2, 3, 4, 5 ; 11 pour la fin du XIIe         | Ensemble discontinu : bourg Saint-Sernin, pôles religieux et château. Versions vers 1150 puis fin XIIe possibles seulement après extraction des phases et vérification de leur persistance. |
-| **XIIIe siècle**                    | 6 + phases compatibles de 2, 3, 4 ; 12 conditionnel       | Plan général enrichi de détails locaux. Le palais royal doit rester réservé à une variante de fin XIIIe, après résolution de sa datation.                                                   |
-| **XIVe–XVe siècles**                | Phases tardives de 2, 3, 5, éventuellement 4 après examen | Fragments locaux uniquement. « Bas Moyen Âge » ne fournit pas une année précise. Pas encore de couche générale autonome suffisamment documentée.                                            |
-| **1550 — héritages du parcellaire** | 7 + 8, contexte de 9                                      | Couche thématique séparée de la frise chronologique principale : les orientations renseignent des héritages, pas un état complet de 1550.                                                   |
-| **Vers 1760 — la Daurade**          | 5 entière                                                 | Petit fragment autonome, intéressant pour comparer l'ancien monastère avec le quartier actuel.                                                                                              |
+| Proposed group                       | Sources                                                   | Coverage and presentation                                                                                                                                            |
+| ------------------------------------ | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Late Antiquity**                   | 1 + detail 10                                             | General reconstruction and fifth-century detail. Show phases/hypotheses; do not invent an exact year for the whole plan.                                             |
+| **Eleventh–twelfth centuries**       | 9 + phases of 2, 3, 4, 5; 11 for the late twelfth century | Discontinuous set: Saint-Sernin borough, religious centres and castle. Circa 1150 and late-twelfth-century versions require phase extraction and persistence checks. |
+| **Thirteenth century**               | 6 + compatible phases of 2, 3, 4; 12 conditionally        | General plan enriched with local details. Reserve the royal palace for a late-thirteenth-century variant after resolving its date.                                   |
+| **Fourteenth–fifteenth centuries**   | Late phases of 2, 3, 5, possibly 4 after inspection       | Local fragments only. “Late Middle Ages” supplies no precise year. No sufficiently documented standalone general layer yet.                                          |
+| **1550 — parcel-layout inheritance** | 7 + 8, context from 9                                     | Thematic layer separate from the main timeline: orientations describe inheritance, not a complete 1550 state.                                                        |
+| **Circa 1760 — Daurade**             | Complete 5                                                | Small standalone fragment for comparing the former monastery with the current quarter.                                                                               |
 
-## Comment assembler les fragments
+## Preparation method
 
-1. **Identifier le contenu historique.** Conserver les originaux ; annoter séparément bâtiments, voies, enceintes, phases et zones hypothétiques. Extraire les légendes et le fond cadastral du rendu historique, tout en les conservant pour le contrôle. Une simple sélection automatique par couleur ne suffit pas : les couleurs changent de sens entre dessins et les traits noirs traversent plusieurs phases.
-2. **Caler chaque document dans un même repère.** Utiliser les emprises au sol des édifices conservés et les limites cadastrales identifiables. Commencer par une transformation affine ; tester une transformation plus complexe seulement si les résidus le justifient. Les cartes 7 et 8 ont les mêmes dimensions et un fond apparent commun : mesurer leur correspondance avant de leur appliquer un calage commun. Ne pas prendre le plan déformé de 1631 comme référence.
-3. **Contrôler le résultat.** Pour les plans de quartier, chercher 4 à 8 points répartis sur l'emprise et réserver des points indépendants. Pour un bâtiment isolé, vérifier les angles de son emprise sur un relevé fiable. Mesurer l'erreur en mètres ; accepter une précision adaptée à la résolution et au degré de restitution. Comparer séparément l'intérieur et les bords des fragments.
-4. **Créer des objets datés et des masques de couverture.** GeoJSON pour les phases vectorisées, avec source, intervalle de date, degré de certitude et identifiant de figure ; raster masqué pour les parties conservées en image. Les intervalles décrivent les preuves, pas des dates de construction inventées. Une zone sans information reste transparente. Ne pas faire croire que l'absence d'un bâtiment sur un schéma prouve son absence historique.
-5. **Composer par période.** Le plan général fournit le contexte ; les détails validés prennent la priorité dans leur propre masque. Résoudre les contradictions avant de fusionner, sans forcer un raccord entre contours incompatibles. Produire les tuiles communes après validation. MapLibre accepte des fragments transparents dans un même ensemble visible et permet aussi des détails vectoriels à fort zoom.
-6. **Adapter la frise.** Étiquettes de période (« XIIIe siècle », « vers 1150 »), mention « Reconstruction » et indication de couverture. Les transitions graphiques entre périodes ne doivent pas simuler une évolution documentée année par année. Garder chaque illustration originale consultable avec sa légende.
+1. **Identify historical content.** Retain originals; separately annotate buildings,
+   streets, enclosures, phases and hypothetical areas. Extract legends and cadastral
+   backgrounds from the historical rendering while retaining them for checking.
+   Automatic colour selection alone is insufficient: colours change meaning between
+   drawings and black lines span several phases.
+2. **Align each document in a shared reference frame.** Use ground footprints of
+   surviving buildings and identifiable cadastral boundaries. Start with an affine
+   transformation; test a more complex one only if residuals justify it. Maps 7 and 8
+   have matching dimensions and an apparently shared background: measure correspondence
+   before applying shared alignment. Do not use the distorted 1631 plan as reference.
+3. **Check results.** For neighbourhood plans, find 4–8 points distributed across the
+   extent and reserve independent points. For an isolated building, check footprint
+   corners against a reliable survey. Measure errors in metres; accept accuracy suited
+   to resolution and reconstruction uncertainty. Compare fragment interiors and edges
+   separately.
+4. **Create dated objects and coverage masks.** Use GeoJSON for vectorized phases,
+   with source, date interval, certainty and figure identifier; use masked rasters for
+   retained imagery. Intervals describe evidence, not invented construction dates.
+   Areas without information stay transparent. A building's absence from a diagram
+   must not imply proof of its historical absence.
+5. **Compose by period.** The general plan supplies context; validated details take
+   priority within their own masks. Resolve contradictions before merging, without
+   forcing incompatible outlines together. Generate shared tiles after validation.
+   MapLibre supports transparent fragments in a shared visible set and high-zoom vector details.
+6. **Adapt the timeline.** Use period labels (“XIIIe siècle”, “vers 1150”), a
+   “Reconstruction” label and coverage indication. Graphical transitions must not
+   simulate documented year-by-year evolution. Keep each original illustration
+   accessible with its legend.
 
-## Ordre de réalisation recommandé
+## Recommended implementation order
 
-1. **XIIIe siècle, figure 6 seule** : plus grand apport immédiat, couverture générale, calage et masquage relativement simples. C'est une estimation avant mesure des points.
-2. **Antiquité tardive, 1 + 10** : changement historique majeur ; travail supplémentaire de séparation entre vestiges, restitution et fond de référence.
-3. **Bourg Saint-Sernin au XIIe siècle, 9 + phases de 2/3** : très intéressant pour observer la croissance ; extraction des phases plus exigeante.
-4. **Secteur Narbonnais/Salin, 11 puis 12** : comparaison du pouvoir comtal et royal, sous réserve de la datation de 12 et d'un bon calage des petits fragments.
-5. **Saint-Étienne et Daurade** : enrichissements localisés ; Daurade vers 1760 possible comme fragment distinct.
-6. **Analyse du parcellaire de 1550, 7 + 8** : intéressante pour expliquer les traces anciennes, mais à présenter comme thème explicatif.
+1. **Thirteenth century, figure 6 alone**: greatest immediate value, general coverage,
+   relatively simple alignment and masking. This is an estimate before measuring points.
+2. **Late Antiquity, 1 + 10**: major historical change; additional separation of remains,
+   reconstruction and reference background.
+3. **Twelfth-century Saint-Sernin borough, 9 + phases of 2/3**: useful for observing
+   growth; more demanding phase extraction.
+4. **Narbonnais/Salin area, 11 then 12**: compare comital and royal power, subject to
+   dating 12 and aligning small fragments well.
+5. **Saint-Étienne and Daurade**: local enrichment; Daurade circa 1760 can be a separate fragment.
+6. **1550 parcel analysis, 7 + 8**: useful for explaining ancient traces, presented
+   as an explanatory theme.
 
-## Droits et qualité des originaux
+## Rights and original-image quality
 
-Le pied de page précise que la licence OpenEdition Books porte sur le texte seul ; les illustrations sont tous droits réservés sauf mention contraire. Aucune licence distincte autorisant leur publication n'a été relevée pour ces 12 dessins. **La collecte locale ne vaut pas autorisation de les publier dans le site**, ni de publier des adaptations tracées à partir de ces dessins. Avant intégration publique, obtenir l'autorisation des ayants droit et, idéalement, les fichiers vectoriels ou données de calage du programme de recherche.
+The footer states that the OpenEdition Books license covers text only; illustrations
+are all rights reserved unless stated otherwise. No separate license permitting
+publication was identified for these 12 drawings. **Local collection does not authorize
+publishing them on the site**, or publishing adaptations traced from them. Before
+public integration, obtain permission from rights holders and, ideally, vector files
+or alignment data from the research programme.
 
-Les JPEG disponibles vont d'environ 900 pixels pour certains détails à 2 000–2 660 pixels pour les plans généraux. Ils permettent d'évaluer le projet, mais ne garantissent pas une lecture fine à tous les niveaux de zoom. Aucun système de coordonnées ni jeu de points de contrôle n'est fourni dans cette page. Des originaux vectoriels amélioreraient la précision et éviteraient d'agrandir artificiellement les images.
+Available JPEGs range from about 900 pixels for some details to 2,000–2,660 pixels
+for general plans. They support project evaluation but do not guarantee fine reading
+at every zoom. The page supplies no coordinate system or control points. Vector
+originals would improve precision and avoid artificial image enlargement.
 
-La galerie locale et le catalogue sont des documents de recherche. À la demande
-de l'utilisateur, la **figure 6 est désormais intégrée au site** sous
-le libellé « XIIIe s. », avec attribution et liens vers la source et le dessin
-complet. Le repère numérique 1250 sert uniquement au
-classement sur la frise et dans les liens ; ce n'est pas une datation précise.
+The local gallery and catalogue are research documents. At the user's request,
+**figure 6 is now integrated into the site** under “XIIIe s.”, with attribution
+and links to the source and complete drawing. The numeric 1250 anchor serves only
+timeline ordering and links; it is not a precise date.
 
-Le calage affine utilise trois repères conservés (Saint-Sernin, portail ouest de
-Saint-Étienne, nef de la Dalbade). Saint-Pierre-des-Cuisines est réservé au
-contrôle indépendant : écart de 3,2 m, sans garantie à l'échelle de toute la ville.
-Configuration reproductible : `data/openedition-13c-control-points.json` ;
-préparation explicite : `scripts/build-openedition-13c.py`. Le rendu conserve
-l’intégralité du dessin source, avec sa légende originale et les quartiers hors
-de l’enceinte, sans découpage ni zone transparente.
-Le fichier WebP préparé pèse environ 1,1 Mo, l'original environ 1,33 Mo.
+Affine alignment uses three surviving landmarks (Saint-Sernin, Saint-Étienne west
+portal, Dalbade nave). Saint-Pierre-des-Cuisines is reserved for independent checking:
+3.2 m error, without a citywide guarantee.
+Reproducible configuration: `data/openedition-13c-control-points.json`;
+explicit preparation: `scripts/build-openedition-13c.py`. Rendering preserves
+the complete source drawing, original legend and quarters outside the enclosure,
+without cropping or transparent areas. The prepared WebP is about 1.1 MB;
+the original is about 1.33 MB.
 
-### Couche Antiquité tardive — figure 1, 1er octobre 2026
+### Late Antiquity layer — figure 1, 2026-10-01
 
-La figure 1 est intégrée localement avec le libellé compact « Ve » sur la frise
-et dans le choix des époques ; son contexte reste « Antiquité tardive ».
-Le repère numérique 450 sert uniquement au classement sur la frise et aux liens ;
-la source ne date pas le dessin d’une année précise. Le plan conserve son étendue
-complète et sa légende, qui distingue vestiges du Haut Empire, du Bas Empire et
-propositions de restitution des axes antiques. Les églises et le fond parcellaire
-servent de repères et ne décrivent pas tous un état de la fin de l’Antiquité.
+Figure 1 is integrated locally with the compact “Ve” timeline and epoch-selection
+label; its context remains “Antiquité tardive”. The numeric 450 anchor serves only
+timeline ordering and links; the source does not date the drawing to a precise year.
+The plan preserves its full extent and legend, distinguishing Early Empire remains,
+Late Empire remains and proposed ancient street-axis reconstructions. Churches
+and the parcel background provide references and do not all depict a Late Antiquity state.
 
-Le calage affine utilise les empreintes de référence de Saint-Sernin, Saint-Étienne
-et la Dalbade, rapprochées de la figure 6. Le contrôle indépendant sur
-Saint-Pierre-des-Cuisines donne 4,4 m, sans garantie de précision ailleurs.
-Configuration : `data/openedition-antiquite-control-points.json` ; préparation
-explicite : `scripts/build-openedition-antiquite.py`. Le SHA-256 de l’original est
-vérifié avant la génération. Aucune publication n’a été effectuée.
+Affine alignment uses reference footprints of Saint-Sernin, Saint-Étienne and Dalbade,
+matched to figure 6. The independent Saint-Pierre-des-Cuisines check gives 4.4 m,
+without an accuracy guarantee elsewhere.
+Configuration: `data/openedition-antiquite-control-points.json`; explicit preparation:
+`scripts/build-openedition-antiquite.py`. The original's SHA-256 is checked before
+generation. No publication was performed.
 
-### Couche 1550 — assemblage des figures 7 et 8, 1er octobre 2026
+### 1550 layer — assembly of figures 7 and 8, 2026-10-01
 
-La couche « 1550 · Héritages du parcellaire » est intégrée localement au choix
-des époques et à la frise. Elle conserve toute la figure 8 et ajoute les limites
-parcellaires rouges de la figure 7. Le fond archéologique et les annotations
-propres à la figure 7 restent consultables dans son original ; ils ne sont pas
-superposés au fond médiéval. Une explication des deux couleurs est ajoutée sous
-le dessin, sans découper le plan ni sa légende.
+The “1550 · Héritages du parcellaire” layer is integrated locally into epoch selection
+and the timeline. It retains all of figure 8 and adds figure 7's red parcel boundaries.
+Figure 7's archaeological background and specific annotations remain accessible in
+its original; they are not overlaid on the medieval background. An explanation of
+both colours is added below the drawing without cropping the plan or legend.
 
-Les deux scans mesurent 1999 × 2482 pixels. Une comparaison locale des motifs
-des trois églises sur les canaux achromatiques donne les translations (-5, -24),
-(-6, -23) et (-6, -24) pixels, avec des corrélations de 0,91 à 0,95.
-La translation moyenne de la figure 7 vers la figure 8 est (-5,67, -23,67) pixels ;
-l’écart maximal sur ces trois repères est de 0,75 pixel. Ce contrôle ne prouve
-pas une concordance parfaite sur tout le plan.
+Both scans are 1999 × 2482 pixels. Local comparison of the three churches' patterns
+in achromatic channels gives translations (-5, -24), (-6, -23) and (-6, -24) pixels,
+with correlations of 0.91–0.95. The mean translation from figure 7 to figure 8 is
+(-5.67, -23.67) pixels; maximum deviation across these three landmarks is 0.75 pixel.
+This does not prove perfect agreement throughout the plan.
 
-Le calage affine de la figure 8 utilise les mêmes repères géographiques que la
-figure 6. Saint-Pierre-des-Cuisines, non utilisé pour l’ajustement, donne un écart
-de 1,8 m. L’annotation est manuelle ; ce chiffre ne garantit pas la précision
-ailleurs. 1550 date la base cadastrale restituée, pas tous les objets représentés.
-La frise montre une transition graphique, pas une reconstruction historique des
-années intermédiaires.
+Figure 8's affine alignment uses the same geographic landmarks as figure 6.
+Saint-Pierre-des-Cuisines, excluded from fitting, gives a 1.8 m error. Annotation
+is manual; this figure does not guarantee accuracy elsewhere. 1550 dates the
+reconstructed cadastral base, not every depicted object. The timeline shows a
+graphical transition, not a historical reconstruction of intermediate years.
 
-Configuration : `data/openedition-1550-control-points.json` ; génération explicite :
-`scripts/build-openedition-1550.py`. Les empreintes SHA-256 des originaux sont
-vérifiées avant la génération. Les ressources sont dans `public/openedition-1550/`.
-Aucune publication n’a été effectuée pour cette intégration.
+Configuration: `data/openedition-1550-control-points.json`; explicit generation:
+`scripts/build-openedition-1550.py`. Original SHA-256 checksums are verified before
+generation. Resources are in `public/openedition-1550/`. No publication was performed
+for this integration.
 
-### Vérification de la provenance et des droits, 30 septembre 2026
+### Provenance and rights verification, 2026-09-30
 
-La mention « tous droits réservés » n'identifie pas OpenEdition comme titulaire des droits. Les légendes attribuent les dessins à **F. Callède** ; le crédit intégré au plan général n°6 mentionne F. Callède, Inrap et le PCR « Toulouse au Moyen Âge ». La [notice bibliographique de la BnF](https://catalogue.bnf.fr/ark:/12148/cb42328162f) donne le nom **Fabien Callède** parmi les auteurs de la synthèse de 2010. L'[atlas officiel de l'Inrap](https://multimedia.inrap.fr/atlas/Grand-Toulouse/sites/3237/Le-Barricou) crédite aussi Fabien Callède pour d'autres dessins. Ces éléments identifient la provenance et le créateur probable, mais ne prouvent pas la répartition actuelle des droits patrimoniaux entre dessinateur, institution et éditeurs.
+“All rights reserved” does not identify OpenEdition as the rights holder. Captions
+credit **F. Callède**; the credit embedded in general plan 6 mentions F. Callède,
+Inrap and the PCR “Toulouse au Moyen Âge”.
+The [BnF bibliographic record](https://catalogue.bnf.fr/ark:/12148/cb42328162f)
+names **Fabien Callède** among the 2010 synthesis authors.
+The [official Inrap atlas](https://multimedia.inrap.fr/atlas/Grand-Toulouse/sites/3237/Le-Barricou)
+also credits Fabien Callède for other drawings. These establish provenance and the
+probable creator but do not prove the current allocation of economic rights between
+the illustrator, institution and publishers.
 
-Les [recommandations des Éditions de la Sorbonne](https://www.editionsdelasorbonne.fr/asset_ref/980f4a2574399b4f2a3d1665fff748924b9c81ce3ae7367e/recommandations_comite_2025.pdf) distinguent explicitement les personnes et organismes titulaires de droits sur les illustrations de l'éditeur qui les publie. Il serait donc incorrect de conclure que les cartes appartiennent à la plateforme ou même automatiquement à l'éditeur du chapitre.
+The [Éditions de la Sorbonne recommendations](https://www.editionsdelasorbonne.fr/asset_ref/980f4a2574399b4f2a3d1665fff748924b9c81ce3ae7367e/recommandations_comite_2025.pdf)
+explicitly distinguish individuals and organizations holding illustration rights from
+the publisher. It would therefore be incorrect to conclude that the platform, or
+automatically the chapter publisher, owns the maps.
 
-Aucune autorisation ouverte spécifique à ces 12 dessins n'a été trouvée dans les sources consultées. Leur sujet antique ou médiéval ne les transforme pas en documents anciens : ce sont des dessins contemporains. Le titulaire habilité à autoriser notre usage reste **non confirmé**, et non « OpenEdition » par défaut. L'attribution et les liens ajoutés au site ne constituent pas une licence. L'utilisateur a demandé la publication le 30 septembre 2026 après cette vérification ; cette demande n'établit pas une autorisation des ayants droit.
+No open permission specific to these 12 drawings was found in consulted sources.
+Their ancient or medieval subject does not make them old documents: these are
+contemporary drawings. The holder authorized to permit our use remains **unconfirmed**,
+rather than “OpenEdition” by default. Attribution and site links do not constitute
+a license. The user requested publication on 2026-09-30 after this verification;
+that request does not establish rights-holder permission.
 
-Pour lever cette incertitude, contacter l'auteur du chapitre ou l'Inrap en citant Fabien Callède et le PCR, et demander qui peut autoriser la reproduction ainsi que les adaptations cartographiques : géoréférencement, découpage, tuilage et superposition sur un site public. Les [Éditions de la Sorbonne proposent un contact pour les demandes de reproduction](https://www.editionsdelasorbonne.fr/store/page/90/foreign-rights) : marie.brunet@univ-paris1.fr ; elles peuvent confirmer leur périmètre de droits ou orienter vers le bon interlocuteur. Aucun message n'a été envoyé.
+To resolve this uncertainty, contact the chapter author or Inrap, citing Fabien
+Callède and the PCR, and ask who can authorize reproduction and map adaptations:
+georeferencing, cropping, tiling and overlay on a public website.
+[Éditions de la Sorbonne provides a reproduction-request contact](https://www.editionsdelasorbonne.fr/store/page/90/foreign-rights):
+marie.brunet@univ-paris1.fr; they can confirm their rights scope or refer to the
+appropriate contact. No message has been sent.

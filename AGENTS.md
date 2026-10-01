@@ -49,7 +49,8 @@ GitHub Pages publication is authorized automatically on every push to `main` thr
 - Format with Oxfmt and lint with Oxlint. Fix the underlying issue; use a narrow, explained suppression only for an intentional exception.
 - Use PumpRoom-UI as the DevEx reference: Bun, Oxfmt, Oxlint with the official React Hooks plugin, and Vitest. Keep effect dependencies, render purity, refs and state mutation checks enabled. Do not copy its Docker deployment or release automation into this static site.
 - Use `bun run test` for Vitest; `bun test` selects Bun's native runner. `start` and `local` are aliases for `dev`.
-- Keep the user interface and accessibility labels in French; use English code comments.
+- Use English as the primary development language for all project documentation (including README), code comments and commit messages. Preserve original source titles, proper names and quoted UI labels where needed.
+- Keep the website interface, user-facing content and accessibility labels in French for now. Additional interface languages will be added later.
 - Keep unit tests under `tests/unit/*.test.ts` and Playwright scenarios under `tests/*.spec.ts`.
 - Do not edit generated raster assets as part of routine formatting or web builds. Asset generation is an explicit separate operation.
 - GitHub Actions runs `bun run check` and builds, without E2E tests or browser installation. The Pages workflow deploys on pushes to `main`. Local development commands and dependency installation must never publish the site.

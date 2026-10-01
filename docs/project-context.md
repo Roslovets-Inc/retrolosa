@@ -13,6 +13,12 @@ the local directory name are independent. The app is a static French-language
 map of Toulouse, built with React, TypeScript, Vite, MapLibre, Radix and PMTiles.
 There is no application backend or database to migrate.
 
+English is the primary development language for project documentation, including
+README, code comments and commit messages. The website interface, user-facing
+content and accessibility labels remain in French for now; additional interface
+languages are planned for later. Keep original source titles, proper names and
+quoted UI labels when needed for identification.
+
 The catalogue covers twelve historical epochs: 450, 1250, 1550, 1631, 1680,
 1777, 1830, 1848, 1860, 1875, 1904 and 1954, followed by the current basemap.
 Some dates represent modern scholarly reconstructions, not contemporary surveys.

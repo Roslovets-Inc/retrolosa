@@ -1,12 +1,12 @@
-# Licence et droits des sources
+# License and source rights
 
-## Code et documentation du projet
+## Project code and documentation
 
-Copyright (C) 2026 Pavel Roslovets et les contributeurs de Rétrolosa.
+Copyright (C) 2026 Pavel Roslovets and the Rétrolosa contributors.
 
-Les contributions originales au code de l’application, aux scripts, aux tests, à la
-configuration et à la documentation sont sous **AGPL-3.0-or-later**, sauf indication
-contraire explicite. Le texte intégral, sans modification, figure dans [LICENSE](../LICENSE).
+Original contributions to application code, scripts, tests, configuration and documentation
+are licensed under **AGPL-3.0-or-later**, unless explicitly stated otherwise.
+The full, unmodified text is in [LICENSE](../LICENSE).
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -21,47 +21,43 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-Cette licence permet les usages privés, publics, pédagogiques et commerciaux.
-Elle impose notamment de conserver les mentions de droits et de licence,
-d’indiquer les modifications et de fournir le code source correspondant lors de
-la distribution d’une version couverte. Sa section 13 impose aussi qu’une version
-modifiée accessible par le réseau propose explicitement aux utilisateurs un accès
-gratuit à son code source correspondant. Le choix vise à préserver les libertés des
-utilisateurs et le partage des améliorations de ce projet d’intérêt public.
+This license permits private, public, educational and commercial use. Its requirements
+include retaining copyright and license notices, identifying modifications and providing
+corresponding source code when distributing a covered version. Section 13 also requires
+a modified version accessible over a network to explicitly offer users free access to
+its corresponding source code. This choice aims to preserve users' freedoms and the
+sharing of improvements to this public-interest project.
 
-Le dépôt source est <https://github.com/roslovets/toulouse-in-time>. Pour une version
-publiée, fournir le code correspondant à cette version, y compris ses modifications
-et les scripts nécessaires à sa compilation ; un lien vers une version différente
-ou vers le dépôt d’origine seul ne suffit pas pour une version dérivée.
+The source repository is <https://github.com/roslovets/toulouse-in-time>. For a published
+version, provide the source corresponding to that version, including its modifications
+and the scripts needed to build it; a link to another version or only to the original
+repository is insufficient for a derived version.
 
-Les nouvelles contributions originales destinées à être intégrées doivent être
-proposées sous cette même licence, sans transfert de propriété intellectuelle.
-Les permissions déjà accordées pour une version antérieure restent applicables
-à cette version ; cette déclaration ne les révoque pas.
+New original contributions intended for integration must be offered under the same
+license, without transferring intellectual property ownership. Permissions already
+granted for an earlier version remain applicable to that version; this statement
+does not revoke them.
 
-## Cartes, données et autres éléments tiers
+## Maps, data and other third-party materials
 
-La licence du projet ne change pas les droits des tiers. Les éléments suivants
-ne sont pas couverts par notre déclaration AGPL :
+The project license does not change third-party rights. Our AGPL declaration does
+not cover the following materials:
 
-- Les cartes et photographies sources, leurs scans, tuiles, mosaïques, aperçus et
-  autres adaptations, notamment les assets cartographiques de `public/`.
-- Les données externes, extraits et catalogues de sources, même lorsqu’ils sont
-  intégrés à un fichier du projet ou enregistrés dans `data/`.
-- Les polices, icônes et bibliothèques tierces, qui conservent leurs propres licences.
+- Source maps and photographs, their scans, tiles, mosaics, overviews and other
+  adaptations, including map assets in `public/`.
+- External data, extracts and source catalogues, even when incorporated into a
+  project file or stored in `data/`.
+- Third-party fonts, icons and libraries, which retain their own licenses.
 
-Le géoréférencement ou le tuilage d’une carte ne confère pas au projet le droit de
-relicencier l’image originale. Les faits historiques et valeurs démographiques ne
-deviennent pas soumis à l’AGPL du seul fait de leur affichage ; les droits éventuels
-sur les bases de données et leurs conditions de réutilisation restent distincts.
+Georeferencing or tiling a map does not grant the project the right to relicense the
+original image. Historical facts and demographic values do not become subject to the
+AGPL merely because they are displayed; any database rights and reuse terms remain separate.
 
-Consulter les attributions et la provenance dans [sources.md](sources.md),
-[map-backlog.md](map-backlog.md), [population.md](population.md) et les fichiers
-de métadonnées de `data/`. Les incertitudes concernant les dessins contemporains
-sont détaillées dans [openedition-medieval-layers.md](openedition-medieval-layers.md).
-Une mention de source n’est pas une licence et les droits non confirmés ne doivent
-pas être présentés comme ouverts. La présence d’un asset dans le dépôt ne constitue
-pas une autorisation générale de le republier.
+See attribution and provenance in [sources.md](sources.md), [map-backlog.md](map-backlog.md),
+[population.md](population.md) and the metadata files in `data/`. Uncertainties about
+contemporary drawings are detailed in [openedition-medieval-layers.md](openedition-medieval-layers.md).
+A source credit is not a license, and unconfirmed rights must not be presented as open.
+An asset's presence in the repository does not constitute general permission to republish it.
 
-Le texte officiel et les explications de la Free Software Foundation sont disponibles
-sur la [page de l’AGPL](https://www.gnu.org/licenses/agpl-3.0.html).
+The official text and Free Software Foundation explanations are available on the
+[AGPL page](https://www.gnu.org/licenses/agpl-3.0.html).
