@@ -12,6 +12,7 @@ import { getEpoch } from "./epochs/catalog";
 import type { EpochId as Year } from "./epochs/catalog";
 import { Coordinates } from "./map/Coordinates";
 import { useMaps } from "./map/useMaps";
+import { registerAppWorker, useOnline } from "./pwa";
 import { useTheme } from "./theme";
 import { Button, TooltipProvider } from "./ui";
 import { useLocation } from "./useLocation";
@@ -33,6 +34,7 @@ const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
 const mapCredit = (value: Year) => getEpoch(value).credit;
 const dateLabel = (value: number) => labelDate(value, TODAY);
 function App() {
+  const online = useOnline();
   const { selection: themePreference, theme } = useTheme();
   const [initial] = useState(() => parseViewState(location.hash, TODAY));
   const [view, dispatch] = useReducer(viewReducer, initial.state);
@@ -126,6 +128,11 @@ function App() {
         label={dateLabel(populationYear)}
         onSources={() => setSources(true)}
       />
+      {!online && (
+        <div className="offline-notice" role="status">
+          Vous êtes hors connexion. Reconnectez-vous pour charger les cartes.
+        </div>
+      )}
       <MapTools
         opacity={opacity}
         hasEpochs={enabled.length > 0}
@@ -218,6 +225,7 @@ function App() {
     </main>
   );
 }
+registerAppWorker();
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <TooltipProvider delayDuration={320} skipDelayDuration={120}>

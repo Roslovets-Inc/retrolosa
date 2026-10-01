@@ -1,9 +1,10 @@
-import { MapPin, Monitor, Sun, Moon, Check, Share2, Info } from "lucide-react";
+import { MapPin, Contrast, Sun, Moon, Check, Share2, Info } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 
 import { setThemePreference } from "../theme";
 import type { Theme, ThemePreference } from "../theme";
 import { Button, Popover, Dialog } from "../ui";
+import { InstallApp } from "./InstallApp";
 const themeLabels = { system: "système", light: "clair", dark: "sombre" };
 const nextTheme: Record<ThemePreference, ThemePreference> = {
   system: "light",
@@ -85,7 +86,7 @@ export function Header({
             onClick={() => setThemePreference(nextTheme[themePreference])}
           >
             {themePreference === "system" ? (
-              <Monitor size={18} aria-hidden="true" />
+              <Contrast size={18} aria-hidden="true" />
             ) : themePreference === "light" ? (
               <Sun size={18} aria-hidden="true" />
             ) : (
@@ -106,7 +107,7 @@ export function Header({
             trigger={
               <Button className="places-button" data-tooltip="Aller à un lieu">
                 <MapPin size={17} />
-                Lieux
+                <span className="places-label">Lieux</span>
               </Button>
             }
           >
@@ -141,6 +142,7 @@ export function Header({
               Lien copié
             </span>
           )}
+          <InstallApp />
           <Button
             className="source-button header-icon"
             onClick={onSources}

@@ -13,6 +13,17 @@ the local directory name are independent. The app is a static French-language
 map of Toulouse, built with React, TypeScript, Vite, MapLibre, Radix and PMTiles.
 There is no application backend or database to migrate.
 
+The app is also installable on iPhone/iPad and Android. `pwa.config.ts` generates
+deployment-scoped manifest/service-worker files; `src/pwa.ts` and
+`src/components/InstallApp.tsx` handle registration and the French installation
+guide. Icons in `public/icons/` derive from the existing Occitan-cross brand mark.
+The production worker caches only the application shell, fonts and icons; maps
+still need Internet access. It is disabled in development and never forces a
+reload during exploration. Run `bun run build` followed by
+`bun run test:e2e --config playwright.pwa.config.ts` for production-worker checks;
+retain `VITE_BASE_PATH` for both when testing a prefixed deployment. Physical
+iPhone/Android installation remains a separate verification step.
+
 English is the primary development language for project documentation, including
 README, code comments and commit messages. The website interface, user-facing
 content and accessibility labels remain in French for now; additional interface

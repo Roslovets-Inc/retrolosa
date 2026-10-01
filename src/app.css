@@ -1012,3 +1012,254 @@ footer {
     sans-serif;
   overflow-wrap: anywhere;
 }
+
+/* Keep map controls clear of phone cutouts and the home indicator in standalone mode. */
+:root {
+  --header-height: calc(46px + env(safe-area-inset-top, 0px));
+  --footer-height: calc(28px + env(safe-area-inset-bottom, 0px));
+}
+html,
+body {
+  overscroll-behavior: none;
+}
+.masthead {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+/* iOS black-translucent status bars use light text, including with the light app theme. */
+.masthead::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: #2f4b40;
+  pointer-events: none;
+}
+:root[data-theme="dark"] .masthead::before {
+  background: var(--canvas);
+}
+footer {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: max(10px, env(safe-area-inset-left, 0px));
+  padding-right: max(10px, env(safe-area-inset-right, 0px));
+}
+.zoom-controls,
+.opacity-controls {
+  right: max(14px, env(safe-area-inset-right, 0px));
+}
+.old-label,
+.population-counter {
+  left: max(14px, env(safe-area-inset-left, 0px));
+}
+.new-label,
+.location-notice {
+  right: calc(max(14px, env(safe-area-inset-right, 0px)) + 56px);
+}
+.control-dock {
+  max-width: calc(100% - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+}
+.offline-notice {
+  position: absolute;
+  z-index: 5;
+  top: calc(var(--header-height) + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(440px, calc(100% - 140px));
+  padding: 10px 14px;
+  border: 1px solid var(--notice-border);
+  border-radius: 10px;
+  background: var(--notice);
+  box-shadow: var(--shadow-small);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.ui-dialog.install-modal {
+  width: min(440px, calc(100vw - 32px));
+  padding: 30px;
+  border-radius: 24px;
+}
+.install-hero {
+  text-align: center;
+}
+.install-hero img {
+  display: block;
+  margin: 0 auto 18px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgb(24 43 36 / 18%);
+}
+.install-eyebrow {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+.install-modal h2 {
+  margin: 10px 0 12px;
+  font:
+    500 29px/1.18 "Literata",
+    Georgia,
+    serif;
+  letter-spacing: -0.025em;
+}
+.install-hero p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.install-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  margin: 18px 0 22px;
+  font-size: 11px;
+  color: var(--primary);
+}
+.install-benefits span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.install-platforms {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--subtle);
+}
+.install-platforms button {
+  flex: 1;
+  min-height: 42px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+.install-platforms button[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.install-steps {
+  display: grid;
+  gap: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 22px 0;
+}
+.install-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.install-steps li > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px;
+  height: 26px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+.install-steps p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.install-steps svg {
+  display: inline;
+  vertical-align: text-bottom;
+  color: var(--primary);
+}
+.install-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+.install-action:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+.install-desktop,
+.install-network,
+.install-message {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.install-network {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.install-network svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.install-message {
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--subtle);
+  color: var(--ink);
+}
+@media (max-width: 600px) {
+  :root {
+    --header-height: calc(44px + env(safe-area-inset-top, 0px));
+    --footer-height: calc(32px + env(safe-area-inset-bottom, 0px));
+  }
+  .masthead {
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
+  }
+  .header-right .header-icon {
+    min-width: 32px;
+  }
+  .zoom-controls,
+  .opacity-controls {
+    right: max(10px, env(safe-area-inset-right, 0px));
+  }
+  .old-label,
+  .population-counter {
+    left: max(10px, env(safe-area-inset-left, 0px));
+  }
+  .control-dock {
+    width: calc(100% - 20px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  }
+  .offline-notice {
+    top: auto;
+    bottom: calc(var(--footer-height) + 166px);
+    max-width: calc(100% - 24px);
+    width: max-content;
+    font-size: 11px;
+  }
+  .install-modal {
+    padding: 26px 22px;
+    max-height: calc(
+      100dvh - 32px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+    );
+  }
+}
+@media (max-width: 380px) {
+  .places-label {
+    display: none;
+  }
+}
+@media (max-height: 500px) {
+  .opacity-controls {
+    right: calc(max(14px, env(safe-area-inset-right, 0px)) + 56px);
+  }
+}

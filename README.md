@@ -111,7 +111,39 @@ a minimum release age of five days. Agent rules and Semantic / Conventional Comm
 defined in [AGENTS.md](AGENTS.md). Sites publication requires an explicit request for
 the changes concerned.
 
-## Maps and usage
+## Installing on a phone
+
+Rétrolosa is an installable progressive web app. Open **Installer Rétrolosa** in
+the header for the French installation guide. On iPhone/iPad, use Safari's Share
+menu, choose **Sur l’écran d’accueil**, and keep **Ouvrir comme app web** enabled
+when offered. On Android, use the app's installation button when available, or
+Chrome's **Installer l’application / Ajouter à l’écran d’accueil** menu.
+The installed app launches in its own window with the existing Occitan-cross icon.
+Installation requires HTTPS (localhost is allowed for development).
+
+The production service worker caches the application shell, bundled code, fonts
+and icons. After the first successful online load, the interface can reopen offline;
+maps still need Internet access. Historical rasters, original scans, PMTiles archives
+and external map services are not stored by the service worker. An offline notice
+explains this limitation. Updates activate after existing app windows close, without
+forcing a reload during exploration. Service workers are disabled in development.
+
+The manifest, worker scope and icon URLs follow `VITE_BASE_PATH`. After a build,
+test the production app with:
+
+```sh
+bun run build
+bun run test:e2e --config playwright.pwa.config.ts
+```
+
+For a prefixed build, keep `VITE_BASE_PATH` set for both commands. Tests simulate
+map providers and check the production worker's offline shell. Desktop browser tests
+do not replace installation checks on a physical iPhone and Android phone.
+App icons are committed; explicitly regenerate them from `public/favicon.svg` with
+`bun scripts/build-app-icons.mjs` (requires Playwright's browser). Web builds never
+regenerate icons or map imagery.
+
+## Exploring maps
 
 Continuous timeline, curtain, transparent overlay and current view. Unchecked epochs
 are skipped by the timeline. Holding the eye button shows current streets with a faint

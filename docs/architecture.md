@@ -131,6 +131,49 @@ Documentation and code comments use English. The website interface, user-facing
 content and accessibility labels remain in French; additional interface languages
 are planned for later.
 
+## Installed application
+
+`pwa.config.ts` is a Vite plugin that serves the manifest in development and emits
+the manifest and service worker during production builds. Identity, launch URL,
+scope and icon addresses follow the configured deployment base. The cache revision
+includes emitted shell contents, manifest and static fonts/icons. The worker
+precaches only HTML, bundled JavaScript/CSS, local fonts, theme initialization and
+icons; it never caches historical imagery, originals or external map providers.
+Lazy modules stay deferred in React, but their production files are precached so
+the sources dialog can also open after an offline launch.
+Navigation tries the network and falls back to the precached HTML on failure.
+Known shell assets use their revision cache. Other requests retain normal browser
+network behaviour. Shell matching ignores response `Vary` headers because these
+same-origin assets are fixed by the revision; a server's `Vary: Origin` must not
+prevent offline module loading. Activation removes only older Rétrolosa shell caches for the
+same deployment scope; it neither calls `skipWaiting` nor reloads an active map.
+
+`src/pwa.ts` registers the production worker after page load and owns installation
+and connectivity hooks. `InstallApp` in the header provides an optional French
+dialog, a one-use native install prompt when available, and manual iPhone/Android
+instructions otherwise. Installed standalone windows hide the install action.
+`App` displays a connectivity notice; map loading and retry remain the controller's
+responsibility. Offline shell availability does not imply offline map availability.
+
+The viewport includes `viewport-fit=cover`. Header/footer dimensions and map-control
+offsets include safe-area insets in `app.css`. The top inset has a dark background
+so iOS's translucent status bar remains legible with either app theme.
+The install dialog uses existing
+Radix focus/dismissal primitives and project colour tokens in both themes.
+`scripts/build-app-icons.mjs` explicitly renders PNG icons from the existing SVG
+brand mark, including an Android mask-safe variant and an Apple touch icon.
+It is separate from ordinary builds and map generators.
+
+`tests/pwa.spec.ts` covers metadata, icon dimensions, mobile layouts, manual and
+native installation flows, dismissal, standalone detection and production offline
+launch. `playwright.pwa.config.ts` runs it against a built preview, including under
+`VITE_BASE_PATH`; normal development tests omit the worker-specific scenario.
+Device installation and operating-system splash screens require physical-device
+verification; desktop emulation does not verify iOS or Android system UI.
+
+Platform references: [MDN installation requirements](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable)
+and [Apple's iPhone web-app installation guide](https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios).
+
 ## Verification and current limits
 
 Catalogue and view contracts are tested under Node without starting React or MapLibre.
