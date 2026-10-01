@@ -27,6 +27,9 @@ test("panels dismiss, restore focus and keep keyboard navigation within a modal"
   await expect(panel).toHaveCount(0);
   const dialog = page.getByRole("dialog", { name: "Cartes et précision" });
   await expect(dialog).toBeVisible();
+  await expect(
+    dialog.getByRole("heading", { name: "Cartes de Toulouse", exact: true }),
+  ).toBeVisible();
   const close = dialog.getByRole("button", { name: "Fermer les sources" });
   await expect(close).toBeFocused();
   await page.keyboard.press("Shift+Tab");

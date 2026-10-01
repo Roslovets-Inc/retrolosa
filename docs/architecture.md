@@ -6,7 +6,7 @@
 les libellés, les crédits, les orientations et les sources. Cet ordre est aussi
 l’ordre de dessin : une carte plus récente est dessinée au-dessus de la précédente.
 `details.ts` contient les textes de provenance et les liens vers les documents.
-Il est importé par le dialogue de sources, chargé à la demande, et jamais par le
+Il est importé par le contenu du dialogue de sources, chargé à la demande, et jamais par le
 catalogue. `getEpochDetails(id)` fournit la description ; `getEpoch(id)` reste
 limité aux données de présentation et de rendu. `Record<EpochId, EpochDetails>`
 exige une description pour chaque époque du catalogue.
@@ -189,12 +189,22 @@ pas l'ensemble du projet.
 L'audit local du 1er octobre 2026 a reproduit les problèmes suivants dans Edge
 headless, avec les services cartographiques simulés :
 
-1. **P1 — Échec du module du dialogue.** Une réponse HTTP 503 pour
-   `SourcesDialog.tsx`, suivie de l'ouverture des sources, provoque une erreur
-   d'import dynamique non interceptée et retire tout le `<main>`. `Suspense`
-   gère l'attente, mais aucune limite d'erreur ne protège ce module. Ajouter
-   une limite locale, un message accessible et un mécanisme de nouvelle
-   tentative qui renouvelle l'import, puis un scénario navigateur de panne.
+1. **P1 corrigé — Échec du module du dialogue.** Une réponse HTTP 503 pour
+   `SourcesDialog.tsx` retirait tout le `<main>`. La coque `SourcesPanel` reste
+   maintenant dans le code initial : elle conserve le dialogue, le focus et
+   la fermeture pendant le chargement ou une erreur. Une limite d'erreur locale
+   protège le contenu différé. Le message propose de continuer sur la carte ou
+   de recharger l'application en sérialisant la vue et la caméra actuelles dans
+   l'adresse. Cette recharge renouvelle le chargement des modules, y compris
+   après un déploiement qui remplace les fichiers ; recréer seulement `lazy`
+   ne garantit pas un nouveau téléchargement d'un import déjà rejeté.
+   `tests/source-loading.spec.ts` simule le HTTP 503, vérifie la fermeture et le
+   retour du focus, modifie la date puis rétablit le module avant la recharge.
+   Le dialogue reste protégé si le service est encore indisponible.
+   Les cinq scénarios locaux de `source-loading` et `ui` passent, dont la
+   fermeture pendant un import en attente. Une vérification supplémentaire sur
+   la sortie de `bun run build` simule le même 503 pour le chunk de production
+   et confirme sa récupération après recharge.
 2. **P2 — Nouvelle tentative après fermeture d'une erreur.** Une réponse 503
    pour `openedition-13c/map.webp` affiche une alerte. « Fermer le message »
    retire aussi l'unique bouton « Réessayer », tandis que le store conserve
