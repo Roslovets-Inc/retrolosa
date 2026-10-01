@@ -168,5 +168,49 @@ respectent le chemin de déploiement configuré par `VITE_BASE_PATH`.
 
 Les variantes responsives restent explicites dans `app.css` ; toute réorganisation
 de leur cascade doit préserver les dimensions, le focus et l’accessibilité des
-contrôles. Les prochaines vérifications concernent les dépendances des composants
-envers les contrôleurs cartographiques et les services cartographiques réels.
+contrôles.
+
+## Bilan du refactoring et travaux restants
+
+Le catalogue, les transitions de vue, la présentation, le contrôleur cartographique
+et le traitement des tuiles ont maintenant des responsabilités distinctes.
+Les composants de `src/components` ne dépendent ni de `MapController` ni de
+MapLibre. `MapTools` reçoit des commandes explicites ; `Coordinates` reçoit une
+fonction d'abonnement et une lecture de valeur. La composition de ces dépendances reste
+dans `main.tsx`. La géolocalisation reste un adaptateur MapLibre dans `useLocation`.
+Les actions de vue partagées avec les panneaux appartiennent au modèle de vue.
+
+Les descriptions sont chargées à la demande ; les images IGN sont partagées,
+avec une concurrence et un cache bornés. Ces limites ne couvrent pas la mémoire
+des images décodées et des canevas temporaires. Les contrôles de couverture à
+100 % concernent seulement les trois fichiers de chronologie et d'état de vue,
+pas l'ensemble du projet.
+
+L'audit local du 1er octobre 2026 a reproduit les problèmes suivants dans Edge
+headless, avec les services cartographiques simulés :
+
+1. **P1 — Échec du module du dialogue.** Une réponse HTTP 503 pour
+   `SourcesDialog.tsx`, suivie de l'ouverture des sources, provoque une erreur
+   d'import dynamique non interceptée et retire tout le `<main>`. `Suspense`
+   gère l'attente, mais aucune limite d'erreur ne protège ce module. Ajouter
+   une limite locale, un message accessible et un mécanisme de nouvelle
+   tentative qui renouvelle l'import, puis un scénario navigateur de panne.
+2. **P2 — Nouvelle tentative après fermeture d'une erreur.** Une réponse 503
+   pour `openedition-13c/map.webp` affiche une alerte. « Fermer le message »
+   retire aussi l'unique bouton « Réessayer », tandis que le store conserve
+   la ressource en échec. Préserver un accès discret et accessible à la
+   nouvelle tentative indépendamment de la visibilité du message.
+3. **P2 — Statut lors de la perte du contexte graphique.** Après chargement,
+   `WEBGL_lose_context.loseContext()` sur la carte actuelle laisse le texte
+   « Cartes chargées » alors que `isContextLost()` est vrai. Le contrôleur
+   ne suit pas ces événements. Représenter l'indisponibilité puis la
+   restauration dans le statut ; MapLibre conserve sa gestion de restauration.
+
+La vérification du changement de dépendances comprend `bun run check` (143
+tests unitaires), les cinq scénarios de `orientation`, `ui` et `compact`, et
+`bun run build`. Un contrôle navigateur supplémentaire vérifie les deux
+marqueurs de géolocalisation et leur suppression à l'arrêt du suivi.
+Ces contrôles hors ligne ne valident pas la disponibilité réelle d'IGN,
+d'OpenFreeMap ou des archives PMTiles distantes. Il reste à vérifier ces
+services séparément et à mesurer la mémoire et le temps de rendu sur un
+appareil mobile avant de justifier un nouveau travail de performance.

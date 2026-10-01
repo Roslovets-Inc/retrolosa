@@ -1,10 +1,8 @@
 import { Eye, Navigation, Plus, Minus, Compass, RotateCcw } from "lucide-react";
 import React from "react";
 
-import type { MapController } from "../map/controller";
 import { nextBearing } from "../orientation";
 import { Button, Slider } from "../ui";
-import type { ViewAction } from "../view/state";
 export function MapTools({
   opacity,
   hasEpochs,
@@ -12,11 +10,14 @@ export function MapTools({
   setCompareHeld,
   locationStatus,
   onLocation,
-  controller,
+  onZoomIn,
+  onZoomOut,
+  onOverview,
+  onOpacityChange,
+  onToggleAlignment,
   bearing,
   readingBearing,
   orientationEpoch,
-  dispatch,
 }: {
   opacity: number;
   hasEpochs: boolean;
@@ -24,13 +25,15 @@ export function MapTools({
   setCompareHeld: (held: boolean) => void;
   locationStatus: "off" | "locating" | "following";
   onLocation: () => void;
-  controller: MapController;
+  onZoomIn: () => void;
+  onZoomOut: () => void;
+  onOverview: () => void;
+  onOpacityChange: (value: number) => void;
+  onToggleAlignment: () => void;
   bearing: number;
   readingBearing: number;
   orientationEpoch: number;
-  dispatch: React.Dispatch<ViewAction>;
 }) {
-  const setOpacity = (value: number) => dispatch({ type: "opacity", value });
   return (
     <>
       <div className="opacity-controls" role="group" aria-label="Transparence et comparaison">
@@ -71,7 +74,7 @@ export function MapTools({
         <section className="opacity-panel" aria-label="Opacité">
           <Slider
             value={opacity}
-            onValueChange={setOpacity}
+            onValueChange={onOpacityChange}
             label="Opacité de la carte historique"
             valueText={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
             disabled={!hasEpochs}
@@ -95,7 +98,7 @@ export function MapTools({
           tooltipSide="left"
           data-tooltip="Zoom avant"
           aria-label="Zoom avant"
-          onClick={controller.zoomIn}
+          onClick={onZoomIn}
         >
           <Plus size={20} />
         </Button>
@@ -103,7 +106,7 @@ export function MapTools({
           tooltipSide="left"
           data-tooltip="Zoom arrière"
           aria-label="Zoom arrière"
-          onClick={controller.zoomOut}
+          onClick={onZoomOut}
         >
           <Minus size={20} />
         </Button>
@@ -122,9 +125,7 @@ export function MapTools({
           }
           data-bearing={bearing}
           disabled={readingBearing === 0}
-          onClick={() => {
-            dispatch({ type: "toggleAlignment" });
-          }}
+          onClick={onToggleAlignment}
         >
           <Compass size={18} style={{ transform: `rotate(${-bearing}deg)` }} />
           <span>{bearing === 0 ? "N" : `${bearing}°`}</span>
@@ -134,7 +135,7 @@ export function MapTools({
           aria-label="Vue d’ensemble de Toulouse"
           tooltipSide="left"
           data-tooltip="Vue d’ensemble de Toulouse"
-          onClick={() => controller.overview(bearing)}
+          onClick={onOverview}
         >
           <RotateCcw size={18} />
         </Button>

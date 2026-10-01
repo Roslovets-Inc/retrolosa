@@ -1,8 +1,12 @@
 import React, { useSyncExternalStore } from "react";
 
-import type { MapController } from "./controller";
-
-export function Coordinates({ controller }: { controller: MapController }) {
-  const value = useSyncExternalStore(controller.subscribeCoordinates, controller.getCoordinates);
+export function Coordinates({
+  subscribe,
+  getSnapshot,
+}: {
+  subscribe: (listener: () => void) => () => void;
+  getSnapshot: () => string;
+}) {
+  const value = useSyncExternalStore(subscribe, getSnapshot);
   return <span className="coordinates">{value}</span>;
 }

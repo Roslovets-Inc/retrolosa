@@ -135,11 +135,14 @@ function App() {
         setCompareHeld={setCompareHeld}
         locationStatus={geo.status}
         onLocation={geo.toggle}
-        controller={controller}
+        onZoomIn={controller.zoomIn}
+        onZoomOut={controller.zoomOut}
+        onOverview={() => controller.overview(bearing)}
+        onOpacityChange={(value) => dispatch({ type: "opacity", value })}
+        onToggleAlignment={() => dispatch({ type: "toggleAlignment" })}
         bearing={bearing}
         readingBearing={readingBearing}
         orientationEpoch={orientationEpoch}
-        dispatch={dispatch}
       />
       <ComparisonPanel
         view={view}
@@ -171,7 +174,10 @@ function App() {
         </div>
       )}
       <footer>
-        <Coordinates controller={controller} />
+        <Coordinates
+          subscribe={controller.subscribeCoordinates}
+          getSnapshot={controller.getCoordinates}
+        />
         <span className="map-credits">
           {creditedPeriods.map((period) => (
             <React.Fragment key={period}>
