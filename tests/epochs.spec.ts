@@ -11,14 +11,14 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
   await page.goto("/#year=1875&mode=time&time=1875");
   await page.getByRole("button", { name: "Époques", exact: true }).click();
   await page.getByRole("checkbox", { name: "1875 Inondation" }).uncheck();
-  await expect(page.locator(".timeline-value")).toHaveText("1830 → 1954");
+  await expect(page.locator(".timeline-value")).toHaveText("1860 → 1904");
   await expect(
     page.locator(".timeline-ticks").getByRole("button", { name: "1875", exact: true }),
   ).toHaveCount(0);
   await page.screenshot({ path: ".local/epochs-mobile.png" });
   await expect
     .poll(() => sharedView(page))
-    .toMatch(/layers=450%2C1250%2C1550%2C1631%2C1680%2C1777%2C1830%2C1954/);
+    .toMatch(/layers=450%2C1250%2C1550%2C1631%2C1680%2C1777%2C1830%2C1860%2C1904%2C1954/);
   await page.goto(await sharedView(page));
   await page.reload();
   await page.getByRole("button", { name: "Époques", exact: true }).click();
@@ -31,6 +31,8 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
     "1680 Cadastre",
     "1777 Plan de Saget",
     "1830 Cadastre",
+    "1860 Plan de Jourdan",
+    "1904 Plan de Laffont",
     "1954 Vue aérienne",
   ])
     await page.getByRole("checkbox", { name }).uncheck();

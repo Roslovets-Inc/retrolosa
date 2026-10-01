@@ -66,9 +66,11 @@ test("compact modes share transparency, preserve comparison shape and have equal
         await page.screenshot({ path: `.local/controls-cards-mobile-${width}.png` });
       }
       const box = (await transparency.boundingBox())!;
-      expect(box.x).toBeGreaterThan(
-        (await panel.boundingBox())!.x + (await panel.boundingBox())!.width,
-      );
+      const hold = (await page.locator(".compare-hold").boundingBox())!;
+      expect(box.y).toBeGreaterThanOrEqual(hold.y + hold.height);
+      expect(Math.abs(box.x + box.width / 2 - (hold.x + hold.width / 2))).toBeLessThan(2);
+      expect(box.y + box.height).toBeLessThan((await panel.boundingBox())!.y);
+      await expect(page.locator(".control-dock .opacity-panel")).toHaveCount(0);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
       ).toBeTruthy();

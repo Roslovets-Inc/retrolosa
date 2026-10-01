@@ -27,7 +27,7 @@ test("address stays stable while sharing captures and restores the current view"
   expect(params.get("z")).toBe("15.60");
   expect(params.get("mode")).toBe("overlay");
   expect(params.get("opacity")).toBe("42");
-  expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1875,1954");
+  expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1860,1875,1904,1954");
   await page.goto(overlay);
   await page.reload();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
@@ -42,7 +42,7 @@ test("address stays stable while sharing captures and restores the current view"
   await page.goto(timeline);
   await page.reload();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1850");
-  await expect(page.locator(".timeline-value")).toHaveText("1680 → 1875");
+  await expect(page.locator(".timeline-value")).toHaveText("1777 → 1860");
   await page.getByRole("button", { name: "Cartes", exact: true }).click();
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison" }).focus();

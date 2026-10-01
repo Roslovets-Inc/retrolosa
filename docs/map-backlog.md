@@ -1,3 +1,27 @@
+## Plans 1860 et 1904 intégrés — 1 octobre 2026
+
+- **Vers 1860** : Justin Jourdan / Prosper Rivière, Archives municipales de Toulouse,
+  20 Fi 66. [Scan officiel](https://www.flickr.com/photos/archives-toulouse/24480515944/),
+  domaine public selon la description Flickr. Original 4117 × 3152 pixels ; rendu
+  4096 × 3136. Les cartes annexes, vues de monuments et tables sont conservées.
+  Le document mêle changements réalisés et alignements projetés.
+- **1904** : Léon Laffont / Pierre Rouy, Pagès et Carrère, 20Fi57.
+  [Notice et illustration officielles](https://archives.toulouse.fr/plans-anciens/#plan-laffont).
+  Le fichier original est identifié par les métadonnées WordPress de l’illustration 3100 :
+  [JPEG complet](https://archives.toulouse.fr/wp-content/uploads/sites/18/2026/09/20Fi57.jpg),
+  3768 × 4592 pixels, rendu 3361 × 4096. Le bas du document porte « Tirage de 1904 ».
+  La grille, le titre et les marges sont conservés. Le pont des Amidonniers est un projet.
+  La page ne précise pas de licence propre à cette illustration ; l’attribution ne
+  remplace pas des conditions de réutilisation.
+
+Les deux calages affines utilisent Saint-Sernin, Saint-Étienne et le Pont Neuf.
+Trois contrôles distincts au Taur, à Saint-Pierre-des-Cuisines et à la Dalbade
+mesurent respectivement **11,8 / 24,9 / 41,9 m** (1860) et **25 / 47,8 / 24,9 m**
+(1904). Ces contrôles concernent le centre ; les faubourgs ne sont pas validés.
+Configurations dans `data/jourdan-1860-control-points.json` et
+`data/laffont-1904-control-points.json`, génération explicite avec
+`scripts/build-city-plans.py` (numpy et Pillow). Aucun téléchargement automatique.
+
 ## Plan de Saget intégré — 1 octobre 2026
 
 Le plan de **1777**, Archives municipales de Toulouse **II 686**, est intégré entre
@@ -30,14 +54,13 @@ Les flux IGN ci-dessous restent à vérifier sur Toulouse avant intégration.
 | Rang | Source                                           | Intérêt pour le site                                     | Effort estimé et prochaine vérification                                                                                                                           |
 | ---- | ------------------------------------------------ | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2    | **1965–1980 — orthophotographies IGN**           | Compléter le grand intervalle entre 1954 et aujourd’hui. | Faible si la couverture locale convient : vérifier des tuiles de Toulouse et la date réelle de chaque prise de vue. Ne pas inventer un millésime unique « 1970 ». |
-| 3    | **1860 — Jourdan et Rivière**                    | Étape intermédiaire entre 1830 et 1875.                  | Moyen : scan et calage manuel ; comparer les points de contrôle indépendants.                                                                                     |
 | 4    | **1808 — changements depuis 1789**               | Lire les transformations autour de la Révolution.        | Moyen à élevé : vérifier la légende et distinguer état existant, changements et projets avant le calage.                                                          |
 | 5    | **1880–1881 — Perrossier, environs de Toulouse** | Étendre l’exploration aux faubourgs et aux environs.     | Élevé : plusieurs feuilles, assemblage et validation des raccords ; intérêt surtout hors du centre.                                                               |
 | 6    | **État-major — série 1820–1866**                 | Contexte territorial du XIXe siècle.                     | Faible à moyen si le flux convient ; identifier la feuille et sa date. Détail urbain à comparer avec notre cadastre de 1830.                                      |
 | 7    | **Cassini — XVIIIe siècle**                      | Campagne, voies et villages autour de Toulouse.          | Faible à moyen si le flux convient ; vérifier date et couverture. Peu adapté à la comparaison des rues du centre.                                                 |
 | 8    | **2000–2005 — orthophotographies IGN**           | Une étape récente avant le fond actuel.                  | Faible si la couverture et les dates locales sont établies. Moins prioritaire qu’une époque ancienne manquante.                                                   |
 
-Pour une prochaine carte ancienne dessinée, examiner **1860**. Pour une
+Pour une prochaine carte ancienne dessinée, examiner **1808**. Pour une
 intégration potentiellement rapide, vérifier d’abord **1965–1980**. Ces deux
 recommandations sont notre jugement, pas une garantie de qualité des sources.
 

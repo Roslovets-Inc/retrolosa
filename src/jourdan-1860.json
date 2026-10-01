@@ -1,0 +1,26 @@
+{
+  "sourcePage": "https://www.flickr.com/photos/archives-toulouse/24480515944/",
+  "coordinates": [
+    [1.4104726022381442, 43.62375502824239],
+    [1.4754298401453525, 43.61731393403225],
+    [1.4719884978232471, 43.58006659619651],
+    [1.4070312599160673, 43.58651167918955]
+  ],
+  "checkPoints": [
+    {
+      "name": "Notre-Dame du Taur footprint",
+      "errorMetres": 11.8
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "errorMetres": 24.9
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "errorMetres": 41.9
+    }
+  ],
+  "method": "Affine transform in Web Mercator from three manually annotated preserved landmarks. Three withheld church checkpoints in the centre; no citywide accuracy claim. Full source sheet retained without masking.",
+  "sourceSize": [4117, 3152],
+  "rasterSize": [4096, 3136]
+}

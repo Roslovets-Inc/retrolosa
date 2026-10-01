@@ -1,0 +1,90 @@
+{
+  "annotationWidth": 1600,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536,
+    "annotationWidth": 1200
+  },
+  "method": "Affine transform in Web Mercator from three manually annotated preserved landmarks. Three withheld church checkpoints in the centre; no citywide accuracy claim. Full source sheet retained without masking.",
+  "sourcePath": ".local/laffont-1904-original.jpg",
+  "sourceUrl": "https://archives.toulouse.fr/wp-content/uploads/sites/18/2026/09/20Fi57.jpg",
+  "sourcePage": "https://archives.toulouse.fr/plans-anciens/#plan-laffont",
+  "sha256": "40059a42fa804b21a1754d60a071584dafa02ff01c226020434ef5066f9cdb9d",
+  "rights": "Archives municipales de Toulouse, 20Fi57. Leon Laffont, Pierre Rouy; Pages et Carrere, 1904. Official archive full-resolution illustration; image-specific reuse terms are not stated on the WordPress page.",
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        815,
+        824
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [
+        996,
+        1087
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "old": [
+        778,
+        1114
+      ],
+      "ref": [
+        621.7,
+        717.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Notre-Dame du Taur footprint",
+      "old": [
+        841,
+        920
+      ],
+      "ref": [
+        669.89,
+        565.46
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "old": [
+        666,
+        959
+      ],
+      "ref": [
+        534.9,
+        599.44
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "old": [
+        829,
+        1164
+      ],
+      "ref": [
+        661.43,
+        765.73
+      ],
+      "role": "check"
+    }
+  ]
+}

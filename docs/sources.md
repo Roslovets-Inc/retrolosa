@@ -93,3 +93,24 @@ scripts/build-flood.py downloads and verifies the original, masks its printed bo
 Manual correspondences are in data/flood-1875-control-points.json. Old-plan coordinates use a 1200 px wide annotation image; reference coordinates use a 1200 px wide IGN PLANIGNV2 mosaic (1536 × 1792 original, zoom 15, origin tile 16512/11962). Reference service: https://data.geopf.fr/wmts (GEOGRAPHICALGRIDSYSTEMS.PLANIGNV2).
 
 Fifteen fitting landmarks span bridges, churches, squares and road junctions. A thin-plate spline in Web Mercator uses smoothing 1000. Three withheld landmarks test the rendered inverse transformation: La Grave dome 13.7 m, Jacobins cloister 20.0 m, Saint-Étienne west portal 26.8 m. These are manual central-landmark checks, not a citywide accuracy claim or a survey. Edges outside the fitting network are less reliable. No folds were detected in the sampled forward Jacobian grid; this is a sampled check, not a mathematical guarantee. Full measurements and artifact size are in data/flood-1875-validation.json.
+
+## Jourdan and Rivière, circa 1860; Laffont, 1904
+
+Both complete original sheets are integrated as affine Web Mercator image layers,
+without cropping legends, margins, cartouches or inset maps. Full-resolution JPEGs
+are accessible from the source dialog. Source images, checksums, manual annotations
+and independent checks are recorded in `data/jourdan-1860-control-points.json` and
+`data/laffont-1904-control-points.json`. Run `scripts/build-city-plans.py` explicitly
+with numpy and Pillow to reproduce the assets; regular builds do not regenerate them.
+
+Three stable landmarks fit each layer (Saint-Sernin, Saint-Étienne and Pont Neuf).
+The withheld Taur, Saint-Pierre-des-Cuisines and Dalbade checks range from 11.8 to
+41.9 m for 1860 and 24.9 to 47.8 m for 1904. No suburban accuracy claim follows from
+these central checkpoints. Historical drawing distortion, folds and manual annotation
+remain limitations. The 1860 document includes officially proposed alignments;
+the 1904 document includes the projected Amidonniers bridge. These should not be
+read as completed construction merely because they appear on a dated map.
+
+Source provenance and reuse statements are detailed in [map-backlog.md](map-backlog.md).
+The periods participate in epoch selection, chronological blending and shared URLs.
+Mobile year buttons occupy two rows, with staggered timeline labels.

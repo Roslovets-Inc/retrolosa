@@ -5,6 +5,7 @@ import {
   Plus,
   Minus,
   RotateCcw,
+  Compass,
   Info,
   X,
   ExternalLink,
@@ -28,9 +29,13 @@ import overviewCoordinates from "./history-overview.json";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
+import jourdan1860 from "./jourdan-1860.json";
+import laffont1904 from "./laffont-1904.json";
 import medieval13c from "./openedition-13c.json";
 import parcels1550 from "./openedition-1550.json";
 import antiquity from "./openedition-antiquite.json";
+import { nextBearing, readBearing } from "./orientation";
+import { LAST_POPULATION_YEAR, populationAt } from "./population";
 import saget1777 from "./saget-1777.json";
 import tavernier1631 from "./tavernier-1631.json";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
@@ -38,7 +43,19 @@ import { useLocation } from "./useLocation";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-const YEARS = ["450", "1250", "1550", "1631", "1680", "1777", "1830", "1875", "1954"] as const;
+const YEARS = [
+  "450",
+  "1250",
+  "1550",
+  "1631",
+  "1680",
+  "1777",
+  "1830",
+  "1860",
+  "1875",
+  "1904",
+  "1954",
+] as const;
 type Year = (typeof YEARS)[number];
 const epochLabel = (value: Year) => (value === "450" ? "Ve" : value === "1250" ? "XIIIe" : value);
 const initialYear = (): Year => {
@@ -51,20 +68,26 @@ const FLOOD_SOURCE =
 const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
 const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
 const SAGET_SOURCE = "https://www.flickr.com/photos/archives-toulouse/25111159875/";
+const JOURDAN_SOURCE = jourdan1860.sourcePage;
+const LAFFONT_SOURCE = laffont1904.sourcePage;
 const sourceUrl = (year: Year) =>
-  year === "1777"
-    ? SAGET_SOURCE
-    : year === "450" || year === "1250" || year === "1550"
-      ? MEDIEVAL_SOURCE
-      : year === "1631"
-        ? TAVERNIER_SOURCE
-        : year === "1875"
-          ? FLOOD_SOURCE
-          : year === "1954"
-            ? IGN_SOURCE
-            : year === "1680"
-              ? "https://tolosa1680.makina-corpus.com/"
-              : "https://tolosa.makina-corpus.com/";
+  year === "1860"
+    ? JOURDAN_SOURCE
+    : year === "1904"
+      ? LAFFONT_SOURCE
+      : year === "1777"
+        ? SAGET_SOURCE
+        : year === "450" || year === "1250" || year === "1550"
+          ? MEDIEVAL_SOURCE
+          : year === "1631"
+            ? TAVERNIER_SOURCE
+            : year === "1875"
+              ? FLOOD_SOURCE
+              : year === "1954"
+                ? IGN_SOURCE
+                : year === "1680"
+                  ? "https://tolosa1680.makina-corpus.com/"
+                  : "https://tolosa.makina-corpus.com/";
 const TODAY = new Date().getFullYear();
 const initialTime = () => {
   const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
@@ -284,6 +307,36 @@ function historicalStyle(year: Year): maplibregl.StyleSpecification {
       "raster-fade-duration": 0,
     },
   });
+  for (const [period, name, metadata, before] of [
+    ["1860", "jourdan-1860", jourdan1860, "overview-1875"],
+    ["1904", "laffont-1904", laffont1904, "history-1954"],
+  ] as const) {
+    const id = "history-" + period;
+    style.sources[id] = {
+      type: "image",
+      url: assetUrl(name + "/map.webp"),
+      coordinates: metadata.coordinates as [
+        [number, number],
+        [number, number],
+        [number, number],
+        [number, number],
+      ],
+    };
+    style.layers.splice(
+      style.layers.findIndex((layer) => layer.id === before),
+      0,
+      {
+        id,
+        type: "raster",
+        source: id,
+        paint: {
+          "raster-opacity": year === period ? 1 : 0,
+          "raster-opacity-transition": { duration: 0 },
+          "raster-fade-duration": 0,
+        },
+      },
+    );
+  }
   return style;
 }
 maplibregl.setWorkerUrl(workerUrl);
@@ -329,6 +382,7 @@ const MIN_ZOOM = 11.5;
 const MAX_ZOOM = 19;
 function initialView() {
   const p = new URLSearchParams(location.hash.slice(1));
+  const bearing = readBearing(p.get("bearing"));
   const lon = Number(p.get("lon")),
     lat = Number(p.get("lat")),
     z = Number(p.get("z"));
@@ -348,14 +402,16 @@ function initialView() {
         center: [lon, lat] as [number, number],
         zoom: Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, z)),
         shared,
+        bearing,
       }
-    : { center: [1.442, 43.602] as [number, number], zoom: 14, shared: false };
+    : { center: [1.442, 43.602] as [number, number], zoom: 14, shared: false, bearing };
 }
 function initialEnabled(): Year[] {
   const value = new URLSearchParams(location.hash.slice(1)).get("layers");
   return value === null ? [...YEARS] : YEARS.filter((year) => value.split(",").includes(year));
 }
 function App() {
+  const [bearing, setBearing] = useState(() => initialView().bearing);
   const modernEl = useRef<HTMLDivElement>(null),
     oldEl = useRef<HTMLDivElement>(null);
   const map = useRef<MapInstance | null>(null);
@@ -445,11 +501,17 @@ function App() {
     historicMap.current = historic;
     locationMaps.current = [modern, historic];
     modern.touchZoomRotate.disableRotation();
+    modern.keyboard.disableRotation();
     const sync = () =>
-      historic.jumpTo({ center: modern.getCenter(), zoom: modern.getZoom(), bearing: 0, pitch: 0 });
+      historic.jumpTo({
+        center: modern.getCenter(),
+        zoom: modern.getZoom(),
+        bearing: modern.getBearing(),
+        pitch: 0,
+      });
     modern.on("move", sync);
     if (!initialView().shared) {
-      modern.fitBounds(CITY_OVERVIEW, { padding: 30, duration: 0 });
+      modern.fitBounds(CITY_OVERVIEW, { padding: 30, duration: 0, bearing: initialView().bearing });
       sync();
     }
     modern.on("mousemove", (e) =>
@@ -603,6 +665,7 @@ function App() {
   };
   const visibleMode =
     enabled.length === 0 ? "modern" : compareHeld ? "overlay" : peek ? "modern" : mode;
+  const populationYear = visibleMode === "modern" ? TODAY : mode === "time" ? time : Number(year);
   const loupeLeft = `clamp(var(--loupe-radius), ${loupe.x}%, calc(100% - var(--loupe-radius)))`;
   const loupeTop = `clamp(var(--loupe-radius), ${loupe.y}%, calc(100% - var(--loupe-radius)))`;
   const go = (index: number) =>
@@ -620,6 +683,7 @@ function App() {
       time: String(time),
       opacity: String(opacity),
       split: String(split),
+      bearing: String(bearing),
     });
     const url = new URL(location.href);
     url.hash = params.toString();
@@ -802,15 +866,19 @@ function App() {
                           ? "Reconstruction"
                           : value === "1550"
                             ? "Héritages du parcellaire"
-                            : value === "1777"
-                              ? "Plan de Saget"
-                              : value === "1631"
-                                ? "Plan · calage approximatif"
-                                : value === "1875"
-                                  ? "Inondation"
-                                  : value === "1954"
-                                    ? "Vue aérienne"
-                                    : "Cadastre"}
+                            : value === "1860"
+                              ? "Plan de Jourdan"
+                              : value === "1904"
+                                ? "Plan de Laffont"
+                                : value === "1777"
+                                  ? "Plan de Saget"
+                                  : value === "1631"
+                                    ? "Plan · calage approximatif"
+                                    : value === "1875"
+                                      ? "Inondation"
+                                      : value === "1954"
+                                        ? "Vue aérienne"
+                                        : "Cadastre"}
                       </small>
                     </label>
                   ))}
@@ -886,6 +954,22 @@ function App() {
           </button>
         </div>
       </header>
+      <button
+        className="population-counter"
+        onClick={() => setSources(true)}
+        aria-label={`Population estimée de Toulouse : environ ${populationAt(populationYear)} habitants. Voir les sources`}
+        title="Population estimée de Toulouse · Voir les sources"
+      >
+        <span>Toulouse · {dateLabel(populationYear)}</span>
+        <strong>
+          ≈ {populationAt(populationYear).toLocaleString("fr-FR")} <small>habitants</small>
+        </strong>
+        <span>
+          {populationYear >= LAST_POPULATION_YEAR
+            ? `Données ${LAST_POPULATION_YEAR}`
+            : "Population estimée"}
+        </span>
+      </button>
       {visibleMode === "split" && opacity > 0 && (
         <>
           <div className="epoch-label old-label">
@@ -937,39 +1021,59 @@ function App() {
           </div>
         </>
       )}
-      <button
-        className="compare-hold"
-        aria-label="Maintenir pour comparer avec la carte actuelle"
-        aria-pressed={compareHeld}
-        title="Maintenez pour lire les rues actuelles"
-        onPointerDown={(e) => {
-          if (e.button !== 0 || !e.isPrimary) return;
-          e.preventDefault();
-          e.currentTarget.focus();
-          e.currentTarget.setPointerCapture(e.pointerId);
-          setCompareHeld(true);
-        }}
-        onPointerUp={() => setCompareHeld(false)}
-        onPointerCancel={() => setCompareHeld(false)}
-        onLostPointerCapture={() => setCompareHeld(false)}
-        onBlur={() => setCompareHeld(false)}
-        onContextMenu={(e) => e.preventDefault()}
-        onKeyDown={(e) => {
-          if (e.key === " " || e.key === "Enter") {
+      <div className="opacity-controls" role="group" aria-label="Transparence et comparaison">
+        <button
+          className="compare-hold"
+          aria-label="Maintenir pour comparer avec la carte actuelle"
+          aria-pressed={compareHeld}
+          title="Maintenez pour lire les rues actuelles"
+          onPointerDown={(e) => {
+            if (e.button !== 0 || !e.isPrimary) return;
             e.preventDefault();
+            e.currentTarget.focus();
+            e.currentTarget.setPointerCapture(e.pointerId);
             setCompareHeld(true);
-          }
-          if (e.key === "Escape") setCompareHeld(false);
-        }}
-        onKeyUp={(e) => {
-          if (e.key === " " || e.key === "Enter") {
-            e.preventDefault();
-            setCompareHeld(false);
-          }
-        }}
-      >
-        <Eye size={20} />
-      </button>
+          }}
+          onPointerUp={() => setCompareHeld(false)}
+          onPointerCancel={() => setCompareHeld(false)}
+          onLostPointerCapture={() => setCompareHeld(false)}
+          onBlur={() => setCompareHeld(false)}
+          onContextMenu={(e) => e.preventDefault()}
+          onKeyDown={(e) => {
+            if (e.key === " " || e.key === "Enter") {
+              e.preventDefault();
+              setCompareHeld(true);
+            }
+            if (e.key === "Escape") setCompareHeld(false);
+          }}
+          onKeyUp={(e) => {
+            if (e.key === " " || e.key === "Enter") {
+              e.preventDefault();
+              setCompareHeld(false);
+            }
+          }}
+        >
+          <Eye size={20} />
+        </button>
+        <section
+          className="opacity-panel"
+          aria-label="Opacité"
+          title="Opacité de la carte historique"
+        >
+          <input
+            type="range"
+            aria-label="Opacité de la carte historique"
+            aria-valuetext={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
+            min="0"
+            max="100"
+            step="1"
+            value={opacity}
+            disabled={!enabled.length}
+            onChange={(e) => setOpacity(Number(e.target.value))}
+          />
+          <output>{opacity}%</output>
+        </section>
+      </div>
       <div className="zoom-controls">
         <button
           className={geo.status !== "off" ? "location-active" : ""}
@@ -987,12 +1091,32 @@ function App() {
         <button aria-label="Zoom arrière" onClick={() => map.current?.zoomOut()}>
           <Minus size={20} />
         </button>
+        <button
+          className="orientation-button"
+          aria-label={`Orientation : ${bearing === 0 ? "nord" : `${bearing}°`}. Tourner vers ${nextBearing(bearing) === 0 ? "le nord" : `${nextBearing(bearing)}°`}`}
+          title={`Orientation : ${bearing === 0 ? "nord" : `${bearing}°`} · Cliquer pour tourner`}
+          data-bearing={bearing}
+          onClick={() => {
+            if (!map.current) return;
+            const next = nextBearing(bearing);
+            setBearing(next);
+            map.current.easeTo({ bearing: next, duration: 450 });
+          }}
+        >
+          <Compass size={18} style={{ transform: `rotate(${-bearing}deg)` }} />
+          <span>{bearing === 0 ? "N" : `${bearing}°`}</span>
+        </button>
         <div />
         <button
           aria-label="Vue d’ensemble de Toulouse"
           title="Vue d’ensemble de Toulouse"
           onClick={() =>
-            map.current?.fitBounds(CITY_OVERVIEW, { padding: 30, duration: 1000, essential: true })
+            map.current?.fitBounds(CITY_OVERVIEW, {
+              padding: 30,
+              duration: 1000,
+              essential: true,
+              bearing,
+            })
           }
         >
           <RotateCcw size={18} />
@@ -1162,25 +1286,6 @@ function App() {
             </div>
           )}
         </section>
-        <section
-          className="opacity-panel"
-          aria-label="Opacité"
-          title="Opacité de la carte historique"
-        >
-          <Eye size={16} aria-hidden="true" />
-          <input
-            type="range"
-            aria-label="Opacité de la carte historique"
-            aria-valuetext={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
-            min="0"
-            max="100"
-            step="1"
-            value={opacity}
-            disabled={!enabled.length}
-            onChange={(e) => setOpacity(Number(e.target.value))}
-          />
-          <output>{opacity}%</output>
-        </section>
       </div>
       {(geo.message || geo.status === "locating") && (
         <div className="location-notice" role="status">
@@ -1243,6 +1348,17 @@ function App() {
               </a>
               {mode === "time" ? " · " : ""}
             </>
+          )}
+          {(["1860", "1904"] as const).map((period) =>
+            mode === "time" || year === period ? (
+              <React.Fragment key={period}>
+                <a href={sourceUrl(period)} target="_blank" rel="noreferrer">
+                  {period === "1860" ? "Jourdan · vers 1860" : "Laffont · 1904"} · Archives
+                  municipales de Toulouse
+                </a>
+                {mode === "time" ? " · " : ""}
+              </React.Fragment>
+            ) : null,
           )}
           {mode === "time" || year === "1680" || year === "1830" ? (
             <>
@@ -1454,6 +1570,43 @@ function App() {
                   Voir le plan complet et sa légende <ExternalLink size={14} />
                 </a>
               </>
+            ) : year === "1860" || year === "1904" ? (
+              <>
+                <h3>
+                  {year === "1860"
+                    ? "Plan de Jourdan et Rivière · vers 1860"
+                    : "Plan de Léon Laffont · 1904"}
+                </h3>
+                <p>
+                  {year === "1860"
+                    ? "Ville de Toulouse. Faubourgs. Banlieue. Dessin de Justin Jourdan, lithographie de Prosper Rivière. Archives municipales de Toulouse, 20 Fi 66 · domaine public."
+                    : "Plan de la ville de Toulouse. Dessin de Léon Laffont, lithographie de Pierre Rouy, édition Pagès et Carrère. Archives municipales de Toulouse, 20Fi57. Tirage de 1904."}
+                </p>
+                <p>
+                  {year === "1860"
+                    ? "Le plan montre le chemin de fer, les places et les faubourgs. Il comprend des changements réalisés et des alignements officiellement projetés, à distinguer avec la légende. Les cartes annexes et les vues de monuments sont conservées."
+                    : "Le plan couvre le centre et les faubourgs, notamment les Minimes, Bonnefoy, Saint-Cyprien et Saint-Michel. Le pont des Amidonniers y figure comme projet. Les numéros de grille, le titre et les marges sont conservés."}
+                </p>
+                <p>
+                  Calage affine manuel sur Saint-Sernin, Saint-Étienne et le Pont Neuf. Trois
+                  contrôles distincts au Taur, à Saint-Pierre-des-Cuisines et à la Dalbade donnent
+                  des écarts de{" "}
+                  {(year === "1860" ? jourdan1860 : laffont1904).checkPoints
+                    .map((point) => point.errorMetres)
+                    .join(", ")}{" "}
+                  m. Ces contrôles concernent le centre ; ils ne garantissent pas la précision aux
+                  faubourgs ni aux bords du document. Le feuillet complet est conservé.
+                </p>
+                <a
+                  href={assetUrl(
+                    (year === "1860" ? "jourdan-1860" : "laffont-1904") + "/original.jpg",
+                  )}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Voir le plan complet <ExternalLink size={14} />
+                </a>
+              </>
             ) : year === "1875" ? (
               <>
                 <h3>Inondation des 23–24 juin 1875</h3>
@@ -1491,7 +1644,55 @@ function App() {
             <a href={sourceUrl(year)} target="_blank" rel="noreferrer">
               Ouvrir la carte source <ExternalLink size={14} />
             </a>
+            <h3>Population de Toulouse</h3>
+            <p>
+              Ordres de grandeur de la ville historique, puis de la commune, pas de la métropole.
+              Entre les repères documentés, le compteur interpole les valeurs et les arrondit au
+              millier. Les estimations anciennes sont incertaines et les périmètres varient. Pour
+              l’Antiquité, le repère est d’environ 20 000 habitants ; les variations du haut Moyen
+              Âge ne sont pas reconstituées. Après 2023, le dernier recensement est conservé.
+            </p>
+            <p>
+              Sources :{" "}
+              <a
+                href="https://archives.toulouse.fr/place-saint-etienne/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Archives de Toulouse
+              </a>
+              ,{" "}
+              <a
+                href="https://www.persee.fr/doc/hes_0752-5702_1998_num_17_3_1997"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Laffont · Ancien Régime
+              </a>
+              ,{" "}
+              <a
+                href="https://fr.wikipedia.org/wiki/Toulouse#Démographie"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Recensements historiques
+              </a>
+              ,{" "}
+              <a
+                href="https://www.insee.fr/fr/statistiques/2011101?geo=COM-31555"
+                target="_blank"
+                rel="noreferrer"
+              >
+                INSEE · 1968–2023
+              </a>
+              .
+            </p>
             <h3>Utilisation</h3>
+            <p>
+              Le bouton boussole fait tourner les deux cartes ensemble : nord, 7° (plans de 1860 et
+              1904), 53° (1777), puis 84° (1631). Ces angles approchés facilitent la lecture des
+              légendes ; les déformations des anciens plans peuvent subsister.
+            </p>
             <p>
               Sur ordinateur, maintenez la barre d’espace pour afficher la carte actuelle. Maintenez
               le bouton avec l’icône œil pour lire les rues actuelles avec une légère superposition
@@ -1504,9 +1705,9 @@ function App() {
               La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
               sources disponibles sont les reconstructions de la fin de l’Antiquité et du XIIIe
               siècle, les héritages du parcellaire de 1550, les plans de 1631 et 1777, les cadastres
-              de 1680 et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954. Les
-              positions intermédiaires sont des transitions visuelles, pas des reconstitutions de
-              ces années.
+              de 1680 et 1830, les plans de 1860 et 1904, le plan d’inondation de 1875 et la vue
+              aérienne de 1954. Les positions intermédiaires sont des transitions visuelles, pas des
+              reconstitutions de ces années.
             </p>
             <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
               Source XIIIe siècle · figure 6
@@ -1530,6 +1731,14 @@ function App() {
             ·{" "}
             <a href={sourceUrl("1830")} target="_blank" rel="noreferrer">
               Source 1830
+            </a>{" "}
+            ·{" "}
+            <a href={JOURDAN_SOURCE} target="_blank" rel="noreferrer">
+              Source vers 1860
+            </a>{" "}
+            ·{" "}
+            <a href={LAFFONT_SOURCE} target="_blank" rel="noreferrer">
+              Source 1904
             </a>{" "}
             ·{" "}
             <a href={FLOOD_SOURCE} target="_blank" rel="noreferrer">

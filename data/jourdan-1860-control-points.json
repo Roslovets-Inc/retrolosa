@@ -1,0 +1,90 @@
+{
+  "annotationWidth": 1600,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536,
+    "annotationWidth": 1200
+  },
+  "method": "Affine transform in Web Mercator from three manually annotated preserved landmarks. Three withheld church checkpoints in the centre; no citywide accuracy claim. Full source sheet retained without masking.",
+  "sourcePath": ".local/jourdan-1860-original.jpg",
+  "sourceUrl": "https://live.staticflickr.com/1702/24480515944_a322c149fd_o.jpg",
+  "sourcePage": "https://www.flickr.com/photos/archives-toulouse/24480515944/",
+  "sha256": "827a68694d8790e7b3e7df629226c99a067cb381dc1ac5b8248619fab04513b5",
+  "rights": "Archives municipales de Toulouse, 20 Fi 66. Domaine public, stated in official Flickr description. Justin Jourdan; Prosper Riviere.",
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        802,
+        397
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Etienne west portal",
+      "old": [
+        1013,
+        654
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Pont Neuf right-bank abutment",
+      "old": [
+        785,
+        691
+      ],
+      "ref": [
+        621.7,
+        717.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Notre-Dame du Taur footprint",
+      "old": [
+        839,
+        487
+      ],
+      "ref": [
+        669.89,
+        565.46
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "old": [
+        659,
+        546
+      ],
+      "ref": [
+        534.9,
+        599.44
+      ],
+      "role": "check"
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "old": [
+        850,
+        756
+      ],
+      "ref": [
+        661.43,
+        765.73
+      ],
+      "role": "check"
+    }
+  ]
+}
