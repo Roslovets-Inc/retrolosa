@@ -11,6 +11,7 @@ import {
   Swords,
   ExternalLink,
   X,
+  ChevronDown,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -41,6 +42,7 @@ export function CityWidget({
   onSources: () => void;
 }) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState(false);
   useEffect(() => {
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelected(null);
@@ -51,7 +53,11 @@ export function CityWidget({
   const events = eventsAt(year);
   const active = events.find((event) => event.year === selected);
   return (
-    <section className="population-counter" aria-label="Toulouse à cette époque">
+    <section
+      className="population-counter"
+      aria-label="Toulouse à cette époque"
+      data-expanded={expanded}
+    >
       <span>Toulouse · {label}</span>
       <Button
         className="population-value"
@@ -63,7 +69,18 @@ export function CityWidget({
           ≈ {populationAt(year).toLocaleString("fr-FR")} <small>habitants</small>
         </strong>
       </Button>
-      <div className="city-events" role="group" aria-label="Repères historiques">
+      <Button
+        className="city-events-toggle"
+        aria-expanded={expanded}
+        aria-controls="city-events"
+        onClick={() => {
+          setExpanded(!expanded);
+          setSelected(null);
+        }}
+      >
+        Repères historiques <ChevronDown size={14} />
+      </Button>
+      <div id="city-events" className="city-events" role="group" aria-label="Repères historiques">
         {events.map((event) => {
           const Icon = icons[event.icon];
           return (

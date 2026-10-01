@@ -138,7 +138,7 @@ export function ComparisonPanel({
             </p>
           )}
           <div className="timeline">
-            <div className="timeline-value sr-only" aria-live="polite">
+            <div className="timeline-value timeline-current sr-only" aria-live="polite">
               {timeLabel}
             </div>
             <div className="timeline-range">
@@ -203,11 +203,19 @@ export function ComparisonPanel({
                 <Button
                   key={date}
                   data-period={date}
+                  data-mobile-tick={
+                    (index % 2 === 0 && index < dates.length - 2) || index === dates.length - 1
+                  }
                   aria-pressed={time === date}
                   style={{
                     // Match the native range's 16px thumb travel, including both end insets.
                     left: `calc(${timelinePosition(date, dates) * 100}% + ${8 - 16 * timelinePosition(date, dates)}px)`,
-                    transform: index === 0 ? "none" : "translateX(-50%)",
+                    transform:
+                      index === 0
+                        ? "none"
+                        : index === dates.length - 1
+                          ? "translateX(-100%)"
+                          : "translateX(-50%)",
                   }}
                   onClick={() => setTime(date)}
                 >

@@ -52,6 +52,7 @@ test("historical milestones appear only after their date and open readable detai
   await slider.fill("1875");
   await expect(widget.locator(".city-events button")).toHaveCount(3);
   await page.setViewportSize({ width: 320, height: 700 });
+  await widget.getByRole("button", { name: "Repères historiques", exact: true }).click();
   await widget.getByRole("button", { name: "1875 · La grande crue" }).click();
   await expect(widget.getByRole("heading")).toContainText("La grande crue");
   const box = (await widget.boundingBox())!;

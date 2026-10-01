@@ -166,6 +166,11 @@ responsibility. Offline shell availability does not imply offline map availabili
 The viewport includes `viewport-fit=cover`. Header/footer dimensions and map-control
 offsets include safe-area insets in `app.css`. The top inset has a dark background
 so iOS's translucent status bar remains legible with either app theme.
+The application is fixed to the viewport edges rather than sized by `100dvh`;
+maps extend beneath the transparent footer and bottom safe area. Mobile population
+milestones collapse initially, and the 120 px comparison panel shows the selected
+date above a single sparse row of timeline labels. `tests/mobile-layout.spec.ts`
+checks viewport coverage, card placement, expansion and control separation.
 The install dialog uses existing
 Radix focus/dismissal primitives and project colour tokens in both themes.
 `scripts/build-app-icons.mjs` explicitly renders PNG icons from the existing SVG

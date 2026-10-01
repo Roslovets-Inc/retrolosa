@@ -6,6 +6,11 @@ The twelve milestones are the Visigothic capital (418), siege (1218), university
 
 The siege is anchored to 1218, while its description includes 1217–1218; the later plague is anchored to its start in 1628. Crossed swords mark armed and religious conflict; a skull marks plague mortality. CHU Toulouse’s historical account estimates 15–30% mortality for the Black Death through 1350 and about 10,000 deaths out of 50,000 inhabitants over 1628–1631. These are explicitly approximate retrospective estimates, not annual counts or deductions from the population widget. The 1562 account uses the municipal archives’ January 2022 dossier, page 2, and the city’s historical overview. No death count is claimed for either conflict. These milestones do not change population anchors or attribute every interpolated decline to a disaster; the series limitations remain in [population.md](population.md).
 
+On phones, the widget starts 14 px below the safe-area-aware header. Population
+stays visible; the French “Repères historiques” button expands or collapses the
+milestones, initially collapsed. Desktop milestones remain visible. Collapsing
+clears the selected event detail.
+
 ## Built-up area
 
 The requested metric is the built-up area of Toulouse, with only verified estimates. No compatible dated series was established in this research, so no area figure is displayed yet.

@@ -54,6 +54,12 @@ ordinary interactions do not continuously rewrite the URL.
 
 ## Where to change things
 
+Mobile layout uses a viewport-fixed application with maps continuing beneath
+the footer safe area. The population card sits just below the header, with
+milestones initially collapsed on phones. The compact timeline exposes its
+selected date and uses one sparse label row. See `tests/mobile-layout.spec.ts`
+for viewport, expansion and non-overlap checks.
+
 | Area                                                   | Entry points                                                     |
 | ------------------------------------------------------ | ---------------------------------------------------------------- |
 | Epochs and rendering variants                          | `src/epochs/catalog.ts`, `types.ts`, `sources.ts`                |
