@@ -1,10 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-import { setSlider } from "./ui";
+import { prepareOfflineMaps, waitForApp, setSlider } from "./ui";
+test.beforeEach(async ({ page }) => prepareOfflineMaps(page));
 test("hold comparison restores split, overlay and timeline on release or cancellation", async ({
   page,
 }) => {
   await page.goto("/#year=1875&lon=1.4315&lat=43.599&z=15.6&mode=split");
+  await waitForApp(page);
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   const button = page.getByRole("button", {
     name: "Maintenir pour comparer avec la carte actuelle",

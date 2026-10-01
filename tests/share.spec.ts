@@ -1,12 +1,14 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { setSlider } from "./ui";
+import { prepareOfflineMaps, waitForApp, setSlider } from "./ui";
+test.beforeEach(async ({ page }) => prepareOfflineMaps(page));
 test("address stays stable while sharing captures and restores the current view", async ({
   page,
 }) => {
   await prepareSharing(page);
   await page.goto("/#lon=1.44954&lat=43.597678&z=16.7&year=1875");
+  await waitForApp(page);
   const original = page.url();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
@@ -30,6 +32,7 @@ test("address stays stable while sharing captures and restores the current view"
   expect(params.get("opacity")).toBe("42");
   expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");
   await page.goto(overlay);
+  await waitForApp(page);
   await page.reload();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
   await expect(
@@ -42,6 +45,7 @@ test("address stays stable while sharing captures and restores the current view"
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1850");
   const timeline = await sharedView(page);
   await page.goto(timeline);
+  await waitForApp(page);
   await page.reload();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1850");
   await expect(page.locator(".timeline-value")).toHaveText("1848 → 1860");
@@ -52,6 +56,7 @@ test("address stays stable while sharing captures and restores the current view"
   for (let i = 0; i < 36; i++) await page.keyboard.press("ArrowRight");
   const split = await sharedView(page);
   await page.goto(split);
+  await waitForApp(page);
   await page.reload();
   await expect(page.locator(".historic-map")).toHaveCSS("clip-path", "inset(0px 28% 0px 0px)");
 });
@@ -76,6 +81,7 @@ test("native sharing cancellation preserves the address and blocked clipboard ex
     });
   });
   await page.goto("/");
+  await waitForApp(page);
   const original = page.url();
   await page.getByRole("button", { name: "Partager la vue", exact: true }).click();
   expect(await page.evaluate(() => (window as any).nativeShareData.url)).toContain("mode=overlay");

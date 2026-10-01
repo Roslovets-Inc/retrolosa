@@ -50,7 +50,7 @@ Les actions temporaires de comparaison sont distinctes de l’état partagé.
 Elles changent la présentation sans remplacer le mode, l’opacité ou le temps
 choisis. Elles ne tournent pas la caméra à chaque pression et relâchement.
 
-## Vérification et limites actuelles
+## Cycle de vie des cartes
 
 `src/map/controller.ts` possède les deux renderers, leur synchronisation et leurs
 abonnements. `useMaps.ts` relie leur cycle de vie à React ; un échec partiel du
@@ -69,6 +69,31 @@ nouvelle tentative la supprime ; les sources désactivées ne bloquent plus la v
 « Réessayer » remplace les sources historiques en échec ou recharge le style
 actuel, en conservant les renderers, la caméra et l’état de comparaison.
 
+## Interface et styles
+
+`main.tsx` compose les composants et conserve l’état partagé, les raccourcis
+globaux et les services de carte. `src/components/` délimite les responsabilités :
+
+- `Header` gère les lieux, le thème et le partage, avec nettoyage du minuteur de
+  confirmation. Le lien est fourni par l’application à partir de sa vue courante.
+- `MapViewport` possède la position et les gestes de la loupe, et affiche le rideau.
+- `MapTools` expose la localisation, le zoom, l’orientation et l’opacité.
+- `ComparisonPanel` gère les gestes de la frise et les choix d’époques et de modes.
+- `SourcesDialog` présente les documents et leurs crédits à partir du catalogue.
+
+L’application conserve un seul choix de panneau ouvert (`places`, `epochs` ou
+aucun). Les états locaux des composants ne dupliquent pas l’état persistant de
+la vue et ne participent pas au lien de partage.
+
+`style.css` est l’unique point d’entrée des styles du projet : `colors.css` pour
+les couleurs, `base.css` pour les règles globales, `app.css` pour l’application
+et ses variantes responsives, `ui.css` pour les primitives Radix. Le fichier
+`compact.css` et les règles du précédent écran ont été supprimés. Les règles
+restantes conservent leur ordre de cascade ; les déclarations déjà dominées par
+une règle identique ultérieure ont été retirées.
+
+## Vérification et limites actuelles
+
 Les contrats du catalogue et de la vue sont testés sous Node, sans démarrer React
 ni MapLibre. La couverture obligatoire à 100 % concerne `timeline.ts` et les
 modules de `src/view/`. Les scénarios de `tests/view-state.spec.ts` vérifient
@@ -84,6 +109,11 @@ des couches et la libération des ressources. `tests/map-loading.spec.ts` vérif
 la reprise après une erreur réseau et l’absence de requêtes vers les archives
 inactives. Les tests avec services cartographiques réels restent distincts.
 
-Une grande partie du JSX reste dans `main.tsx`. Son découpage, la consolidation
-du CSS et le traitement des tuiles État-major dans un worker constituent les
-étapes suivantes.
+Les scénarios de partage, de comparaison et de loupe utilisent des services
+externes simulés : ils vérifient les gestes et les états de l’interface sans
+dépendre de la disponibilité d’un fournisseur de cartes.
+
+Le traitement des tuiles État-major dans un worker et la réduction du bundle
+JavaScript constituent les prochaines étapes. Les variantes responsives restent
+explicites dans `app.css` ; toute réorganisation de leur cascade doit préserver
+les dimensions, le focus et l’accessibilité des contrôles.

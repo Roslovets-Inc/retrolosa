@@ -1,9 +1,13 @@
 import { test, expect } from "@playwright/test";
 
+import { prepareOfflineMaps, waitForApp } from "./ui";
+
 test("loupe follows dragging and keyboard input and restores after comparison", async ({
   page,
 }) => {
+  await prepareOfflineMaps(page);
   await page.goto("/#mode=loupe&year=1875");
+  await waitForApp(page);
   const glass = page.getByRole("button", { name: "Déplacer la loupe historique" });
   const layer = page.locator(".historic-map");
   await expect(glass).toBeVisible();
@@ -42,7 +46,9 @@ test("mobile loupe handles touch dragging and cancellation", async ({ browser })
     hasTouch: true,
   });
   const page = await context.newPage();
+  await prepareOfflineMaps(page);
   await page.goto("/#mode=loupe");
+  await waitForApp(page);
   const glass = page.getByRole("button", { name: "Déplacer la loupe historique" });
   await expect(glass).toBeVisible();
   const before = (await glass.boundingBox())!;

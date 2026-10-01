@@ -56,7 +56,7 @@ export function derivePresentation(
   today: number,
 ) {
   const timeline = resolveTimeline(state, today);
-  const visibleMode =
+  const visibleMode: ViewState["mode"] | "modern" =
     state.enabled.length === 0
       ? "modern"
       : temporary.compareHeld
