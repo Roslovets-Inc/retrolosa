@@ -25,6 +25,14 @@ origin are explicit parameters; this module does not read `location`.
 `epochLayerIds` provides layer identifiers, so opacity handling does not depend
 on a particular epoch.
 
+The XII-century epoch (`1195`) uses the existing image renderer for a transparent
+composite of three disconnected regions (figures 9, 4 and 11), with separately
+aligned Saint-Pierre-des-Cuisines detail (figure 3) inside the borough. Each is aligned
+separately during explicit generation; no renderer/module boundary changes are
+needed. Regions without evidence remain transparent. Full originals and phase
+legends stay in the lazy sources links. The raster revision changes its asset URL
+to avoid stale imagery. Castle placement is explicitly approximate and unvalidated.
+
 To add an epoch:
 
 1. Explicitly prepare assets and their geographic metadata.

@@ -1,0 +1,85 @@
+{
+  "coordinates": [
+    [1.4340591430664062, 43.61179729776887],
+    [1.4524054527282715, 43.61179729776887],
+    [1.4524054527282715, 43.59238970944837],
+    [1.4340591430664062, 43.59238970944837]
+  ],
+  "timelineAnchor": 1195,
+  "checkPoints": [
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "errorMetres": 15.9
+    },
+    {
+      "name": "La Porterie gate",
+      "errorMetres": 19.1
+    },
+    {
+      "name": "Matabiau gate",
+      "errorMetres": 19.8
+    }
+  ],
+  "sourceSize": [3420, 4996],
+  "method": "Affine transfer through figure 6, translated to the corrected Saint-Sernin crossing on IGN. Withheld gates check inter-diagram agreement only.",
+  "coverage": "Three disconnected regions: Saint-Sernin borough with Saint-Pierre-des-Cuisines phase detail, Romanesque Saint-Étienne, approximately placed Narbonnais castle.",
+  "fragments": [
+    {
+      "id": "saint-sernin",
+      "figure": 9,
+      "checkPoints": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 15.9
+        },
+        {
+          "name": "La Porterie gate",
+          "errorMetres": 19.1
+        },
+        {
+          "name": "Matabiau gate",
+          "errorMetres": 19.8
+        }
+      ]
+    },
+    {
+      "id": "saint-etienne",
+      "figure": 4,
+      "checkPoints": [
+        {
+          "name": "Cathedral southwest nave corner",
+          "errorMetres": 4.9
+        },
+        {
+          "name": "Cathedral north choir corner",
+          "errorMetres": 7.8
+        }
+      ],
+      "method": "Similarity fit to two ends of the surviving cathedral; two separate cathedral corner checks on IGN Plan v2. Checks do not validate the complete historical quarter."
+    },
+    {
+      "id": "narbonnais",
+      "figure": 11,
+      "checkPoints": [],
+      "method": "Approximate placement from the figure 6 castle symbol, north arrow and printed 50-metre scale. No independent survey check; symbol centre does not establish an archaeological footprint.",
+      "approximate": true
+    },
+    {
+      "id": "saint-pierre",
+      "figure": 3,
+      "checkPoints": [
+        {
+          "name": "Northwest nave corner",
+          "errorMetres": 3.8
+        },
+        {
+          "name": "Southwest nave corner",
+          "errorMetres": 7.0
+        }
+      ],
+      "method": "Similarity fit to the surviving church's west facade midpoint and eastern main apse end on IGN Plan v2. Two withheld nave corners; manual low-resolution annotations limit accuracy.",
+      "multiphase": true
+    }
+  ],
+  "revision": 4
+}

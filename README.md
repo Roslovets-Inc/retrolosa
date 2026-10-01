@@ -2,6 +2,10 @@
 
 An interactive map of Toulouse through the centuries: ancient and medieval reconstructions,
 historical plans, the 1848 État-major map, 1954 aerial photography and the present-day map.
+The XII-century partial reconstruction combines Saint-Sernin borough growth,
+Romanesque Saint-Étienne and an approximately positioned Narbonnais castle fragment.
+Saint-Pierre-des-Cuisines adds building-phase detail within the Saint-Sernin borough.
+Undocumented gaps remain transparent; original phase legends are linked from sources.
 React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is in French.
 
 UI components use Radix Primitives: tooltips, panels, dialogs, checkboxes, mode selection

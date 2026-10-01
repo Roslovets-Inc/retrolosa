@@ -7,7 +7,7 @@ The time slider is always available. Superposition, curtain and loupe are compar
 The footer credits only historical sheets participating in the visible timeline blend,
 including both sheets during a crossfade. It hides historical credits for the modern-only
 view and zero historical opacity. OpenMapTiles and OpenStreetMap remain visible with links;
-OpenFreeMap and the complete list of twelve historical sources and authors are available
+OpenFreeMap and the complete list of thirteen historical sources and authors are available
 in the existing source dialog. Footer text is legible rather than compressed to 7px on mobile.
 OpenFreeMap explicitly permits omitting its own name from the on-map attribution:
 <https://openfreemap.org/#attribution>. OSM guidance is at
@@ -18,9 +18,36 @@ Attribution does not resolve the source-rights uncertainties documented below.
 
 ## Continuous timeline
 
-The unified timeline interpolates opacity between enabled historical sources and the modern basemap, not historical geometry or building dates. The current catalogue contains twelve historical epochs. Only contributing sources and their immediate enabled neighbours coexist in the historical style; neighbours stay transparent and prepared across snapped dates. Disabled epochs are skipped. Visual interval widths are bounded by `timelineStops`, while interpolation inside each interval uses calendar years. Pointer input snaps within 20% of each local interval. Intermediate labels report the source pair without a blend percentage or a claimed surveyed intermediate year. The comparison tool and calendar year are included when explicitly generating a shared URL; ordinary navigation does not rewrite the address. See [architecture](architecture.md) for the current source lifecycle and legacy link compatibility; the dated research below records source investigations rather than the current UI architecture.
+The unified timeline interpolates opacity between enabled historical sources and the modern basemap, not historical geometry or building dates. The current catalogue contains thirteen historical epochs. Only contributing sources and their immediate enabled neighbours coexist in the historical style; neighbours stay transparent and prepared across snapped dates. Disabled epochs are skipped. Visual interval widths are bounded by `timelineStops`, while interpolation inside each interval uses calendar years. Pointer input snaps within 20% of each local interval. Intermediate labels report the source pair without a blend percentage or a claimed surveyed intermediate year. The comparison tool and calendar year are included when explicitly generating a shared URL; ordinary navigation does not rewrite the address. See [architecture](architecture.md) for the current source lifecycle and legacy link compatibility; the dated research below records source investigations rather than the current UI architecture.
 
 Remaining candidates and priorities are maintained in [map-backlog.md](map-backlog.md).
+
+## Twelfth-century fragments (partial reconstruction)
+
+Figure 9 of Quitterie Cazes's study, drawn by F. Callède / Inrap, is integrated as
+`1195` with the XII-century label. Its original legend distinguishes growth circa
+1107, circa 1150, after 1150 and after 1191. 1195 is only a timeline ordering anchor.
+The fossil parcel background derives from the reconstructed 1550 cadastre. This
+is neither a complete city map nor a single-year state. The map now also includes
+selected Romanesque features from figure 4's Saint-Étienne quarter and figure 11's
+late-XII-century Narbonnais castle. Gaps between the three regions are transparent.
+Full drawings and original legends remain accessible in the sources dialog.
+Figure 3 enriches Saint-Pierre-des-Cuisines inside the borough with red phases
+circa 1100/1150 and light-green circa 1180. Yellow 1050, teal Late Middle Ages and
+grey later elements are excluded; this multiphase detail is not a single-year state.
+Two separate nave corners differ by 3.8 and 7.0 m from IGN. The detail replaces
+the coarse church symbol locally without extending the region's coverage.
+
+Three points transfer alignment through figure 6, followed by direct translation
+onto the corrected Saint-Sernin crossing in IGN Plan v2. Saint-Pierre-des-Cuisines
+differs by 15.9 m from IGN; two withheld gates differ by 19.1 and 19.8 m from
+figure 6. Saint-Étienne's two cathedral-corner checks give 4.9 and 7.8 m versus IGN;
+they do not validate the whole quarter. Its pale-yellow XIII-century extension and
+grey later features are excluded. Castle placement uses figure 6's symbol, the
+north arrow and figure 11's printed scale; it has no independent survey validation
+and is explicitly labelled approximate. These measurements do not establish historical accuracy. See
+[the preparation record](openedition-medieval-layers.md#twelfth-century-borough-layer--2026-10-01)
+for inputs, generation and unresolved illustration reuse terms.
 
 ## Added Tavernier plan 1631 (approximate alignment)
 

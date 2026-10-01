@@ -30,7 +30,7 @@ test("address stays stable while sharing captures and restores the current view"
   expect(params.get("z")).toBe("15.60");
   expect(params.get("mode")).toBe("overlay");
   expect(params.get("opacity")).toBe("42");
-  expect(params.get("layers")).toBe("450,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");
+  expect(params.get("layers")).toBe("450,1195,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");
   await page.goto(overlay);
   await waitForApp(page);
   await page.reload();

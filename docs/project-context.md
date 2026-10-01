@@ -30,9 +30,19 @@ content and accessibility labels remain in French for now; additional interface
 languages are planned for later. Keep original source titles, proper names and
 quoted UI labels when needed for identification.
 
-The catalogue covers twelve historical epochs: 450, 1250, 1550, 1631, 1680,
+The catalogue covers thirteen historical epochs: 450, 1195, 1250, 1550, 1631, 1680,
 1777, 1830, 1848, 1860, 1875, 1904 and 1954, followed by the current basemap.
 Some dates represent modern scholarly reconstructions, not contemporary surveys.
+The XII-century layer (`1195`) combines three disconnected fragments: Saint-Sernin
+borough growth, selected Romanesque Saint-Étienne features and an approximately
+placed Narbonnais castle. Undocumented gaps remain transparent.
+Saint-Pierre-des-Cuisines (figure 3) adds XII-century building-phase detail inside
+the borough, replacing its coarse church symbol with separately aligned red/light-green
+phases. Yellow 1050, teal Late Middle Ages and grey later features are excluded.
+1195 is an ordering anchor. Full originals and legends are linked; castle placement has no independent
+survey validation. Run `scripts/build-openedition-12c.py` followed by
+`scripts/compose-openedition-12c.py` for explicit regeneration. See
+`docs/openedition-medieval-layers.md` for checks, masks and remaining work.
 Source accuracy and licensing limitations are documented in [sources.md](sources.md)
 and [licensing.md](licensing.md). Do not infer accuracy from alignment alone.
 

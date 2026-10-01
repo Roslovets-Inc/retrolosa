@@ -11,6 +11,34 @@ absence does not block the site build using assets already tracked in `public/`.
 
 ## Source
 
+### Twelfth-century borough layer — 2026-10-01
+
+Figure 9 is integrated as `1195`, labelled **XIIe**, with partial coverage of the
+Saint-Sernin borough. The complete diagram retains its legend and growth phases
+circa 1107, circa 1150, after 1150 and after 1191. This is a multiphase analysis,
+not a single-year city state. Its fossil parcel background derives from the
+reconstructed 1550 cadastre. 1195 is only an ordering anchor.
+
+Three manually matched landmarks transfer alignment through figure 6: Saint-Sernin,
+Saint-Pierre-des-Cuisines and the first Arnaud-Bernard gate. Withheld La Porterie and
+Matabiau gates disagree by 5.1 and 5.3 metres between diagrams. These checks measure
+inter-diagram agreement, not independent geographic or historical accuracy.
+Configuration: `data/openedition-12c-control-points.json`; explicit generator:
+`scripts/build-openedition-12c.py` (numpy and Pillow). Original checksums are verified.
+
+Figure 11 is linked as a supplementary castle document, without an unvalidated map
+overlay. Castle alignment and phase-separated composition remain future work.
+The unresolved illustration reuse terms also apply here. No deployment was requested.
+
+Alignment correction on 2026-10-01: the XII-century Saint-Sernin crossing is
+reannotated at (675, 380) on the 1200-pixel drawing and anchored directly to IGN
+Plan v2 zoom-17 cached reference tiles, at mosaic pixel (272, 232), corresponding
+to (653.125, 495.3125) in the shared annotation reference. The affine transfer is
+translated to this anchor; it is not refitted through near-collinear direct points,
+which amplified small annotation errors at the edges. Current checks supersede the
+initial figures above: Saint-Pierre-des-Cuisines versus IGN 15.9 m; La Porterie and
+Matabiau versus figure 6, 19.1 and 19.8 m. Remaining disagreement is explicit.
+
 [Quitterie Cazes, “Toulouse au Moyen Âge : les pouvoirs dans la ville”](https://books.openedition.org/psorbonne/3296),
 in _Marquer la ville_, 2013, pp. 341–366. Drawings by F. Callède, based on research
 into medieval Toulouse, notably the collective programme and the synthesis edited
@@ -22,6 +50,55 @@ and proposals. They are not maps drawn in the period represented. Several use th
 and later elements are not all contemporary with the subject.
 
 ## Inventory of the 12 figures
+
+### Saint-Pierre-des-Cuisines phase detail — 2026-10-01
+
+Figure 3 now enriches the XII-century layer inside the existing Saint-Sernin region,
+without adding another epoch or claiming wider coverage. Hand-reviewed building
+regions and legend colours retain red phases circa 1100/1150 and the light-green
+phase circa 1180. Yellow 1050, teal Late Middle Ages and grey later elements are
+excluded. The retained phases remain a comparative analysis, not evidence that all
+walls coexisted in 1195; missing older wall segments are not reconstructed.
+
+A similarity fit uses the surviving west facade midpoint and eastern main apse end
+on cached IGN Plan v2 zoom-17 tiles (66057–66059, 47859–47861). Withheld northwest
+and southwest nave corners disagree by 3.8 and 7.0 m. These manual annotations on
+the reference map validate only this small footprint. A tight replacement mask
+removes figure 9's coarse church symbol beneath the detail, retaining surrounding
+borough streets. Figure 3's complete original and phase legend are linked in sources.
+Configuration remains in `data/openedition-12c-fragments.json`, with the same two-step
+explicit generator workflow. Raster revision 4 avoids stale browser imagery.
+
+### Three-fragment XII-century composition — 2026-10-01
+
+The current renderer uses a single transparent composite of figures 9, 4 and 11.
+The preceding borough-only records describe earlier preparation stages. Figure 9
+keeps its established corrected alignment; its manually bounded map region excludes
+the page legend and margins. Its full original and multiphase legend remain linked.
+
+Figure 4 uses a similarity fit between the surviving cathedral's west portal and
+eastern choir end on cached IGN Plan v2 zoom-17 reference tiles. Withheld southwest
+nave and north choir corners differ by 4.9 and 7.8 m. These building checks do not
+validate the entire historical quarter. Hand-reviewed regions plus legend colours
+retain Romanesque red features, yellow canonical residences and the purple episcopal
+palace; pale-yellow XIII-century extension, grey later elements and contemporary
+cathedral/background linework are excluded. This is phase extraction, not a complete
+reconstruction of the missing Romanesque cathedral. The original is linked in full.
+
+Figure 11 retains the late-XII-century castle, walls, moats, uncertain gate and possible
+access labels inside a bounded fragment. Its approximate placement uses the castle
+symbol in figure 6, the north arrow and 50-metre scale. **No independent geographic
+check validates the castle footprint**; a symbol centre is not a survey control point.
+Do not claim street-level accuracy for it. Figure 12 is not used as a historical layer.
+
+Inputs and masks: `data/openedition-12c-fragments.json`. Explicit generation requires
+`scripts/build-openedition-12c.py` followed by `scripts/compose-openedition-12c.py`.
+The composer verifies source checksums, aligns fragments in Web Mercator and preserves
+transparent gaps in the shared WebP. Originals are copied to `public/openedition-12c`;
+after preparation, generators can use those tracked copies if `.local` is absent.
+Re-running the composer alone against an already composed raster is unsupported;
+always run the borough generator first. No automatic downloads, raster regeneration
+in the web build, or deployment are introduced. Illustration reuse terms remain open.
 
 | No. | Subject                                   | Usable dating                                                                                                  | Proposed use and precautions                                                                                                                                               |
 | --- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

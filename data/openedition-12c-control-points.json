@@ -1,0 +1,16 @@
+{
+  "sourcePath": ".local/openedition-3296/originals/figure-09.jpg",
+  "sha256": "275db363639f896c31522dca777eb10bdfb5ad1d945b2b54af1f3a97749dd44d",
+  "annotationWidth": 1200,
+  "referenceConfig": "data/openedition-13c-control-points.json",
+  "points": [
+    { "name": "Saint-Sernin crossing", "old": [675, 380], "ref": [546, 263], "modernRef": [653.125, 495.3125], "role": "fit" },
+    { "name": "Saint-Pierre-des-Cuisines footprint", "old": [130, 853], "ref": [216, 547], "modernRef": [534.9, 599.44], "role": "fit" },
+    { "name": "First Arnaud-Bernard gate", "old": [426, 211], "ref": [396, 159], "role": "fit" },
+    { "name": "La Porterie gate", "old": [760, 846], "ref": [596, 544], "role": "check" },
+    { "name": "Matabiau gate", "old": [980, 400], "ref": [730, 273], "role": "check" }
+  ],
+  "modernReference": "IGN Plan v2 cached zoom-17 tiles 66060/47857 and neighbours; coordinates expressed in the existing zoom-15 reference at annotation width 1200. Saint-Sernin crossing manually annotated at mosaic pixel 272,232; uncertainty of several pixels remains.",
+  "dating": "Growth during the twelfth century, including extension after 1191. 1195 is an ordering anchor, not a surveyed city state.",
+  "rights": "F. Callède / Inrap / PCR Toulouse au Moyen Âge. Reuse authorization remains unconfirmed."
+}

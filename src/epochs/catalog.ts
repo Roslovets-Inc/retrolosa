@@ -9,6 +9,10 @@ import {
   coordinates as laffontCoordinates,
   sourcePage as laffontSourcePage,
 } from "../laffont-1904.json";
+import {
+  coordinates as boroughCoordinates,
+  revision as medievalRevision,
+} from "../openedition-12c.json";
 import { coordinates as medievalCoordinates } from "../openedition-13c.json";
 import { coordinates as parcelsCoordinates } from "../openedition-1550.json";
 import { coordinates as antiquityCoordinates } from "../openedition-antiquite.json";
@@ -50,6 +54,18 @@ export const EPOCHS = [
     attribution: "F. Callède / Inrap",
     bearing: 0,
     render: image("openedition-antiquite/map.webp", antiquityCoordinates),
+  },
+  {
+    id: "1195",
+    label: "XIIe",
+    optionLabel: "Reconstruction partielle · trois secteurs",
+    category: "RECONSTRUCTION PARTIELLE",
+    timelineLabel: "XIIe · Reconstruction partielle",
+    credit: "F. Callède / Inrap",
+    sourceUrl: medievalSource,
+    attribution: "F. Callède / Inrap · PCR Toulouse au Moyen Âge",
+    bearing: 0,
+    render: image(`openedition-12c/map.webp?v=${medievalRevision}`, boroughCoordinates),
   },
   {
     id: "1250",

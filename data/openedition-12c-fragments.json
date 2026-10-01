@@ -1,0 +1,48 @@
+{
+  "annotationWidth": 1200,
+  "reference": { "z": 17, "x0": 66062, "y0": 47861 },
+  "etienne": {
+    "figure": 4,
+    "sha256": "5644a728b25e44a6241c4781075599b035fd92600a54f7f5b7aea045729e9ce7",
+    "points": [
+      { "name": "Cathedral west portal", "old": [446, 517], "ref": [471.55, 318.98], "role": "fit" },
+      { "name": "Cathedral choir east end", "old": [861, 471], "ref": [602, 303], "role": "fit" },
+      { "name": "Cathedral southwest nave corner", "old": [478, 621], "ref": [481, 346], "role": "check" },
+      { "name": "Cathedral north choir corner", "old": [808, 365], "ref": [581, 278], "role": "check" }
+    ],
+    "phaseRegions": [
+      [[295, 590], [447, 591], [465, 632], [592, 650], [593, 735], [665, 735], [665, 845], [494, 1214], [220, 1090], [195, 1072]],
+      [[494, 1218], [659, 842], [670, 748], [718, 748], [746, 805], [786, 833], [806, 800], [848, 740], [869, 688], [839, 1080], [802, 1263], [663, 1234]],
+      [[825, 270], [851, 300], [898, 341], [930, 502], [939, 551], [941, 600], [939, 678], [875, 732], [863, 573], [845, 454], [824, 353]]
+    ],
+    "romanesqueRegion": [[488, 479], [656, 478], [810, 479], [851, 522], [945, 545], [943, 670], [849, 722], [857, 755], [816, 821], [683, 845], [665, 742], [667, 581], [489, 612]],
+    "dating": "Romanesque features explicitly coloured in figure 4. Pale-yellow XIII-century extension and grey later elements excluded; contemporary background used for alignment only.",
+    "method": "Similarity fit to two ends of the surviving cathedral; two separate cathedral corner checks on IGN Plan v2. Checks do not validate the complete historical quarter."
+  },
+  "castle": {
+    "figure": 11,
+    "sha256": "de1e2c7c7d8d2d4cfbfcfa17b18e2c91d58b5acd8be5f95ac9ceda7bb831b307",
+    "anchor": [600, 566],
+    "figure6Anchor": [660, 1280],
+    "scaleBar": { "pixels": 302, "metres": 50 },
+    "coveragePolygon": [[0, 530], [463, 530], [463, 450], [730, 450], [730, 530], [1200, 530], [1200, 1190], [0, 1190]],
+    "dating": "Late twelfth century, figure 11; uncertain gate and possible accesses retain their labels.",
+    "method": "Approximate placement from the figure 6 castle symbol, north arrow and printed 50-metre scale. No independent survey check; symbol centre does not establish an archaeological footprint.",
+    "positionalAccuracy": "Unvalidated approximate placement; no measured accuracy claim."
+  },
+  "pierre": {
+    "figure": 3,
+    "sha256": "46f1f3373a98164e5d79b7a483db80b71dc387144eca250021ae21b550331d36",
+    "reference": { "z": 17, "x0": 66057, "y0": 47859 },
+    "points": [
+      { "name": "West facade midpoint", "old": [115, 507], "ref": [410, 251], "role": "fit" },
+      { "name": "Main apse eastern end", "old": [1126, 375], "ref": [464, 251], "role": "fit" },
+      { "name": "Northwest nave corner", "old": [80, 365], "ref": [408, 239], "role": "check" },
+      { "name": "Southwest nave corner", "old": [135, 655], "ref": [414, 266], "role": "check" }
+    ],
+    "phaseRegion": [[30, 330], [195, 265], [715, 190], [752, 270], [865, 305], [1140, 255], [1165, 475], [1165, 820], [1050, 850], [800, 900], [70, 750]],
+    "dating": "Retain red phases circa 1100 and 1150 and light-green phase circa 1180 as a multiphase analysis. Yellow 1050, teal Late Middle Ages and grey later elements excluded. Missing segments are not reconstructed.",
+    "method": "Similarity fit to the surviving church's west facade midpoint and eastern main apse end on IGN Plan v2. Two withheld nave corners; manual low-resolution annotations limit accuracy."
+  },
+  "rights": "Existing unresolved illustration reuse terms apply; no publication authorized by this preparation."
+}

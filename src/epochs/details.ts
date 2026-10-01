@@ -10,6 +10,10 @@ import {
   fitPointCount as laffontFitPointCount,
   checkPoints as laffontCheckPoints,
 } from "../laffont-1904.json";
+import {
+  checkPoints as boroughCheckPoints,
+  fragments as medievalFragments,
+} from "../openedition-12c.json";
 import { checkPoints as medievalCheckPoints } from "../openedition-13c.json";
 import { checkPoints as parcelsCheckPoints } from "../openedition-1550.json";
 import { checkPoints as antiquityCheckPoints } from "../openedition-antiquite.json";
@@ -33,6 +37,37 @@ export const epochDetails = {
       {
         path: "openedition-antiquite/figure-01.jpg",
         label: "Voir le dessin complet et sa légende",
+      },
+    ],
+  },
+  "1195": {
+    title: "Toulouse au XIIe siècle · trois secteurs reconstruits",
+    paragraphs: [
+      "Reconstruction partielle : figure 9 de l’étude de Quitterie Cazes, dessin de F. Callède / Inrap. Le document montre la croissance du bourg vers 1107, vers 1150, après 1150 et son extension après 1191. Les couleurs et la légende distinguent ces phases ; ce n’est pas un état unique de toute la ville.",
+      "Trois secteurs séparés : le bourg Saint-Sernin, les éléments romans du quartier Saint-Étienne et le château Narbonnais de la fin du XIIe siècle. Entre ces fragments, les zones sans documentation restent transparentes. Le fond parcellaire de Saint-Sernin est une analyse du cadastre restitué de 1550. Le repère 1195 sert au classement, sans dater précisément tous les éléments.",
+      `Calage affine transféré depuis la reconstruction du XIIIe siècle, puis corrigé sur la croisée de Saint-Sernin dans le plan IGN actuel. Le contrôle de Saint-Pierre-des-Cuisines sur IGN donne ${boroughCheckPoints[0].errorMetres} m ; les portes de la Porterie et de Matabiau donnent ${boroughCheckPoints
+        .slice(1)
+        .map((point) => point.errorMetres)
+        .join(
+          " et ",
+        )} m de désaccord avec le dessin du XIIIe siècle. Ces contrôles ne garantissent pas la précision historique ou la concordance de toutes les rues. Le dessin complet et sa légende sont conservés.`,
+      `Saint-Étienne : seuls les éléments romans rouges, les maisons canoniales jaunes et le palais épiscopal violet sont retenus dans les zones identifiées. L’extension jaune pâle du XIIIe siècle et les éléments gris postérieurs sont exclus. Deux contrôles sur les angles de la cathédrale actuelle donnent ${medievalFragments[1].checkPoints.map((point) => point.errorMetres).join(" et ")} m ; ils ne valident pas tout le quartier.`,
+      "Château Narbonnais : placement approximatif à partir du symbole du château dans le plan général, du nord et de l’échelle de la figure 11. Ce fragment n’a pas de contrôle topographique indépendant. La porte incertaine et les accès possibles restent signalés ; le fond cadastral n’est pas un état médiéval. Les légendes complètes sont accessibles ci-dessous.",
+      `Saint-Pierre-des-Cuisines : la figure 3 complète le bourg avec les phases rouges vers 1100 et 1150 et la phase vert clair vers 1180. Le jaune de 1050, le bleu-vert du bas Moyen Âge et les éléments gris postérieurs sont exclus. Les phases sont présentées ensemble pour l’analyse, sans affirmer que tous les murs coexistaient. Deux angles de la nef non utilisés pour le calage donnent ${medievalFragments[3].checkPoints.map((point) => point.errorMetres).join(" et ")} m d’écart avec IGN. Ces contrôles locaux ne garantissent pas la précision ailleurs.`,
+    ],
+    links: [
+      {
+        path: "openedition-12c/figure-09.jpg",
+        label: "Croissance de Saint-Sernin · dessin et légende",
+      },
+      {
+        path: "openedition-12c/figure-11.jpg",
+        label: "Château Narbonnais · dessin et légende",
+      },
+      { path: "openedition-12c/figure-04.jpg", label: "Saint-Étienne · phases et légende" },
+      {
+        path: "openedition-12c/figure-03.jpg",
+        label: "Saint-Pierre-des-Cuisines · phases et légende",
       },
     ],
   },

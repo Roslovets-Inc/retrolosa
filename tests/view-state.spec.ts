@@ -75,6 +75,7 @@ test("every epoch exposes its own source details through the catalogue", async (
   await page.goto("/");
   for (const [year, title] of [
     ["450", "Toulouse à la fin de l’Antiquité"],
+    ["1195", "Toulouse au XIIe siècle"],
     ["1250", "Toulouse au XIIIe siècle"],
     ["1550", "1550 · Héritages"],
     ["1631", "Plan de Melchior Tavernier"],
@@ -96,5 +97,32 @@ test("every epoch exposes its own source details through the catalogue", async (
       /^https:\/\//,
     );
     await page.keyboard.press("Escape");
+  }
+});
+
+test("twelfth-century partial reconstruction loads and survives sharing", async ({ page }) => {
+  const raster = page.waitForResponse((response) =>
+    new URL(response.url()).pathname.endsWith("/openedition-12c/map.webp"),
+  );
+  await page.goto("/#layers=1195&time=1195&lon=1.445&lat=43.602&z=14&opacity=100");
+  expect((await raster).ok()).toBe(true);
+  await expect(page.locator(".timeline-value")).toHaveText("XIIe · Reconstruction partielle");
+  const url = await sharedView(page);
+  expect(new URL(url).hash).toContain("layers=1195");
+  await page.goto(url);
+  await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1195");
+  await page.screenshot({ path: ".local/12c-desktop.png" });
+  await page.getByRole("button", { name: "À propos des cartes", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Cartes et précision" });
+  await expect(dialog).toContainText("Reconstruction partielle");
+  await expect(dialog).toContainText("après 1191");
+  await expect(dialog).toContainText("Trois secteurs séparés");
+  await expect(dialog).toContainText("placement approximatif", { ignoreCase: true });
+  await expect(dialog).toContainText("vers 1180");
+  for (const filename of ["figure-09.jpg", "figure-11.jpg", "figure-04.jpg", "figure-03.jpg"]) {
+    const link = dialog.locator(`a[href$="openedition-12c/${filename}"]`);
+    await expect(link).toBeVisible();
+    const response = await page.request.get((await link.getAttribute("href"))!);
+    expect(response.ok()).toBe(true);
   }
 });
