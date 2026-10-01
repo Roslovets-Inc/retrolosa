@@ -30,18 +30,19 @@ import "./style.css";
 import "./compact.css";
 import medieval13c from "./openedition-13c.json";
 import parcels1550 from "./openedition-1550.json";
+import antiquity from "./openedition-antiquite.json";
 import tavernier1631 from "./tavernier-1631.json";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import { useLocation } from "./useLocation";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
-const YEARS = ["1250", "1550", "1631", "1680", "1830", "1875", "1954"] as const;
+const YEARS = ["450", "1250", "1550", "1631", "1680", "1830", "1875", "1954"] as const;
 type Year = (typeof YEARS)[number];
-const epochLabel = (value: Year) => (value === "1250" ? "XIIIe" : value);
+const epochLabel = (value: Year) => (value === "450" ? "Ve" : value === "1250" ? "XIIIe" : value);
 const initialYear = (): Year => {
   const value = new URLSearchParams(location.hash.slice(1)).get("year");
-  return YEARS.includes(value as Year) ? (value as Year) : YEARS[0];
+  return YEARS.includes(value as Year) ? (value as Year) : "1250";
 };
 const IGN_SOURCE = "https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities";
 const FLOOD_SOURCE =
@@ -49,7 +50,7 @@ const FLOOD_SOURCE =
 const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
 const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
 const sourceUrl = (year: Year) =>
-  year === "1250" || year === "1550"
+  year === "450" || year === "1250" || year === "1550"
     ? MEDIEVAL_SOURCE
     : year === "1631"
       ? TAVERNIER_SOURCE
@@ -63,10 +64,32 @@ const sourceUrl = (year: Year) =>
 const TODAY = new Date().getFullYear();
 const initialTime = () => {
   const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
-  return Number.isFinite(value) && value >= 1250 && value <= TODAY ? value : Number(initialYear());
+  return Number.isFinite(value) && value >= Number(YEARS[0]) && value <= TODAY
+    ? value
+    : Number(initialYear());
 };
 function historicalStyle(year: Year): maplibregl.StyleSpecification {
   const style: maplibregl.StyleSpecification = { version: 8, sources: {}, layers: [] };
+  style.sources["history-450"] = {
+    type: "image",
+    url: assetUrl("openedition-antiquite/map.webp"),
+    coordinates: antiquity.coordinates as [
+      [number, number],
+      [number, number],
+      [number, number],
+      [number, number],
+    ],
+  };
+  style.layers.push({
+    id: "history-450",
+    type: "raster",
+    source: "history-450",
+    paint: {
+      "raster-opacity": year === "450" ? 1 : 0,
+      "raster-opacity-transition": { duration: 0 },
+      "raster-fade-duration": 0,
+    },
+  });
   style.sources["history-1250"] = {
     type: "image",
     url: assetUrl("openedition-13c/map.webp"),
@@ -521,7 +544,7 @@ function App() {
   const lower = dates.filter((date) => date <= time).at(-1)!;
   const upper = dates.find((date) => date > time) ?? TODAY;
   const dateLabel = (date: number) =>
-    date === TODAY ? "Actuel" : date === 1250 ? "XIIIe" : String(date);
+    date === TODAY ? "Actuel" : date === 450 ? "Ve" : date === 1250 ? "XIIIe" : String(date);
   const timePosition = timelinePosition(time, dates);
   const moveTimeline = (element: HTMLInputElement, clientX: number) => {
     const box = element.getBoundingClientRect();
@@ -600,11 +623,13 @@ function App() {
         aria-label={
           mode === "time"
             ? "Cartes historiques sur la frise"
-            : year === "1250"
-              ? "Reconstruction de Toulouse au XIIIe siècle"
-              : year === "1550"
-                ? "Héritages du parcellaire de 1550"
-                : `Carte historique de Toulouse en ${year}`
+            : year === "450"
+              ? "Reconstruction de Toulouse à la fin de l’Antiquité"
+              : year === "1250"
+                ? "Reconstruction de Toulouse au XIIIe siècle"
+                : year === "1550"
+                  ? "Héritages du parcellaire de 1550"
+                  : `Carte historique de Toulouse en ${year}`
         }
         style={{
           opacity:
@@ -747,7 +772,7 @@ function App() {
                       />
                       <span>{epochLabel(value)}</span>
                       <small>
-                        {value === "1250"
+                        {value === "450" || value === "1250"
                           ? "Reconstruction"
                           : value === "1550"
                             ? "Héritages du parcellaire"
@@ -838,7 +863,7 @@ function App() {
           <div className="epoch-label old-label">
             {year === "1875" ? "1875 · Inondation" : epochLabel(year)}{" "}
             <span>
-              {year === "1250"
+              {year === "450" || year === "1250"
                 ? "RECONSTRUCTION"
                 : year === "1550"
                   ? "HÉRITAGES DU PARCELLAIRE"
@@ -959,7 +984,14 @@ function App() {
                 {enabled.map((value) => (
                   <button
                     key={value}
-                    aria-label={value === "1250" ? "Carte du XIIIe siècle" : `Carte de ${value}`}
+                    aria-label={
+                      value === "450"
+                        ? "Carte de l’Antiquité tardive"
+                        : value === "1250"
+                          ? "Carte du XIIIe siècle"
+                          : `Carte de ${value}`
+                    }
+                    data-period={value}
                     aria-pressed={year === value}
                     className={year === value ? "selected" : ""}
                     onClick={() => changeYear(value)}
@@ -1087,15 +1119,11 @@ function App() {
                 {dates.map((date, index) => (
                   <button
                     key={date}
+                    data-period={date}
                     style={{
                       // Match the native range's 16px thumb travel, including both end insets.
                       left: `calc(${timelinePosition(date, dates) * 100}% + ${8 - 16 * timelinePosition(date, dates)}px)`,
-                      transform:
-                        index === 0
-                          ? "none"
-                          : index === dates.length - 1
-                            ? "translateX(-100%)"
-                            : "translateX(-50%)",
+                      transform: index === 0 ? "none" : "translateX(-50%)",
                     }}
                     onClick={() => setTime(date)}
                   >
@@ -1148,6 +1176,14 @@ function App() {
       <footer>
         <span className="coordinates">{coords}</span>
         <span>
+          {(mode === "time" || year === "450") && (
+            <>
+              <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
+                Antiquité tardive · F. Callède / Inrap
+              </a>
+              {mode === "time" ? " · " : ""}
+            </>
+          )}
           {(mode === "time" || year === "1250") && (
             <>
               <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
@@ -1262,7 +1298,31 @@ function App() {
             </button>
             <div className="eyebrow">SOURCES ET PRÉCISION</div>
             <h2>Cartes de Toulouse</h2>
-            {year === "1250" ? (
+            {year === "450" ? (
+              <>
+                <h3>Toulouse à la fin de l’Antiquité · reconstruction</h3>
+                <p>
+                  Figure 1 de l’étude de Quitterie Cazes, dessin de F. Callède. Le plan distingue
+                  les vestiges du Haut et du Bas Empire et les propositions de restitution des axes
+                  de la voirie antique. Le fond parcellaire et les églises servent de repères ; tous
+                  les éléments dessinés ne sont pas contemporains.
+                </p>
+                <p>
+                  La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans
+                  les liens et la frise sert uniquement au classement. La légende originale est
+                  conservée. Le calage affine utilise trois églises de référence ; le contrôle
+                  indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
+                  {antiquity.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
+                </p>
+                <a
+                  href={assetUrl("openedition-antiquite/figure-01.jpg")}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Voir le dessin complet et sa légende <ExternalLink size={14} />
+                </a>
+              </>
+            ) : year === "1250" ? (
               <>
                 <h3>Toulouse au XIIIe siècle · reconstruction</h3>
                 <p>
@@ -1381,10 +1441,10 @@ function App() {
             <h3>Mode « Frise »</h3>
             <p>
               La frise mélange les cartes sélectionnées dans « Époques » et la carte actuelle. Les
-              sources disponibles sont la reconstruction du XIIIe siècle, les héritages du
-              parcellaire de 1550, le plan de 1631, les cadastres de 1680 et 1830, le plan
-              d’inondation de 1875 et la vue aérienne de 1954. Les positions intermédiaires sont des
-              transitions visuelles, pas des reconstitutions de ces années.
+              sources disponibles sont les reconstructions de la fin de l’Antiquité et du XIIIe
+              siècle, les héritages du parcellaire de 1550, le plan de 1631, les cadastres de 1680
+              et 1830, le plan d’inondation de 1875 et la vue aérienne de 1954. Les positions
+              intermédiaires sont des transitions visuelles, pas des reconstitutions de ces années.
             </p>
             <a href={MEDIEVAL_SOURCE} target="_blank" rel="noreferrer">
               Source XIIIe siècle · figure 6

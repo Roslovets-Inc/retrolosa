@@ -54,6 +54,16 @@ test("compact modes share transparency, preserve comparison shape and have equal
         const panelBox = (await panel.boundingBox())!;
         expect(switchBox.x + switchBox.width).toBeLessThanOrEqual(panelBox.x + panelBox.width);
         expect(switchBox.y + switchBox.height).toBeLessThanOrEqual(panelBox.y + panelBox.height);
+        const modeBox = (await page.locator(".mode-buttons").boundingBox())!;
+        const yearsBox = (await page.locator(".year-selector").boundingBox())!;
+        expect(modeBox.x + modeBox.width).toBeLessThanOrEqual(switchBox.x);
+        expect(yearsBox.y).toBeGreaterThanOrEqual(switchBox.y + switchBox.height);
+        for (const button of await page.locator(".year-selector button").all()) {
+          const epochBox = (await button.boundingBox())!;
+          expect(epochBox.x).toBeGreaterThanOrEqual(panelBox.x);
+          expect(epochBox.x + epochBox.width).toBeLessThanOrEqual(panelBox.x + panelBox.width);
+        }
+        await page.screenshot({ path: `.local/controls-cards-mobile-${width}.png` });
       }
       const box = (await transparency.boundingBox())!;
       expect(box.x).toBeGreaterThan(

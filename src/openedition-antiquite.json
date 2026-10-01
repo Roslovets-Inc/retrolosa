@@ -1,0 +1,19 @@
+{
+  "sourcePage": "https://books.openedition.org/psorbonne/3296",
+  "coordinates": [
+    [1.4303810762055775, 43.612123786055065],
+    [1.4538057506763096, 43.61246599196032],
+    [1.4545989508742991, 43.5896069498768],
+    [1.431174276403567, 43.58926461392832]
+  ],
+  "label": "Antiquité tardive",
+  "timelineAnchor": 450,
+  "checkPoints": [
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "errorMetres": 4.4
+    }
+  ],
+  "method": "Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+  "sourceSize": [2007, 2660]
+}

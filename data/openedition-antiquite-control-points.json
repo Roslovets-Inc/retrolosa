@@ -1,0 +1,66 @@
+{
+  "sourcePath": ".local/openedition-3296/originals/figure-01.jpg",
+  "sourceUrl": "https://books.openedition.org/psorbonne/file/3296/tei/img-1.jpg/download",
+  "sourcePage": "https://books.openedition.org/psorbonne/3296",
+  "sha256": "a1b070195e5edc4efea63c92e2ed035215d7c246ca816b98bd28e01c87121083",
+  "annotationWidth": 1200,
+  "reference": {
+    "z": 15,
+    "x0": 16512,
+    "y0": 11962,
+    "width": 1536
+  },
+  "points": [
+    {
+      "name": "Saint-Sernin crossing",
+      "old": [
+        584.155456,
+        266.666667
+      ],
+      "ref": [
+        649.3,
+        494.5
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Étienne west portal",
+      "old": [
+        970.403587,
+        877.130045
+      ],
+      "ref": [
+        792.1,
+        712.3
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Dalbade nave footprint",
+      "old": [
+        599.103139,
+        1017.638266
+      ],
+      "ref": [
+        661.43,
+        765.73
+      ],
+      "role": "fit"
+    },
+    {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "old": [
+        256.502242,
+        548.281016
+      ],
+      "ref": [
+        534.9,
+        599.44
+      ],
+      "role": "check"
+    }
+  ],
+  "method": "Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+  "dating": "Antiquité tardive, plusieurs phases. 450 is only a timeline ordering anchor, not a dated state.",
+  "rights": "F. Callède / Inrap / PCR Toulouse au Moyen Âge. Reuse authorization unconfirmed; attribution and source link do not establish permission. Integrated at user's request."
+}

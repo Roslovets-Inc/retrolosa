@@ -26,6 +26,8 @@ test("local assets and navigation work under the deployment base path", async ({
   for (const asset of [
     "fonts/font-4.woff2",
     "openedition-13c/map.webp",
+    "openedition-antiquite/map.webp",
+    "openedition-antiquite/figure-01.jpg",
     "openedition-13c/figure-06.jpg",
     "openedition-1550/map.webp",
     "openedition-1550/figure-07.jpg",

@@ -116,21 +116,27 @@ main {
   bottom: auto;
   transform: none;
   padding: 8px 10px;
-  width: 440px;
+  width: 480px;
   min-width: 0;
   flex: 1;
   height: 110px;
   border-radius: 10px;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 42px 42px;
   align-items: center;
   gap: 6px 10px;
 }
 .mode-buttons {
+  grid-column: 1;
+  grid-row: 1;
   order: 0;
   width: 100%;
   padding: 3px;
   gap: 2px;
+}
+.control-panel:not(:has(.comparison-switch)) .mode-buttons {
+  grid-column: 1 / -1;
 }
 .mode-buttons button {
   min-height: 36px;
@@ -138,16 +144,26 @@ main {
   font-size: 11px;
 }
 .year-selector {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
   order: 1;
   margin: 0;
   flex: 1;
 }
+.year-selector > div {
+  width: 100%;
+}
 .year-selector button {
+  flex: 1;
+  min-width: 0;
   height: 36px;
   padding: 0 8px;
   font-size: 11px;
 }
 .comparison-switch {
+  grid-column: 2;
+  grid-row: 1;
   order: 1;
   display: flex;
   gap: 2px;
@@ -193,6 +209,8 @@ main {
   opacity: 0.3;
 }
 .timeline {
+  grid-column: 1 / -1;
+  grid-row: 2;
   width: 100%;
   margin: 0;
 }
@@ -368,7 +386,7 @@ footer {
     min-width: 0;
   }
   .comparison-switch button {
-    width: 24px;
+    width: 30px;
   }
   .timeline-ticks button {
     font-size: 9px;

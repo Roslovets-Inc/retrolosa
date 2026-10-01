@@ -39,6 +39,8 @@ Premier candidat : **Toulouse au XIIIe siècle, figure 6**, puis Antiquité tard
 7/8 documentent des héritages du parcellaire de 1550 ; elles ne constituent pas
 une carte antique. La figure 12 présente une contradiction de datation à résoudre.
 
+La figure 1 de la fin de l’Antiquité est intégrée localement, avec sa légende
+complète et un repère numérique 450 utilisé uniquement pour la navigation.
 La figure 6 du XIIIe siècle est maintenant intégrée au site, avec
 un calage affine et des liens de source. Les limites parcellaires des figures 7 et 8
 sont également assemblées dans une couche locale « 1550 · Héritages du parcellaire ».

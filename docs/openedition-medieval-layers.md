@@ -77,6 +77,23 @@ l’intégralité du dessin source, avec sa légende originale et les quartiers 
 de l’enceinte, sans découpage ni zone transparente.
 Le fichier WebP préparé pèse environ 1,1 Mo, l'original environ 1,33 Mo.
 
+### Couche Antiquité tardive — figure 1, 1er octobre 2026
+
+La figure 1 est intégrée localement avec le libellé compact « Ve » sur la frise
+et dans le choix des époques ; son contexte reste « Antiquité tardive ».
+Le repère numérique 450 sert uniquement au classement sur la frise et aux liens ;
+la source ne date pas le dessin d’une année précise. Le plan conserve son étendue
+complète et sa légende, qui distingue vestiges du Haut Empire, du Bas Empire et
+propositions de restitution des axes antiques. Les églises et le fond parcellaire
+servent de repères et ne décrivent pas tous un état de la fin de l’Antiquité.
+
+Le calage affine utilise les empreintes de référence de Saint-Sernin, Saint-Étienne
+et la Dalbade, rapprochées de la figure 6. Le contrôle indépendant sur
+Saint-Pierre-des-Cuisines donne 4,4 m, sans garantie de précision ailleurs.
+Configuration : `data/openedition-antiquite-control-points.json` ; préparation
+explicite : `scripts/build-openedition-antiquite.py`. Le SHA-256 de l’original est
+vérifié avant la génération. Aucune publication n’a été effectuée.
+
 ### Couche 1550 — assemblage des figures 7 et 8, 1er octobre 2026
 
 La couche « 1550 · Héritages du parcellaire » est intégrée localement au choix

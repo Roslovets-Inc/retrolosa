@@ -18,13 +18,14 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
   await page.screenshot({ path: ".local/epochs-mobile.png" });
   await expect
     .poll(() => sharedView(page))
-    .toMatch(/layers=1250%2C1550%2C1631%2C1680%2C1830%2C1954/);
+    .toMatch(/layers=450%2C1250%2C1550%2C1631%2C1680%2C1830%2C1954/);
   await page.goto(await sharedView(page));
   await page.reload();
   await page.getByRole("button", { name: "Époques", exact: true }).click();
   await expect(page.getByRole("checkbox", { name: "1875 Inondation" })).not.toBeChecked();
   for (const name of [
     "XIIIe Reconstruction",
+    "Ve Reconstruction",
     "1550 Héritages du parcellaire",
     "1631 Plan · calage approximatif",
     "1680 Cadastre",
