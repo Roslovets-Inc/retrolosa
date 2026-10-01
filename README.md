@@ -67,11 +67,14 @@ React Hooks et Vitest. Les avertissements lint font échouer la vérification.
 Oxfmt impose les fins de ligne LF et exclut les cartes et données générées.
 TypeScript vérifie l’application, les tests et les configurations.
 
-Vitest vérifie les transitions et seuils de la frise. Le seuil de couverture de
-100 % concerne uniquement `src/timeline.ts`, pas toute l’application.
+Vitest vérifie notamment le catalogue, les transitions de vue, la frise, les
+contrôleurs et le worker. Le seuil de couverture de 100 % concerne uniquement
+`src/timeline.ts` et les modules de `src/view/`, pas toute l’application.
 Playwright vérifie les cartes, les modes de comparaison, le partage et le mobile.
-Les tests navigateur nécessitent Internet ; les vérifications hors ligne
-fonctionnent après installation des dépendances.
+Certains tests navigateur utilisent les services réels et nécessitent Internet ;
+les scénarios d'interface et de reprise utilisant `prepareOfflineMaps` simulent
+les services externes. Les vérifications hors ligne fonctionnent après
+installation des dépendances et du navigateur.
 
 Sur Windows, Playwright utilise Edge. Sur Linux et macOS, installer Chromium :
 `bun x playwright install chromium`. `PLAYWRIGHT_CHANNEL` permet de choisir le
@@ -87,7 +90,8 @@ bloque la publication.
 
 Le workflow unique `Deploy to GitHub Pages` (`.github/workflows/pages.yml`) se lance
 automatiquement à chaque push vers `main`. Il vérifie le projet, compile `dist/`,
-exécute les tests navigateur, puis publie avec les actions officielles GitHub Pages.
+publie ensuite avec les actions officielles GitHub Pages. Les tests navigateur
+s'exécutent localement ; la CI ne les lance pas et n'installe pas de navigateur.
 Un lancement manuel reste disponible depuis **Actions → Deploy to GitHub Pages →
 Run workflow**, sur `main`. Les commandes locales et l’installation des dépendances
 ne déclenchent pas de publication.
@@ -98,8 +102,9 @@ l’environnement `github-pages` doivent autoriser la branche `main`.
 
 Le chemin de base fourni par GitHub Pages est transmis à Vite via `VITE_BASE_PATH` ;
 les cartes, polices et liens fonctionnent aussi sous le chemin du dépôt. Pour
-reproduire cette compilation localement, définir `VITE_BASE_PATH=/toulouse-in-time/`
-avant `bun run build`, puis utiliser `bun run preview` et ouvrir ce chemin.
+reproduire cette compilation localement, définir `VITE_BASE_PATH=/nom-du-depot/`
+avant `bun run build` et conserver cette même variable pour `bun run preview`,
+puis ouvrir ce chemin. Remplacer `nom-du-depot` par le nom réel du dépôt.
 La compilation locale utilise `/` par défaut.
 
 ## Dépendances et conventions
@@ -129,3 +134,23 @@ La photographie de 1954 vient d’IGN / Edugéo ; le fond actuel d’OpenFreeMap
 Voir [sources et précision](docs/sources.md) et [cartes restantes](docs/map-backlog.md).
 Les générateurs Python sont séparés du build web ; les assets préparés sont
 inclus dans le dépôt.
+
+## Documentation et reprise du projet
+
+Pour travailler dans un nouveau chat ou après déplacement du dépôt, commencer
+par [AGENTS.md](AGENTS.md), le [contexte du projet](docs/project-context.md) et
+l'[architecture](docs/architecture.md). Le contexte décrit les contrats à
+préserver, la validation récente, les travaux restants et la procédure de
+transfert ou de changement de nom. Les chemins documentés sont relatifs au dépôt.
+
+| Document                                                           | Contenu                                                              |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| [Architecture](docs/architecture.md)                               | Modules, frise, sources, workers, chargement et reprise après erreur |
+| [Sources](docs/sources.md)                                         | Provenance des cartes, calage et limites de précision                |
+| [Reconstructions OpenEdition](docs/openedition-medieval-layers.md) | Inventaire et choix des figures antiques et médiévales               |
+| [Orientation](docs/orientation.md)                                 | Nord, orientation de lecture et synchronisation                      |
+| [Population](docs/population.md)                                   | Estimations, interpolation et périmètres des données                 |
+| [Widget historique](docs/city-widget.md)                           | Événements et limites de la surface bâtie                            |
+| [Cartes à ajouter](docs/map-backlog.md)                            | Recherche de nouvelles sources, avec dates d'intégration             |
+| [Licences](docs/licensing.md)                                      | Licence du code et conditions distinctes des ressources tierces      |
+| [Guide de style](docs/style-guide.html)                            | Référence visuelle ; les styles exécutés restent dans `src/`         |

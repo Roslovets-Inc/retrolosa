@@ -121,8 +121,9 @@ globaux et les services de carte. `src/components/` délimite les responsabilit�
 - `MapViewport` possède la position et les gestes de la loupe, et affiche le rideau.
 - `MapTools` expose la localisation, le zoom, l’orientation et l’opacité.
 - `ComparisonPanel` gère les gestes de la frise et les choix d’époques et de modes.
-- `SourcesDialog` présente les documents et leurs crédits à partir du catalogue.
-  Son module est chargé à la première ouverture.
+- `SourcesPanel` conserve la coque du dialogue, son focus et sa limite d'erreur
+  dans le code initial. `SourcesContent`, exporté par `SourcesDialog.tsx`, présente
+  les documents et leurs crédits ; son module est chargé à la première ouverture.
 
 L’application conserve un seul choix de panneau ouvert (`places`, `epochs` ou
 aucun). Les états locaux des composants ne dupliquent pas l’état persistant de

@@ -2,6 +2,22 @@
 
 These rules apply to the entire project.
 
+## Starting a new session
+
+- Read [README.md](README.md), [project context](docs/project-context.md), and [architecture](docs/architecture.md) before changing code. Follow the linked domain documentation for the area being changed.
+- Discover the repository root from the current checkout; do not reuse an absolute path, directory name, server process, or tool configuration from an earlier chat.
+- Inspect the current Git branch, status, and recent commits. Preserve existing user changes. The context document records a dated baseline; current source and configuration determine actual behavior.
+- Keep the context and architecture documents current when changing module boundaries, behavioral invariants, development commands, or unresolved work. Do not use chat history or ignored `.local/` files as the only record of a decision.
+
+## Architectural invariants
+
+- Keep epoch metadata in `src/epochs/catalog.ts` and descriptions in the lazy sources content. Preserve legacy shared URLs through `src/view/state.ts`.
+- Preserve painter order: during a historical crossfade, the lower sheet stays opaque and the upper sheet fades in. Do not normalize their opacities to sum to one.
+- Keep the bounded set of adjacent enabled epochs prepared, including at snapped dates. Do not remove and recreate a neighbour when its opacity reaches zero; this reintroduces scrubbing latency. Prepared invisible sources must not block visible readiness or appear in credits.
+- Keep the map controller responsible for renderer lifecycle, synchronization and source reconciliation. UI components receive data and commands rather than the whole controller.
+- Keep source failures separate from WebGL availability. `idle` must not clear errors; dismissed errors must retain a retry action. Keep the lazy sources content inside its local error boundary.
+- See [architecture](docs/architecture.md) for worker cancellation, cache limits, style boundaries, and relevant regression tests.
+
 ## Commit messages
 
 Create commits using Semantic Commits (Conventional Commits):

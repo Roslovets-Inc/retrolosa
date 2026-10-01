@@ -2,6 +2,11 @@
 
 Inventaire du 30 septembre 2026. Les 12 illustrations originales ont été téléchargées et vérifiées. Elles restent dans `.local/openedition-3296/originals/`, hors des ressources publiques du site. Une galerie locale est disponible dans `.local/openedition-3296/index.html` ; le manifeste reproductible est dans `data/openedition-3296-catalog.json`.
 
+`.local/` est ignoré par Git : ces fichiers et la galerie peuvent être absents
+d'un nouveau clone. Conserver les originaux séparément lors d'un transfert si
+une régénération est prévue ; leur absence ne bloque pas le build du site avec
+les assets déjà suivis dans `public/`.
+
 ## Source et nature des documents
 
 [Quitterie Cazes, « Toulouse au Moyen Âge : les pouvoirs dans la ville »](https://books.openedition.org/psorbonne/3296), dans _Marquer la ville_, 2013, p. 341–366. Dessins de F. Callède, issus des recherches sur Toulouse au Moyen Âge, notamment du programme collectif et de la synthèse dirigée par Jean Catalo et Quitterie Cazes en 2010.
