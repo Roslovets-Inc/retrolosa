@@ -14,7 +14,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await expect(page.getByRole("alert")).toHaveCount(0);
   expect(historicResponses.some((code) => code === 206)).toBeTruthy();
   await page.screenshot({ path: ".local/desktop.png" });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page
@@ -24,7 +24,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("0");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.screenshot({ path: ".local/modern.png" });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("100");
@@ -35,7 +35,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.keyboard.up("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison", exact: true }).focus();
   await page.keyboard.press("Home");
@@ -45,14 +45,14 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   await page.getByRole("combobox").selectOption("1");
   await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
   await page.screenshot({ path: ".local/saint-etienne.png" });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page
     .getByRole("slider", { name: "Opacité de la carte historique", exact: true })
     .fill("50");
   await page.screenshot({ path: ".local/alignment.png" });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison", exact: true }).focus();
   await page.keyboard.press("ArrowLeft");

@@ -1,9 +1,9 @@
 {
-  "name": "toulouse-in-time",
+  "name": "retrolosa",
   "version": "1.0.0",
   "private": true,
   "description": "Explore Toulouse across historical maps and the present day.",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {
     "start": "vite",

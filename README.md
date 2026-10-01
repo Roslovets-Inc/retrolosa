@@ -1,7 +1,21 @@
-# Toulouse · Au fil du temps
+# Rétrolosa
 
 Carte interactive de Toulouse en 1631, 1680, 1830, 1875, 1954 et aujourd’hui.
 React 19, TypeScript, Vite 8, MapLibre GL JS 6 et PMTiles 4. Interface en français.
+
+## Licence
+
+Copyright (C) 2026 Pavel Roslovets et les contributeurs de Rétrolosa.
+
+Le code et la documentation originale du projet sont distribués sous
+**GNU Affero General Public License, version 3 ou ultérieure**
+(`AGPL-3.0-or-later`). Voir [LICENSE](LICENSE) et le [périmètre de la licence](docs/licensing.md).
+L’utilisation, la modification et la redistribution, y compris commerciales, sont autorisées
+dans les conditions de cette licence. Les versions dérivées doivent conserver ces libertés ;
+une version modifiée accessible par le réseau doit proposer son code source aux utilisateurs.
+
+Les cartes, photographies, données, polices et autres éléments tiers conservent leurs droits
+et conditions propres. La licence du logiciel ne constitue pas une autorisation de les réutiliser.
 
 ## Démarrage
 

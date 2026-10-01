@@ -45,9 +45,9 @@ test("late Antiquity uses a period label, preserves the complete raster and shar
     if (await page.getByRole("button", { name: "Fermer le message", exact: true }).isVisible()) {
       await page.getByRole("button", { name: "Fermer le message", exact: true }).click();
     }
-    await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
     await expect(
-      page.getByRole("button", { name: "Carte de l’Antiquité tardive" }),
+      page.locator(".timeline-ticks").getByRole("button", { name: "Ve", exact: true }),
     ).toHaveAttribute("aria-pressed", "true");
     const dock = (await page.locator(".control-dock").boundingBox())!;
     expect(dock.x).toBeGreaterThanOrEqual(0);
@@ -56,7 +56,7 @@ test("late Antiquity uses a period label, preserves the complete raster and shar
       true,
     );
     await page.screenshot({ path: `.local/antiquity-${width}.png` });
-    await page.getByRole("button", { name: "Frise", exact: true }).click();
+
     await expect(slider).toHaveAttribute("aria-valuetext", "Ve");
   }
   await page.getByRole("button", { name: "À propos des cartes" }).click();

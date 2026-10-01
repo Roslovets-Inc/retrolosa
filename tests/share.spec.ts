@@ -11,13 +11,13 @@ test("address stays stable while sharing captures and restores the current view"
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
   await page.getByRole("combobox").selectOption({ label: "Saint-Cyprien" });
   await page.waitForTimeout(1200);
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("42");
   await page.getByRole("button", { name: "Époques", exact: true }).click();
   await page.getByRole("checkbox", { name: "1830 Cadastre" }).uncheck();
-  await page.getByRole("button", { name: "Fermer le choix des époques" }).click();
+  await page.keyboard.press("Escape");
   expect(page.url()).toBe(original);
   const overlay = await sharedView(page);
   expect(page.url()).toBe(original);
@@ -31,19 +31,20 @@ test("address stays stable while sharing captures and restores the current view"
   await page.goto(overlay);
   await page.reload();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
-  await expect(page.getByRole("button", { name: "Carte de 1875" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await expect(page.getByRole("button", { name: "Carte de 1830" })).toHaveCount(0);
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1875", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }),
+  ).toHaveCount(0);
+
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1850");
   const timeline = await sharedView(page);
   await page.goto(timeline);
   await page.reload();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1850");
   await expect(page.locator(".timeline-value")).toHaveText("1777 → 1860");
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("slider", { name: "Limite de comparaison" }).focus();
   await page.keyboard.press("Home");

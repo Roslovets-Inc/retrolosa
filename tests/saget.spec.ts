@@ -35,16 +35,15 @@ test("Saget 1777 preserves the full plan, sources and shared selection", async (
     await page.setViewportSize({ width, height: 844 });
     const dismiss = page.getByRole("button", { name: "Fermer le message", exact: true });
     if (await dismiss.isVisible()) await dismiss.click();
-    await page.getByRole("button", { name: "Cartes", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Carte de 1777", exact: true })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+
+    await expect(
+      page.locator(".timeline-ticks").getByRole("button", { name: "1777", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,
     );
     await page.screenshot({ path: `.local/saget-${width}.png` });
-    await page.getByRole("button", { name: "Frise", exact: true }).click();
+
     await expect(slider).toHaveValue("1777");
   }
   await page.getByRole("button", { name: "À propos des cartes" }).click();

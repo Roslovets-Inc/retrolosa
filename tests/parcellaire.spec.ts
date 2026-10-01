@@ -18,10 +18,9 @@ test("1550 combines both parcel colors, preserves its legend and restores shared
   );
   await page.goto("/#year=1550&layers=1250,1550&lon=1.442&lat=43.602&z=14.5&opacity=100");
   expect((await raster).ok()).toBe(true);
-  await expect(page.getByRole("button", { name: "Carte de 1550" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1550", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   const colors = await page.evaluate(async () => {
     const image = new Image();
     image.src = "/openedition-1550/map.webp";
@@ -64,18 +63,19 @@ test("1550 combines both parcel colors, preserves its legend and restores shared
   await page.getByRole("button", { name: "Fermer les sources" }).click();
   await page.goto(await sharedView(page));
   await page.reload();
-  await expect(page.getByRole("button", { name: "Carte de 1550" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1550", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByRole("button", { name: "Carte de 1550" })).toBeVisible();
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1550", exact: true }),
+  ).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (await page.getByRole("button", { name: "Fermer le message", exact: true }).isVisible()) {
     await page.getByRole("button", { name: "Fermer le message", exact: true }).click();
   }
   await page.screenshot({ path: ".local/parcellaire-1550-mobile.png" });
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1550");
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveAttribute(
     "aria-valuetext",

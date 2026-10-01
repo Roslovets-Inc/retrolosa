@@ -57,15 +57,15 @@ for (const plan of [
       await page.setViewportSize({ width, height: 844 });
       const dismiss = page.getByRole("button", { name: "Fermer le message", exact: true });
       if (await dismiss.isVisible()) await dismiss.click();
-      await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
       await expect(
-        page.getByRole("button", { name: `Carte de ${plan.year}`, exact: true }),
+        page.locator(".timeline-ticks").getByRole("button", { name: plan.year, exact: true }),
       ).toHaveAttribute("aria-pressed", "true");
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
         true,
       );
       await page.screenshot({ path: `.local/${plan.name}-${width}.png` });
-      await page.getByRole("button", { name: "Frise", exact: true }).click();
+
       await expect(slider).toHaveValue(plan.year);
     }
     await page.getByRole("button", { name: "À propos des cartes" }).click();

@@ -9,13 +9,13 @@ test("continuous timeline preserves view, endpoints, keyboard peek and shared st
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/#lon=1.44954&lat=43.597678&z=16.7");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
   await expect(slider).toBeVisible();
   await expect(page.getByRole("slider", { name: "Limite de comparaison" })).toHaveCount(0);
   await slider.fill("1755");
   await expect(page.locator(".timeline-value")).toHaveText("1680 → 1830");
-  await expect.poll(() => sharedView(page)).toMatch(/mode=time&time=1755/);
+  await expect.poll(() => sharedView(page)).toMatch(/mode=overlay&time=1755/);
   await page.screenshot({ path: ".local/time-midpoint.png" });
   await slider.fill("1830");
   await expect(page.locator(".timeline-value")).toHaveText("1830");
@@ -35,10 +35,10 @@ test("continuous timeline preserves view, endpoints, keyboard peek and shared st
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.keyboard.up("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.75");
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await expect(page.getByRole("group", { name: "Époque historique" })).toBeVisible();
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+  await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toBeVisible();
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: ".local/time-mobile.png" });
   expect(

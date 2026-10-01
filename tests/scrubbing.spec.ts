@@ -15,7 +15,7 @@ test("rapid scrubbing survives browser history rate limits", async ({ page }) =>
     };
   });
   await page.goto("/#lon=1.44954&lat=43.597678&z=16.7");
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
   await slider.evaluate(async (element) => {
     const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")!.set!;
@@ -29,7 +29,7 @@ test("rapid scrubbing survives browser history rate limits", async ({ page }) =>
   await slider.fill("1830");
   await expect(page.locator(".timeline-value")).toHaveText("1830");
   await expect.poll(() => sharedView(page)).toMatch(/time=1830/);
-  await expect(page.getByRole("button", { name: "Cartes", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Superposition", exact: true })).toBeVisible();
   expect(failures).toEqual([]);
 });
 
@@ -42,16 +42,15 @@ test("rejected history writes never blank the application", async ({ page }) => 
     };
   });
   await page.goto("/");
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1900");
   await page.waitForTimeout(700);
-  await expect(page.locator(".timeline-value")).toContainText("1875 → 1954");
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+  await expect(page.locator(".timeline-value")).toContainText("1875 → 1904");
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
-  await page.getByRole("button", { name: "Carte de 1830" }).click();
-  await expect(page.getByRole("button", { name: "Carte de 1830" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }).click();
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   expect(failures).toEqual([]);
 });

@@ -1,3 +1,19 @@
+## Unified timeline controls
+
+The time slider is always available. Superposition, curtain and loupe are comparison tools above the same timeline; changing tools preserves the selected calendar year, layer blending and opacity. Epoch ticks select source dates directly, and the Époques menu beside the comparison tools, directly above the slider, selects which sources participate. Population, events, orientation and the source dialog follow the timeline in every tool. Shared URLs store both the tool and time. Legacy `mode=time` links open the unified timeline in superposition, preserving their opacity; historical-only and current-only links retain their transparency rules.
+
+## Attribution display
+
+The footer credits only historical sheets participating in the visible timeline blend,
+including both sheets during a crossfade. It hides historical credits for the modern-only
+view and zero historical opacity. OpenMapTiles and OpenStreetMap remain visible with links;
+OpenFreeMap and the complete list of eleven historical sources and authors are available
+in the existing source dialog. Footer text is legible rather than compressed to 7px on mobile.
+OpenFreeMap explicitly permits omitting its own name from the on-map attribution:
+<https://openfreemap.org/#attribution>. OSM guidance is at
+<https://osmfoundation.org/wiki/Licence/Attribution_Guidelines#Interactive_maps>.
+Attribution does not resolve the source-rights uncertainties documented below.
+
 # Source feasibility — 2026-09-29
 
 ## Continuous timeline

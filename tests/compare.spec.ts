@@ -19,14 +19,14 @@ test("hold comparison restores split, overlay and timeline on release or cancell
   await page.mouse.up();
   await expect(layer).toHaveCSS("opacity", "1");
   await expect(page.locator(".divider")).toBeVisible();
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("72");
   await hold();
   await page.mouse.up();
   await expect(layer).toHaveCSS("opacity", "0.72");
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   const time = page.getByRole("slider", { name: "Voyage dans le temps" });
   await time.fill("1850");
   await page.setViewportSize({ width: 390, height: 844 });

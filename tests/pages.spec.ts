@@ -14,10 +14,8 @@ test("local assets and navigation work under the deployment base path", async ({
   });
   await page.route(/^https:\/\//, (route) => route.abort());
   await page.goto(basePath);
-  await expect(page.getByRole("link", { name: "Toulouse au fil du temps" })).toHaveAttribute(
-    "href",
-    basePath,
-  );
+  await expect(page).toHaveTitle("Rétrolosa");
+  await expect(page.getByRole("link", { name: "Rétrolosa" })).toHaveAttribute("href", basePath);
   await page.evaluate(() => document.fonts.ready);
   expect(await page.evaluate(() => document.fonts.check('16px "Golos Text"'))).toBe(true);
   const fontStylesheet = await request.get(`${basePath}fonts/fonts.css`);

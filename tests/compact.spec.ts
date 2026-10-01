@@ -15,14 +15,14 @@ test("compact mobile controls keep the map clear and places collapse after selec
   await page.getByRole("combobox").selectOption("1");
   await expect(page.getByRole("combobox")).toHaveCount(0);
   await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   const panel = await page.locator(".control-panel").boundingBox();
-  expect(panel!.height).toBeLessThanOrEqual(110);
+  expect(panel!.height).toBeLessThanOrEqual(132);
   const zoom = await page.locator(".zoom-controls").boundingBox();
   expect(zoom!.y + zoom!.height).toBeLessThan(panel!.y);
   await page.screenshot({ path: ".local/compact-overlay.png" });
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   expect((await page.locator(".control-panel").boundingBox())!.height).toBeLessThan(150);
   await page.screenshot({ path: ".local/compact-time.png" });
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
@@ -35,14 +35,14 @@ test("compact mobile controls keep the map clear and places collapse after selec
 
 test("historical tab unifies opacity modes and preserves legacy shared views", async ({ page }) => {
   await page.goto("/#mode=historic&opacity=42&year=1680");
-  await expect(page.locator(".mode-buttons button")).toHaveCount(2);
-  const tab = page.getByRole("button", { name: "Cartes", exact: true });
+  await expect(page.locator(".comparison-switch button")).toHaveCount(3);
+  const tab = page.getByRole("button", { name: "Superposition", exact: true });
   const slider = page.getByRole("slider", { name: "Opacité de la carte historique" });
   await expect(tab).toHaveAttribute("aria-pressed", "true");
   await expect(slider).toHaveValue("100");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await slider.fill("35");
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   await tab.click();
   await expect(slider).toHaveValue("35");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.35");

@@ -6,6 +6,14 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
   page,
 }) => {
   const errors: string[] = [];
+  const dismiss = page.getByRole("button", { name: "Fermer le message" });
+  await page.addLocatorHandler(
+    dismiss,
+    async () => {
+      await dismiss.click();
+    },
+    { noWaitAfter: true },
+  );
   page.on("pageerror", (e) => errors.push(e.message));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/#year=1875&mode=time&time=1875");
@@ -44,7 +52,7 @@ test("epoch selection skips disabled sources, survives reload and permits an emp
     "min",
     "1875",
   );
-  await page.getByRole("button", { name: "Fermer le choix des époques" }).click();
+  await page.keyboard.press("Escape");
   await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1875");
   await expect(page.locator(".timeline-value")).toHaveText("1875 · Inondation");
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");

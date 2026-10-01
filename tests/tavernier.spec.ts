@@ -56,10 +56,9 @@ test("1631 retains the full sheet and exposes its original legend", async ({ pag
   await page.goto("/#year=1631&lon=1.442&lat=43.602&z=17&opacity=100");
   await page.reload();
   expect((await tile).ok()).toBe(true);
-  await expect(page.getByRole("button", { name: "Carte de 1631" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1631", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
 });
 
 test("1631 scan loads at overview and overzoom, participates in timeline and sharing", async ({
@@ -78,10 +77,9 @@ test("1631 scan loads at overview and overzoom, participates in timeline and sha
     await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({
       timeout: 60000,
     });
-    await expect(page.getByRole("button", { name: "Carte de 1631" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    await expect(
+      page.locator(".timeline-ticks").getByRole("button", { name: "1631", exact: true }),
+    ).toHaveAttribute("aria-pressed", "true");
   }
   expect(responses.length).toBeGreaterThan(0);
   expect(responses.every((status) => status === 200)).toBe(true);
@@ -94,7 +92,7 @@ test("1631 scan loads at overview and overzoom, participates in timeline and sha
   await page.reload();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await page.screenshot({ path: ".local/1631-mobile.png" });
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
   await expect(slider).toHaveAttribute("min", "450");
   await slider.fill("1655");

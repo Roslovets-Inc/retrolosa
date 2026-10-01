@@ -20,14 +20,13 @@ test("compass cycles, preserves position and shares its orientation", async ({ p
   });
   await page.goto("/#year=1777&mode=time&time=1777&lon=1.442&lat=43.602&z=14&opacity=100");
   const compass = page.getByRole("button", { name: /^Orientation :/ });
-  for (const bearing of [7, 53, 84, 0]) {
+  for (const bearing of [53, 0]) {
     await compass.click();
     await expect(compass).toHaveAttribute("data-bearing", String(bearing));
     await expect
       .poll(async () => new URL(await sharedView(page)).hash)
       .toContain(`bearing=${bearing}`);
   }
-  await compass.click();
   await compass.click();
   const url = await sharedView(page);
   expect(url).toContain("lon=1.442000&lat=43.602000&z=14.00");
@@ -42,7 +41,32 @@ test("compass cycles, preserves position and shares its orientation", async ({ p
   const eye = (await page.locator(".compare-hold").boundingBox())!;
   expect(box.y + box.height).toBeLessThan(eye.y);
   await page.screenshot({ path: ".local/orientation-mobile.png" });
-  await compass.focus();
-  await page.keyboard.press("Enter");
+  await compass.press("Enter");
+  await expect(compass).toHaveAttribute("data-bearing", "0");
+  const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
+  await slider.fill("1631");
+  await expect(compass).toHaveAttribute("data-bearing", "0");
+  await compass.click();
   await expect(compass).toHaveAttribute("data-bearing", "84");
+  await slider.fill("1656");
+  await expect(compass).toHaveAttribute("data-bearing", "0");
+  await expect(compass).toBeDisabled();
+  await slider.fill("1730");
+  await expect(compass).toHaveAttribute("data-bearing", "53");
+  await expect(compass).toBeEnabled();
+  await slider.fill("1860");
+  await expect(compass).toHaveAttribute("data-bearing", "0");
+  await expect(compass).toBeDisabled();
+  await slider.fill("1777");
+  await expect(compass).toHaveAttribute("data-bearing", "53");
+  await compass.click();
+  await slider.fill("1631");
+  await expect(compass).toHaveAttribute("data-bearing", "0");
+  await compass.click();
+
+  await page.locator(".timeline-ticks").getByRole("button", { name: "1777", exact: true }).click();
+  await expect(compass).toHaveAttribute("data-bearing", "53");
+  await page.locator(".timeline-ticks").getByRole("button", { name: "1904", exact: true }).click();
+  await expect(compass).toBeDisabled();
+  await expect(compass).toHaveAttribute("data-bearing", "0");
 });

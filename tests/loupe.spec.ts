@@ -19,8 +19,8 @@ test("loupe follows dragging and keyboard input and restores after comparison", 
   await glass.focus();
   await page.keyboard.press("ArrowLeft");
   expect((await glass.boundingBox())!.x).toBeCloseTo(dragged.x - 10, 0);
-  await page.getByRole("button", { name: "Carte de 1830", exact: true }).click();
-  await expect(layer).toHaveAttribute("aria-label", "Carte historique de Toulouse en 1830");
+  await page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }).click();
+  await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1830");
   const compare = page.getByRole("button", {
     name: "Maintenir pour comparer avec la carte actuelle",
   });

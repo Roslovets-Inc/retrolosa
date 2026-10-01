@@ -10,25 +10,24 @@ test("1875 flood tiles, timeline and mobile controls", async ({ page }) => {
     if (r.url().includes("/flood-1875/")) tiles.push(r.status());
   });
   await page.goto("/#lon=1.4315&lat=43.599&z=15.6&year=1875");
-  await expect(page.getByRole("button", { name: "Carte de 1875" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page.locator(".timeline-ticks").getByRole("button", { name: "1875", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
   await expect.poll(() => tiles.includes(200), { timeout: 60000 }).toBeTruthy();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("100");
   await page.screenshot({ path: ".local/1875-desktop.png" });
-  await page.getByRole("button", { name: "Cartes", exact: true }).click();
+
   await page.getByRole("button", { name: "Rideau", exact: true }).click();
   await page.getByRole("button", { name: "Superposition", exact: true }).click();
   await page.getByRole("slider", { name: "Opacité de la carte historique" }).fill("50");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.5");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.screenshot({ path: ".local/1875-mobile.png" });
-  await page.getByRole("button", { name: "Frise", exact: true }).click();
+
   const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
   for (const [value, label] of [
     ["1875", "1875 · Inondation"],
