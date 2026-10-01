@@ -286,7 +286,7 @@ function App() {
       )}
       <header className="masthead">
         <a className="brand" href={import.meta.env.BASE_URL} aria-label="Rétrolosa">
-          <Layers size={20} />
+          <img className="brand-mark" src={assetUrl("favicon.svg")} width="26" height="26" alt="" />
           <span>Rétrolosa</span>
         </a>
         <div className="header-right">

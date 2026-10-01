@@ -1,21 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <title>Croix occitane — Toulouse au fil du temps</title>
-  <defs>
-    <linearGradient id="red" x2="0.8" y2="1">
-      <stop stop-color="#a3313d"/>
-      <stop offset="1" stop-color="#701e2b"/>
-    </linearGradient>
-    <linearGradient id="gold" x2="0.4" y2="1">
-      <stop stop-color="#ffe6a0"/>
-      <stop offset="1" stop-color="#e9b94e"/>
-    </linearGradient>
-  </defs>
-  <rect width="64" height="64" rx="15" fill="url(#red)"/>
-  <rect x="2" y="2" width="60" height="60" rx="13" fill="none" stroke="#ffd77a" stroke-opacity=".18"/>
-  <g stroke="url(#gold)" stroke-width="3" stroke-linejoin="round">
+  <rect width="64" height="64" rx="14" fill="#2f4b40"/>
+  <g stroke="#faf9f2" stroke-width="3.25" stroke-linejoin="round">
     <path d="M32 9 42 17 37 27 47 22 55 32 47 42 37 37 42 47 32 55 22 47 27 37 17 42 9 32 17 22 27 27 22 17Z" fill="none"/>
   </g>
-  <g fill="url(#gold)">
+  <g fill="#faf9f2">
     <circle cx="32" cy="9" r="3"/>
     <circle cx="42" cy="17" r="3"/>
     <circle cx="22" cy="17" r="3"/>
