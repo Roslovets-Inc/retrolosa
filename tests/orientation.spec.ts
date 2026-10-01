@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
+import { waitForApp } from "./ui";
 
 test("compass cycles, preserves position and shares its orientation", async ({ page }) => {
   await prepareSharing(page);
@@ -19,6 +20,7 @@ test("compass cycles, preserves position and shares its orientation", async ({ p
     } else await route.abort();
   });
   await page.goto("/#year=1777&mode=time&time=1777&lon=1.442&lat=43.602&z=14&opacity=100");
+  await waitForApp(page);
   const compass = page.getByRole("button", { name: /^Orientation :/ });
   for (const bearing of [53, 0]) {
     await compass.click();
@@ -32,6 +34,7 @@ test("compass cycles, preserves position and shares its orientation", async ({ p
   expect(url).toContain("lon=1.442000&lat=43.602000&z=14.00");
   await page.goto(url);
   await page.reload();
+  await waitForApp(page);
   await expect(compass).toHaveAttribute("data-bearing", "53");
   await page.getByRole("button", { name: "Vue d’ensemble de Toulouse" }).click();
   await expect.poll(async () => new URL(await sharedView(page)).hash).toContain("bearing=53");

@@ -1,4 +1,9 @@
-import type { Locator, Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
+
+export async function waitForApp(page: Page) {
+  // Give mounting and expected offline notices their own budget after navigation.
+  await expect(page.getByRole("main")).toBeVisible({ timeout: 15000 });
+}
 
 export async function prepareOfflineMaps(page: Page) {
   await page.route(/^https:\/\//, async (route) => {

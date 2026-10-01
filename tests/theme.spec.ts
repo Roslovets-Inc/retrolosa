@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import { waitForApp } from "./ui";
+
 test("appearance follows the system, persists overrides and preserves the historical view", async ({
   page,
 }) => {
@@ -34,6 +36,7 @@ test("appearance follows the system, persists overrides and preserves the histor
   const dismiss = page.getByRole("button", { name: "Fermer le message" });
   await page.addLocatorHandler(dismiss, () => dismiss.click(), { noWaitAfter: true });
   await page.goto("/#mode=loupe&time=1777&opacity=60&lon=1.44&lat=43.6&z=15");
+  await waitForApp(page);
   const theme = page.getByRole("button", { name: /^Thème :/ });
   const root = page.locator("html");
   await expect(theme).toHaveAccessibleName("Thème : système. Passer au thème clair");
@@ -53,6 +56,7 @@ test("appearance follows the system, persists overrides and preserves the histor
   expect(page.url()).toBe(originalUrl);
   expect(await initialCanvas?.evaluate((element) => element.isConnected)).toBe(true);
   await page.reload();
+  await waitForApp(page);
   await expect(theme).toHaveAccessibleName("Thème : clair. Passer au thème sombre");
   await expect(root).toHaveAttribute("data-theme", "light");
   await page.emulateMedia({ colorScheme: "light" });

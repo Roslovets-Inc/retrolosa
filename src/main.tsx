@@ -23,27 +23,20 @@ import * as maplibregl from "maplibre-gl";
 import type { Map as MapInstance } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { Protocol } from "pmtiles";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { CityWidget } from "./CityWidget";
-import { loadStateMajorTile } from "./etat-major";
-import flood1875 from "./flood-1875.json";
-import overview1830 from "./history-overview-1830.json";
-import overviewCoordinates from "./history-overview.json";
+import { EPOCH_IDS as YEARS, getEpoch } from "./epochs/catalog";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
 import "./ui.css";
-import jourdan1860 from "./jourdan-1860.json";
-import laffont1904 from "./laffont-1904.json";
-import medieval13c from "./openedition-13c.json";
-import parcels1550 from "./openedition-1550.json";
-import antiquity from "./openedition-antiquite.json";
-import { mapBearing, nextBearing, readBearing, visibleEpoch } from "./orientation";
-import saget1777 from "./saget-1777.json";
-import tavernier1631 from "./tavernier-1631.json";
+import type { EpochId as Year } from "./epochs/catalog";
+import { historicalStyle, epochLayerIds } from "./epochs/sources";
+import { loadStateMajorTile } from "./etat-major";
+import { nextBearing } from "./orientation";
 import { appliedTheme, modernMapStyle, setThemePreference, useTheme } from "./theme";
 import type { Theme, ThemePreference } from "./theme";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
@@ -59,6 +52,18 @@ import {
   ToggleItem,
 } from "./ui";
 import { useLocation } from "./useLocation";
+import { derivePresentation, resolveTimeline } from "./view/presentation";
+import {
+  parseViewState,
+  reduceViewState,
+  serializeViewState,
+  dateLabel as labelDate,
+  CITY_LIMITS,
+  CITY_OVERVIEW,
+  MIN_ZOOM,
+  MAX_ZOOM,
+} from "./view/state";
+import type { Mode, ViewState, ViewAction } from "./view/state";
 
 const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 const themeLabels = { system: "système", light: "clair", dark: "sombre" };
@@ -68,361 +73,16 @@ const nextTheme: Record<ThemePreference, ThemePreference> = {
   dark: "system",
 };
 
-const YEARS = [
-  "450",
-  "1250",
-  "1550",
-  "1631",
-  "1680",
-  "1777",
-  "1830",
-  "1848",
-  "1860",
-  "1875",
-  "1904",
-  "1954",
-] as const;
-type Year = (typeof YEARS)[number];
-const epochLabel = (value: Year) => (value === "450" ? "Ve" : value === "1250" ? "XIIIe" : value);
-const initialYear = (): Year => {
-  const value = new URLSearchParams(location.hash.slice(1)).get("year");
-  return YEARS.includes(value as Year) ? (value as Year) : "1250";
-};
-const IGN_SOURCE = "https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities";
-const FLOOD_SOURCE =
-  "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/";
-const TAVERNIER_SOURCE = "https://www.flickr.com/photos/archives-toulouse/24484342123/";
-const MEDIEVAL_SOURCE = "https://books.openedition.org/psorbonne/3296";
-const SAGET_SOURCE = "https://www.flickr.com/photos/archives-toulouse/25111159875/";
-const JOURDAN_SOURCE = jourdan1860.sourcePage;
-const LAFFONT_SOURCE = laffont1904.sourcePage;
-const sourceUrl = (year: Year) =>
-  year === "1848"
-    ? "https://remonterletemps.ign.fr/telecharger/?lon=1.444&lat=43.604&z=13&layer=cartes_anciennes&collection=ETATMAJOR&year=1848"
-    : year === "1860"
-      ? JOURDAN_SOURCE
-      : year === "1904"
-        ? LAFFONT_SOURCE
-        : year === "1777"
-          ? SAGET_SOURCE
-          : year === "450" || year === "1250" || year === "1550"
-            ? MEDIEVAL_SOURCE
-            : year === "1631"
-              ? TAVERNIER_SOURCE
-              : year === "1875"
-                ? FLOOD_SOURCE
-                : year === "1954"
-                  ? IGN_SOURCE
-                  : year === "1680"
-                    ? "https://tolosa1680.makina-corpus.com/"
-                    : "https://tolosa.makina-corpus.com/";
 const TODAY = new Date().getFullYear();
-const mapCredit = (period: Year) =>
-  period === "450" || period === "1250" || period === "1550"
-    ? "F. Callède / Inrap"
-    : period === "1631"
-      ? "Tavernier"
-      : period === "1777"
-        ? "Saget"
-        : period === "1860"
-          ? "Jourdan"
-          : period === "1904"
-            ? "Laffont"
-            : period === "1848"
-              ? "© IGN · État-major 1848"
-              : period === "1954"
-                ? "© IGN / Edugéo"
-                : period === "1875"
-                  ? "Sirven / Archives Toulouse"
-                  : "Toulouse Métropole / Makina Corpus";
-const initialTime = () => {
-  const value = Number(new URLSearchParams(location.hash.slice(1)).get("time"));
-  return Number.isFinite(value) && value >= Number(YEARS[0]) && value <= TODAY
-    ? value
-    : Number(initialYear());
-};
-function historicalStyle(year: Year): maplibregl.StyleSpecification {
-  const style: maplibregl.StyleSpecification = { version: 8, sources: {}, layers: [] };
-  style.sources["history-450"] = {
-    type: "image",
-    url: assetUrl("openedition-antiquite/map.webp"),
-    coordinates: antiquity.coordinates as [
-      [number, number],
-      [number, number],
-      [number, number],
-      [number, number],
-    ],
-  };
-  style.layers.push({
-    id: "history-450",
-    type: "raster",
-    source: "history-450",
-    paint: {
-      "raster-opacity": year === "450" ? 1 : 0,
-      "raster-opacity-transition": { duration: 0 },
-      "raster-fade-duration": 0,
-    },
-  });
-  style.sources["history-1250"] = {
-    type: "image",
-    url: assetUrl("openedition-13c/map.webp"),
-    coordinates: medieval13c.coordinates as [
-      [number, number],
-      [number, number],
-      [number, number],
-      [number, number],
-    ],
-  };
-  style.layers.push({
-    id: "history-1250",
-    type: "raster",
-    source: "history-1250",
-    paint: {
-      "raster-opacity": year === "1250" ? 1 : 0,
-      "raster-opacity-transition": { duration: 0 },
-      "raster-fade-duration": 0,
-    },
-  });
-  style.sources["history-1550"] = {
-    type: "image",
-    url: assetUrl("openedition-1550/map.webp"),
-    coordinates: parcels1550.coordinates as [
-      [number, number],
-      [number, number],
-      [number, number],
-      [number, number],
-    ],
-  };
-  style.layers.push({
-    id: "history-1550",
-    type: "raster",
-    source: "history-1550",
-    paint: {
-      "raster-opacity": year === "1550" ? 1 : 0,
-      "raster-opacity-transition": { duration: 0 },
-      "raster-fade-duration": 0,
-    },
-  });
-  style.sources["overview-1631"] = {
-    type: "image",
-    url: assetUrl(`tavernier-1631/overview.webp?v=${tavernier1631.revision}`),
-    coordinates: tavernier1631.coordinates as [
-      [number, number],
-      [number, number],
-      [number, number],
-      [number, number],
-    ],
-  };
-  style.sources["history-1631"] = {
-    type: "raster",
-    tiles: [
-      location.origin + assetUrl(`tavernier-1631/{z}/{x}/{y}.webp?v=${tavernier1631.revision}`),
-    ],
-    tileSize: 256,
-    minzoom: 14,
-    maxzoom: 17,
-    bounds: tavernier1631.bounds as [number, number, number, number],
-    attribution: "Melchior Tavernier · Archives municipales de Toulouse, II 671 · Domaine public",
-  };
-  for (const kind of ["overview", "history"]) {
-    style.layers.push({
-      id: kind + "-1631",
-      type: "raster",
-      source: kind + "-1631",
-      ...(kind === "overview" ? { maxzoom: 14 } : { minzoom: 14 }),
-      paint: {
-        "raster-opacity": year === "1631" ? 1 : 0,
-        "raster-opacity-transition": { duration: 0 },
-        "raster-fade-duration": 0,
-      },
-    });
-  }
-  for (const period of ["1680", "1830"] as const) {
-    if (period === "1830") {
-      style.sources["history-1777"] = {
-        type: "image",
-        url: assetUrl("saget-1777/map.webp"),
-        coordinates: saget1777.coordinates as [
-          [number, number],
-          [number, number],
-          [number, number],
-          [number, number],
-        ],
-      };
-      style.layers.push({
-        id: "history-1777",
-        type: "raster",
-        source: "history-1777",
-        paint: {
-          "raster-opacity": year === "1777" ? 1 : 0,
-          "raster-opacity-transition": { duration: 0 },
-          "raster-fade-duration": 0,
-        },
-      });
-    }
-    style.sources["overview-" + period] = {
-      type: "image",
-      url: assetUrl(period === "1680" ? "history-overview.png" : "history-overview-1830.png"),
-      coordinates: (period === "1680" ? overviewCoordinates : overview1830) as [
-        [number, number],
-        [number, number],
-        [number, number],
-        [number, number],
-      ],
-    };
-    style.sources["history-" + period] = {
-      type: "raster",
-      url: "pmtiles://https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-" + period + ".pmtiles",
-      tileSize: 256,
-      attribution: "Toulouse Métropole · Makina Corpus",
-    };
-    style.layers.push(
-      {
-        id: "overview-" + period,
-        type: "raster",
-        source: "overview-" + period,
-        maxzoom: 15,
-        paint: {
-          "raster-opacity": period === year ? 1 : 0,
-          "raster-opacity-transition": { duration: 0 },
-          "raster-fade-duration": 0,
-        },
-      },
-      {
-        id: "history-" + period,
-        type: "raster",
-        source: "history-" + period,
-        minzoom: 15,
-        paint: {
-          "raster-opacity": period === year ? 1 : 0,
-          "raster-opacity-transition": { duration: 0 },
-          "raster-fade-duration": 0,
-        },
-      },
-    );
-  }
-  style.sources["history-1848"] = {
-    type: "raster",
-    tileSize: 256,
-    minzoom: 6,
-    maxzoom: 15,
-    bounds: [1.3, 43.49, 1.57, 43.75],
-    tiles: ["etat-major://{z}/{x}/{y}"],
-    attribution: "IGN · État-major · Minutes de 1848 · Licence Ouverte 2.0",
-  };
-  style.layers.push({
-    id: "history-1848",
-    type: "raster",
-    source: "history-1848",
-    paint: {
-      "raster-opacity": year === "1848" ? 1 : 0,
-      "raster-opacity-transition": { duration: 0 },
-      "raster-fade-duration": 0,
-    },
-  });
-  style.sources["overview-1875"] = {
-    type: "image",
-    url: assetUrl("flood-1875/overview.webp"),
-    coordinates: flood1875.coordinates as [
-      [number, number],
-      [number, number],
-      [number, number],
-      [number, number],
-    ],
-  };
-  style.sources["history-1875"] = {
-    type: "raster",
-    tileSize: 256,
-    minzoom: 14,
-    maxzoom: 17,
-    bounds: flood1875.bounds as [number, number, number, number],
-    tiles: [location.origin + assetUrl("flood-1875/{z}/{x}/{y}.webp")],
-    attribution: "Archives municipales de Toulouse · 20 Fi 45 · Sirven / La Dépêche",
-  };
-  for (const kind of ["overview", "history"] as const)
-    style.layers.push({
-      id: kind + "-1875",
-      type: "raster",
-      source: kind + "-1875",
-      ...(kind === "overview" ? { maxzoom: 14 } : { minzoom: 14 }),
-      paint: {
-        "raster-opacity": year === "1875" ? 1 : 0,
-        "raster-opacity-transition": { duration: 0 },
-        "raster-fade-duration": 0,
-      },
-    });
-  style.sources["history-1954"] = {
-    type: "raster",
-    tileSize: 256,
-    minzoom: 6,
-    maxzoom: 16,
-    bounds: [1.23852, 43.5618, 1.55128, 43.7247],
-    tiles: [
-      "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.EDUGEO.TOULOUSE1954&STYLE=normal&FORMAT=image/png&TILEMATRIXSET=PM_6_16&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}",
-    ],
-    attribution: "IGN · Edugéo · Toulouse 1954",
-  };
-  style.layers.push({
-    id: "history-1954",
-    type: "raster",
-    source: "history-1954",
-    paint: {
-      "raster-opacity": year === "1954" ? 1 : 0,
-      "raster-opacity-transition": { duration: 0 },
-      "raster-fade-duration": 0,
-    },
-  });
-  for (const [period, name, metadata, before] of [
-    ["1860", "jourdan-1860", jourdan1860, "overview-1875"],
-    ["1904", "laffont-1904", laffont1904, "history-1954"],
-  ] as const) {
-    const id = "history-" + period;
-    style.sources[id] = {
-      type: "image",
-      url: assetUrl(name + "/map.webp"),
-      coordinates: metadata.coordinates as [
-        [number, number],
-        [number, number],
-        [number, number],
-        [number, number],
-      ],
-    };
-    style.layers.splice(
-      style.layers.findIndex((layer) => layer.id === before),
-      0,
-      {
-        id,
-        type: "raster",
-        source: id,
-        paint: {
-          "raster-opacity": year === period ? 1 : 0,
-          "raster-opacity-transition": { duration: 0 },
-          "raster-fade-duration": 0,
-        },
-      },
-    );
-  }
-  return style;
-}
+const viewReducer = (state: ViewState, action: ViewAction) => reduceViewState(state, action, TODAY);
+const epochLabel = (value: Year) => getEpoch(value).label;
+const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
+const mapCredit = (value: Year) => getEpoch(value).credit;
+const dateLabel = (value: number) => labelDate(value, TODAY);
 maplibregl.setWorkerUrl(workerUrl);
 maplibregl.addProtocol("etat-major", loadStateMajorTile);
 const protocol = new Protocol();
 maplibregl.addProtocol("pmtiles", protocol.tile);
-type Mode = "split" | "overlay" | "loupe";
-function initialMode(): Mode {
-  const value = new URLSearchParams(location.hash.slice(1)).get("mode");
-  return value === "split" || value === "loupe" ? value : "overlay";
-}
-function initialPercent(key: string, fallback: number) {
-  if (key === "opacity" && new URLSearchParams(location.hash.slice(1)).get("mode") === "modern")
-    return 0;
-  // Legacy historical-only links retain their fully opaque appearance.
-  if (key === "opacity" && new URLSearchParams(location.hash.slice(1)).get("mode") === "historic")
-    return 100;
-  const raw = new URLSearchParams(location.hash.slice(1)).get(key);
-  const value = Number(raw);
-  return raw !== null && Number.isFinite(value) && value >= 0 && value <= 100 ? value : fallback;
-}
 const places = [
   { name: "Rue Ninau", center: [1.44954, 43.597678] as [number, number], zoom: 17.3 },
   { name: "Saint-Étienne", center: [1.448962, 43.599782] as [number, number], zoom: 17 },
@@ -431,76 +91,23 @@ const places = [
   { name: "Saint-Cyprien", center: [1.4315, 43.599] as [number, number], zoom: 15.6 },
   { name: "Tout le centre", center: [1.442, 43.602] as [number, number], zoom: 15 },
 ];
-// Toulouse and its immediate surroundings, including the 1954 imagery coverage.
-const CITY_LIMITS: [[number, number], [number, number]] = [
-  [1.3, 43.49],
-  [1.57, 43.75],
-];
-const CITY_OVERVIEW: [[number, number], [number, number]] = [
-  [1.412, 43.579],
-  [1.472, 43.625],
-];
-const MIN_ZOOM = 11.5;
-const MAX_ZOOM = 19;
-function initialView() {
-  const p = new URLSearchParams(location.hash.slice(1));
-  const bearing = readBearing(p.get("bearing"));
-  const lon = Number(p.get("lon")),
-    lat = Number(p.get("lat")),
-    z = Number(p.get("z"));
-  const shared =
-    p.has("lon") &&
-    p.has("lat") &&
-    p.has("z") &&
-    Number.isFinite(lon) &&
-    Number.isFinite(lat) &&
-    Number.isFinite(z) &&
-    lon >= CITY_LIMITS[0][0] &&
-    lon <= CITY_LIMITS[1][0] &&
-    lat >= CITY_LIMITS[0][1] &&
-    lat <= CITY_LIMITS[1][1];
-  return shared
-    ? {
-        center: [lon, lat] as [number, number],
-        zoom: Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, z)),
-        shared,
-        bearing,
-      }
-    : { center: [1.442, 43.602] as [number, number], zoom: 14, shared: false, bearing };
-}
-function initialEnabled(): Year[] {
-  const value = new URLSearchParams(location.hash.slice(1)).get("layers");
-  return value === null ? [...YEARS] : YEARS.filter((year) => value.split(",").includes(year));
-}
 function App() {
   const { selection: themePreference, theme } = useTheme();
   const mapTheme = useRef<Theme | null>(null);
-  const [alignedToMap, setAlignedToMap] = useState(() => initialView().bearing !== 0);
+  const [initial] = useState(() => parseViewState(location.hash, TODAY));
+  const [view, dispatch] = useReducer(viewReducer, initial.state);
+  const { enabled, mode, time, opacity, split } = view;
+  const setTime = (value: number) => dispatch({ type: "time", value });
+  const setOpacity = (value: number) => dispatch({ type: "opacity", value });
+  const setSplit = (value: number) => dispatch({ type: "split", value });
   const modernEl = useRef<HTMLDivElement>(null),
     oldEl = useRef<HTMLDivElement>(null);
   const map = useRef<MapInstance | null>(null);
   const historicMap = useRef<MapInstance | null>(null);
-  const [enabled, setEnabled] = useState<Year[]>(initialEnabled);
   const [epochsOpen, setEpochsOpen] = useState(false);
   const locationMaps = useRef<MapInstance[]>([]);
   const geo = useLocation(locationMaps);
-  const [mode, setMode] = useState<Mode>(initialMode);
-  const [time, setTime] = useState(() => Math.max(Number(enabled[0] ?? TODAY), initialTime()));
-  const dates = [...enabled.map(Number), TODAY];
-  const epoch = visibleEpoch(time, dates);
-  const year = ((epoch === TODAY ? enabled.at(-1) : String(epoch)) as Year) ?? YEARS[0];
-  const yearRef = useRef(year);
   const timelinePointer = useRef(false);
-  const [opacity, setOpacity] = useState(() =>
-      initialPercent(
-        "opacity",
-        new URLSearchParams(location.hash.slice(1)).get("mode") === "time" ||
-          initialMode() !== "overlay"
-          ? 100
-          : 75,
-      ),
-    ),
-    [split, setSplit] = useState(() => initialPercent("split", 50));
   const [compareHeld, setCompareHeld] = useState(false);
   const [loupe, setLoupe] = useState({ x: 50, y: 42 });
   const loupeDrag = useRef<{ id: number; x: number; y: number } | null>(null);
@@ -512,13 +119,27 @@ function App() {
   const [copied, setCopied] = useState(false);
   const [shareFallback, setShareFallback] = useState("");
   const [placesOpen, setPlacesOpen] = useState(false);
+  const presentation = derivePresentation(view, { compareHeld, peek }, TODAY);
+  const {
+    dates,
+    year,
+    timeLabel,
+    visibleMode,
+    populationYear,
+    creditedPeriods,
+    orientationEpoch,
+    readingBearing,
+    bearing,
+    historicOpacity,
+  } = presentation;
   useEffect(() => {
     if (!modernEl.current || !oldEl.current) return;
-    let modern: MapInstance, historic: MapInstance;
+    let modern: MapInstance | undefined;
+    let historic: MapInstance;
     try {
-      const { shared: _shared, ...view } = initialView();
+      const camera = initial.camera;
       const options = {
-        ...view,
+        ...camera,
         minZoom: MIN_ZOOM,
         maxZoom: MAX_ZOOM,
         maxBounds: CITY_LIMITS,
@@ -536,9 +157,13 @@ function App() {
         ...options,
         container: oldEl.current,
         interactive: false,
-        style: historicalStyle(yearRef.current),
+        style: historicalStyle(resolveTimeline(initial.state, TODAY).opacities, {
+          baseUrl: import.meta.env.BASE_URL,
+          origin: location.origin,
+        }),
       });
     } catch {
+      modern?.remove();
       // eslint-disable-next-line react/set-state-in-effect, react-hooks-js/set-state-in-effect -- Report failure of the external WebGL renderer.
       setErrors(["Impossible de démarrer la carte. Vérifiez WebGL et l’accélération matérielle."]);
       return;
@@ -549,16 +174,21 @@ function App() {
     locationMaps.current = [modern, historic];
     modern.touchZoomRotate.disableRotation();
     modern.keyboard.disableRotation();
+    const current = modern;
     const sync = () =>
       historic.jumpTo({
-        center: modern.getCenter(),
-        zoom: modern.getZoom(),
-        bearing: modern.getBearing(),
+        center: current.getCenter(),
+        zoom: current.getZoom(),
+        bearing: current.getBearing(),
         pitch: 0,
       });
     modern.on("move", sync);
-    if (!initialView().shared) {
-      modern.fitBounds(CITY_OVERVIEW, { padding: 30, duration: 0, bearing: initialView().bearing });
+    if (!initial.shared) {
+      modern.fitBounds(CITY_OVERVIEW, {
+        padding: 30,
+        duration: 0,
+        bearing: initial.camera.bearing,
+      });
       sync();
     }
     modern.on("mousemove", (e) =>
@@ -586,20 +216,20 @@ function App() {
       });
     }
     const resize = new ResizeObserver(() => {
-      modern.resize();
+      current.resize();
       historic.resize();
       sync();
     });
     resize.observe(modernEl.current);
     return () => {
       resize.disconnect();
-      modern.remove();
+      current.remove();
       historic.remove();
       map.current = null;
       historicMap.current = null;
       locationMaps.current = [];
     };
-  }, []);
+  }, [initial]);
   useEffect(() => {
     if (!map.current || mapTheme.current === theme) return;
     mapTheme.current = theme;
@@ -641,32 +271,11 @@ function App() {
     const historical = historicMap.current;
     if (!historical) return;
     const apply = () => {
-      if (!historical.getLayer("history-1680")) return;
-      const blendDates = [...enabled.map(Number), TODAY];
-      const index = Math.min(
-        blendDates.length - 2,
-        Math.max(
-          0,
-          blendDates.findIndex((date, i) => i < blendDates.length - 1 && time < blendDates[i + 1]),
-        ),
-      );
-      const start =
-        time === TODAY ? (blendDates[blendDates.length - 2] ?? TODAY) : blendDates[index];
-      const end = time === TODAY ? TODAY : blendDates[index + 1];
-      const fraction = end === start ? 1 : (time - start) / (end - start);
+      const { opacities } = resolveTimeline({ enabled, time }, TODAY);
       for (const period of YEARS) {
-        const value = !enabled.includes(period)
-          ? 0
-          : Number(period) === start
-            ? end === TODAY
-              ? 1 - fraction
-              : 1
-            : Number(period) === end
-              ? fraction
-              : 0;
-        for (const kind of ["overview", "history"]) {
-          const id = kind + "-" + period;
-          if (historical.getLayer(id)) historical.setPaintProperty(id, "raster-opacity", value);
+        for (const id of epochLayerIds(period)) {
+          if (historical.getLayer(id))
+            historical.setPaintProperty(id, "raster-opacity", opacities[period]);
         }
       }
     };
@@ -675,43 +284,14 @@ function App() {
     return () => {
       historical.off("style.load", apply);
     };
-  }, [time, enabled]);
-  const lower = dates.filter((date) => date <= time).at(-1)!;
-  const upper = dates.find((date) => date > time) ?? TODAY;
-  const dateLabel = (date: number) =>
-    date === TODAY ? "Actuel" : date === 450 ? "Ve" : date === 1250 ? "XIIIe" : String(date);
+  }, [enabled, time]);
   const timePosition = timelinePosition(time, dates);
   const moveTimeline = (element: HTMLInputElement, clientX: number) => {
     const box = element.getBoundingClientRect();
     const position = (clientX - box.left - 8) / Math.max(1, box.width - 16);
     setTime(snapTimelineYear(Math.round(timelineYear(position, dates)), dates));
   };
-  const timeLabel = dates.includes(time)
-    ? time === 1875
-      ? "1875 · Inondation"
-      : time === 1848
-        ? "1848 · État-major"
-        : time === 1550
-          ? "1550 · Héritages du parcellaire"
-          : dateLabel(time)
-    : `${dateLabel(lower)} → ${dateLabel(upper)}`;
-  const toggleEpoch = (value: Year) => {
-    const next = YEARS.filter((y) => (y === value ? !enabled.includes(y) : enabled.includes(y)));
-    setEnabled(next);
-    setTime((t) => Math.max(Number(next[0] ?? TODAY), t));
-  };
-  const visibleMode =
-    enabled.length === 0 ? "modern" : compareHeld ? "overlay" : peek ? "modern" : mode;
-  const populationYear = visibleMode === "modern" ? TODAY : time;
-  const creditedPeriods =
-    visibleMode === "modern" || (!compareHeld && opacity === 0)
-      ? []
-      : enabled.filter(
-          (period) => Number(period) === lower || (time !== lower && Number(period) === upper),
-        );
-  const orientationEpoch = !enabled.length || opacity === 0 ? TODAY : epoch;
-  const readingBearing = mapBearing(orientationEpoch);
-  const bearing = alignedToMap ? readingBearing : 0;
+  const toggleEpoch = (id: Year) => dispatch({ type: "toggleEpoch", id });
   useEffect(() => {
     map.current?.easeTo({ bearing, duration: 450 });
   }, [bearing]);
@@ -721,21 +301,17 @@ function App() {
     map.current?.flyTo({ ...places[index], duration: 1000, essential: true });
   const share = async () => {
     const center = map.current?.getCenter();
-    const view = initialView();
-    const params = new URLSearchParams({
-      lon: (center?.lng ?? view.center[0]).toFixed(6),
-      lat: (center?.lat ?? view.center[1]).toFixed(6),
-      z: (map.current?.getZoom() ?? view.zoom).toFixed(2),
-      year,
-      layers: enabled.join(","),
-      mode,
-      time: String(time),
-      opacity: String(opacity),
-      split: String(split),
-      bearing: String(bearing),
-    });
+    const camera = {
+      center: [
+        center?.lng ?? initial.camera.center[0],
+        center?.lat ?? initial.camera.center[1],
+      ] as [number, number],
+      zoom: map.current?.getZoom() ?? initial.camera.zoom,
+      bearing,
+    };
+    const hash = serializeViewState(view, camera, year);
     const url = new URL(location.href);
-    url.hash = params.toString();
+    url.hash = hash;
     setShareFallback("");
     if (navigator.share) {
       try {
@@ -761,14 +337,7 @@ function App() {
         ref={oldEl}
         aria-label="Cartes historiques sur la frise"
         style={{
-          opacity:
-            enabled.length === 0
-              ? 0
-              : compareHeld
-                ? 0.2
-                : visibleMode === "modern"
-                  ? 0
-                  : opacity / 100,
+          opacity: historicOpacity,
           clipPath:
             visibleMode === "split"
               ? `inset(0 ${100 - split}% 0 0)`
@@ -951,15 +520,7 @@ function App() {
         <>
           <div className="epoch-label old-label">
             {year === "1875" ? "1875 · Inondation" : epochLabel(year)}{" "}
-            <span>
-              {year === "450" || year === "1250"
-                ? "RECONSTRUCTION"
-                : year === "1550"
-                  ? "HÉRITAGES DU PARCELLAIRE"
-                  : year === "1954"
-                    ? "VUE AÉRIENNE"
-                    : "CADASTRE HISTORIQUE"}
-            </span>
+            <span>{getEpoch(year).category}</span>
           </div>
           <div className="epoch-label new-label">
             <span>CARTE ACTUELLE</span> Actuel
@@ -983,12 +544,10 @@ function App() {
               onKeyDown={(e) => {
                 if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
                   e.preventDefault();
-                  setSplit((s) =>
-                    e.key === "Home"
-                      ? 0
-                      : e.key === "End"
-                        ? 100
-                        : Math.max(0, Math.min(100, s + (e.key === "ArrowLeft" ? -2 : 2))),
+                  dispatch(
+                    e.key === "Home" || e.key === "End"
+                      ? { type: "split", value: e.key === "Home" ? 0 : 100 }
+                      : { type: "moveSplit", delta: e.key === "ArrowLeft" ? -2 : 2 },
                   );
                 }
               }}
@@ -1089,7 +648,7 @@ function App() {
           disabled={readingBearing === 0}
           onClick={() => {
             if (!map.current) return;
-            setAlignedToMap(!alignedToMap);
+            dispatch({ type: "toggleAlignment" });
           }}
         >
           <Compass size={18} style={{ transform: `rotate(${-bearing}deg)` }} />
@@ -1148,27 +707,7 @@ function App() {
                       onCheckedChange={() => toggleEpoch(value)}
                     />
                     <span>{epochLabel(value)}</span>
-                    <small>
-                      {value === "450" || value === "1250"
-                        ? "Reconstruction"
-                        : value === "1550"
-                          ? "Héritages du parcellaire"
-                          : value === "1848"
-                            ? "État-major · IGN"
-                            : value === "1860"
-                              ? "Plan de Jourdan"
-                              : value === "1904"
-                                ? "Plan de Laffont"
-                                : value === "1777"
-                                  ? "Plan de Saget"
-                                  : value === "1631"
-                                    ? "Plan · calage approximatif"
-                                    : value === "1875"
-                                      ? "Inondation"
-                                      : value === "1954"
-                                        ? "Vue aérienne"
-                                        : "Cadastre"}
-                    </small>
+                    <small>{getEpoch(value).optionLabel}</small>
                   </label>
                 ))}
               </div>
@@ -1177,7 +716,7 @@ function App() {
               className="comparison-switch"
               aria-label="Forme de comparaison"
               value={mode}
-              onValueChange={(value) => setMode(value as Mode)}
+              onValueChange={(value) => dispatch({ type: "mode", value: value as Mode })}
             >
               {(["overlay", "split", "loupe"] as const).map((shape) => (
                 <ToggleItem key={shape} value={shape} asChild disabled={!enabled.length}>
@@ -1358,213 +897,17 @@ function App() {
       >
         <div className="eyebrow">SOURCES ET PRÉCISION</div>
         <h2>Cartes de Toulouse</h2>
-        {year === "450" ? (
-          <>
-            <h3>Toulouse à la fin de l’Antiquité · reconstruction</h3>
-            <p>
-              Figure 1 de l’étude de Quitterie Cazes, dessin de F. Callède. Le plan distingue les
-              vestiges du Haut et du Bas Empire et les propositions de restitution des axes de la
-              voirie antique. Le fond parcellaire et les églises servent de repères ; tous les
-              éléments dessinés ne sont pas contemporains.
-            </p>
-            <p>
-              La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans les
-              liens et la frise sert uniquement au classement. La légende originale est conservée.
-              Le calage affine utilise trois églises de référence ; le contrôle indépendant à
-              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-              {antiquity.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-            </p>
-            <a
-              href={assetUrl("openedition-antiquite/figure-01.jpg")}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Voir le dessin complet et sa légende <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1250" ? (
-          <>
-            <h3>Toulouse au XIIIe siècle · reconstruction</h3>
-            <p>
-              Dessin de F. Callède, Inrap, PCR « Toulouse au Moyen Âge », illustration 6 de l’étude
-              de Quitterie Cazes publiée dans Marquer la ville (2013), sur OpenEdition. Les
-              positions connues et proposées sont distinguées dans la légende originale. Le fond
-              parcellaire est un repère de lecture, pas un relevé exact du XIIIe siècle.
-            </p>
-            <p>
-              Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle indépendant à
-              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-              {medieval13c.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs. La
-              légende originale est conservée sur la carte. Le repère 1250 dans les liens et la
-              frise sert au classement ; la source date le plan du XIIIe siècle, sans année précise.
-            </p>
-            <a href={assetUrl("openedition-13c/figure-06.jpg")} target="_blank" rel="noreferrer">
-              Voir le dessin complet et sa légende <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1550" ? (
-          <>
-            <h3>1550 · Héritages du parcellaire</h3>
-            <p>
-              Assemblage des figures 7 et 8 de l’étude de Quitterie Cazes, dessins de F. Callède /
-              Inrap. Les limites rouges de la figure 7, d’orientation antique, complètent les
-              limites bleues de la figure 8. Le fond et la légende de la figure 8 sont conservés ;
-              le fond archéologique propre à la figure 7 reste dans l’original.
-            </p>
-            <p>
-              1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond
-              représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de
-              Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à
-              Saint-Pierre-des-Cuisines donne un écart d’environ{" "}
-              {parcels1550.checkPoints[0].errorMetres} m, sans garantir la précision ailleurs.
-            </p>
-            <a href={assetUrl("openedition-1550/figure-07.jpg")} target="_blank" rel="noreferrer">
-              Figure 7 · Héritages antiques <ExternalLink size={14} />
+        <h3>{getEpoch(year).details.title}</h3>
+        {getEpoch(year).details.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+        {getEpoch(year).details.links?.map((link) => (
+          <React.Fragment key={link.label}>
+            <a href={link.path ? assetUrl(link.path) : link.url} target="_blank" rel="noreferrer">
+              {link.label} <ExternalLink size={14} />
             </a>{" "}
-            <a href={assetUrl("openedition-1550/figure-08.jpg")} target="_blank" rel="noreferrer">
-              Figure 8 · Héritages médiévaux <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1631" ? (
-          <>
-            <h3>Plan de Melchior Tavernier · 1631</h3>
-            <p>
-              Plan de la ville de Tholose, Archives municipales de Toulouse, II 671. Numérisation
-              originale de 7874 × 5884 pixels, domaine public.
-            </p>
-            <p>
-              Calage révisé sur 22 repères au sol, avec une correction locale de la rue Nazareth.
-              Quatre contrôles distincts autour de Nazareth et du Salin donnent des écarts de 8 à 39
-              m, sans établir la précision de toute la ville. Les monuments sont dessinés en
-              perspective ; les toits et les bords restent moins fiables. Ce plan ne garantit pas
-              une correspondance exacte rue par rue.
-            </p>
-            <p>Le feuillet complet conserve ses marges, son cartouche et sa légende.</p>
-            <a href={assetUrl("tavernier-1631/original.jpg")} target="_blank" rel="noreferrer">
-              Voir le plan complet et sa légende <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1777" ? (
-          <>
-            <h3>Plan de Joseph Marie de Saget · 1777</h3>
-            <p>
-              Plan de la ville de Toulouse dédié et présenté à Monsieur le frère du Roi. Dessin de
-              Joseph Marie de Saget, gravure de Pierre Gabriel Berthault. Archives municipales de
-              Toulouse, II 686 · domaine public. Numérisation originale de 5906 × 4047 pixels.
-            </p>
-            <p>
-              Le plan complet conserve ses tables et sa légende. Calage affine manuel sur
-              Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles distincts
-              donnent des écarts de{" "}
-              {saget1777.checkPoints.map((point) => point.errorMetres).join(" et ")} m. Ces repères
-              ne garantissent pas la précision ailleurs ; la correspondance des rues reste
-              approximative, surtout aux bords.
-            </p>
-            <a href={assetUrl("saget-1777/original.jpg")} target="_blank" rel="noreferrer">
-              Voir le plan complet et sa légende <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1848" ? (
-          <>
-            <h3>Carte de l’état-major · 1848</h3>
-            <p>
-              Minutes en couleurs au 1 : 40 000, diffusées par IGN. Le catalogue officiel date de
-              1848 le feuillet 230 NO qui couvre le centre de Toulouse, ainsi que les cinq feuillets
-              voisins intersectant notre zone de navigation. La période « 1820–1866 » désigne la
-              série nationale, pas la date de Toulouse.
-            </p>
-            <p>
-              Le millésime 1848 est celui des minutes dans le catalogue. Des compléments ultérieurs,
-              notamment ferroviaires, peuvent figurer dans cette série : chaque objet dessiné n’est
-              donc pas nécessairement un état de 1848. La carte montre surtout le territoire, les
-              routes, les cultures et les villages autour de la ville ; elle ne donne pas la
-              précision d’un cadastre parcellaire.
-            </p>
-            <p>
-              Géoréférencement IGN affiné sur 30 repères conservés : carrefours, ponts, monuments et
-              axes autour du Grand Rond. Quinze contrôles indépendants vérifient ce recalage
-              progressif dans le centre. Les tuiles couvrent les niveaux de zoom 6 à 15 ; au-delà,
-              elles sont agrandies. Source IGN, Licence Ouverte 2.0 ; métadonnées vérifiées le 1er
-              octobre 2026.
-            </p>
-            <a
-              href="https://www.data.gouv.fr/datasets/scan-etat-major-r-40k-1"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Catalogue IGN et licence <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1860" || year === "1904" ? (
-          <>
-            <h3>
-              {year === "1860"
-                ? "Plan de Jourdan et Rivière · vers 1860"
-                : "Plan de Léon Laffont · 1904"}
-            </h3>
-            <p>
-              {year === "1860"
-                ? "Ville de Toulouse. Faubourgs. Banlieue. Dessin de Justin Jourdan, lithographie de Prosper Rivière. Archives municipales de Toulouse, 20 Fi 66 · domaine public."
-                : "Plan de la ville de Toulouse. Dessin de Léon Laffont, lithographie de Pierre Rouy, édition Pagès et Carrère. Archives municipales de Toulouse, 20Fi57. Tirage de 1904."}
-            </p>
-            <p>
-              {year === "1860"
-                ? "Le plan montre le chemin de fer, les places et les faubourgs. Il comprend des changements réalisés et des alignements officiellement projetés, à distinguer avec la légende. Les cartes annexes et les vues de monuments sont conservées."
-                : "Le plan couvre le centre et les faubourgs, notamment les Minimes, Bonnefoy, Saint-Cyprien et Saint-Michel. Le pont des Amidonniers y figure comme projet. Les numéros de grille, le titre et les marges sont conservés."}
-            </p>
-            <p>
-              Calage sur {(year === "1860" ? jourdan1860 : laffont1904).fitPointCount} repères
-              répartis entre le centre, les ponts du canal, Saint-Cyprien et le Grand Rond, dont le
-              bassin central et trois axes de rues autour du parc, avec une correction progressive
-              des déformations du plan. Quinze contrôles indépendants sur des carrefours, églises et
-              places donnent des écarts de{" "}
-              {(year === "1860" ? jourdan1860 : laffont1904).checkPoints
-                .map((point) => point.errorMetres)
-                .join(", ")}{" "}
-              m. Ces contrôles concernent le centre ; ils ne garantissent pas la précision aux
-              faubourgs ni aux bords du document. Le feuillet complet est conservé.
-            </p>
-            <a
-              href={assetUrl((year === "1860" ? "jourdan-1860" : "laffont-1904") + "/original.jpg")}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Voir le plan complet <ExternalLink size={14} />
-            </a>
-          </>
-        ) : year === "1875" ? (
-          <>
-            <h3>Inondation des 23–24 juin 1875</h3>
-            <p>
-              Plan original Sirven / La Dépêche, Archives municipales de Toulouse, 20 Fi 45.
-              Numérisation disponible sur Mapas Milhaud. Le bleu indique les zones inondées ; le
-              rouge, les maisons écroulées.
-            </p>
-            <p>
-              Le plan a été calé manuellement sur 15 repères. Sur trois points de contrôle
-              indépendants, les écarts sont de 14 à 27 m. La précision diminue aux bords. Ce
-              document historique ne décrit pas le risque actuel d’inondation.
-            </p>
-          </>
-        ) : year === "1954" ? (
-          <>
-            <h3>Vue aérienne de 1954</h3>
-            <p>
-              Photographie aérienne en noir et blanc fournie par IGN / Edugéo, déjà géoréférencée. À
-              fort zoom, les pixels du cliché deviennent visibles. Hors couverture, la carte
-              actuelle reste affichée.
-            </p>
-          </>
-        ) : (
-          <>
-            <h3>{year === "1680" ? "Vers 1680" : "Cadastre de 1830"}</h3>
-            <p>
-              Carte réalisée par Makina Corpus à partir du cadastre historique de Toulouse
-              Métropole. Il s’agit d’un dessin actuel de données historiques, et non d’un scan
-              d’archive. Les tuiles géoréférencées sont utilisées sans déformation supplémentaire.
-            </p>
-          </>
-        )}
+          </React.Fragment>
+        ))}
         <a href={sourceUrl(year)} target="_blank" rel="noreferrer">
           Ouvrir la carte source <ExternalLink size={14} />
         </a>
@@ -1641,8 +984,7 @@ function App() {
             <li key={period}>
               <a href={sourceUrl(period)} target="_blank" rel="noreferrer">
                 {epochLabel(period)} · {mapCredit(period)}
-                {["1631", "1777", "1860", "1904"].includes(period) &&
-                  " / Archives municipales de Toulouse"}
+                {getEpoch(period).archiveCredit && ` / ${getEpoch(period).archiveCredit}`}
               </a>
             </li>
           ))}
