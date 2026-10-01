@@ -19,26 +19,22 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import * as maplibregl from "maplibre-gl";
-import type { Map as MapInstance } from "maplibre-gl";
-import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
-import { Protocol } from "pmtiles";
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 
 import { CityWidget } from "./CityWidget";
 import { EPOCH_IDS as YEARS, getEpoch } from "./epochs/catalog";
+import type { EpochId as Year } from "./epochs/catalog";
+import { Coordinates } from "./map/Coordinates";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./style.css";
 import "./compact.css";
 import "./ui.css";
-import type { EpochId as Year } from "./epochs/catalog";
-import { historicalStyle, epochLayerIds } from "./epochs/sources";
-import { loadStateMajorTile } from "./etat-major";
+import { useMaps } from "./map/useMaps";
 import { nextBearing } from "./orientation";
-import { appliedTheme, modernMapStyle, setThemePreference, useTheme } from "./theme";
-import type { Theme, ThemePreference } from "./theme";
+import { setThemePreference, useTheme } from "./theme";
+import type { ThemePreference } from "./theme";
 import { snapTimelineYear, timelinePosition, timelineYear } from "./timeline";
 import {
   Button,
@@ -52,16 +48,12 @@ import {
   ToggleItem,
 } from "./ui";
 import { useLocation } from "./useLocation";
-import { derivePresentation, resolveTimeline } from "./view/presentation";
+import { derivePresentation } from "./view/presentation";
 import {
   parseViewState,
   reduceViewState,
   serializeViewState,
   dateLabel as labelDate,
-  CITY_LIMITS,
-  CITY_OVERVIEW,
-  MIN_ZOOM,
-  MAX_ZOOM,
 } from "./view/state";
 import type { Mode, ViewState, ViewAction } from "./view/state";
 
@@ -79,10 +71,6 @@ const epochLabel = (value: Year) => getEpoch(value).label;
 const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
 const mapCredit = (value: Year) => getEpoch(value).credit;
 const dateLabel = (value: number) => labelDate(value, TODAY);
-maplibregl.setWorkerUrl(workerUrl);
-maplibregl.addProtocol("etat-major", loadStateMajorTile);
-const protocol = new Protocol();
-maplibregl.addProtocol("pmtiles", protocol.tile);
 const places = [
   { name: "Rue Ninau", center: [1.44954, 43.597678] as [number, number], zoom: 17.3 },
   { name: "Saint-Étienne", center: [1.448962, 43.599782] as [number, number], zoom: 17 },
@@ -93,29 +81,19 @@ const places = [
 ];
 function App() {
   const { selection: themePreference, theme } = useTheme();
-  const mapTheme = useRef<Theme | null>(null);
   const [initial] = useState(() => parseViewState(location.hash, TODAY));
   const [view, dispatch] = useReducer(viewReducer, initial.state);
   const { enabled, mode, time, opacity, split } = view;
   const setTime = (value: number) => dispatch({ type: "time", value });
   const setOpacity = (value: number) => dispatch({ type: "opacity", value });
   const setSplit = (value: number) => dispatch({ type: "split", value });
-  const modernEl = useRef<HTMLDivElement>(null),
-    oldEl = useRef<HTMLDivElement>(null);
-  const map = useRef<MapInstance | null>(null);
-  const historicMap = useRef<MapInstance | null>(null);
   const [epochsOpen, setEpochsOpen] = useState(false);
-  const locationMaps = useRef<MapInstance[]>([]);
-  const geo = useLocation(locationMaps);
   const timelinePointer = useRef(false);
   const [compareHeld, setCompareHeld] = useState(false);
   const [loupe, setLoupe] = useState({ x: 50, y: 42 });
   const loupeDrag = useRef<{ id: number; x: number; y: number } | null>(null);
   const [peek, setPeek] = useState(false),
     [sources, setSources] = useState(false);
-  const [ready, setReady] = useState({ modern: false, historic: false });
-  const [errors, setErrors] = useState<string[]>([]);
-  const [coords, setCoords] = useState("43.59768° N · 1.44954° E");
   const [copied, setCopied] = useState(false);
   const [shareFallback, setShareFallback] = useState("");
   const [placesOpen, setPlacesOpen] = useState(false);
@@ -132,109 +110,16 @@ function App() {
     bearing,
     historicOpacity,
   } = presentation;
-  useEffect(() => {
-    if (!modernEl.current || !oldEl.current) return;
-    let modern: MapInstance | undefined;
-    let historic: MapInstance;
-    try {
-      const camera = initial.camera;
-      const options = {
-        ...camera,
-        minZoom: MIN_ZOOM,
-        maxZoom: MAX_ZOOM,
-        maxBounds: CITY_LIMITS,
-        pitchWithRotate: false,
-        dragRotate: false,
-        touchPitch: false,
-        attributionControl: false as const,
-      };
-      modern = new maplibregl.Map({
-        ...options,
-        container: modernEl.current,
-        style: modernMapStyle(appliedTheme()),
-      });
-      historic = new maplibregl.Map({
-        ...options,
-        container: oldEl.current,
-        interactive: false,
-        style: historicalStyle(resolveTimeline(initial.state, TODAY).opacities, {
-          baseUrl: import.meta.env.BASE_URL,
-          origin: location.origin,
-        }),
-      });
-    } catch {
-      modern?.remove();
-      // eslint-disable-next-line react/set-state-in-effect, react-hooks-js/set-state-in-effect -- Report failure of the external WebGL renderer.
-      setErrors(["Impossible de démarrer la carte. Vérifiez WebGL et l’accélération matérielle."]);
-      return;
-    }
-    map.current = modern;
-    mapTheme.current = appliedTheme();
-    historicMap.current = historic;
-    locationMaps.current = [modern, historic];
-    modern.touchZoomRotate.disableRotation();
-    modern.keyboard.disableRotation();
-    const current = modern;
-    const sync = () =>
-      historic.jumpTo({
-        center: current.getCenter(),
-        zoom: current.getZoom(),
-        bearing: current.getBearing(),
-        pitch: 0,
-      });
-    modern.on("move", sync);
-    if (!initial.shared) {
-      modern.fitBounds(CITY_OVERVIEW, {
-        padding: 30,
-        duration: 0,
-        bearing: initial.camera.bearing,
-      });
-      sync();
-    }
-    modern.on("mousemove", (e) =>
-      setCoords(`${e.lngLat.lat.toFixed(5)}° N · ${e.lngLat.lng.toFixed(5)}° E`),
-    );
-    modern.addControl(
-      new maplibregl.ScaleControl({ maxWidth: 120, unit: "metric" }),
-      "bottom-left",
-    );
-    for (const [kind, instance] of [
-      ["modern", modern],
-      ["historic", historic],
-    ] as const) {
-      instance.on("idle", () => setReady((s) => ({ ...s, [kind]: true })));
-      instance.on("error", (e) => {
-        console.error(kind, e.error);
-        setErrors((s) => [
-          ...new Set([
-            ...s,
-            kind === "modern"
-              ? "Chargement incomplet de la carte actuelle. Vérifiez la connexion et rechargez la page."
-              : "Chargement incomplet de la carte historique. Vérifiez la connexion et rechargez la page.",
-          ]),
-        ]);
-      });
-    }
-    const resize = new ResizeObserver(() => {
-      current.resize();
-      historic.resize();
-      sync();
-    });
-    resize.observe(modernEl.current);
-    return () => {
-      resize.disconnect();
-      current.remove();
-      historic.remove();
-      map.current = null;
-      historicMap.current = null;
-      locationMaps.current = [];
-    };
-  }, [initial]);
-  useEffect(() => {
-    if (!map.current || mapTheme.current === theme) return;
-    mapTheme.current = theme;
-    map.current.setStyle(modernMapStyle(theme));
-  }, [theme]);
+  const { controller, modernEl, oldEl, status } = useMaps(
+    initial,
+    theme,
+    { enabled, time },
+    TODAY,
+    historicOpacity > 0,
+    bearing,
+  );
+  const geo = useLocation(controller.locationMaps);
+  const errors = [...new Set(status.failures.map((failure) => failure.message))];
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (
@@ -267,24 +152,6 @@ function App() {
       window.removeEventListener("blur", blur);
     };
   }, []);
-  useEffect(() => {
-    const historical = historicMap.current;
-    if (!historical) return;
-    const apply = () => {
-      const { opacities } = resolveTimeline({ enabled, time }, TODAY);
-      for (const period of YEARS) {
-        for (const id of epochLayerIds(period)) {
-          if (historical.getLayer(id))
-            historical.setPaintProperty(id, "raster-opacity", opacities[period]);
-        }
-      }
-    };
-    apply();
-    historical.on("style.load", apply);
-    return () => {
-      historical.off("style.load", apply);
-    };
-  }, [enabled, time]);
   const timePosition = timelinePosition(time, dates);
   const moveTimeline = (element: HTMLInputElement, clientX: number) => {
     const box = element.getBoundingClientRect();
@@ -292,23 +159,12 @@ function App() {
     setTime(snapTimelineYear(Math.round(timelineYear(position, dates)), dates));
   };
   const toggleEpoch = (id: Year) => dispatch({ type: "toggleEpoch", id });
-  useEffect(() => {
-    map.current?.easeTo({ bearing, duration: 450 });
-  }, [bearing]);
   const loupeLeft = `clamp(var(--loupe-radius), ${loupe.x}%, calc(100% - var(--loupe-radius)))`;
   const loupeTop = `clamp(var(--loupe-radius), ${loupe.y}%, calc(100% - var(--loupe-radius)))`;
   const go = (index: number) =>
-    map.current?.flyTo({ ...places[index], duration: 1000, essential: true });
+    controller.flyTo({ ...places[index], duration: 1000, essential: true });
   const share = async () => {
-    const center = map.current?.getCenter();
-    const camera = {
-      center: [
-        center?.lng ?? initial.camera.center[0],
-        center?.lat ?? initial.camera.center[1],
-      ] as [number, number],
-      zoom: map.current?.getZoom() ?? initial.camera.zoom,
-      bearing,
-    };
+    const camera = { ...controller.getCamera(), bearing };
     const hash = serializeViewState(view, camera, year);
     const url = new URL(location.href);
     url.hash = hash;
@@ -619,7 +475,7 @@ function App() {
           tooltipSide="left"
           data-tooltip="Zoom avant"
           aria-label="Zoom avant"
-          onClick={() => map.current?.zoomIn()}
+          onClick={controller.zoomIn}
         >
           <Plus size={20} />
         </Button>
@@ -627,7 +483,7 @@ function App() {
           tooltipSide="left"
           data-tooltip="Zoom arrière"
           aria-label="Zoom arrière"
-          onClick={() => map.current?.zoomOut()}
+          onClick={controller.zoomOut}
         >
           <Minus size={20} />
         </Button>
@@ -647,7 +503,6 @@ function App() {
           data-bearing={bearing}
           disabled={readingBearing === 0}
           onClick={() => {
-            if (!map.current) return;
             dispatch({ type: "toggleAlignment" });
           }}
         >
@@ -659,14 +514,7 @@ function App() {
           aria-label="Vue d’ensemble de Toulouse"
           tooltipSide="left"
           data-tooltip="Vue d’ensemble de Toulouse"
-          onClick={() =>
-            map.current?.fitBounds(CITY_OVERVIEW, {
-              padding: 30,
-              duration: 1000,
-              essential: true,
-              bearing,
-            })
-          }
+          onClick={() => controller.overview(bearing)}
         >
           <RotateCcw size={18} />
         </Button>
@@ -674,9 +522,13 @@ function App() {
       <div className="control-dock">
         <section className="control-panel" aria-label="Comparaison des cartes">
           <span className="sr-only">
-            {ready.modern && ready.historic ? "Cartes chargées" : "Chargement des cartes…"}
+            {status.phase === "ready"
+              ? "Cartes chargées"
+              : status.phase === "error"
+                ? "Chargement incomplet des cartes"
+                : "Chargement des cartes…"}
           </span>
-          {!(ready.modern && ready.historic) && (
+          {status.phase === "loading" && (
             <Tooltip text="Chargement des cartes…">
               <span className="loading-dot" />
             </Tooltip>
@@ -844,14 +696,14 @@ function App() {
           {errors.map((e) => (
             <p key={e}>{e}</p>
           ))}
-          <Button onClick={() => location.reload()}>Recharger</Button>
-          <Button aria-label="Fermer le message" onClick={() => setErrors([])}>
+          <Button onClick={controller.retry}>Réessayer</Button>
+          <Button aria-label="Fermer le message" onClick={controller.loading.dismiss}>
             <X size={16} />
           </Button>
         </div>
       )}
       <footer>
-        <span className="coordinates">{coords}</span>
+        <Coordinates controller={controller} />
         <span className="map-credits">
           {creditedPeriods.map((period) => (
             <React.Fragment key={period}>

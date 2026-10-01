@@ -52,6 +52,23 @@ choisis. Elles ne tournent pas la caméra à chaque pression et relâchement.
 
 ## Vérification et limites actuelles
 
+`src/map/controller.ts` possède les deux renderers, leur synchronisation et leurs
+abonnements. `useMaps.ts` relie leur cycle de vie à React ; un échec partiel du
+démarrage libère les ressources déjà créées. Les coordonnées ont leur propre
+abonnement dans `Coordinates.tsx`, sans rendre à nouveau toute l’application.
+
+Seules les époques qui contribuent à la date choisie sont installées. Pour une
+source avec vue d’ensemble et détails, seul le rendu correspondant au zoom est
+présent. Les changements d’opacité et les déplacements dans le même intervalle
+de zoom ne recréent pas les sources. Pendant une comparaison temporaire, les
+sources historiques restent disponibles mais ne bloquent pas le statut visible.
+
+`loading.ts` suit séparément les ressources requises et leurs échecs. Un événement
+`idle` ne supprime jamais une erreur. La réussite de la même requête ou une
+nouvelle tentative la supprime ; les sources désactivées ne bloquent plus la vue.
+« Réessayer » remplace les sources historiques en échec ou recharge le style
+actuel, en conservant les renderers, la caméra et l’état de comparaison.
+
 Les contrats du catalogue et de la vue sont testés sous Node, sans démarrer React
 ni MapLibre. La couverture obligatoire à 100 % concerne `timeline.ts` et les
 modules de `src/view/`. Les scénarios de `tests/view-state.spec.ts` vérifient
@@ -62,6 +79,11 @@ suivi de chaque repère, les contrôles indépendants, les voisins des tuiles et
 l’absence de repliement. Le nombre de points peut évoluer sans désactiver les
 vérifications géométriques.
 
-Le cycle de vie des cartes, leurs statuts de chargement et une grande partie
-du JSX restent dans `main.tsx`. Leur isolation, la consolidation du CSS et le
-traitement des tuiles État-major dans un worker constituent les étapes suivantes.
+Les tests du contrôleur simulent MapLibre pour vérifier les transitions, l’ordre
+des couches et la libération des ressources. `tests/map-loading.spec.ts` vérifie
+la reprise après une erreur réseau et l’absence de requêtes vers les archives
+inactives. Les tests avec services cartographiques réels restent distincts.
+
+Une grande partie du JSX reste dans `main.tsx`. Son découpage, la consolidation
+du CSS et le traitement des tuiles État-major dans un worker constituent les
+étapes suivantes.

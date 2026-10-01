@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 
+export { modernMapStyle } from "./map/styles";
+
 export type ThemePreference = "system" | "light" | "dark";
 export type Theme = "light" | "dark";
 const storageKey = "retrolosa-theme";
@@ -8,10 +10,6 @@ const media = window.matchMedia("(prefers-color-scheme: dark)");
 
 export function appliedTheme(): Theme {
   return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-}
-
-export function modernMapStyle(theme: Theme) {
-  return `https://tiles.openfreemap.org/styles/${theme === "dark" ? "dark" : "positron"}`;
 }
 
 function preference(): ThemePreference {

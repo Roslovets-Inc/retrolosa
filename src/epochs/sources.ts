@@ -76,3 +76,26 @@ export function historicalStyle(
   }
   return style;
 }
+
+/** Only the contributing sheets at this zoom need sources or network requests. */
+export function activeHistoricalStyle(
+  opacities: Readonly<Partial<Record<EpochId, number>>>,
+  assets: AssetContext,
+  zoom: number,
+): StyleSpecification {
+  const style = historicalStyle(opacities, assets);
+  style.layers = style.layers.filter(
+    (layer) =>
+      layer.type === "raster" &&
+      Number(layer.paint?.["raster-opacity"]) > 0 &&
+      (layer.minzoom === undefined || zoom >= layer.minzoom) &&
+      (layer.maxzoom === undefined || zoom < layer.maxzoom),
+  );
+  const sources = new Set(
+    style.layers.flatMap((layer) => ("source" in layer ? [layer.source] : [])),
+  );
+  style.sources = Object.fromEntries(
+    Object.entries(style.sources).filter(([id]) => sources.has(id)),
+  );
+  return style;
+}

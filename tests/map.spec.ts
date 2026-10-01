@@ -10,7 +10,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   page.on("response", (response) => {
     if (response.url().includes("tolosa-1680.pmtiles")) historicResponses.push(response.status());
   });
-  await page.goto("/#lon=1.442&lat=43.602&z=16.7");
+  await page.goto("/#year=1680&lon=1.442&lat=43.602&z=16.7");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await expect(page.getByRole("alert")).toHaveCount(0);
   expect(historicResponses.some((code) => code === 206)).toBeTruthy();
@@ -85,7 +85,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
 });
 test("historical network failure is explained", async ({ page }) => {
   await page.route("**/tolosa-1680.pmtiles", (route) => route.abort());
-  await page.goto("/");
+  await page.goto("/#year=1680&z=16");
   await expect(page.getByRole("alert")).toContainText(
     "Chargement incomplet de la carte historique",
     { timeout: 30000 },
