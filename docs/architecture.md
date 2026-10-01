@@ -6,7 +6,17 @@
 les libellés, les crédits, les orientations et les sources. Cet ordre est aussi
 l’ordre de dessin : une carte plus récente est dessinée au-dessus de la précédente.
 `details.ts` contient les textes de provenance et les liens vers les documents.
+Il est importé par le dialogue de sources, chargé à la demande, et jamais par le
+catalogue. `getEpochDetails(id)` fournit la description ; `getEpoch(id)` reste
+limité aux données de présentation et de rendu. `Record<EpochId, EpochDetails>`
+exige une description pour chaque époque du catalogue.
+
 Les nombres de points de contrôle disponibles sont tirés des métadonnées.
+Le catalogue importe explicitement les coordonnées, les emprises, les révisions
+et les adresses nécessaires aux cartes. Les descriptions importent seulement
+les champs utilisés dans leurs textes ; les annotations complètes ne sont pas
+nécessaires au rendu. Les fichiers géographiques restent les sources communes,
+sans copier leurs valeurs dans un deuxième catalogue.
 
 `types.ts` définit les variantes de rendu : image, tuiles, archive PMTiles et
 image d’ensemble suivie d’une source détaillée. Les coordonnées et les emprises
@@ -127,6 +137,12 @@ Les scénarios de partage, de comparaison et de loupe utilisent des services
 externes simulés : ils vérifient les gestes et les états de l’interface sans
 dépendre de la disponibilité d’un fournisseur de cartes.
 
+`tests/source-loading.spec.ts` vérifie que les descriptions et le rapport de
+validation État-major ne sont pas demandés à l’ouverture de l’application, puis
+apparaissent à l’ouverture des sources. Une deuxième époque réutilise le module
+déjà chargé. Le test unitaire des descriptions contrôle la couverture du catalogue,
+les textes interpolés et les liens ; le scénario de la vue vérifie chaque époque.
+
 La configuration Vite sépare MapLibre, les dépendances d’interface et le code
 de l’application pour que le cache des bibliothèques survive aux changements
 de l’interface. MapLibre reste nécessaire au premier affichage : le découpage
@@ -135,6 +151,6 @@ respectent le chemin de déploiement configuré par `VITE_BASE_PATH`.
 
 Les variantes responsives restent explicites dans `app.css` ; toute réorganisation
 de leur cascade doit préserver les dimensions, le focus et l’accessibilité des
-contrôles. Le partage de détails du catalogue avec la vue conserve encore des
-textes de provenance dans le chargement initial ; une séparation supplémentaire
-devra préserver le contrat du catalogue et ses contrôles.
+contrôles. Les prochaines vérifications concernent les requêtes IGN voisines,
+leur parallélisme et la mesure du bénéfice d’un cache borné, ainsi que les
+dépendances des composants envers les contrôleurs cartographiques.

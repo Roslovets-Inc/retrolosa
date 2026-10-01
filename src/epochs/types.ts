@@ -39,7 +39,6 @@ export interface EpochDefinition {
   attribution: string;
   bearing: number;
   render: EpochRender;
-  details: EpochDetails;
 }
 
 export function readCoordinates(value: number[][]): Coordinates {

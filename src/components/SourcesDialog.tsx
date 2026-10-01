@@ -3,6 +3,7 @@ import React from "react";
 
 import { EPOCH_IDS as YEARS, getEpoch } from "../epochs/catalog";
 import type { EpochId as Year } from "../epochs/catalog";
+import { getEpochDetails } from "../epochs/details";
 import { Dialog } from "../ui";
 export function SourcesDialog({
   year,
@@ -13,6 +14,7 @@ export function SourcesDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const details = getEpochDetails(year);
   const assetUrl = (path: string) => `${import.meta.env.BASE_URL}${path}`;
   const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
   const epochLabel = (value: Year) => getEpoch(value).label;
@@ -27,11 +29,11 @@ export function SourcesDialog({
       >
         <div className="eyebrow">SOURCES ET PRÉCISION</div>
         <h2>Cartes de Toulouse</h2>
-        <h3>{getEpoch(year).details.title}</h3>
-        {getEpoch(year).details.paragraphs.map((paragraph) => (
+        <h3>{details.title}</h3>
+        {details.paragraphs.map((paragraph) => (
           <p key={paragraph}>{paragraph}</p>
         ))}
-        {getEpoch(year).details.links?.map((link) => (
+        {details.links?.map((link) => (
           <React.Fragment key={link.label}>
             <a href={link.path ? assetUrl(link.path) : link.url} target="_blank" rel="noreferrer">
               {link.label} <ExternalLink size={14} />

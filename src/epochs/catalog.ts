@@ -1,14 +1,23 @@
-import flood from "../flood-1875.json";
+import { coordinates as floodCoordinates, bounds as floodBounds } from "../flood-1875.json";
 import overview1830 from "../history-overview-1830.json";
 import overview1680 from "../history-overview.json";
-import jourdan from "../jourdan-1860.json";
-import laffont from "../laffont-1904.json";
-import medieval from "../openedition-13c.json";
-import parcels from "../openedition-1550.json";
-import antiquity from "../openedition-antiquite.json";
-import saget from "../saget-1777.json";
-import tavernier from "../tavernier-1631.json";
-import { epochDetails } from "./details";
+import {
+  coordinates as jourdanCoordinates,
+  sourcePage as jourdanSourcePage,
+} from "../jourdan-1860.json";
+import {
+  coordinates as laffontCoordinates,
+  sourcePage as laffontSourcePage,
+} from "../laffont-1904.json";
+import { coordinates as medievalCoordinates } from "../openedition-13c.json";
+import { coordinates as parcelsCoordinates } from "../openedition-1550.json";
+import { coordinates as antiquityCoordinates } from "../openedition-antiquite.json";
+import { coordinates as sagetCoordinates, sourcePage as sagetSourcePage } from "../saget-1777.json";
+import {
+  coordinates as tavernierCoordinates,
+  bounds as tavernierBounds,
+  revision as tavernierRevision,
+} from "../tavernier-1631.json";
 import { readBounds, readCoordinates } from "./types";
 import type { EpochDefinition, ImageRender, EpochRender } from "./types";
 
@@ -33,7 +42,6 @@ const cadastralRender = (id: string, coordinates: number[][]): EpochRender => ({
 export const EPOCHS = [
   {
     id: "450",
-    details: epochDetails["450"],
     label: "Ve",
     optionLabel: "Reconstruction",
     category: "RECONSTRUCTION",
@@ -41,11 +49,10 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-antiquite/map.webp", antiquity.coordinates),
+    render: image("openedition-antiquite/map.webp", antiquityCoordinates),
   },
   {
     id: "1250",
-    details: epochDetails["1250"],
     label: "XIIIe",
     optionLabel: "Reconstruction",
     category: "RECONSTRUCTION",
@@ -53,11 +60,10 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-13c/map.webp", medieval.coordinates),
+    render: image("openedition-13c/map.webp", medievalCoordinates),
   },
   {
     id: "1550",
-    details: epochDetails["1550"],
     label: "1550",
     optionLabel: "Héritages du parcellaire",
     category: "HÉRITAGES DU PARCELLAIRE",
@@ -66,11 +72,10 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-1550/map.webp", parcels.coordinates),
+    render: image("openedition-1550/map.webp", parcelsCoordinates),
   },
   {
     id: "1631",
-    details: epochDetails["1631"],
     label: "1631",
     optionLabel: "Plan · calage approximatif",
     category: "CADASTRE HISTORIQUE",
@@ -82,20 +87,19 @@ export const EPOCHS = [
     render: {
       kind: "overview",
       switchZoom: 14,
-      image: image(`tavernier-1631/overview.webp?v=${tavernier.revision}`, tavernier.coordinates),
+      image: image(`tavernier-1631/overview.webp?v=${tavernierRevision}`, tavernierCoordinates),
       detail: {
         kind: "tiles",
         local: true,
-        tiles: [`tavernier-1631/{z}/{x}/{y}.webp?v=${tavernier.revision}`],
+        tiles: [`tavernier-1631/{z}/{x}/{y}.webp?v=${tavernierRevision}`],
         minzoom: 14,
         maxzoom: 17,
-        bounds: readBounds(tavernier.bounds),
+        bounds: readBounds(tavernierBounds),
       },
     },
   },
   {
     id: "1680",
-    details: epochDetails["1680"],
     label: "1680",
     optionLabel: "Cadastre",
     category: "CADASTRE HISTORIQUE",
@@ -107,20 +111,18 @@ export const EPOCHS = [
   },
   {
     id: "1777",
-    details: epochDetails["1777"],
     label: "1777",
     optionLabel: "Plan de Saget",
     category: "CADASTRE HISTORIQUE",
     credit: "Saget",
     archiveCredit: archives,
-    sourceUrl: saget.sourcePage,
+    sourceUrl: sagetSourcePage,
     attribution: "Joseph Marie de Saget · Archives municipales de Toulouse · Domaine public",
     bearing: 53,
-    render: image("saget-1777/map.webp", saget.coordinates),
+    render: image("saget-1777/map.webp", sagetCoordinates),
   },
   {
     id: "1830",
-    details: epochDetails["1830"],
     label: "1830",
     optionLabel: "Cadastre",
     category: "CADASTRE HISTORIQUE",
@@ -132,7 +134,6 @@ export const EPOCHS = [
   },
   {
     id: "1848",
-    details: epochDetails["1848"],
     label: "1848",
     optionLabel: "État-major · IGN",
     category: "CADASTRE HISTORIQUE",
@@ -152,20 +153,18 @@ export const EPOCHS = [
   },
   {
     id: "1860",
-    details: epochDetails["1860"],
     label: "1860",
     optionLabel: "Plan de Jourdan",
     category: "CADASTRE HISTORIQUE",
     credit: "Jourdan",
     archiveCredit: archives,
-    sourceUrl: jourdan.sourcePage,
+    sourceUrl: jourdanSourcePage,
     attribution: "Jourdan · Archives municipales de Toulouse · Domaine public",
     bearing: 0,
-    render: image("jourdan-1860/map.webp", jourdan.coordinates),
+    render: image("jourdan-1860/map.webp", jourdanCoordinates),
   },
   {
     id: "1875",
-    details: epochDetails["1875"],
     label: "1875",
     optionLabel: "Inondation",
     category: "CADASTRE HISTORIQUE",
@@ -177,33 +176,31 @@ export const EPOCHS = [
     render: {
       kind: "overview",
       switchZoom: 14,
-      image: image("flood-1875/overview.webp", flood.coordinates),
+      image: image("flood-1875/overview.webp", floodCoordinates),
       detail: {
         kind: "tiles",
         local: true,
         tiles: ["flood-1875/{z}/{x}/{y}.webp"],
         minzoom: 14,
         maxzoom: 17,
-        bounds: readBounds(flood.bounds),
+        bounds: readBounds(floodBounds),
       },
     },
   },
   {
     id: "1904",
-    details: epochDetails["1904"],
     label: "1904",
     optionLabel: "Plan de Laffont",
     category: "CADASTRE HISTORIQUE",
     credit: "Laffont",
     archiveCredit: archives,
-    sourceUrl: laffont.sourcePage,
+    sourceUrl: laffontSourcePage,
     attribution: "Laffont · Archives municipales de Toulouse · Domaine public",
     bearing: 0,
-    render: image("laffont-1904/map.webp", laffont.coordinates),
+    render: image("laffont-1904/map.webp", laffontCoordinates),
   },
   {
     id: "1954",
-    details: epochDetails["1954"],
     label: "1954",
     optionLabel: "Vue aérienne",
     category: "VUE AÉRIENNE",

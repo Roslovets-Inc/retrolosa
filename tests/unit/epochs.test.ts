@@ -1,10 +1,29 @@
 import { expect, test } from "vitest";
 
 import { EPOCHS, EPOCH_IDS, getEpoch, isEpochId } from "../../src/epochs/catalog";
+import { epochDetails, getEpochDetails } from "../../src/epochs/details";
 import { epochLayerIds, historicalStyle } from "../../src/epochs/sources";
 import { readBounds, readCoordinates } from "../../src/epochs/types";
 
 const assets = { baseUrl: "/toulouse-in-time/", origin: "https://example.test" };
+
+test("source descriptions cover every epoch and expose usable document links", () => {
+  expect(Object.keys(epochDetails).sort()).toEqual([...EPOCH_IDS].sort());
+  for (const id of EPOCH_IDS) {
+    const details = getEpochDetails(id);
+    expect(details.title.trim()).not.toBe("");
+    expect(details.paragraphs.length).toBeGreaterThan(0);
+    for (const paragraph of details.paragraphs) {
+      expect(paragraph.trim()).not.toBe("");
+      expect(paragraph).not.toMatch(/undefined|NaN/);
+    }
+    for (const link of details.links ?? []) {
+      expect(link.label.trim()).not.toBe("");
+      expect(Boolean(link.path) !== Boolean(link.url)).toBe(true);
+      if (link.url) expect(new URL(link.url).protocol).toBe("https:");
+    }
+  }
+});
 
 test("catalogue has unique, chronological IDs and complete presentation metadata", () => {
   expect(new Set(EPOCH_IDS).size).toBe(EPOCH_IDS.length);
