@@ -5,7 +5,7 @@
     7874,
     5884
   ],
-  "revision": 3,
+  "revision": 4,
   "fitPoints": 22,
   "fittingResiduals": [
     {
@@ -225,9 +225,9 @@
   ],
   "medianLeaveOneOutErrorMetres": 57.5,
   "maxLeaveOneOutErrorMetres": 113.7,
-  "minimumVisibleInverseJacobian": 1.385766644299707,
-  "visibleJacobianSamples": 8372,
-  "tileCount": 894,
-  "bytes": 3084582,
-  "limitations": "Manual ground-landmark alignment of a perspective drawing, not a survey. Withheld checks concentrate on Nazareth and Salin; they do not establish citywide accuracy. Leave-one-out errors expose weaker areas of the network. Printed margins are masked; edges outside the control network and roofs displaced by perspective remain less reliable."
+  "minimumVisibleInverseJacobian": 1.387218633378432,
+  "visibleJacobianSamples": 22827,
+  "tileCount": 2125,
+  "bytes": 5955104,
+  "limitations": "Manual ground-landmark alignment of a perspective drawing, not a survey. Withheld checks concentrate on Nazareth and Salin; they do not establish citywide accuracy. Leave-one-out errors expose weaker areas of the network. Complete sheet retained; edges outside the control network and roofs displaced by perspective remain less reliable."
 }

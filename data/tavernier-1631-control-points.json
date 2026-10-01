@@ -326,104 +326,10 @@
       "role": "check"
     }
   ],
-  "mask": [
-    [
-      185,
-      296
-    ],
-    [
-      355,
-      248
-    ],
-    [
-      493,
-      259
-    ],
-    [
-      597,
-      116
-    ],
-    [
-      711,
-      102
-    ],
-    [
-      909,
-      185
-    ],
-    [
-      985,
-      303
-    ],
-    [
-      1006,
-      393
-    ],
-    [
-      987,
-      446
-    ],
-    [
-      1002,
-      477
-    ],
-    [
-      1026,
-      575
-    ],
-    [
-      992,
-      633
-    ],
-    [
-      918,
-      691
-    ],
-    [
-      792,
-      777
-    ],
-    [
-      693,
-      757
-    ],
-    [
-      675,
-      795
-    ],
-    [
-      475,
-      795
-    ],
-    [
-      455,
-      735
-    ],
-    [
-      485,
-      640
-    ],
-    [
-      504,
-      607
-    ],
-    [
-      374,
-      554
-    ],
-    [
-      266,
-      512
-    ],
-    [
-      211,
-      443
-    ]
-  ],
   "smoothing": 500,
   "method": "Inverse thin-plate spline in Web Mercator; ground footprints and tower bases rather than roof tops; smoothing 500 reference annotation pixels",
   "sha256": "71be08d5d5be6f4882153eaf65ee524d5f5eee7ab29b79736579ebeb03383d44",
-  "revision": 3,
+  "revision": 4,
   "landmarkIdentification": "Read the numbered/lettered legend of II 671 at original resolution; modern church footprints cross-checked against OpenStreetMap geometries and PLAN IGN. Street geocodes are approximate context, not building positions.",
   "pointSelectionNotes": "Manual ground landmarks; rebuilt squares and roofs displaced by perspective make some correspondences approximate. No survey uncertainty estimate is available.",
   "localRevision": "Correct Place Mage reference to OSM street junction, add north/south Nazareth endpoints and Philippe Feral junction; withhold Coffres and Darquier junctions. Modern geometries: OSM ways 115572305,791005603,22529543,22530936,22530935,186598289, accessed 2026-09-30."

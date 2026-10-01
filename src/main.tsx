@@ -1428,6 +1428,10 @@ function App() {
                   sont dessinés en perspective ; les toits et les bords restent moins fiables. Ce
                   plan ne garantit pas une correspondance exacte rue par rue.
                 </p>
+                <p>Le feuillet complet conserve ses marges, son cartouche et sa légende.</p>
+                <a href={assetUrl("tavernier-1631/original.jpg")} target="_blank" rel="noreferrer">
+                  Voir le plan complet et sa légende <ExternalLink size={14} />
+                </a>
               </>
             ) : year === "1777" ? (
               <>

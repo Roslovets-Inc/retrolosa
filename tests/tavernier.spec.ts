@@ -2,6 +2,66 @@ import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
 
+test("1631 retains the full sheet and exposes its original legend", async ({ page, request }) => {
+  await page.route(/^https:\/\//, async (route) => {
+    if (route.request().url().includes("tiles.openfreemap.org/styles/positron")) {
+      await route.fulfill({ json: { version: 8, sources: {}, layers: [] } });
+    } else {
+      await route.abort();
+    }
+  });
+  const overview = page.waitForResponse((response) =>
+    response.url().includes("tavernier-1631/overview.webp"),
+  );
+  await page.goto("/#year=1631&lon=1.442&lat=43.602&z=12&opacity=100");
+  expect((await overview).ok()).toBe(true);
+  const original = await request.get("/tavernier-1631/original.jpg");
+  expect(original.ok()).toBe(true);
+  const dimensions = await page.evaluate(async () => {
+    const image = new Image();
+    image.src = "/tavernier-1631/original.jpg";
+    await image.decode();
+    return [image.naturalWidth, image.naturalHeight];
+  });
+  expect(dimensions).toEqual([7874, 5884]);
+  const retained = await page.evaluate(async () => {
+    const image = new Image();
+    image.src = "/tavernier-1631/overview.webp";
+    await image.decode();
+    const canvas = document.createElement("canvas");
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+    const context = canvas.getContext("2d")!;
+    context.drawImage(image, 0, 0);
+    // Four inset source corners and the printed legend, independently located in the overview.
+    return [
+      [779, 427],
+      [843, 874],
+      [526, 889],
+      [460, 478],
+      [545, 545],
+    ].map(([x, y]) => context.getImageData(x, y, 1, 1).data[3]);
+  });
+  expect(retained).toEqual([255, 255, 255, 255, 255]);
+  const dismiss = page.getByRole("button", { name: "Fermer le message", exact: true });
+  if (await dismiss.isVisible()) await dismiss.click();
+  await page.getByRole("button", { name: "À propos des cartes" }).click();
+  await expect(
+    page.getByRole("link", { name: "Voir le plan complet et sa légende" }),
+  ).toHaveAttribute("href", "/tavernier-1631/original.jpg");
+  await page.getByRole("button", { name: "Fermer les sources" }).click();
+  await page.screenshot({ path: ".local/1631-complete-sheet.png" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  const tile = page.waitForResponse((response) => /tavernier-1631\/1[4-7]\//.test(response.url()));
+  await page.goto("/#year=1631&lon=1.442&lat=43.602&z=17&opacity=100");
+  await page.reload();
+  expect((await tile).ok()).toBe(true);
+  await expect(page.getByRole("button", { name: "Carte de 1631" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+});
+
 test("1631 scan loads at overview and overzoom, participates in timeline and sharing", async ({
   page,
 }) => {
