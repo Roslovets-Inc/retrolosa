@@ -1,0 +1,82 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "tavernier-1631",
+  "properties": {
+    "title": "Plan de Tavernier, 1631",
+    "datetime": null,
+    "start_datetime": "1631-01-01T00:00:00Z",
+    "end_datetime": "1631-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Plan de Tavernier, 1631",
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "7645770f6ac273948785688cd201056174e7d3ea13c19e35bf80f898b2a59b38"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://www.flickr.com/photos/archives-toulouse/24484342123/",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.38427734375,
+    43.56447158721811,
+    1.494140625,
+    43.64402584769949
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.38427734375,
+          43.56447158721811
+        ],
+        [
+          1.494140625,
+          43.56447158721811
+        ],
+        [
+          1.494140625,
+          43.64402584769949
+        ],
+        [
+          1.38427734375,
+          43.64402584769949
+        ],
+        [
+          1.38427734375,
+          43.56447158721811
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "overview.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        1280,
+        1280
+      ],
+      "proj:transform": [
+        9.554628535647021,
+        0.0,
+        154097.04902291534,
+        0.0,
+        -9.554628535646042,
+        5410518.610137915
+      ]
+    }
+  }
+}

@@ -9,6 +9,10 @@ These rules apply to the entire project.
 - Inspect the current Git branch, status, and recent commits. Preserve existing user changes. The context document records a dated baseline; current source and configuration determine actual behavior.
 - Keep the context and architecture documents current when changing module boundaries, behavioral invariants, development commands, or unresolved work. Do not use chat history or ignored `.local/` files as the only record of a decision.
 
+## Adding maps
+
+- Follow [the map integration guide](docs/map-integration.md) for new maps or source formats. Use the existing catalogue and typed integrations; do not add per-map branches to the controller or UI. Run `bun run maps:list` to audit registrations.
+
 ## Architectural invariants
 
 - Keep epoch metadata in `src/epochs/catalog.ts` and descriptions in the lazy sources content. Preserve legacy shared URLs through `src/view/state.ts`.

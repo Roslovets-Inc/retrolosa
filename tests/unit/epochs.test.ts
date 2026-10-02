@@ -56,7 +56,7 @@ test("local images and tiles respect deployment paths while remote protocols are
   const style = historicalStyle({}, assets);
   expect(style.sources["history-1250"]).toMatchObject({
     type: "image",
-    url: "/toulouse-in-time/openedition-13c/map.webp",
+    url: "/toulouse-in-time/openedition-13c/display.webp?v=stac-v1-2026-10-02",
   });
   expect(style.sources["history-1631"]).toMatchObject({
     tiles: ["https://example.test/toulouse-in-time/tavernier-1631/{z}/{x}/{y}.webp?v=4"],
@@ -77,14 +77,14 @@ test("local images and tiles respect deployment paths while remote protocols are
 test("overview and detail layers meet at a single zoom boundary", () => {
   const style = historicalStyle({}, assets);
   for (const epoch of EPOCHS) {
-    if (epoch.render.kind !== "overview") continue;
-    expect(Number.isFinite(epoch.render.switchZoom)).toBe(true);
+    if (epoch.render.kind !== "tiles" || !epoch.render.overview) continue;
+    expect(Number.isFinite(epoch.render.overview.switchZoom)).toBe(true);
     const overview = style.layers.find((layer) => layer.id === `overview-${epoch.id}`)!;
     const detail = style.layers.find((layer) => layer.id === `history-${epoch.id}`)!;
     expect(overview.maxzoom).toBe(detail.minzoom);
-    if (epoch.render.detail.kind === "tiles") {
-      expect(epoch.render.detail.minzoom).toBeLessThanOrEqual(epoch.render.switchZoom);
-      expect(epoch.render.detail.maxzoom).toBeGreaterThanOrEqual(epoch.render.switchZoom);
+    if (epoch.render.source.type === "template") {
+      expect(epoch.render.minzoom).toBeLessThanOrEqual(epoch.render.overview.switchZoom);
+      expect(epoch.render.maxzoom).toBeGreaterThanOrEqual(epoch.render.overview.switchZoom);
     }
   }
 });

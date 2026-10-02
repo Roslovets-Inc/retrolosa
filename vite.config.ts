@@ -2,9 +2,10 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 import { pwa } from "./pwa.config.ts";
+import { rasterAssets } from "./raster-assets.config.ts";
 export default defineConfig({
   base: process.env.VITE_BASE_PATH || "/",
-  plugins: [react(), pwa()],
+  plugins: [react(), rasterAssets(), pwa()],
   build: {
     rolldownOptions: {
       output: {

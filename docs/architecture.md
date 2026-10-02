@@ -1,5 +1,59 @@
 # Exploration architecture
 
+## Preparation is external (2026-10-02)
+
+The editor and raster-generation scripts live in the independent `retrolosa-georeferencer` repository. Preparation commands in historical notes below must run there. This site only imports prepared materials and validates delivery packages. Original scans are preserved in `data/map-sources/`; editable projects and current reports remain in `data/georeferencing/`. See [preparation boundary](georeferencing.md).
+
+Current catalogue contract: `image | tiles`. Former `archive` and `overview`
+variants have been replaced by tile `source` delivery and optional `overview`.
+MapLibre source definitions, layer IDs and zoom boundaries are preserved.
+See [map-integration.md](map-integration.md) for the current authoring API.
+
+Map integration starts with the [catalogue and integration guide](map-integration.md).
+`src/epochs/catalog.ts` is the single historical catalogue; `bun run maps:list`
+audits and lists every integration. The typed render contract has exactly two variants: `image` and `tiles`.
+Tile delivery selects templates or PMTiles; an optional `overview` supplies a
+STAC image below a zoom threshold. The Etat-major adapter remains internal. The current-day basemap remains a MapLibre style.
+
+## All prepared images use STAC (2026-10-02)
+
+All eleven image/overview sources now use `src/epochs/raster-items.ts` and
+`readStacRaster`. `raster-assets.config.ts` serves/emits each Item next to its
+WebP. Tile-only IGN sources and detail tiles/PMTiles keep their existing protocols.
+Five legacy rotated/sheared images have explicit north-up `display.webp`
+derivatives; two cadastral PNG overviews have lossless WebP derivatives.
+Legacy preparation images and their metadata remain inputs, not viewer imports.
+The 1860 user-02 raster is unchanged. See [raster-contract.md](raster-contract.md)
+for the migration inventory, reproducible command and validation boundaries.
+This supersedes the earlier 1860-only migration notes below.
+
+## Current 1860 source and delivery
+
+The current map is approved revision `2026-10-02-user-02`. Its editable source is
+`data/georeferencing/jourdan-1860.json`; its latest GDAL report is
+`data/georeferencing/jourdan-1860-report.json`. Preserve the original scan in
+`data/map-sources/jourdan-1860/original.jpg`. The site consumes only
+`public/jourdan-1860/map.webp` and `data/stac/jourdan-1860.item.json`.
+There are 75 fit points and 30 independent checks; check RMSE is 15.54 m.
+This measures consistency with manual annotations, not survey accuracy.
+Historical revision folders, duplicate previews and obsolete metadata have been
+removed. Use Git for future history; commit current source records with each
+accepted delivery update. No commit is implied by this cleanup.
+
+## Independent georeferencing preparation tool
+
+The editor, its dependencies, browser tests and Python generators belong to the
+separate `retrolosa-georeferencer` repository. There is no source-code import,
+symlink, workspace dependency or shared build between the two applications.
+The delivery boundary is a reviewed WebP + STAC package. This site's
+`maps:validate` checks it; the catalogue selects the prepared image or tiles.
+
+Original scans are archived in `data/map-sources/`. Current annotation JSON and
+the latest GDAL report remain in `data/georeferencing/`. The editor has an
+independent example snapshot, not an automatically synchronized working copy.
+Historical preparation code now lives only in the standalone preparation project;
+no duplicate tool archive is kept here. See [the workflow](georeferencing.md).
+
 ## Epochs and sources
 
 `src/epochs/catalog.ts` describes epochs in chronological order, providing labels,
@@ -15,6 +69,15 @@ the coordinates, bounds, revisions and addresses needed by maps. Descriptions im
 only fields used in their text; complete annotations are unnecessary for rendering.
 Geographic files remain the shared sources, without copying their values into a
 second catalogue.
+
+The 1860 local raster survey retains its affine full-sheet frame and original
+JPEG. `scripts/build-city-plans.py --plan jourdan-1860` explicitly rebuilds only
+that sheet. New local observations replace contradictory soft priors within
+80 annotation pixels; dense 4-pixel Jacobian sampling supplements the full-sheet
+grid and must remain above 0.3. Withheld checks use the actual 16-pixel renderer
+mesh against the frozen preceding field, never participating in fitting.
+Its metadata revision is included in the catalogue's raster URL. See
+[sources.md](sources.md) for the individual improvements, regressions and limits.
 
 `types.ts` defines rendering variants: image, tiles, PMTiles archive, and overview
 image followed by a detailed source. Imported coordinates and bounds are validated
@@ -310,3 +373,5 @@ when tracking stops. These offline checks do not validate actual IGN, OpenFreeMa
 or remote PMTiles availability. Those services remain to be checked separately,
 and memory and rendering time must be measured on mobile hardware before further
 performance work is justified.
+
+The explicit city-plan generator permits per-point `smoothing` in fitting annotations (default 4). Two close 1860 Henri-Beraldi observations use 500 to avoid excessive compression near Saint-Sernin. Withheld checks never fit the field; the minimum inverse Jacobian >0.3 and fixed boundaries still apply.

@@ -1,9 +1,47 @@
 # Project context for a new session
 
-This document is a handoff for a developer or AI agent without the previous chat.
-Paths are relative to the repository root. Read `AGENTS.md` for working rules and
-`README.md` for commands; [architecture.md](architecture.md) explains the implementation.
-Source and configuration take precedence over this dated snapshot.
+## Preparation is external (2026-10-02)
+
+Post-extraction cleanup removed the duplicate preparation-tool archive, old editor
+build and empty tool directory. Original scans, annotation projects, current reports and prepared delivery assets remain preserved. `debug.log` is ignored.
+
+The editor and raster-generation scripts live in the independent `retrolosa-georeferencer` repository. Preparation commands in historical notes below must run there. This site only imports prepared materials and validates delivery packages. Original scans are preserved in `data/map-sources/`; editable projects and current reports remain in `data/georeferencing/`. See [preparation boundary](georeferencing.md).
+
+Current catalogue contract: `image | tiles`. Former `archive` and `overview`
+variants have been replaced by tile `source` delivery and optional `overview`.
+MapLibre source definitions, layer IDs and zoom boundaries are preserved.
+See [map-integration.md](map-integration.md) for the current authoring API.
+
+Map integration starts with the [catalogue and integration guide](map-integration.md).
+`src/epochs/catalog.ts` is the single historical catalogue; `bun run maps:list`
+audits and lists every integration. The typed render contract has exactly two variants: `image` and `tiles`.
+Tile delivery selects templates or PMTiles; an optional `overview` supplies a
+STAC image below a zoom threshold. The Etat-major adapter remains internal. The current-day basemap remains a MapLibre style.
+
+## All prepared images use STAC (2026-10-02)
+
+All eleven image/overview sources now use `src/epochs/raster-items.ts` and
+`readStacRaster`. `raster-assets.config.ts` serves/emits each Item next to its
+WebP. Tile-only IGN sources and detail tiles/PMTiles keep their existing protocols.
+Five legacy rotated/sheared images have explicit north-up `display.webp`
+derivatives; two cadastral PNG overviews have lossless WebP derivatives.
+Legacy preparation images and their metadata remain inputs, not viewer imports.
+The 1860 user-02 raster is unchanged. See [raster-contract.md](raster-contract.md)
+for the migration inventory, reproducible command and validation boundaries.
+This supersedes the earlier 1860-only migration notes below.
+
+## Current 1860 source and delivery
+
+The current map is approved revision `2026-10-02-user-02`. Its editable source is
+`data/georeferencing/jourdan-1860.json`; its latest GDAL report is
+`data/georeferencing/jourdan-1860-report.json`. Preserve the original scan in
+`data/map-sources/jourdan-1860/original.jpg`. The site consumes only
+`public/jourdan-1860/map.webp` and `data/stac/jourdan-1860.item.json`.
+There are 75 fit points and 30 independent checks; check RMSE is 15.54 m.
+This measures consistency with manual annotations, not survey accuracy.
+Historical revision folders, duplicate previews and obsolete metadata have been
+removed. Use Git for future history; commit current source records with each
+accepted delivery update. No commit is implied by this cleanup.
 
 ## Product and scope
 
@@ -58,6 +96,39 @@ survey validation. Run `scripts/build-openedition-12c.py` followed by
 Source accuracy and licensing limitations are documented in [sources.md](sources.md)
 and [licensing.md](licensing.md). Do not infer accuracy from alignment alone.
 
+The 1860 sheet was locally refined on 2026-10-02 around Parlement / the former
+Carmelite block, Brienne / Bazacle, Saint-Aubin and Belfort / Bayard / Jean-Jaures.
+Its 75 fitting points and 32 withheld checks are in `data/jourdan-1860-control-points.json`; the previous
+40-anchor field is frozen in `data/jourdan-1860-local-baseline.json` for reproducible
+comparison. The corrected Riquet / Colombette junction replaces a misidentification.
+Pont des Minimes also replaces an original annotation east along the canal
+with the actual bridge crossing; its modern reference centre remains unchanged.
+The Arnaud-Bernard refinement corrects a misplaced Lascrosses boulevard anchor
+and adds five fitting junctions and three withheld observations northwest of
+Saint-Sernin. The square retains a larger residual and individual checks can worsen.
+Four subsequent anchors constrain Saint-Julien, Salenques and Peyrou, including
+the southern Puits-Creuses / Albert-Lautman junction. Two new withheld checks
+average 59.2 m before and 18.7 m after against the frozen 40-anchor field.
+The Strasbourg continuation adds five fits and three withheld checks. Former
+Saint-Loup is matched to Moutons, resolving the western Bayard candidate.
+Two close Henri-Beraldi observations use smoothing 500 instead of 4 to keep
+the minimum inverse Jacobian above 0.3 near Saint-Sernin.
+Terre-Cabade adds the preserved main gate, southwest corner and two approach
+junctions. A withheld Saint-Paul junction improves from 159.2 m to 4.1 m against
+the frozen 40-anchor field. Later cemetery extensions and the unidentified central
+monument symbol are not fitting observations.
+Rejected later street cuts and the non-comparable Sabots / Feuga plaza junction
+remain recorded. Local independent errors improve, but some existing individual
+checks worsen; see the measurements and limits in [sources.md](sources.md).
+Explicitly regenerate only this sheet with
+`python scripts/build-city-plans.py --plan jourdan-1860` (numpy, scipy, Pillow).
+The raster revision in its metadata invalidates cached images. Normal builds do
+not regenerate imagery or alter other epochs.
+Validation passed `bun run check` (159 unit tests), `bun run build`, and both
+`tests/city-plans.spec.ts` browser scenarios, using real local rasters with remote
+providers disabled. These checks verify complete sheets, mobile selection,
+sources and sharing; the separate generator report evaluates geographic alignment.
+
 The same timeline works with overlay, curtain and loupe. It skips unchecked
 epochs and uses evenly spaced historical ticks, with extra room before the present
 label. Calendar-year interpolation remains linear within each interval. It
@@ -67,6 +138,12 @@ events are part of the experience. Sharing explicitly creates an address;
 ordinary interactions do not continuously rewrite the URL.
 
 ## Where to change things
+
+The preparation editor was extracted to `retrolosa-georeferencer` on 2026-10-02.
+Run `bun run dev` and `bun run build` in that independent repository. The site
+has no Leaflet or Python preparation dependency. Its source scans, annotation
+projects and current reports remain here; the new editor includes a separate
+approved user-02 example snapshot. See [georeferencing.md](georeferencing.md).
 
 Mobile layout uses a viewport-fixed application with maps continuing beneath
 the footer safe area. The population card sits just below the header, with

@@ -1,46 +1,17 @@
-import { coordinates as floodCoordinates, bounds as floodBounds } from "../flood-1875.json";
-import overview1830 from "../history-overview-1830.json";
-import overview1680 from "../history-overview.json";
-import {
-  coordinates as jourdanCoordinates,
-  sourcePage as jourdanSourcePage,
-} from "../jourdan-1860.json";
-import {
-  coordinates as laffontCoordinates,
-  sourcePage as laffontSourcePage,
-} from "../laffont-1904.json";
-import {
-  coordinates as boroughCoordinates,
-  revision as medievalRevision,
-} from "../openedition-12c.json";
-import { coordinates as medievalCoordinates } from "../openedition-13c.json";
-import { coordinates as parcelsCoordinates } from "../openedition-1550.json";
-import { coordinates as antiquityCoordinates } from "../openedition-antiquite.json";
-import { coordinates as sagetCoordinates, sourcePage as sagetSourcePage } from "../saget-1777.json";
-import {
-  coordinates as tavernierCoordinates,
-  bounds as tavernierBounds,
-  revision as tavernierRevision,
-} from "../tavernier-1631.json";
-import { readBounds, readCoordinates } from "./types";
-import type { EpochDefinition, ImageRender, EpochRender } from "./types";
+import { RASTER_ITEMS } from "./raster-items";
+import { readStacRaster } from "./stac";
+import type { EpochDefinition, TileRender } from "./types";
 
 const medievalSource = "https://books.openedition.org/psorbonne/3296";
 const archives = "Archives municipales de Toulouse";
-const image = (path: string, coordinates: number[][]): ImageRender => ({
-  kind: "image",
-  path,
-  coordinates: readCoordinates(coordinates),
-});
-const cadastralRender = (id: string, coordinates: number[][]): EpochRender => ({
-  kind: "overview",
-  image: image(id === "1680" ? "history-overview.png" : "history-overview-1830.png", coordinates),
-  detail: {
-    kind: "archive",
-    url: `pmtiles://https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-${id}.pmtiles`,
-  },
-  switchZoom: 15,
-});
+const raster = (id: keyof typeof RASTER_ITEMS) => {
+  const item = RASTER_ITEMS[id];
+  return readStacRaster(item, `${item.id}/item.json`);
+};
+const tiles = (
+  source: TileRender["source"],
+  options: Omit<TileRender, "kind" | "source"> = {},
+): TileRender => ({ kind: "tiles", source, ...options });
 
 // Chronological order is also painter order: the emerging sheet covers the preceding one.
 export const EPOCHS = [
@@ -53,7 +24,7 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-antiquite/map.webp", antiquityCoordinates),
+    render: raster("450"),
   },
   {
     id: "1195",
@@ -65,7 +36,7 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap · PCR Toulouse au Moyen Âge",
     bearing: 0,
-    render: image(`openedition-12c/map.webp?v=${medievalRevision}`, boroughCoordinates),
+    render: raster("1195"),
   },
   {
     id: "1250",
@@ -76,7 +47,7 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-13c/map.webp", medievalCoordinates),
+    render: raster("1250"),
   },
   {
     id: "1550",
@@ -88,7 +59,7 @@ export const EPOCHS = [
     sourceUrl: medievalSource,
     attribution: "F. Callède / Inrap",
     bearing: 0,
-    render: image("openedition-1550/map.webp", parcelsCoordinates),
+    render: raster("1550"),
   },
   {
     id: "1631",
@@ -100,19 +71,15 @@ export const EPOCHS = [
     sourceUrl: "https://www.flickr.com/photos/archives-toulouse/24484342123/",
     attribution: "Melchior Tavernier · Archives municipales de Toulouse, II 671 · Domaine public",
     bearing: 84,
-    render: {
-      kind: "overview",
-      switchZoom: 14,
-      image: image(`tavernier-1631/overview.webp?v=${tavernierRevision}`, tavernierCoordinates),
-      detail: {
-        kind: "tiles",
-        local: true,
-        tiles: [`tavernier-1631/{z}/{x}/{y}.webp?v=${tavernierRevision}`],
+    render: tiles(
+      { type: "template", tiles: ["tavernier-1631/{z}/{x}/{y}.webp?v=4"], local: true },
+      {
         minzoom: 14,
         maxzoom: 17,
-        bounds: readBounds(tavernierBounds),
+        bounds: [1.38427734375, 43.56447158721811, 1.494140625, 43.64402584769949],
+        overview: { image: raster("1631"), switchZoom: 14 },
       },
-    },
+    ),
   },
   {
     id: "1680",
@@ -123,7 +90,13 @@ export const EPOCHS = [
     sourceUrl: "https://tolosa1680.makina-corpus.com/",
     attribution: "Toulouse Métropole · Makina Corpus",
     bearing: 0,
-    render: cadastralRender("1680", overview1680),
+    render: tiles(
+      {
+        type: "pmtiles",
+        url: "pmtiles://https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-1680.pmtiles",
+      },
+      { overview: { image: raster("1680"), switchZoom: 15 } },
+    ),
   },
   {
     id: "1777",
@@ -132,10 +105,10 @@ export const EPOCHS = [
     category: "CADASTRE HISTORIQUE",
     credit: "Saget",
     archiveCredit: archives,
-    sourceUrl: sagetSourcePage,
+    sourceUrl: RASTER_ITEMS["1777"].links[0].href,
     attribution: "Joseph Marie de Saget · Archives municipales de Toulouse · Domaine public",
     bearing: 53,
-    render: image("saget-1777/map.webp", sagetCoordinates),
+    render: raster("1777"),
   },
   {
     id: "1830",
@@ -146,7 +119,13 @@ export const EPOCHS = [
     sourceUrl: "https://tolosa.makina-corpus.com/",
     attribution: "Toulouse Métropole · Makina Corpus",
     bearing: 0,
-    render: cadastralRender("1830", overview1830),
+    render: tiles(
+      {
+        type: "pmtiles",
+        url: "pmtiles://https://makina-pmtiles.s3.fr-par.scw.cloud/tolosa-1830.pmtiles",
+      },
+      { overview: { image: raster("1830"), switchZoom: 15 } },
+    ),
   },
   {
     id: "1848",
@@ -159,13 +138,10 @@ export const EPOCHS = [
       "https://remonterletemps.ign.fr/telecharger/?lon=1.444&lat=43.604&z=13&layer=cartes_anciennes&collection=ETATMAJOR&year=1848",
     attribution: "IGN · État-major · Minutes de 1848 · Licence Ouverte 2.0",
     bearing: 0,
-    render: {
-      kind: "tiles",
-      tiles: ["etat-major://{z}/{x}/{y}"],
-      minzoom: 6,
-      maxzoom: 15,
-      bounds: readBounds([1.3, 43.49, 1.57, 43.75]),
-    },
+    render: tiles(
+      { type: "template", tiles: ["etat-major://{z}/{x}/{y}"] },
+      { minzoom: 6, maxzoom: 15, bounds: [1.3, 43.49, 1.57, 43.75] },
+    ),
   },
   {
     id: "1860",
@@ -174,10 +150,10 @@ export const EPOCHS = [
     category: "CADASTRE HISTORIQUE",
     credit: "Jourdan",
     archiveCredit: archives,
-    sourceUrl: jourdanSourcePage,
+    sourceUrl: RASTER_ITEMS["1860"].links[0].href,
     attribution: "Jourdan · Archives municipales de Toulouse · Domaine public",
     bearing: 0,
-    render: image("jourdan-1860/map.webp", jourdanCoordinates),
+    render: raster("1860"),
   },
   {
     id: "1875",
@@ -189,19 +165,15 @@ export const EPOCHS = [
     sourceUrl: "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/",
     attribution: "Archives municipales de Toulouse · 20 Fi 45 · Sirven / La Dépêche",
     bearing: 0,
-    render: {
-      kind: "overview",
-      switchZoom: 14,
-      image: image("flood-1875/overview.webp", floodCoordinates),
-      detail: {
-        kind: "tiles",
-        local: true,
-        tiles: ["flood-1875/{z}/{x}/{y}.webp"],
+    render: tiles(
+      { type: "template", tiles: ["flood-1875/{z}/{x}/{y}.webp"], local: true },
+      {
         minzoom: 14,
         maxzoom: 17,
-        bounds: readBounds(floodBounds),
+        bounds: [1.40625, 43.56447158721811, 1.4721679687499998, 43.628123412124594],
+        overview: { image: raster("1875"), switchZoom: 14 },
       },
-    },
+    ),
   },
   {
     id: "1904",
@@ -210,10 +182,10 @@ export const EPOCHS = [
     category: "CADASTRE HISTORIQUE",
     credit: "Laffont",
     archiveCredit: archives,
-    sourceUrl: laffontSourcePage,
+    sourceUrl: RASTER_ITEMS["1904"].links[0].href,
     attribution: "Laffont · Archives municipales de Toulouse · Domaine public",
     bearing: 0,
-    render: image("laffont-1904/map.webp", laffontCoordinates),
+    render: raster("1904"),
   },
   {
     id: "1954",
@@ -224,15 +196,15 @@ export const EPOCHS = [
     sourceUrl: "https://data.geopf.fr/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities",
     attribution: "IGN · Edugéo · Toulouse 1954",
     bearing: 0,
-    render: {
-      kind: "tiles",
-      minzoom: 6,
-      maxzoom: 16,
-      bounds: readBounds([1.23852, 43.5618, 1.55128, 43.7247]),
-      tiles: [
-        "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.EDUGEO.TOULOUSE1954&STYLE=normal&FORMAT=image/png&TILEMATRIXSET=PM_6_16&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}",
-      ],
-    },
+    render: tiles(
+      {
+        type: "template",
+        tiles: [
+          "https://data.geopf.fr/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ORTHOIMAGERY.EDUGEO.TOULOUSE1954&STYLE=normal&FORMAT=image/png&TILEMATRIXSET=PM_6_16&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}",
+        ],
+      },
+      { minzoom: 6, maxzoom: 16, bounds: [1.23852, 43.5618, 1.55128, 43.7247] },
+    ),
   },
 ] as const satisfies readonly EpochDefinition[];
 

@@ -1,5 +1,18 @@
 ## Unified timeline controls
 
+## Current 1860 source and delivery
+
+The current map is approved revision `2026-10-02-user-02`. Its editable source is
+`data/georeferencing/jourdan-1860.json`; its latest GDAL report is
+`data/georeferencing/jourdan-1860-report.json`. Preserve the original scan in
+`data/map-sources/jourdan-1860/original.jpg`. The site consumes only
+`public/jourdan-1860/map.webp` and `data/stac/jourdan-1860.item.json`.
+There are 75 fit points and 30 independent checks; check RMSE is 15.54 m.
+This measures consistency with manual annotations, not survey accuracy.
+Historical revision folders, duplicate previews and obsolete metadata have been
+removed. Use Git for future history; commit current source records with each
+accepted delivery update. No commit is implied by this cleanup.
+
 The time slider is always available. Superposition, curtain and loupe are comparison tools above the same timeline; changing tools preserves the selected calendar year, layer blending and opacity. Epoch ticks select source dates directly, and the Époques menu beside the comparison tools, directly above the slider, selects which sources participate. Population, events, orientation and the source dialog follow the timeline in every tool. Shared URLs store both the tool and time. Legacy `mode=time` links open the unified timeline in superposition, preserving their opacity; historical-only and current-only links retain their transparency rules.
 
 ## Attribution display
@@ -146,7 +159,7 @@ and independent checks are recorded in `data/jourdan-1860-control-points.json` a
 `data/laffont-1904-control-points.json`. Run `scripts/build-city-plans.py` explicitly
 with numpy, scipy and Pillow to reproduce the assets; regular builds do not regenerate them.
 
-Forty fitting landmarks on 1860 and thirty-seven on 1904 span preserved street
+Fifty-one fitting landmarks on 1860 and thirty-seven on 1904 span preserved street
 junctions, canal bridges, Grand Rond and Saint-Cyprien. The quarter survey adds
 street axes around Dalbade, Taur, Jardin Royal, Rue Valade and Rue Quilmery.
 Modern junctions are cross-checked against OpenStreetMap node coordinates,
@@ -157,17 +170,97 @@ Three ambiguous 1904 Dalbade candidates are also rejected and recorded.
 
 The affine sheet frame stays fixed. An inverse thin-plate spline corrects local
 geometry, with fixed sheet boundaries and soft prior samples restraining drift.
+The 1860 local survey omits contradictory prior samples within 80 annotation
+pixels of its new observations; dense 4-pixel Jacobian samples inspect these
+neighbourhoods in addition to the full-sheet grid.
 The 1904 model preserves the preceding 32-anchor field between observations;
 new observations receive softer weight because the drawn street edges are less
 precise. A sampled inverse Jacobian rejects compression below 0.3.
-Fifteen independent church, square and street-junction checks evaluate the actual
+The initial fifteen independent church, square and street-junction checks evaluate the actual
 16-pixel renderer mesh. On identical revised annotations, mean error changes
 from 28.3 to 20.1 m for 1860 and from 18.3 to 18.1 m for 1904; maxima remain
 51.9 and 40.8 m. The 1904 gain is small, and some individual checks worsen.
 These manual checks do not establish survey accuracy or exact alignment of
 all streets. Fit residuals are not independent accuracy estimates.
 
-The immediately preceding fields are frozen in `data/*-street-baseline.json`;
+The 2026-10-02 survey refines the three reported areas: Parlement / the former
+Carmelite block, Brienne / Bazacle, and Saint-Aubin. Eleven fitting junctions and
+five withheld checks supplement the earlier network. The Riquet / Colombette
+anchor was misidentified on both the scan and reference; it now matches the
+preserved Rue Pierre-Paul Riquet junction west of the church. Amelie and Mercadier
+street cuts through the northern plot are absent on the historical sheet and are
+not matched. Sabots / Feuga was rejected because the old street opens onto an
+irregular square rather than a comparable through-road intersection; its trial
+measurements and rejection remain recorded in `excludedLandmarks`.
+
+The preceding 40-anchor 1860 field is frozen in
+`data/jourdan-1860-local-baseline.json`. Identical current annotations, evaluated
+through the actual renderer mesh, give these independent errors:
+
+| Area / withheld landmark                       | Before (m) | After (m) |
+| ---------------------------------------------- | ---------- | --------- |
+| Parlement: Sainte-Catherine / Trente-Six-Ponts | 57.3       | 34.8      |
+| Parlement: Mespoul / Viadieu                   | 43.9       | 2.9       |
+| Brienne: Lejeune / Barcelone                   | 62.7       | 22.9      |
+| Saint-Aubin: drawn nave centre                 | 79.9       | 32.3      |
+| Saint-Aubin / Aubuisson                        | 44.3       | 16.6      |
+| Caffarelli / Stalingrad                        | 137.4      | 20.1      |
+| Belfort: eastern street opening                | 137.0      | 6.7       |
+| Heliot / Dalayrac                              | 103.2      | 15.0      |
+| Arnaud-Bernard / Trois-Piliers                 | 107.5      | 49.7      |
+| Gatien-Arnoult / Saint-Charles                 | 9.5        | 19.1      |
+| Verge-d-Or / Escoussieres                      | 29.4       | 32.4      |
+| Lois / Salenques / Peyrou                      | 49.1       | 7.5       |
+| Puits-Creuses / Saint-Julien                   | 69.2       | 30.4      |
+
+Across all thirty-two checks, mean error decreases from 47.8 to 20.2 m. The old
+fifteen-check mean is 19.5 m, but individual changes remain: notably,
+Saint-Pierre-des-Cuisines worsens from 18.9 to 31.3 m. Maximum error is 51.8 m;
+minimum sampled inverse Jacobian is 0.3523 (required >0.3), with fixed sheet
+boundaries. These sparse manual checks do not guarantee every drawn street or
+building footprint. The church drawing, changing quays and proposed alignments
+retain historical differences from the present map.
+
+The northeast refinement matches former Place Castelet to Place Belfort and
+Allées Louis-Napoleon / Lafayette to Allées Jean-Jaures. The original Bayard and
+Matabiau bridge annotations were south of the actual crossings and are corrected.
+Six additional fitting openings constrain both ends of the promenade, Caffarelli,
+Heliot and Denfert-Rochereau. Three new observations remain withheld. Later Lafon
+and Bertrand-de-Born cuts are not forced onto this sheet. Exploratory western
+Bayard / Strasbourg and Jacques-Laffitte correspondences remain excluded and
+documented: projected streets and subsequent widening make their identification
+ambiguous. The exploratory Jacques-Laffitte error was 85.1 m; it is not part of
+the final preserved-landmark accuracy summary. This limits the accuracy claim
+for western Bayard at that stage; the following refinement resolves Saint-Loup. Historical context: [Municipal Archives, Rue Bayard](https://archives.toulouse.fr/rue-bayard/).
+
+Pont des Minimes was subsequently corrected on the original scan from
+[690, 173] to [637.5, 174.5]. The former annotation lay east along the canal,
+outside the crossing. Its existing modern bridge centre [564.34, 303.11] is
+retained. The local correction also moves the adjoining former Faubourg
+Arnaud-Bernard street. No new independent Minimes accuracy claim is made;
+the existing twenty-three checks remain withheld and retain the same annotations.
+
+The following Arnaud-Bernard refinement replaces the misplaced original
+Lascrosses / boulevard anchor [676, 337.3], inside a block, with [650.5, 344.5].
+Five fitting junctions constrain Queteurs, Embarthe / Chaine, Gramat, Verge-d-Or
+and Trois-Piliers northwest of Saint-Sernin. Three additional withheld checks
+average 48.8 m before and 33.9 m after. Two individual observations worsen and
+the square retains a 49.8 m residual; this is a local improvement, not a claim
+that all historical block outlines match the modern street layout.
+
+The southern continuation around Saint-Julien / Peyrou adds four fitting
+junctions: Embarthe / Salenques, Chaine / Peyrou, Puits-Creuses / Albert-Lautman
+and Urbain-Vitry / Albert-Lautman. Two withheld observations improve from
+59.2 m to 18.7 m on average against the frozen 40-anchor field. The old
+Place et Rue des Salenques extends through present Place Saint-Julien; the
+plaza shape and road openings are not identical. Valade / De-la-Bastide also
+improves from 36.7 m to 14.5 m; Saint-Pierre-des-Cuisines worsens, as recorded above.
+
+Regenerate just this sheet with
+`python scripts/build-city-plans.py --plan jourdan-1860`; omitting `--plan` still
+builds both plans. Its revision is part of the raster URL to invalidate old caches.
+
+The earlier fields are frozen in `data/*-street-baseline.json`;
 the original 13-anchor affine frame is retained in `data/*-alignment-baseline.json`.
 Full measurements are in `data/*-validation.json`. Source margins, legends,
 insets and unmodified JPEGs remain complete. The 1860 document includes
@@ -229,3 +322,7 @@ A central Toulouse tile was successfully fetched (HTTP 200, JPEG, CORS `*`).
 The map covers the countryside as well as the city; it is useful for territorial
 comparison, without a cadastral precision claim. The new layer participates in
 chronological blends, source selection, north orientation and shared URLs.
+
+The Strasbourg refinement adds five fits and three withheld checks around Saint-Bernard, Henri-Beraldi, Montoyol / Remusat and western Bayard. Former Rue Saint-Loup corresponds to Moutons rather than Jacques-Laffitte. The rejected candidate remains recorded with the corrected identification and is now withheld; the northeast Bayard boulevard opening is fitted. New check errors are Saint-Bernard / Pouzonville 32.5 to 14.5 m, Perigord / Remusat 30.7 to 12.4 m, and Bayard / Moutons 75.7 to 31.1 m (mean 46.3 to 19.3 m). The two close Henri-Beraldi fits use explicit smoothing 500 instead of 4: forcing both exactly compressed the area near Saint-Sernin below the existing Jacobian limit. Their actual residuals remain in the generated report. Later Alsace-Lorraine street cuts are not substituted for historical intersections.
+
+The Terre-Cabade refinement adds four fitting observations: the main gateway, the southwest wall / Gloire corner, Cimetiere / Saint-Bertrand / Compans, and Colonne / Saint-Sylve. One withheld Cimetiere / Saint-Paul / Gazan observation improves from 159.2 m to 4.1 m against the frozen 40-anchor field. The entrance reference is OSM node 1828807375 at the junction of avenue way 23148223 and cemetery boundary way 16299793. The southwest corner is manually inspected on IGN and has 8 m annotation uncertainty. The central drawn monument and unverified northern extensions are excluded. The preserved gateway is independently identified by the [Ministry of Culture, PA31000114](https://pop.culture.gouv.fr/notice/merimee/PA31000114). These controls validate the approaches and entrance, not every internal grave path.

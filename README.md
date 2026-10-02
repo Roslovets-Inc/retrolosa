@@ -1,5 +1,15 @@
 # Rétrolosa
 
+## Preparation is external (2026-10-02)
+
+The editor and raster-generation scripts live in the independent `retrolosa-georeferencer` repository. Preparation commands in historical notes below must run there. This site only imports prepared materials and validates delivery packages. Original scans are preserved in `data/map-sources/`; editable projects and current reports remain in `data/georeferencing/`. See [preparation boundary](docs/georeferencing.md).
+
+Map integration starts with the [catalogue and integration guide](docs/map-integration.md).
+`src/epochs/catalog.ts` is the single historical catalogue; `bun run maps:list`
+audits and lists every integration. The typed render contract has exactly two variants: `image` and `tiles`.
+Tile delivery selects templates or PMTiles; an optional `overview` supplies a
+STAC image below a zoom threshold. The Etat-major adapter remains internal. The current-day basemap remains a MapLibre style.
+
 An interactive map of Toulouse through the centuries: ancient and medieval reconstructions,
 historical plans, the 1848 État-major map, 1954 aerial photography and the present-day map.
 The XII-century partial reconstruction combines Saint-Sernin borough growth,
@@ -48,7 +58,13 @@ bun run dev
 Open http://127.0.0.1:5173. Maps require Internet access.
 `bun start` and `bun local` are development aliases.
 
+The prepared raster delivery format is documented in the [STAC raster contract](docs/raster-contract.md).
+Package prepared TIFF/WebP outputs in the preparation project and validate them
+with `bun run maps:validate <path/to/item.json>`.
+
 ## Commands
+
+The [separate preparation project](docs/georeferencing.md) owns the editor and GDAL tools.
 
 | Command               | Purpose                                |
 | --------------------- | -------------------------------------- |

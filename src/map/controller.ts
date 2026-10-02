@@ -270,7 +270,7 @@ export class MapController {
     if (!historic || !this.styleReady.historic) return;
     const zoom = historic.getZoom();
     const variants = EPOCHS.flatMap(({ render }) =>
-      render.kind === "overview" ? [zoom >= render.switchZoom] : [],
+      render.kind === "tiles" && render.overview ? [zoom >= render.overview.switchZoom] : [],
     );
     const signature = JSON.stringify([this.opacities, this.prepared, variants]);
     if (!retry.size && signature === this.historicalSignature) return;

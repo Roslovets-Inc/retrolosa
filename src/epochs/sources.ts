@@ -6,7 +6,7 @@ import type {
 
 import { EPOCHS, getEpoch } from "./catalog";
 import type { EpochId } from "./catalog";
-import type { ArchiveRender, ImageRender, TileRender } from "./types";
+import type { ImageRender, TileRender } from "./types";
 
 export interface AssetContext {
   baseUrl: string;
@@ -14,11 +14,13 @@ export interface AssetContext {
 }
 export function epochLayerIds(id: EpochId): string[] {
   const epoch = getEpoch(id);
-  return epoch.render.kind === "overview" ? [`overview-${id}`, `history-${id}`] : [`history-${id}`];
+  return epoch.render.kind === "tiles" && epoch.render.overview
+    ? [`overview-${id}`, `history-${id}`]
+    : [`history-${id}`];
 }
 
 function source(
-  render: ImageRender | TileRender | ArchiveRender,
+  render: ImageRender | TileRender,
   attribution: string,
   assets: AssetContext,
 ): SourceSpecification {
@@ -28,15 +30,18 @@ function source(
       url: `${assets.baseUrl}${render.path}`,
       coordinates: render.coordinates,
     };
-  if (render.kind === "archive")
-    return { type: "raster", url: render.url, tileSize: 256, attribution };
+  const delivery = render.source;
   return {
     type: "raster",
     tileSize: 256,
     attribution,
-    tiles: render.tiles.map((tile) =>
-      render.local ? `${assets.origin}${assets.baseUrl}${tile}` : tile,
-    ),
+    ...(delivery.type === "pmtiles"
+      ? { url: delivery.url }
+      : {
+          tiles: delivery.tiles.map((tile) =>
+            delivery.local ? `${assets.origin}${assets.baseUrl}${tile}` : tile,
+          ),
+        }),
     ...(render.minzoom === undefined ? {} : { minzoom: render.minzoom }),
     ...(render.maxzoom === undefined ? {} : { maxzoom: render.maxzoom }),
     ...(render.bounds === undefined ? {} : { bounds: render.bounds }),
@@ -52,7 +57,7 @@ export function historicalStyle(
     const render = epoch.render;
     const add = (
       id: string,
-      data: ImageRender | TileRender | ArchiveRender,
+      data: ImageRender | TileRender,
       limits: { minzoom?: number; maxzoom?: number } = {},
     ) => {
       style.sources[id] = source(data, epoch.attribution, assets);
@@ -69,9 +74,9 @@ export function historicalStyle(
       };
       style.layers.push(layer);
     };
-    if (render.kind === "overview") {
-      add(`overview-${epoch.id}`, render.image, { maxzoom: render.switchZoom });
-      add(`history-${epoch.id}`, render.detail, { minzoom: render.switchZoom });
+    if (render.kind === "tiles" && render.overview) {
+      add(`overview-${epoch.id}`, render.overview.image, { maxzoom: render.overview.switchZoom });
+      add(`history-${epoch.id}`, render, { minzoom: render.overview.switchZoom });
     } else add(`history-${epoch.id}`, render);
   }
   return style;

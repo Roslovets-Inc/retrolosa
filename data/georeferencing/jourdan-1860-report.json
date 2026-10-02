@@ -1,0 +1,755 @@
+{
+  "fitCount": 75,
+  "checkCount": 30,
+  "checkRmseMetres": 15.540235699155321,
+  "checkMaxMetres": 32.18696855627372,
+  "orientationReversalSamples": 0,
+  "warnings": [
+    "105 enabled annotations still need review.",
+    "Errors are based on manual annotations. Inspect streets, edges and inverse residuals before accepting this result."
+  ],
+  "points": [
+    {
+      "id": "jourdan-001",
+      "name": "Saint-Sernin crossing",
+      "role": "fit",
+      "forwardErrorMetres": 7.102152979386106e-10,
+      "inverseErrorPixels": 9.374856803373543e-12
+    },
+    {
+      "id": "jourdan-002",
+      "name": "Saint-Etienne west portal",
+      "role": "fit",
+      "forwardErrorMetres": 7.075051650168544e-10,
+      "inverseErrorPixels": 2.6737442742322127e-11
+    },
+    {
+      "id": "jourdan-003",
+      "name": "Pont Neuf right-bank abutment",
+      "role": "fit",
+      "forwardErrorMetres": 7.118377820401594e-10,
+      "inverseErrorPixels": 3.922970213568933e-11
+    },
+    {
+      "id": "jourdan-004",
+      "name": "Notre-Dame du Taur footprint",
+      "role": "check",
+      "forwardErrorMetres": 5.87595376008973,
+      "inverseErrorPixels": 4.564116144673952
+    },
+    {
+      "id": "jourdan-005",
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "role": "check",
+      "forwardErrorMetres": 30.918918306035646,
+      "inverseErrorPixels": 20.153751892433004
+    },
+    {
+      "id": "jourdan-007",
+      "name": "Pont des Minimes centre",
+      "role": "fit",
+      "forwardErrorMetres": 2.1220325389243824e-09,
+      "inverseErrorPixels": 1.4953168872541376e-11
+    },
+    {
+      "id": "jourdan-008",
+      "name": "Pont du Bearnais centre",
+      "role": "fit",
+      "forwardErrorMetres": 1.120265828840439e-10,
+      "inverseErrorPixels": 2.514818635776891e-11
+    },
+    {
+      "id": "jourdan-009",
+      "name": "Pont Matabiau centre",
+      "role": "fit",
+      "forwardErrorMetres": 7.080478492654978e-10,
+      "inverseErrorPixels": 2.4050073665743825e-11
+    },
+    {
+      "id": "jourdan-010",
+      "name": "Pont Bayard centre",
+      "role": "fit",
+      "forwardErrorMetres": 1.4169094880308757e-09,
+      "inverseErrorPixels": 2.654045949823001e-11
+    },
+    {
+      "id": "jourdan-011",
+      "name": "Chateau d eau centre",
+      "role": "fit",
+      "forwardErrorMetres": 1.4219648909213123e-09,
+      "inverseErrorPixels": 2.153337948683988e-11
+    },
+    {
+      "id": "jourdan-012",
+      "name": "Porte Saint-Cyprien centre",
+      "role": "fit",
+      "forwardErrorMetres": 7.080482365154569e-10,
+      "inverseErrorPixels": 2.4124121947116325e-11
+    },
+    {
+      "id": "jourdan-013",
+      "name": "Patte d Oie junction",
+      "role": "fit",
+      "forwardErrorMetres": 1.437647588146621e-09,
+      "inverseErrorPixels": 3.864349233182267e-11
+    },
+    {
+      "id": "jourdan-014",
+      "name": "Place du Capitole centre",
+      "role": "check",
+      "forwardErrorMetres": 3.65844527216943,
+      "inverseErrorPixels": 3.1619554563722128
+    },
+    {
+      "id": "jourdan-015",
+      "name": "Place Wilson centre",
+      "role": "check",
+      "forwardErrorMetres": 3.9719952115210146,
+      "inverseErrorPixels": 2.7774569824961817
+    },
+    {
+      "id": "jourdan-016",
+      "name": "Grand Rond fountain centre",
+      "role": "fit",
+      "forwardErrorMetres": 7.102165157286318e-10,
+      "inverseErrorPixels": 4.7921395801878966e-11
+    },
+    {
+      "id": "jourdan-017",
+      "name": "Grand Rond north road axis",
+      "role": "fit",
+      "forwardErrorMetres": 0.0,
+      "inverseErrorPixels": 4.788524153416455e-11
+    },
+    {
+      "id": "jourdan-018",
+      "name": "Grand Rond south road axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4150103921713799e-09,
+      "inverseErrorPixels": 4.1581417428810265e-11
+    },
+    {
+      "id": "jourdan-019",
+      "name": "Grand Rond rue de Tivoli road axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.830020762312565e-09,
+      "inverseErrorPixels": 3.576711500948241e-11
+    },
+    {
+      "id": "jourdan-020",
+      "name": "Grand Rond Paul-Sabatier junction",
+      "role": "check",
+      "forwardErrorMetres": 3.569911485790093,
+      "inverseErrorPixels": 2.7989252682040435
+    },
+    {
+      "id": "jourdan-021",
+      "name": "Pont Guilhemery centre",
+      "role": "fit",
+      "forwardErrorMetres": 2.122032569593621e-09,
+      "inverseErrorPixels": 3.7565544385985744e-11
+    },
+    {
+      "id": "jourdan-022",
+      "name": "Pont des Demoiselles centre",
+      "role": "fit",
+      "forwardErrorMetres": 2.82970392756777e-09,
+      "inverseErrorPixels": 7.546614153001063e-11
+    },
+    {
+      "id": "jourdan-023",
+      "name": "Lascrosses / boulevard Arcole axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.075051003638064e-10,
+      "inverseErrorPixels": 2.3144138467792878e-11
+    },
+    {
+      "id": "jourdan-024",
+      "name": "Sebastopol / boulevard Lascrosses axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.161412307353305e-10,
+      "inverseErrorPixels": 2.4784773599877652e-11
+    },
+    {
+      "id": "jourdan-025",
+      "name": "Allees Lafayette / boulevard Strasbourg axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4154627914650996e-09,
+      "inverseErrorPixels": 2.5648919683313757e-11
+    },
+    {
+      "id": "jourdan-026",
+      "name": "Riquet / Colombette axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.188206844313462e-10,
+      "inverseErrorPixels": 3.5213568933087046e-11
+    },
+    {
+      "id": "jourdan-027",
+      "name": "Pont Montaudran centre",
+      "role": "fit",
+      "forwardErrorMetres": 7.089523730629331e-10,
+      "inverseErrorPixels": 3.294643772584087e-11
+    },
+    {
+      "id": "jourdan-028",
+      "name": "Porte Saint-Etienne / boulevard Carnot axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.829341543470098e-09,
+      "inverseErrorPixels": 1.2734955785108874e-11
+    },
+    {
+      "id": "jourdan-029",
+      "name": "Filatiers / Trinite axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.073240659849489e-10,
+      "inverseErrorPixels": 2.0434556833325877e-11
+    },
+    {
+      "id": "jourdan-030",
+      "name": "Filatiers / Maletache axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.138150194038435e-10,
+      "inverseErrorPixels": 2.9947797567778174e-11
+    },
+    {
+      "id": "jourdan-031",
+      "name": "Nazareth / Perchepinte axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4169105464997567e-09,
+      "inverseErrorPixels": 3.7460804972613864e-11
+    },
+    {
+      "id": "jourdan-032",
+      "name": "Lascrosses / Armand-Duportal axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.073240659849489e-10,
+      "inverseErrorPixels": 3.3801526904695734e-12
+    },
+    {
+      "id": "jourdan-033",
+      "name": "Gambetta / Romiguieres axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.122937816199621e-09,
+      "inverseErrorPixels": 1.3644315175658901e-11
+    },
+    {
+      "id": "jourdan-034",
+      "name": "La Grave dome centre",
+      "role": "fit",
+      "forwardErrorMetres": 4.802034620363653e-11,
+      "inverseErrorPixels": 8.449616951139453e-12
+    },
+    {
+      "id": "jourdan-035",
+      "name": "Filatiers / Polinaires axis",
+      "role": "check",
+      "forwardErrorMetres": 8.571095938574794,
+      "inverseErrorPixels": 6.033454297834079
+    },
+    {
+      "id": "jourdan-036",
+      "name": "Valade / De-la-Bastide axis",
+      "role": "check",
+      "forwardErrorMetres": 12.775213081855492,
+      "inverseErrorPixels": 8.838525705807374
+    },
+    {
+      "id": "jourdan-037",
+      "name": "Lafayette / Remusat axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4150102701667189e-09,
+      "inverseErrorPixels": 1.4530583310870914e-11
+    },
+    {
+      "id": "jourdan-038",
+      "name": "Lafayette / Taur axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.415010271499587e-09,
+      "inverseErrorPixels": 1.2330698939837247e-11
+    },
+    {
+      "id": "jourdan-039",
+      "name": "Gambetta / Saint-Rome axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.089520847677679e-10,
+      "inverseErrorPixels": 1.7371408325665523e-11
+    },
+    {
+      "id": "jourdan-040",
+      "name": "Lafayette / Wilson west road axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4146481319698978e-09,
+      "inverseErrorPixels": 2.2462862098524908e-11
+    },
+    {
+      "id": "jourdan-041",
+      "name": "Desparadoux / Paradis axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.417904794962206e-09,
+      "inverseErrorPixels": 3.083240696047856e-11
+    },
+    {
+      "id": "jourdan-042",
+      "name": "Dalbade / Saint-Jean axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.1229380590670273e-09,
+      "inverseErrorPixels": 2.8147538621715163e-11
+    },
+    {
+      "id": "jourdan-043",
+      "name": "Desparadoux / Joutx-Aigues axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4169104693227314e-09,
+      "inverseErrorPixels": 1.2370465364015621e-11
+    },
+    {
+      "id": "jourdan-044",
+      "name": "Grand Rond west road axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.080482876987128e-10,
+      "inverseErrorPixels": 3.456379029677894e-11
+    },
+    {
+      "id": "jourdan-045",
+      "name": "Velane / Montoulieu-Velane axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.138154930367824e-10,
+      "inverseErrorPixels": 3.712253898258232e-11
+    },
+    {
+      "id": "jourdan-046",
+      "name": "Taur / Perigord axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.075051228581944e-10,
+      "inverseErrorPixels": 1.0725194820289066e-11
+    },
+    {
+      "id": "jourdan-047",
+      "name": "Dalbade / Pont-de-Tounis axis",
+      "role": "check",
+      "forwardErrorMetres": 6.870557983874639,
+      "inverseErrorPixels": 5.624249950136475
+    },
+    {
+      "id": "jourdan-048",
+      "name": "Saint-Remesy / Pretres axis",
+      "role": "check",
+      "forwardErrorMetres": 5.003035422660502,
+      "inverseErrorPixels": 4.131979611742978
+    },
+    {
+      "id": "jourdan-049",
+      "name": "Grand Rond Jules-Guesde junction",
+      "role": "check",
+      "forwardErrorMetres": 15.84479315037733,
+      "inverseErrorPixels": 12.160350968262563
+    },
+    {
+      "id": "jourdan-050",
+      "name": "Donne / Brasserie axis",
+      "role": "check",
+      "forwardErrorMetres": 12.971001680276123,
+      "inverseErrorPixels": 10.134988732018826
+    },
+    {
+      "id": "jourdan-051",
+      "name": "Taur / Place-Saint-Sernin axis",
+      "role": "check",
+      "forwardErrorMetres": 13.044049947041085,
+      "inverseErrorPixels": 8.932662144941066
+    },
+    {
+      "id": "jourdan-052",
+      "name": "Laque / Tour-du-Sac axis",
+      "role": "check",
+      "forwardErrorMetres": 13.557669101536819,
+      "inverseErrorPixels": 10.525548078968518
+    },
+    {
+      "id": "jourdan-053",
+      "name": "Pont-Saint-Pierre / Reclusane axis",
+      "role": "check",
+      "forwardErrorMetres": 5.112738841197475,
+      "inverseErrorPixels": 4.002881738815905
+    },
+    {
+      "id": "jourdan-054",
+      "name": "Quilmery / Pont-Saint-Pierre axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4204322339472083e-09,
+      "inverseErrorPixels": 1.0469070214841247e-11
+    },
+    {
+      "id": "jourdan-055",
+      "name": "Valade / Pargaminieres axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.080480913244915e-10,
+      "inverseErrorPixels": 3.2155493553843715e-13
+    },
+    {
+      "id": "jourdan-056",
+      "name": "Renforts / Parlement axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.102167223672553e-10,
+      "inverseErrorPixels": 3.283326260531739e-11
+    },
+    {
+      "id": "jourdan-057",
+      "name": "Caussade / Viadieu axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.138164678749425e-10,
+      "inverseErrorPixels": 3.576060999209858e-11
+    },
+    {
+      "id": "jourdan-058",
+      "name": "Sainte-Catherine / Grande-Saint-Michel axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.8300208857621545e-09,
+      "inverseErrorPixels": 5.40920014581934e-11
+    },
+    {
+      "id": "jourdan-059",
+      "name": "Sabots / Caussade axis",
+      "role": "fit",
+      "forwardErrorMetres": 3.5375260769931106e-09,
+      "inverseErrorPixels": 5.1617329968076633e-11
+    },
+    {
+      "id": "jourdan-060",
+      "name": "Dumeril / Sachet axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.075052089951992e-10,
+      "inverseErrorPixels": 3.45128973294964e-11
+    },
+    {
+      "id": "jourdan-061",
+      "name": "Sainte-Catherine / Trente-Six-Ponts axis",
+      "role": "check",
+      "forwardErrorMetres": 16.432844759942363,
+      "inverseErrorPixels": 12.418838085640733
+    },
+    {
+      "id": "jourdan-062",
+      "name": "Mespoul / Viadieu axis",
+      "role": "check",
+      "forwardErrorMetres": 3.3890784874069326,
+      "inverseErrorPixels": 2.3768283613302246
+    },
+    {
+      "id": "jourdan-063",
+      "name": "Leclerc / Barcelone axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.089519298459143e-10,
+      "inverseErrorPixels": 8.702799827462804e-12
+    },
+    {
+      "id": "jourdan-064",
+      "name": "Lancefoc / Barcelone axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.080480441270308e-10,
+      "inverseErrorPixels": 1.161387698550437e-11
+    },
+    {
+      "id": "jourdan-065",
+      "name": "Quai-Saint-Pierre / Brienne axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.122937793350426e-09,
+      "inverseErrorPixels": 9.779711566628325e-12
+    },
+    {
+      "id": "jourdan-066",
+      "name": "Lejeune / Barcelone axis",
+      "role": "check",
+      "forwardErrorMetres": 29.65925076328427,
+      "inverseErrorPixels": 25.691970337177853
+    },
+    {
+      "id": "jourdan-067",
+      "name": "Colombette / Saint-Aubin axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4146481319698978e-09,
+      "inverseErrorPixels": 2.3633740893612926e-11
+    },
+    {
+      "id": "jourdan-068",
+      "name": "Riquet / Camichel axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.089521439424627e-10,
+      "inverseErrorPixels": 3.33550284647431e-11
+    },
+    {
+      "id": "jourdan-069",
+      "name": "Colombette canal west abutment",
+      "role": "fit",
+      "forwardErrorMetres": 7.11836967982266e-10,
+      "inverseErrorPixels": 3.183556259170862e-11
+    },
+    {
+      "id": "jourdan-070",
+      "name": "Saint-Aubin nave centre",
+      "role": "check",
+      "forwardErrorMetres": 14.412936755632082,
+      "inverseErrorPixels": 10.55391217465401
+    },
+    {
+      "id": "jourdan-071",
+      "name": "Saint-Aubin / Aubuisson axis",
+      "role": "check",
+      "forwardErrorMetres": 13.41182344239304,
+      "inverseErrorPixels": 11.322224250017985
+    },
+    {
+      "id": "jourdan-072",
+      "name": "Caffarelli / Bayard (former Orient)",
+      "role": "fit",
+      "forwardErrorMetres": 2.122515320251651e-09,
+      "inverseErrorPixels": 2.448889430131432e-11
+    },
+    {
+      "id": "jourdan-073",
+      "name": "Caffarelli / Stalingrad (former Redoutes)",
+      "role": "check",
+      "forwardErrorMetres": 17.705689349263046,
+      "inverseErrorPixels": 11.41316451549868
+    },
+    {
+      "id": "jourdan-074",
+      "name": "Heliot / Place Belfort (former Castelet)",
+      "role": "fit",
+      "forwardErrorMetres": 1.416095948167585e-09,
+      "inverseErrorPixels": 1.9591115441051456e-11
+    },
+    {
+      "id": "jourdan-075",
+      "name": "Belfort / Place Belfort east opening",
+      "role": "check",
+      "forwardErrorMetres": 18.268434363145435,
+      "inverseErrorPixels": 12.546776292846161
+    },
+    {
+      "id": "jourdan-076",
+      "name": "Caffarelli / Jean-Jaures northwest opening",
+      "role": "fit",
+      "forwardErrorMetres": 1.4150102399633936e-09,
+      "inverseErrorPixels": 1.5942121665792097e-11
+    },
+    {
+      "id": "jourdan-077",
+      "name": "Belfort / Jean-Jaures northwest opening",
+      "role": "fit",
+      "forwardErrorMetres": 7.11836443369634e-10,
+      "inverseErrorPixels": 2.3202143918335807e-11
+    },
+    {
+      "id": "jourdan-078",
+      "name": "Jean-Jaures / Bonrepos west bridge abutment",
+      "role": "fit",
+      "forwardErrorMetres": 1.420430417983659e-09,
+      "inverseErrorPixels": 2.1805360713667115e-11
+    },
+    {
+      "id": "jourdan-079",
+      "name": "Heliot / Dalayrac axis",
+      "role": "check",
+      "forwardErrorMetres": 21.600767337310455,
+      "inverseErrorPixels": 13.168613315335548
+    },
+    {
+      "id": "jourdan-080",
+      "name": "Denfert-Rochereau / Lafaille axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.122213621025858e-09,
+      "inverseErrorPixels": 1.5563059567873644e-11
+    },
+    {
+      "id": "jourdan-081",
+      "name": "Arnaud-Bernard / Queteurs axis",
+      "role": "fit",
+      "forwardErrorMetres": 0.0,
+      "inverseErrorPixels": 5.2345351074206236e-12
+    },
+    {
+      "id": "jourdan-082",
+      "name": "Arnaud-Bernard / Embarthe / Chaine axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.1225153240438685e-09,
+      "inverseErrorPixels": 1.575619184138342e-11
+    },
+    {
+      "id": "jourdan-083",
+      "name": "Gatien-Arnoult / Gramat axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.6004404092943896e-11,
+      "inverseErrorPixels": 4.267422895992117e-12
+    },
+    {
+      "id": "jourdan-084",
+      "name": "Verge-d-Or / Trois-Piliers axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4154626656504477e-09,
+      "inverseErrorPixels": 1.3116919128020487e-11
+    },
+    {
+      "id": "jourdan-085",
+      "name": "Arnaud-Bernard / Trois-Piliers axis",
+      "role": "check",
+      "forwardErrorMetres": 11.448447139013155,
+      "inverseErrorPixels": 10.030906140274135
+    },
+    {
+      "id": "jourdan-086",
+      "name": "Gatien-Arnoult / Saint-Charles axis",
+      "role": "check",
+      "forwardErrorMetres": 18.544635669748764,
+      "inverseErrorPixels": 14.528542287831554
+    },
+    {
+      "id": "jourdan-087",
+      "name": "Hirondelle / Trois-Piliers axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.080479436660181e-10,
+      "inverseErrorPixels": 1.2040074848185874e-11
+    },
+    {
+      "id": "jourdan-088",
+      "name": "Verge-d-Or / Escoussieres axis",
+      "role": "check",
+      "forwardErrorMetres": 17.724075286951457,
+      "inverseErrorPixels": 12.951979856566668
+    },
+    {
+      "id": "jourdan-089",
+      "name": "Embarthe / Salenques axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.414738664662221e-09,
+      "inverseErrorPixels": 6.9302362381350445e-12
+    },
+    {
+      "id": "jourdan-090",
+      "name": "Chaine / Peyrou / Cartailhac axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.073240659849489e-10,
+      "inverseErrorPixels": 1.1405005538094386e-11
+    },
+    {
+      "id": "jourdan-091",
+      "name": "Puits-Creuses / Albert-Lautman axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4150102540289845e-09,
+      "inverseErrorPixels": 3.749942721349417e-12
+    },
+    {
+      "id": "jourdan-092",
+      "name": "Urbain-Vitry / Albert-Lautman axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.1225153720868333e-09,
+      "inverseErrorPixels": 9.98892693882626e-12
+    },
+    {
+      "id": "jourdan-093",
+      "name": "Lois / Salenques / Peyrou axis",
+      "role": "check",
+      "forwardErrorMetres": 5.074063879476362,
+      "inverseErrorPixels": 4.160104286710327
+    },
+    {
+      "id": "jourdan-095",
+      "name": "Saint-Bernard / Henri-Beraldi axis",
+      "role": "fit",
+      "forwardErrorMetres": 7.089518139216289e-10,
+      "inverseErrorPixels": 1.3958966044966317e-11
+    },
+    {
+      "id": "jourdan-096",
+      "name": "Bellegarde / Henri-Beraldi axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4147386655613861e-09,
+      "inverseErrorPixels": 1.8259394449081676e-11
+    },
+    {
+      "id": "jourdan-097",
+      "name": "Saint-Bernard / Pouzonville axis",
+      "role": "check",
+      "forwardErrorMetres": 12.124897020241553,
+      "inverseErrorPixels": 9.915842035266337
+    },
+    {
+      "id": "jourdan-098",
+      "name": "Saint-Bernard / Strasbourg northwest opening",
+      "role": "fit",
+      "forwardErrorMetres": 7.089517909995493e-10,
+      "inverseErrorPixels": 9.146669565557513e-12
+    },
+    {
+      "id": "jourdan-099",
+      "name": "Montoyol / Remusat axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.4147386711947287e-09,
+      "inverseErrorPixels": 1.6900763452347866e-11
+    },
+    {
+      "id": "jourdan-100",
+      "name": "Perigord / Remusat axis",
+      "role": "check",
+      "forwardErrorMetres": 15.246668125936484,
+      "inverseErrorPixels": 13.129949026798304
+    },
+    {
+      "id": "jourdan-101",
+      "name": "Bayard / Strasbourg northeast opening",
+      "role": "fit",
+      "forwardErrorMetres": 7.075051165400333e-10,
+      "inverseErrorPixels": 1.620944683692897e-11
+    },
+    {
+      "id": "jourdan-102",
+      "name": "Bayard / Moutons (former Saint-Loup) axis",
+      "role": "check",
+      "forwardErrorMetres": 32.18696855627372,
+      "inverseErrorPixels": 23.52355343485408
+    },
+    {
+      "id": "jourdan-103",
+      "name": "Terre-Cabade main gate",
+      "role": "fit",
+      "forwardErrorMetres": 2.8321920555791717e-09,
+      "inverseErrorPixels": 3.0589999476146e-11
+    },
+    {
+      "id": "jourdan-104",
+      "name": "Cimetiere / Saint-Bertrand / Compans axis",
+      "role": "fit",
+      "forwardErrorMetres": 1.421963040898913e-09,
+      "inverseErrorPixels": 5.3345663376921635e-11
+    },
+    {
+      "id": "jourdan-105",
+      "name": "Colonne / Saint-Sylve axis",
+      "role": "fit",
+      "forwardErrorMetres": 2.831513555579581e-09,
+      "inverseErrorPixels": 3.3082869776990265e-11
+    },
+    {
+      "id": "jourdan-106",
+      "name": "Cimetiere / Saint-Paul / Gazan axis",
+      "role": "check",
+      "forwardErrorMetres": 14.535804341662077,
+      "inverseErrorPixels": 11.414815015138997
+    },
+    {
+      "id": "jourdan-107",
+      "name": "Terre-Cabade southwest boundary / Gloire",
+      "role": "fit",
+      "forwardErrorMetres": 1.4169099398630387e-09,
+      "inverseErrorPixels": 1.8954020148491897e-11
+    }
+  ],
+  "engine": "GDAL via Rasterio",
+  "gdalVersion": "3.12.2",
+  "rasterioVersion": "1.5.2",
+  "transform": "tps",
+  "sourceSha256": "827a68694d8790e7b3e7df629226c99a067cb381dc1ac5b8248619fab04513b5",
+  "width": 4096,
+  "height": 3272
+}

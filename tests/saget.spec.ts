@@ -11,14 +11,16 @@ test("Saget 1777 preserves the full plan, sources and shared selection", async (
       await route.abort();
     }
   });
-  const raster = page.waitForResponse((response) => response.url().endsWith("saget-1777/map.webp"));
+  const raster = page.waitForResponse((response) =>
+    new URL(response.url()).pathname.endsWith("saget-1777/display.webp"),
+  );
   await page.goto("/#year=1777&mode=time&time=1777&lon=1.442&lat=43.602&z=14&opacity=100");
   expect((await raster).ok()).toBe(true);
   const slider = page.getByRole("slider", { name: "Voyage dans le temps" });
   await expect(slider).toHaveAttribute("aria-valuetext", "1777");
   const pixels = await page.evaluate(async () => {
     const image = new Image();
-    image.src = "/saget-1777/map.webp";
+    image.src = "/saget-1777/display.webp";
     await image.decode();
     const canvas = document.createElement("canvas");
     canvas.width = image.naturalWidth;
@@ -30,7 +32,9 @@ test("Saget 1777 preserves the full plan, sources and shared selection", async (
     for (let i = 3; i < data.length; i += 4) if (data[i] !== 255) missing++;
     return { width: canvas.width, height: canvas.height, missing };
   });
-  expect(pixels).toEqual({ width: 4096, height: 2807, missing: 0 });
+  expect(pixels.width).toBe(4842);
+  expect(pixels.height).toBe(4965);
+  expect(pixels.missing).toBeGreaterThan(0);
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 844 });
     const dismiss = page.getByRole("button", { name: "Fermer le message", exact: true });

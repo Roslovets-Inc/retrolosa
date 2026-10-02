@@ -1,0 +1,88 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "openedition-1550",
+  "properties": {
+    "title": "Historical parcel inheritance, nominal 1550",
+    "datetime": null,
+    "start_datetime": "1550-01-01T00:00:00Z",
+    "end_datetime": "1550-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Figure 8 with registered red parcel boundaries from figure 7. Affine Web Mercator fit on three churches; one withheld checkpoint. Manual annotation, not survey-grade.",
+    "retrolosa:check_points": [
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 1.8
+      }
+    ],
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "74e5185914278fbb1f11ce3395e34ee1a477af1feba7c4438163a87570a6ba45"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://books.openedition.org/psorbonne/3296",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.4299474965179684,
+    43.58919007521679,
+    1.4536307392300105,
+    43.61196365141659
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.4299474965179684,
+          43.58919007521679
+        ],
+        [
+          1.4536307392300105,
+          43.58919007521679
+        ],
+        [
+          1.4536307392300105,
+          43.61196365141659
+        ],
+        [
+          1.4299474965179684,
+          43.61196365141659
+        ],
+        [
+          1.4299474965179684,
+          43.58919007521679
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "display.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        2750,
+        2071
+      ],
+      "proj:transform": [
+        1.273011356367961,
+        0.0,
+        159181.02717349658,
+        0.0,
+        -1.273011356367961,
+        5405587.723471017
+      ]
+    }
+  }
+}

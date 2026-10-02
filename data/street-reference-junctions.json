@@ -94,6 +94,738 @@
         542.85,
         610.01
       ]
+    },
+    {
+      "nodeId": "11023195",
+      "ways": {
+        "Rue de la Colombette": "1359896741",
+        "Rue Pierre Paul Riquet": "1436634869",
+        "Rue Pierre-Paul Riquet": "1486514274"
+      },
+      "lon": 1.4541382,
+      "lat": 43.6046027,
+      "ref": [
+        871.78,
+        591.43
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/11023195"
+    },
+    {
+      "nodeId": "241771518",
+      "ways": {
+        "Rue des Renforts": "22535648",
+        "Place du Parlement": "229908336"
+      },
+      "ref": [
+        691.19,
+        867.74
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/241771518"
+    },
+    {
+      "nodeId": "240717117",
+      "ways": {
+        "Rue Caussade": "208439016",
+        "Rue Achille Viadieu": "219699545"
+      },
+      "lon": 1.4444411,
+      "lat": 43.5917061,
+      "ref": [
+        695.25,
+        915.62
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/240717117"
+    },
+    {
+      "nodeId": "13519386602",
+      "ways": {
+        "Rue Sainte-Catherine": "22392422",
+        "Grande Rue Saint-Michel": "1473603369"
+      },
+      "lon": 1.4453335,
+      "lat": 43.5906293,
+      "ref": [
+        711.49,
+        942.68
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/13519386602"
+    },
+    {
+      "nodeId": "240717111",
+      "ways": {
+        "Rue des Sabots": "22390503",
+        "Rue Caussade": "208439016"
+      },
+      "lon": 1.4438677,
+      "lat": 43.5916334,
+      "ref": [
+        684.81,
+        917.45
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/240717111"
+    },
+    {
+      "nodeId": "240744152",
+      "ways": {
+        "Rue Alfred Duméril": "22392524",
+        "Rue du Sachet": "22392907"
+      },
+      "ref": [
+        754.02,
+        890.71
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/240744152"
+    },
+    {
+      "nodeId": "240736036",
+      "ways": {
+        "Rue des Trente-Six Ponts": "22392416",
+        "Rue Sainte-Catherine": "22392422"
+      },
+      "lon": 1.4479397,
+      "lat": 43.5909922,
+      "ref": [
+        758.94,
+        933.56
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/240736036"
+    },
+    {
+      "nodeId": "240717055",
+      "ways": {
+        "Rue Mespoul": "22390495",
+        "Rue Achille Viadieu": "219699545"
+      },
+      "lon": 1.4444432,
+      "lat": 43.5913447,
+      "ref": [
+        695.29,
+        924.7
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/240717055"
+    },
+    {
+      "nodeId": "243450757",
+      "ways": {
+        "Allée de Barcelone": "274541632",
+        "Rue du Béarnais": "190049054",
+        "Boulevard du Maréchal Leclerc": "1205280378"
+      },
+      "lon": 1.4304361,
+      "lat": 43.6067,
+      "ref": [
+        440.29,
+        538.7
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243450757"
+    },
+    {
+      "nodeId": "243451406",
+      "ways": {
+        "Allée de Barcelone": "1451594471",
+        "Rue Lancefoc": "22695945"
+      },
+      "lon": 1.4328337,
+      "lat": 43.6058254,
+      "ref": [
+        483.94,
+        560.69
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243451406"
+    },
+    {
+      "nodeId": "243450732",
+      "ways": {
+        "Quai Saint-Pierre": "22717775",
+        "Allée de Brienne": "791005607"
+      },
+      "lon": 1.4328291,
+      "lat": 43.6052998,
+      "ref": [
+        483.86,
+        573.91
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243450732"
+    },
+    {
+      "nodeId": "243451397",
+      "ways": {
+        "Allée de Barcelone": "22695943",
+        "Rue Lejeune": "115577031"
+      },
+      "lon": 1.4315653,
+      "lat": 43.6062892,
+      "ref": [
+        460.85,
+        549.03
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243451397"
+    },
+    {
+      "nodeId": "60292984",
+      "ways": {
+        "Rue Saint-Aubin": "22634774",
+        "Rue de la Colombette": "382262955"
+      },
+      "lon": 1.4524947,
+      "lat": 43.6044562,
+      "ref": [
+        841.86,
+        595.11
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/60292984"
+    },
+    {
+      "nodeId": "242780785",
+      "ways": {
+        "Rue Pierre-Paul Riquet": "1427197641",
+        "Rue Charles Camichel": "22634679",
+        "Rue d'Aubuisson": "22634772"
+      },
+      "lon": 1.4543086,
+      "lat": 43.6027401,
+      "ref": [
+        874.88,
+        638.26
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/242780785"
+    },
+    {
+      "nodeId": "8831215",
+      "ways": {
+        "Boulevard Pierre-Paul-Riquet": "523973388",
+        "Pont de la Colombette": "185302519",
+        "Rue de la Colombette": "315778517"
+      },
+      "lon": 1.4566131,
+      "lat": 43.6050307,
+      "ref": [
+        916.83,
+        580.67
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/8831215"
+    },
+    {
+      "nodeId": "242788006",
+      "ways": {
+        "Rue d'Aubuisson": "22634772",
+        "Rue Saint-Aubin": "383282337"
+      },
+      "lon": 1.4523568,
+      "lat": 43.6033717,
+      "ref": [
+        839.35,
+        622.38
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/242788006"
+    },
+    {
+      "nodeId": "3845301552",
+      "ways": {
+        "Rue de l'Orient": "1491235359",
+        "Rue Caffarelli": "22660138",
+        "Rue de Bayard": "1077029587"
+      },
+      "lon": 1.4492835,
+      "lat": 43.6096836,
+      "ref": [
+        783.4,
+        463.69
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/3845301552"
+    },
+    {
+      "nodeId": "13287499106",
+      "ways": {
+        "Rue de Stalingrad": "22657418",
+        "Rue Caffarelli": "208578763"
+      },
+      "lon": 1.4496122,
+      "lat": 43.6094403,
+      "ref": [
+        789.38,
+        469.81
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/13287499106"
+    },
+    {
+      "nodeId": "243047222",
+      "ways": {
+        "Rue Héliot": "22657414",
+        "Place de Belfort": "797981879"
+      },
+      "lon": 1.450135,
+      "lat": 43.6084959,
+      "ref": [
+        798.9,
+        493.55
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243047222"
+    },
+    {
+      "nodeId": "243047220",
+      "ways": {
+        "Rue de Belfort": "22657415",
+        "Place de Belfort": "797981878"
+      },
+      "lon": 1.4505471,
+      "lat": 43.6086834,
+      "ref": [
+        806.4,
+        488.84
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243047220"
+    },
+    {
+      "nodeId": "243044828",
+      "ways": {
+        "Rue Caffarelli": "22655948",
+        "Allées Jean Jaurès": "1123201399"
+      },
+      "lon": 1.4512178,
+      "lat": 43.6075658,
+      "ref": [
+        818.61,
+        516.94
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243044828"
+    },
+    {
+      "nodeId": "344742810",
+      "ways": {
+        "Rue de Belfort": "22657415",
+        "Allées Jean Jaurès": "1124301028"
+      },
+      "lon": 1.4526846,
+      "lat": 43.6085489,
+      "ref": [
+        845.32,
+        492.22
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/344742810"
+    },
+    {
+      "nodeId": "8831750",
+      "ways": {
+        "Boulevard de Bonrepos": "123032373",
+        "Allées Jean Jaurès": "5137140",
+        "Pont Pierre-Paul Riquet": "1026121567"
+      },
+      "lon": 1.453855,
+      "lat": 43.609291,
+      "ref": [
+        866.62,
+        473.56
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/8831750"
+    },
+    {
+      "nodeId": "243047235",
+      "ways": {
+        "Place d'Arménie": "31004793",
+        "Rue Dalayrac": "1315206759",
+        "Rue Héliot": "1315206760"
+      },
+      "lon": 1.4496231,
+      "lat": 43.6068786,
+      "ref": [
+        789.58,
+        534.21
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243047235"
+    },
+    {
+      "nodeId": "344752164",
+      "ways": {
+        "Rue Denfert-Rochereau": "22657407",
+        "Rue Lafaille": "31005466"
+      },
+      "ref": [
+        760.54,
+        520.77
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/344752164"
+    },
+    {
+      "nodeId": "243667018",
+      "ways": {
+        "Rue Arnaud Bernard": "618962729",
+        "Rue des Quêteurs": "808150268"
+      },
+      "ref": [
+        599.02,
+        455.06
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243667018"
+    },
+    {
+      "nodeId": "243667004",
+      "ways": {
+        "Rue d'Embarthe": "22718069",
+        "Rue de la Chaîne": "22718070",
+        "Rue Arnaud Bernard": "618962729"
+      },
+      "ref": [
+        598.62,
+        468.97
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243667004"
+    },
+    {
+      "nodeId": "84826079",
+      "ways": {
+        "Rue Gatien Arnoult": "608470609",
+        "Rue Gramat": "10235276"
+      },
+      "ref": [
+        623.27,
+        461.31
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826079"
+    },
+    {
+      "nodeId": "84826096",
+      "ways": {
+        "Rue de la Verge d'Or": "10235281",
+        "Rue des Trois Piliers": "27787564"
+      },
+      "ref": [
+        611.88,
+        445.57
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826096"
+    },
+    {
+      "nodeId": "243667017",
+      "ways": {
+        "Rue des Trois Piliers": "27787564",
+        "Place Arnaud Bernard": "32061220",
+        "Rue Arnaud Bernard": "539394400"
+      },
+      "ref": [
+        603.7,
+        444.12
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243667017"
+    },
+    {
+      "nodeId": "84826072",
+      "ways": {
+        "Rue Gatien Arnoult": "608470609",
+        "Rue Saint-Charles": "10235291",
+        "Rue des Trois Piliers": "27787564"
+      },
+      "ref": [
+        622.38,
+        452.26
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826072"
+    },
+    {
+      "nodeId": "84826083",
+      "ways": {
+        "Rue de l'Hirondelle": "10235279",
+        "Rue des Trois Piliers": "27787564"
+      },
+      "ref": [
+        620.39,
+        450.2
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826083"
+    },
+    {
+      "nodeId": "84826093",
+      "ways": {
+        "Rue de la Verge d'Or": "539690973",
+        "Rue Escoussières Arnaud Bernard": "10235284"
+      },
+      "ref": [
+        615.04,
+        430.93
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826093"
+    },
+    {
+      "nodeId": "243667023",
+      "ways": {
+        "Rue d'Embarthe": "645255229",
+        "Rue des Salenques": "650817466"
+      },
+      "ref": [
+        568.53,
+        493.94
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243667023"
+    },
+    {
+      "nodeId": "84826020",
+      "ways": {
+        "Place du Peyrou": "31005916",
+        "Rue Émile Cartailhac": "137266543",
+        "Rue de la Chaîne": "361290724"
+      },
+      "ref": [
+        613.42,
+        518.78
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826020"
+    },
+    {
+      "nodeId": "84825905",
+      "ways": {
+        "Rue Antoine Deville": "10235241",
+        "Rue Albert Lautman": "10235256",
+        "Rue des Puits Creusés": "21038923",
+        "Place Anatole France": "1254711120"
+      },
+      "ref": [
+        591.35,
+        548.33
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84825905"
+    },
+    {
+      "nodeId": "84825895",
+      "ways": {
+        "Rue Urbain Vitry": "10235239",
+        "Rue Albert Lautman": "10235256"
+      },
+      "ref": [
+        599.59,
+        535.86
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84825895"
+    },
+    {
+      "nodeId": "60964494",
+      "ways": {
+        "Rue Albert Lautman": "10235256",
+        "Rue des Lois": "22718005",
+        "Rue des Salenques": "22718006",
+        "Place du Peyrou": "31005916"
+      },
+      "ref": [
+        607.85,
+        523.5
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/60964494"
+    },
+    {
+      "nodeId": "1373199319",
+      "ways": {
+        "Rue des Puits Creusés": "21038923",
+        "Place Saint-Julien": "123032385"
+      },
+      "ref": [
+        562.3,
+        495.16
+      ],
+      "retrieved": "2026-10-01",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/1373199319"
+    },
+    {
+      "nodeId": "84826038",
+      "ways": {
+        "Rue Saint-Bernard": "10235260",
+        "Rue Henri Beraldi": "10235263"
+      },
+      "ref": [
+        678.2,
+        484.79
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826038"
+    },
+    {
+      "nodeId": "84826045",
+      "ways": {
+        "Rue Henri Beraldi": "10235263",
+        "Rue Bellegarde": "22718008"
+      },
+      "ref": [
+        684.51,
+        501.45
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826045"
+    },
+    {
+      "nodeId": "84826066",
+      "ways": {
+        "Rue Saint-Bernard": "539690980",
+        "Rue Pouzonville": "128241737"
+      },
+      "ref": [
+        698.46,
+        476.83
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/84826066"
+    },
+    {
+      "nodeId": "243666274",
+      "ways": {
+        "Boulevard de Strasbourg": "5137104",
+        "Rue Saint-Bernard": "539690980"
+      },
+      "ref": [
+        704.26,
+        474.13
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243666274"
+    },
+    {
+      "nodeId": "60960462",
+      "ways": {
+        "Rue Montoyol": "8590241",
+        "Rue Charles de Rémusat": "192389096"
+      },
+      "ref": [
+        698.0,
+        548.5
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/60960462"
+    },
+    {
+      "nodeId": "11379409593",
+      "ways": {
+        "Rue de Périgord": "8590425",
+        "Rue Charles de Rémusat": "1416990934"
+      },
+      "ref": [
+        710.2,
+        523.78
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/11379409593"
+    },
+    {
+      "nodeId": "10526875",
+      "ways": {
+        "Boulevard de Strasbourg": "217848675",
+        "Rue de Bayard": "1077029499"
+      },
+      "ref": [
+        729.73,
+        504.58
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/10526875"
+    },
+    {
+      "nodeId": "243048213",
+      "ways": {
+        "Rue des Moutons": "22660772",
+        "Rue de Bayard": "1077029499"
+      },
+      "ref": [
+        749.06,
+        489.88
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/243048213"
+    },
+    {
+      "nodeId": "1828807375",
+      "ways": {
+        "Avenue du Cimetiere": "23148223",
+        "Cimetiere de Terre Cabade boundary": "16299793"
+      },
+      "lon": 1.4598548,
+      "lat": 43.6069129,
+      "ref": [
+        975.85,
+        533.35
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/1828807375"
+    },
+    {
+      "nodeId": "250063183",
+      "ways": {
+        "Avenue du Cimetière": "23148223",
+        "Rue du Général Jean Compans": "23148232",
+        "Rue Saint-Bertrand": "23196745"
+      },
+      "lon": 1.458131,
+      "lat": 43.6066832,
+      "ref": [
+        944.46,
+        539.13
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/250063183"
+    },
+    {
+      "nodeId": "250055551",
+      "ways": {
+        "Rue Saint-Sylve": "23147672",
+        "Avenue de la Colonne": "25532521"
+      },
+      "lon": 1.4586356,
+      "lat": 43.6083863,
+      "ref": [
+        953.65,
+        496.31
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/250055551"
+    },
+    {
+      "nodeId": "250063003",
+      "ways": {
+        "Avenue du Cimetière": "23148223",
+        "Rue Gazan": "23148224",
+        "Rue Saint-Paul": "23197697"
+      },
+      "lon": 1.457336,
+      "lat": 43.6065638,
+      "ref": [
+        929.99,
+        542.13
+      ],
+      "retrieved": "2026-10-02",
+      "sourceUrl": "https://api.openstreetmap.org/api/0.6/node/250063003"
     }
   ]
 }

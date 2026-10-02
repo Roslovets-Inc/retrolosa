@@ -1,0 +1,3728 @@
+{
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/item.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/item.json",
+    "title": "STAC Item",
+    "type": "object",
+    "description": "This object represents the metadata for an item in a SpatioTemporal Asset Catalog.",
+    "allOf": [
+      {
+        "$ref": "#/definitions/core"
+      }
+    ],
+    "definitions": {
+      "core": {
+        "allOf": [
+          {
+            "$ref": "https://geojson.org/schema/Feature.json"
+          },
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "geometry",
+                  "bbox"
+                ],
+                "properties": {
+                  "geometry": {
+                    "$ref": "https://geojson.org/schema/Geometry.json"
+                  },
+                  "bbox": {
+                    "type": "array",
+                    "oneOf": [
+                      {
+                        "minItems": 4,
+                        "maxItems": 4
+                      },
+                      {
+                        "minItems": 6,
+                        "maxItems": 6
+                      }
+                    ],
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "geometry"
+                ],
+                "properties": {
+                  "geometry": {
+                    "type": "null"
+                  },
+                  "bbox": {
+                    "not": {}
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "stac_version",
+              "id",
+              "links",
+              "assets",
+              "properties"
+            ],
+            "properties": {
+              "stac_version": {
+                "title": "STAC version",
+                "type": "string",
+                "const": "1.1.0"
+              },
+              "stac_extensions": {
+                "title": "STAC extensions",
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "title": "Reference to a JSON Schema",
+                  "type": "string",
+                  "format": "iri"
+                }
+              },
+              "id": {
+                "title": "Provider ID",
+                "description": "Provider item ID",
+                "type": "string",
+                "minLength": 1
+              },
+              "links": {
+                "$ref": "#/definitions/links"
+              },
+              "assets": {
+                "$ref": "#/definitions/assets"
+              },
+              "properties": {
+                "allOf": [
+                  {
+                    "$ref": "common.json"
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "datetime"
+                        ],
+                        "properties": {
+                          "datetime": {
+                            "not": {
+                              "type": "null"
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "required": [
+                          "datetime",
+                          "start_datetime",
+                          "end_datetime"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "$comment": "Rules enforcement for STAC Item",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "links": {
+                      "contains": {
+                        "required": [
+                          "rel"
+                        ],
+                        "properties": {
+                          "rel": {
+                            "const": "collection"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "collection"
+                  ],
+                  "properties": {
+                    "collection": {
+                      "title": "Collection ID",
+                      "description": "The ID of the STAC Collection this Item references to.",
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "collection": {
+                      "not": {}
+                    }
+                  }
+                }
+              },
+              {
+                "$comment": "The if-then-else below checks whether the bands field is given in assets or not. If not, allows bands in properties (then), otherwise, disallows bands in properties (else).",
+                "if": {
+                  "$comment": "If there is no asset with bands...",
+                  "required": [
+                    "assets"
+                  ],
+                  "properties": {
+                    "assets": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "properties": {
+                          "bands": false
+                        }
+                      }
+                    }
+                  }
+                },
+                "then": {
+                  "$comment": "... then bands are not allowed in properties...",
+                  "properties": {
+                    "properties": {
+                      "properties": {
+                        "bands": false
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "$comment": "... otherwise bands are allowed in properties.",
+                  "properties": {
+                    "properties": {
+                      "$ref": "bands.json"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "links": {
+        "title": "Item links",
+        "description": "Links to item relations",
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/link"
+        }
+      },
+      "link": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "rel",
+              "href"
+            ],
+            "properties": {
+              "href": {
+                "title": "Link reference",
+                "type": "string",
+                "format": "iri-reference",
+                "minLength": 1
+              },
+              "rel": {
+                "title": "Link relation type",
+                "type": "string",
+                "minLength": 1
+              },
+              "type": {
+                "title": "Link type",
+                "type": "string"
+              },
+              "title": {
+                "title": "Link title",
+                "type": "string"
+              },
+              "method": {
+                "title": "Link method",
+                "type": "string",
+                "pattern": "^[A-Z]+$",
+                "default": "GET"
+              },
+              "headers": {
+                "title": "Link headers",
+                "type": "object",
+                "additionalProperties": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                }
+              },
+              "body": {
+                "title": "Link body",
+                "$comment": "Any type is allowed."
+              }
+            },
+            "$comment": "Link with relationship `self` must be absolute URI",
+            "if": {
+              "properties": {
+                "rel": {
+                  "const": "self"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "href": {
+                  "format": "iri"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "common.json"
+          }
+        ]
+      },
+      "assets": {
+        "title": "Asset links",
+        "description": "Links to assets",
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/definitions/asset"
+        }
+      },
+      "asset": {
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "href"
+            ],
+            "properties": {
+              "href": {
+                "title": "Asset reference",
+                "type": "string",
+                "format": "iri-reference",
+                "minLength": 1
+              },
+              "title": {
+                "title": "Asset title",
+                "type": "string"
+              },
+              "description": {
+                "title": "Asset description",
+                "type": "string"
+              },
+              "type": {
+                "title": "Asset type",
+                "type": "string"
+              },
+              "roles": {
+                "title": "Asset roles",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "common.json"
+          }
+        ]
+      }
+    }
+  },
+  "https://geojson.org/schema/Feature.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://geojson.org/schema/Feature.json",
+    "title": "GeoJSON Feature",
+    "type": "object",
+    "required": [
+      "type",
+      "properties",
+      "geometry"
+    ],
+    "properties": {
+      "type": {
+        "type": "string",
+        "enum": [
+          "Feature"
+        ]
+      },
+      "id": {
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "properties": {
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "geometry": {
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "title": "GeoJSON Point",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Point"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON LineString",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "LineString"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON Polygon",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Polygon"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON MultiPoint",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "MultiPoint"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON MultiLineString",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "MultiLineString"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON MultiPolygon",
+            "type": "object",
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "MultiPolygon"
+                ]
+              },
+              "coordinates": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "minItems": 4,
+                    "items": {
+                      "type": "array",
+                      "minItems": 2,
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "title": "GeoJSON GeometryCollection",
+            "type": "object",
+            "required": [
+              "type",
+              "geometries"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "GeometryCollection"
+                ]
+              },
+              "geometries": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "title": "GeoJSON Point",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Point"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "GeoJSON LineString",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "LineString"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "minItems": 2,
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "GeoJSON Polygon",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "Polygon"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "minItems": 4,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "GeoJSON MultiPoint",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "MultiPoint"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "GeoJSON MultiLineString",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "MultiLineString"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                              "type": "array",
+                              "minItems": 2,
+                              "items": {
+                                "type": "number"
+                              }
+                            }
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "GeoJSON MultiPolygon",
+                      "type": "object",
+                      "required": [
+                        "type",
+                        "coordinates"
+                      ],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "MultiPolygon"
+                          ]
+                        },
+                        "coordinates": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "minItems": 4,
+                              "items": {
+                                "type": "array",
+                                "minItems": 2,
+                                "items": {
+                                  "type": "number"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "bbox": {
+                          "type": "array",
+                          "minItems": 4,
+                          "items": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "bbox": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "bbox": {
+        "type": "array",
+        "minItems": 4,
+        "items": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "https://geojson.org/schema/Geometry.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://geojson.org/schema/Geometry.json",
+    "title": "GeoJSON Geometry",
+    "oneOf": [
+      {
+        "title": "GeoJSON Point",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Point"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "number"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "title": "GeoJSON LineString",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "LineString"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "title": "GeoJSON Polygon",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Polygon"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "title": "GeoJSON MultiPoint",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MultiPoint"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "number"
+              }
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "title": "GeoJSON MultiLineString",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MultiLineString"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      {
+        "title": "GeoJSON MultiPolygon",
+        "type": "object",
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MultiPolygon"
+            ]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/common.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/commonjson",
+    "title": "STAC Common Metadata",
+    "type": "object",
+    "description": "This schema includes all common metadata fields.",
+    "allOf": [
+      {
+        "$ref": "basics.json"
+      },
+      {
+        "$ref": "bands.json"
+      },
+      {
+        "$ref": "datetime.json"
+      },
+      {
+        "$ref": "data-values.json"
+      },
+      {
+        "$ref": "instrument.json"
+      },
+      {
+        "$ref": "licensing.json"
+      },
+      {
+        "$ref": "provider.json"
+      }
+    ]
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/basics.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/basics.json",
+    "title": "Basic Descriptive Fields",
+    "type": "object",
+    "properties": {
+      "title": {
+        "title": "Title",
+        "description": "A human-readable title describing the entity.",
+        "type": "string"
+      },
+      "description": {
+        "title": "Description",
+        "description": "Detailed multi-line description to fully explain the entity.",
+        "type": "string",
+        "minLength": 1
+      },
+      "keywords": {
+        "title": "Keywords",
+        "description": "List of keywords describing the entity.",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "roles": {
+        "title": "Roles",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/bands.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/bands.json",
+    "title": "Bands Field",
+    "type": "object",
+    "properties": {
+      "bands": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "common.json"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/datetime.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/datetime.json",
+    "title": "Date and Time Fields",
+    "type": "object",
+    "dependencies": {
+      "start_datetime": {
+        "required": [
+          "end_datetime"
+        ]
+      },
+      "end_datetime": {
+        "required": [
+          "start_datetime"
+        ]
+      }
+    },
+    "properties": {
+      "datetime": {
+        "title": "Date and Time",
+        "description": "The searchable date/time of the data, in UTC (Formatted in RFC 3339) ",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date-time",
+        "pattern": "(\\+00:00|Z)$"
+      },
+      "start_datetime": {
+        "title": "Start Date and Time",
+        "description": "The searchable start date/time of the data, in UTC (Formatted in RFC 3339) ",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "(\\+00:00|Z)$"
+      },
+      "end_datetime": {
+        "title": "End Date and Time",
+        "description": "The searchable end date/time of the data, in UTC (Formatted in RFC 3339) ",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "(\\+00:00|Z)$"
+      },
+      "created": {
+        "title": "Creation Time",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "(\\+00:00|Z)$"
+      },
+      "updated": {
+        "title": "Last Update Time",
+        "type": "string",
+        "format": "date-time",
+        "pattern": "(\\+00:00|Z)$"
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/data-values.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/data-values.json#",
+    "title": "Fields related to data values",
+    "type": "object",
+    "properties": {
+      "data_type": {
+        "title": "Data type of the values",
+        "type": "string",
+        "enum": [
+          "int8",
+          "int16",
+          "int32",
+          "int64",
+          "uint8",
+          "uint16",
+          "uint32",
+          "uint64",
+          "float16",
+          "float32",
+          "float64",
+          "cint16",
+          "cint32",
+          "cfloat32",
+          "cfloat64",
+          "other"
+        ]
+      },
+      "nodata": {
+        "title": "No data value",
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "string",
+            "enum": [
+              "nan",
+              "inf",
+              "-inf"
+            ]
+          }
+        ]
+      },
+      "statistics": {
+        "title": "Statistics",
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "minimum": {
+            "title": "Minimum value of all the data values",
+            "type": "number"
+          },
+          "maximum": {
+            "title": "Maximum value of all the data values",
+            "type": "number"
+          },
+          "mean": {
+            "title": "Mean value of all the data values",
+            "type": "number"
+          },
+          "stddev": {
+            "title": "Standard deviation value of all the data values",
+            "type": "number"
+          },
+          "count": {
+            "title": "Total number of all data values",
+            "type": "integer",
+            "minimum": 0
+          },
+          "valid_percent": {
+            "title": "Percentage of valid (not nodata) values",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        }
+      },
+      "unit": {
+        "title": "Unit denomination of the data value",
+        "type": "string"
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/instrument.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/instrument.json",
+    "title": "Instrument Fields",
+    "type": "object",
+    "properties": {
+      "platform": {
+        "title": "Platform",
+        "type": "string"
+      },
+      "instruments": {
+        "title": "Instruments",
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "constellation": {
+        "title": "Constellation",
+        "type": "string"
+      },
+      "mission": {
+        "title": "Mission",
+        "type": "string"
+      },
+      "gsd": {
+        "title": "Ground Sample Distance",
+        "type": "number",
+        "exclusiveMinimum": 0
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/licensing.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/licensing.json",
+    "title": "Licensing Fields",
+    "type": "object",
+    "properties": {
+      "license": {
+        "type": "string",
+        "pattern": "^[\\w\\-\\.\\+]+$"
+      }
+    }
+  },
+  "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/provider.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.stacspec.org/v1.1.0/item-spec/json-schema/provider.json",
+    "title": "Provider Fields",
+    "type": "object",
+    "properties": {
+      "providers": {
+        "title": "Providers",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "title": "Organization name",
+              "type": "string",
+              "minLength": 1
+            },
+            "description": {
+              "title": "Organization description",
+              "type": "string"
+            },
+            "roles": {
+              "title": "Organization roles",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "producer",
+                  "licensor",
+                  "processor",
+                  "host"
+                ]
+              }
+            },
+            "url": {
+              "title": "Organization homepage",
+              "type": "string",
+              "format": "iri"
+            }
+          }
+        }
+      }
+    }
+  },
+  "https://stac-extensions.github.io/projection/v2.0.0/schema.json": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://stac-extensions.github.io/projection/v2.0.0/schema.json",
+    "title": "Projection Extension",
+    "description": "STAC Projection Extension for STAC Items.",
+    "$comment": "This schema succeeds if the proj: fields are not used at all, please keep this in mind.",
+    "oneOf": [
+      {
+        "$comment": "This is the schema for STAC Items.",
+        "allOf": [
+          {
+            "$ref": "#/definitions/stac_extensions"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "properties",
+              "assets"
+            ],
+            "properties": {
+              "type": {
+                "const": "Feature"
+              },
+              "properties": {
+                "$ref": "#/definitions/fields"
+              },
+              "assets": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/fields"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "$comment": "This is the schema for STAC Collections.",
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "const": "Collection"
+              },
+              "assets": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/fields"
+                }
+              },
+              "item_assets": {
+                "type": "object",
+                "additionalProperties": {
+                  "$ref": "#/definitions/fields"
+                }
+              }
+            }
+          },
+          {
+            "$ref": "#/definitions/stac_extensions"
+          }
+        ]
+      }
+    ],
+    "definitions": {
+      "stac_extensions": {
+        "type": "object",
+        "required": [
+          "stac_extensions"
+        ],
+        "properties": {
+          "stac_extensions": {
+            "type": "array",
+            "contains": {
+              "const": "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+            }
+          }
+        }
+      },
+      "fields": {
+        "type": "object",
+        "properties": {
+          "proj:code": {
+            "title": "Projection code",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "proj:wkt2": {
+            "title": "Coordinate Reference System in WKT2 format",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "proj:projjson": {
+            "title": "Coordinate Reference System in PROJJSON format",
+            "oneOf": [
+              {
+                "$ref": "https://proj.org/schemas/v0.7/projjson.schema.json"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "proj:geometry": {
+            "$ref": "https://geojson.org/schema/Geometry.json"
+          },
+          "proj:bbox": {
+            "title": "Extent",
+            "type": "array",
+            "oneOf": [
+              {
+                "minItems": 4,
+                "maxItems": 4
+              },
+              {
+                "minItems": 6,
+                "maxItems": 6
+              }
+            ],
+            "items": {
+              "type": "number"
+            }
+          },
+          "proj:centroid": {
+            "title": "Centroid",
+            "type": "object",
+            "required": [
+              "lat",
+              "lon"
+            ],
+            "properties": {
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              }
+            }
+          },
+          "proj:shape": {
+            "title": "Shape",
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "integer"
+            }
+          },
+          "proj:transform": {
+            "title": "Transform",
+            "type": "array",
+            "oneOf": [
+              {
+                "minItems": 6,
+                "maxItems": 6
+              },
+              {
+                "minItems": 9,
+                "maxItems": 9
+              }
+            ],
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "patternProperties": {
+          "^(?!proj:)": {}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "https://proj.org/schemas/v0.7/projjson.schema.json": {
+    "$id": "https://proj.org/schemas/v0.7/projjson.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Schema for PROJJSON (v0.7)",
+    "$comment": "This file exists both in data/ and in schemas/vXXX/. Keep both in sync. And if changing the value of $id, change PROJJSON_DEFAULT_VERSION accordingly in io.cpp",
+    "oneOf": [
+      {
+        "$ref": "#/definitions/crs"
+      },
+      {
+        "$ref": "#/definitions/datum"
+      },
+      {
+        "$ref": "#/definitions/datum_ensemble"
+      },
+      {
+        "$ref": "#/definitions/ellipsoid"
+      },
+      {
+        "$ref": "#/definitions/prime_meridian"
+      },
+      {
+        "$ref": "#/definitions/single_operation"
+      },
+      {
+        "$ref": "#/definitions/concatenated_operation"
+      },
+      {
+        "$ref": "#/definitions/coordinate_metadata"
+      }
+    ],
+    "definitions": {
+      "abridged_transformation": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "AbridgedTransformation"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_crs": {
+            "$ref": "#/definitions/crs",
+            "$comment": "Only present when the source_crs of the bound_crs does not match the source_crs of the AbridgedTransformation. No equivalent in WKT"
+          },
+          "method": {
+            "$ref": "#/definitions/method"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/parameter_value"
+            }
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name",
+          "method",
+          "parameters"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "axis": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Axis"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "abbreviation": {
+            "type": "string"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "north",
+              "northNorthEast",
+              "northEast",
+              "eastNorthEast",
+              "east",
+              "eastSouthEast",
+              "southEast",
+              "southSouthEast",
+              "south",
+              "southSouthWest",
+              "southWest",
+              "westSouthWest",
+              "west",
+              "westNorthWest",
+              "northWest",
+              "northNorthWest",
+              "up",
+              "down",
+              "geocentricX",
+              "geocentricY",
+              "geocentricZ",
+              "columnPositive",
+              "columnNegative",
+              "rowPositive",
+              "rowNegative",
+              "displayRight",
+              "displayLeft",
+              "displayUp",
+              "displayDown",
+              "forward",
+              "aft",
+              "port",
+              "starboard",
+              "clockwise",
+              "counterClockwise",
+              "towards",
+              "awayFrom",
+              "future",
+              "past",
+              "unspecified"
+            ]
+          },
+          "meridian": {
+            "$ref": "#/definitions/meridian"
+          },
+          "unit": {
+            "$ref": "#/definitions/unit"
+          },
+          "minimum_value": {
+            "type": "number"
+          },
+          "maximum_value": {
+            "type": "number"
+          },
+          "range_meaning": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "wraparound"
+            ]
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name",
+          "abbreviation",
+          "direction"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "bbox": {
+        "type": "object",
+        "properties": {
+          "east_longitude": {
+            "type": "number"
+          },
+          "west_longitude": {
+            "type": "number"
+          },
+          "south_latitude": {
+            "type": "number"
+          },
+          "north_latitude": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "east_longitude",
+          "west_longitude",
+          "south_latitude",
+          "north_latitude"
+        ],
+        "additionalProperties": false
+      },
+      "bound_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "BoundCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "target_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "transformation": {
+            "$ref": "#/definitions/abridged_transformation"
+          },
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "source_crs",
+          "target_crs",
+          "transformation"
+        ],
+        "additionalProperties": false
+      },
+      "compound_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CompoundCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/crs"
+            }
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "components"
+        ],
+        "additionalProperties": false
+      },
+      "concatenated_operation": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ConcatenatedOperation"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "target_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/single_operation"
+            }
+          },
+          "accuracy": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "source_crs",
+          "target_crs",
+          "steps"
+        ],
+        "additionalProperties": false
+      },
+      "conversion": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Conversion"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "method": {
+            "$ref": "#/definitions/method"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/parameter_value"
+            }
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name",
+          "method"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "coordinate_metadata": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "CoordinateMetadata"
+            ]
+          },
+          "crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "coordinateEpoch": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "crs"
+        ],
+        "additionalProperties": false
+      },
+      "coordinate_system": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "CoordinateSystem"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "subtype": {
+            "type": "string",
+            "enum": [
+              "Cartesian",
+              "spherical",
+              "ellipsoidal",
+              "vertical",
+              "ordinal",
+              "parametric",
+              "affine",
+              "TemporalDateTime",
+              "TemporalCount",
+              "TemporalMeasure"
+            ]
+          },
+          "axis": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/axis"
+            }
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "subtype",
+          "axis"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "crs": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/bound_crs"
+          },
+          {
+            "$ref": "#/definitions/compound_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_engineering_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_geodetic_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_parametric_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_projected_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_temporal_crs"
+          },
+          {
+            "$ref": "#/definitions/derived_vertical_crs"
+          },
+          {
+            "$ref": "#/definitions/engineering_crs"
+          },
+          {
+            "$ref": "#/definitions/geodetic_crs"
+          },
+          {
+            "$ref": "#/definitions/parametric_crs"
+          },
+          {
+            "$ref": "#/definitions/projected_crs"
+          },
+          {
+            "$ref": "#/definitions/temporal_crs"
+          },
+          {
+            "$ref": "#/definitions/vertical_crs"
+          }
+        ]
+      },
+      "datum": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/geodetic_reference_frame"
+          },
+          {
+            "$ref": "#/definitions/vertical_reference_frame"
+          },
+          {
+            "$ref": "#/definitions/dynamic_geodetic_reference_frame"
+          },
+          {
+            "$ref": "#/definitions/dynamic_vertical_reference_frame"
+          },
+          {
+            "$ref": "#/definitions/temporal_datum"
+          },
+          {
+            "$ref": "#/definitions/parametric_datum"
+          },
+          {
+            "$ref": "#/definitions/engineering_datum"
+          }
+        ]
+      },
+      "datum_ensemble": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "DatumEnsemble"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "id": {
+                  "$ref": "#/definitions/id"
+                },
+                "ids": {
+                  "$ref": "#/definitions/ids"
+                }
+              },
+              "required": [
+                "name"
+              ],
+              "allOf": [
+                {
+                  "$ref": "#/definitions/id_ids_mutually_exclusive"
+                }
+              ],
+              "additionalProperties": false
+            }
+          },
+          "ellipsoid": {
+            "$ref": "#/definitions/ellipsoid"
+          },
+          "accuracy": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name",
+          "members",
+          "accuracy"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "deformation_model": {
+        "description": "Association to a PointMotionOperation",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "derived_engineering_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedEngineeringCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/engineering_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "derived_geodetic_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedGeodeticCRS",
+              "DerivedGeographicCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/geodetic_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "derived_parametric_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedParametricCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/parametric_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "derived_projected_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedProjectedCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/projected_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "derived_temporal_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedTemporalCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/temporal_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "derived_vertical_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DerivedVerticalCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/vertical_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "dynamic_geodetic_reference_frame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DynamicGeodeticReferenceFrame"
+            ]
+          },
+          "name": {},
+          "anchor": {},
+          "anchor_epoch": {},
+          "ellipsoid": {},
+          "prime_meridian": {},
+          "frame_reference_epoch": {
+            "type": "number"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "ellipsoid",
+          "frame_reference_epoch"
+        ],
+        "additionalProperties": false
+      },
+      "dynamic_vertical_reference_frame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "DynamicVerticalReferenceFrame"
+            ]
+          },
+          "name": {},
+          "anchor": {},
+          "anchor_epoch": {},
+          "frame_reference_epoch": {
+            "type": "number"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "frame_reference_epoch"
+        ],
+        "additionalProperties": false
+      },
+      "ellipsoid": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "$schema": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Ellipsoid"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "semi_major_axis": {
+                "$ref": "#/definitions/value_in_metre_or_value_and_unit"
+              },
+              "semi_minor_axis": {
+                "$ref": "#/definitions/value_in_metre_or_value_and_unit"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "required": [
+              "name",
+              "semi_major_axis",
+              "semi_minor_axis"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "$schema": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Ellipsoid"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "semi_major_axis": {
+                "$ref": "#/definitions/value_in_metre_or_value_and_unit"
+              },
+              "inverse_flattening": {
+                "type": "number"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "required": [
+              "name",
+              "semi_major_axis",
+              "inverse_flattening"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "$schema": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "Ellipsoid"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "radius": {
+                "$ref": "#/definitions/value_in_metre_or_value_and_unit"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "required": [
+              "name",
+              "radius"
+            ],
+            "additionalProperties": false
+          }
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ]
+      },
+      "engineering_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "EngineeringCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "datum": {
+            "$ref": "#/definitions/engineering_datum"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "datum"
+        ],
+        "additionalProperties": false
+      },
+      "engineering_datum": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "EngineeringDatum"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "geodetic_crs": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "GeodeticCRS",
+              "GeographicCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "datum": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/geodetic_reference_frame"
+              },
+              {
+                "$ref": "#/definitions/dynamic_geodetic_reference_frame"
+              }
+            ]
+          },
+          "datum_ensemble": {
+            "$ref": "#/definitions/datum_ensemble"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "deformation_models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/deformation_model"
+            }
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name"
+        ],
+        "description": "One and only one of datum and datum_ensemble must be provided",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          },
+          {
+            "$ref": "#/definitions/one_and_only_one_of_datum_or_datum_ensemble"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "geodetic_reference_frame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "GeodeticReferenceFrame"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "anchor_epoch": {
+            "type": "number"
+          },
+          "ellipsoid": {
+            "$ref": "#/definitions/ellipsoid"
+          },
+          "prime_meridian": {
+            "$ref": "#/definitions/prime_meridian"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "ellipsoid"
+        ],
+        "additionalProperties": false
+      },
+      "geoid_model": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "interpolation_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "id": {
+        "type": "object",
+        "properties": {
+          "authority": {
+            "type": "string"
+          },
+          "code": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "version": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "authority_citation": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authority",
+          "code"
+        ],
+        "additionalProperties": false
+      },
+      "ids": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/id"
+        }
+      },
+      "method": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "OperationMethod"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "id_ids_mutually_exclusive": {
+        "not": {
+          "type": "object",
+          "required": [
+            "id",
+            "ids"
+          ]
+        }
+      },
+      "one_and_only_one_of_datum_or_datum_ensemble": {
+        "allOf": [
+          {
+            "not": {
+              "type": "object",
+              "required": [
+                "datum",
+                "datum_ensemble"
+              ]
+            }
+          },
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "datum"
+                ]
+              },
+              {
+                "type": "object",
+                "required": [
+                  "datum_ensemble"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "meridian": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Meridian"
+            ]
+          },
+          "longitude": {
+            "$ref": "#/definitions/value_in_degree_or_value_and_unit"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "longitude"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "object_usage": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "$schema": {
+                "type": "string"
+              },
+              "scope": {
+                "type": "string"
+              },
+              "area": {
+                "type": "string"
+              },
+              "bbox": {
+                "$ref": "#/definitions/bbox"
+              },
+              "vertical_extent": {
+                "$ref": "#/definitions/vertical_extent"
+              },
+              "temporal_extent": {
+                "$ref": "#/definitions/temporal_extent"
+              },
+              "remarks": {
+                "type": "string"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "allOf": [
+              {
+                "$ref": "#/definitions/id_ids_mutually_exclusive"
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "$schema": {
+                "type": "string"
+              },
+              "usages": {
+                "$ref": "#/definitions/usages"
+              },
+              "remarks": {
+                "type": "string"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "allOf": [
+              {
+                "$ref": "#/definitions/id_ids_mutually_exclusive"
+              }
+            ]
+          }
+        ]
+      },
+      "parameter_value": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "ParameterValue"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "unit": {
+            "$ref": "#/definitions/unit"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "parametric_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ParametricCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "datum": {
+            "$ref": "#/definitions/parametric_datum"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "datum"
+        ],
+        "additionalProperties": false
+      },
+      "parametric_datum": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ParametricDatum"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "point_motion_operation": {
+        "$comment": "Not implemented in PROJ (at least as of PROJ 9.1)",
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "PointMotionOperation"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "method": {
+            "$ref": "#/definitions/method"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/parameter_value"
+            }
+          },
+          "accuracy": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "source_crs",
+          "method",
+          "parameters"
+        ],
+        "additionalProperties": false
+      },
+      "prime_meridian": {
+        "type": "object",
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PrimeMeridian"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "longitude": {
+            "$ref": "#/definitions/value_in_degree_or_value_and_unit"
+          },
+          "id": {
+            "$ref": "#/definitions/id"
+          },
+          "ids": {
+            "$ref": "#/definitions/ids"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/definitions/id_ids_mutually_exclusive"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "single_operation": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/conversion"
+          },
+          {
+            "$ref": "#/definitions/transformation"
+          },
+          {
+            "$ref": "#/definitions/point_motion_operation"
+          }
+        ]
+      },
+      "projected_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ProjectedCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "base_crs": {
+            "$ref": "#/definitions/geodetic_crs"
+          },
+          "conversion": {
+            "$ref": "#/definitions/conversion"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "base_crs",
+          "conversion",
+          "coordinate_system"
+        ],
+        "additionalProperties": false
+      },
+      "temporal_crs": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TemporalCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "datum": {
+            "$ref": "#/definitions/temporal_datum"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "datum"
+        ],
+        "additionalProperties": false
+      },
+      "temporal_datum": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TemporalDatum"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "calendar": {
+            "type": "string"
+          },
+          "time_origin": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "calendar"
+        ],
+        "additionalProperties": false
+      },
+      "temporal_extent": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      },
+      "transformation": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Transformation"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "source_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "target_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "interpolation_crs": {
+            "$ref": "#/definitions/crs"
+          },
+          "method": {
+            "$ref": "#/definitions/method"
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/parameter_value"
+            }
+          },
+          "accuracy": {
+            "type": "string"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name",
+          "source_crs",
+          "target_crs",
+          "method",
+          "parameters"
+        ],
+        "additionalProperties": false
+      },
+      "unit": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "metre",
+              "degree",
+              "unity"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "LinearUnit",
+                  "AngularUnit",
+                  "ScaleUnit",
+                  "TimeUnit",
+                  "ParametricUnit",
+                  "Unit"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "conversion_factor": {
+                "type": "number"
+              },
+              "id": {
+                "$ref": "#/definitions/id"
+              },
+              "ids": {
+                "$ref": "#/definitions/ids"
+              }
+            },
+            "required": [
+              "type",
+              "name"
+            ],
+            "allOf": [
+              {
+                "$ref": "#/definitions/id_ids_mutually_exclusive"
+              }
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "usages": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "string"
+            },
+            "area": {
+              "type": "string"
+            },
+            "bbox": {
+              "$ref": "#/definitions/bbox"
+            },
+            "vertical_extent": {
+              "$ref": "#/definitions/vertical_extent"
+            },
+            "temporal_extent": {
+              "$ref": "#/definitions/temporal_extent"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "value_and_unit": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "$ref": "#/definitions/unit"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ],
+        "additionalProperties": false
+      },
+      "value_in_degree_or_value_and_unit": {
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/definitions/value_and_unit"
+          }
+        ]
+      },
+      "value_in_metre_or_value_and_unit": {
+        "oneOf": [
+          {
+            "type": "number"
+          },
+          {
+            "$ref": "#/definitions/value_and_unit"
+          }
+        ]
+      },
+      "vertical_crs": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "VerticalCRS"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "datum": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/vertical_reference_frame"
+              },
+              {
+                "$ref": "#/definitions/dynamic_vertical_reference_frame"
+              }
+            ]
+          },
+          "datum_ensemble": {
+            "$ref": "#/definitions/datum_ensemble"
+          },
+          "coordinate_system": {
+            "$ref": "#/definitions/coordinate_system"
+          },
+          "geoid_model": {
+            "$ref": "#/definitions/geoid_model"
+          },
+          "geoid_models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/geoid_model"
+            }
+          },
+          "deformation_models": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/deformation_model"
+            }
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name"
+        ],
+        "description": "One and only one of datum and datum_ensemble must be provided",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          },
+          {
+            "$ref": "#/definitions/one_and_only_one_of_datum_or_datum_ensemble"
+          },
+          {
+            "not": {
+              "type": "object",
+              "required": [
+                "geoid_model",
+                "geoid_models"
+              ]
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "vertical_extent": {
+        "type": "object",
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number"
+          },
+          "unit": {
+            "$ref": "#/definitions/unit"
+          }
+        },
+        "required": [
+          "minimum",
+          "maximum"
+        ],
+        "additionalProperties": false
+      },
+      "vertical_reference_frame": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/definitions/object_usage"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "VerticalReferenceFrame"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "anchor": {
+            "type": "string"
+          },
+          "anchor_epoch": {
+            "type": "number"
+          },
+          "$schema": {},
+          "scope": {},
+          "area": {},
+          "bbox": {},
+          "vertical_extent": {},
+          "temporal_extent": {},
+          "usages": {},
+          "remarks": {},
+          "id": {},
+          "ids": {}
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 node_modules/
 dist/
+debug.log
+__pycache__/
 test-results/
 playwright-report/
 .local/

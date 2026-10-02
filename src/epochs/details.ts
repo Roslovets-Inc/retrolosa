@@ -2,23 +2,8 @@ import {
   fitPoints as stateMajorFitPoints,
   independentChecks as stateMajorIndependentChecks,
 } from "../../data/etat-major-validation.json";
-import {
-  fitPointCount as jourdanFitPointCount,
-  checkPoints as jourdanCheckPoints,
-} from "../jourdan-1860.json";
-import {
-  fitPointCount as laffontFitPointCount,
-  checkPoints as laffontCheckPoints,
-} from "../laffont-1904.json";
-import {
-  checkPoints as boroughCheckPoints,
-  fragments as medievalFragments,
-} from "../openedition-12c.json";
-import { checkPoints as medievalCheckPoints } from "../openedition-13c.json";
-import { checkPoints as parcelsCheckPoints } from "../openedition-1550.json";
-import { checkPoints as antiquityCheckPoints } from "../openedition-antiquite.json";
-import { checkPoints as sagetCheckPoints } from "../saget-1777.json";
 import type { EpochId } from "./catalog";
+import { RASTER_ITEMS } from "./raster-items";
 import type { EpochDetails } from "./types";
 
 function createEpochDetails(translate: Translate) {
@@ -50,8 +35,8 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.theSourceIndicatesLateAntiquityWithoutAPreciseYear",
-          `La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans les liens et la frise sert uniquement au classement. La légende originale est conservée. Le calage affine utilise trois églises de référence ; le contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${antiquityCheckPoints[0].errorMetres} m, sans garantir la précision ailleurs.`,
-          { v0: antiquityCheckPoints[0].errorMetres },
+          `La source indique la fin de l’Antiquité, sans année précise. Le repère 450 dans les liens et la frise sert uniquement au classement. La légende originale est conservée. Le calage affine utilise trois églises de référence ; le contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${RASTER_ITEMS["450"].properties["retrolosa:check_points"][0].errorMetres} m, sans garantir la précision ailleurs.`,
+          { v0: RASTER_ITEMS["450"].properties["retrolosa:check_points"][0].errorMetres },
         ),
       ],
       links: [
@@ -80,15 +65,17 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.affineAlignmentTransferredFromThe13thCenturyReconstructionThen",
-          `Calage affine transféré depuis la reconstruction du XIIIe siècle, puis corrigé sur la croisée de Saint-Sernin dans le plan IGN actuel. Le contrôle de Saint-Pierre-des-Cuisines sur IGN donne ${boroughCheckPoints[0].errorMetres} m ; les portes de la Porterie et de Matabiau donnent ${boroughCheckPoints
+          `Calage affine transféré depuis la reconstruction du XIIIe siècle, puis corrigé sur la croisée de Saint-Sernin dans le plan IGN actuel. Le contrôle de Saint-Pierre-des-Cuisines sur IGN donne ${RASTER_ITEMS["1195"].properties["retrolosa:check_points"][0].errorMetres} m ; les portes de la Porterie et de Matabiau donnent ${RASTER_ITEMS[
+            "1195"
+          ].properties["retrolosa:check_points"]
             .slice(1)
             .map((point) => point.errorMetres)
             .join(
               translate("details.and", " et "),
             )} m de désaccord avec le dessin du XIIIe siècle. Ces contrôles ne garantissent pas la précision historique ou la concordance de toutes les rues. Le dessin complet et sa légende sont conservés.`,
           {
-            v0: boroughCheckPoints[0].errorMetres,
-            v1: boroughCheckPoints
+            v0: RASTER_ITEMS["1195"].properties["retrolosa:check_points"][0].errorMetres,
+            v1: RASTER_ITEMS["1195"].properties["retrolosa:check_points"]
               .slice(1)
               .map((point) => point.errorMetres)
               .join(" et "),
@@ -96,9 +83,9 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.saintEtienneOnlyRedRomanesqueFeaturesYellowCanonsHouses",
-          `Saint-Étienne : seuls les éléments romans rouges, les maisons canoniales jaunes et le palais épiscopal violet sont retenus dans les zones identifiées. L’extension jaune pâle du XIIIe siècle et les éléments gris postérieurs sont exclus. Deux contrôles sur les angles de la cathédrale actuelle donnent ${medievalFragments[1].checkPoints.map((point) => point.errorMetres).join(translate("details.and", " et "))} m ; ils ne valident pas tout le quartier.`,
+          `Saint-Étienne : seuls les éléments romans rouges, les maisons canoniales jaunes et le palais épiscopal violet sont retenus dans les zones identifiées. L’extension jaune pâle du XIIIe siècle et les éléments gris postérieurs sont exclus. Deux contrôles sur les angles de la cathédrale actuelle donnent ${RASTER_ITEMS["1195"].properties["retrolosa:fragments"][1].checkPoints.map((point) => point.errorMetres).join(translate("details.and", " et "))} m ; ils ne valident pas tout le quartier.`,
           {
-            v0: medievalFragments[1].checkPoints
+            v0: RASTER_ITEMS["1195"].properties["retrolosa:fragments"][1].checkPoints
               .map((point) => point.errorMetres)
               .join(translate("details.and", " et ")),
           },
@@ -109,9 +96,9 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.saintPierreDesCuisinesFigure3SupplementsTheBorough",
-          `Saint-Pierre-des-Cuisines : la figure 3 complète le bourg avec les phases rouges vers 1100 et 1150 et la phase vert clair vers 1180. Le jaune de 1050, le bleu-vert du bas Moyen Âge et les éléments gris postérieurs sont exclus. Les phases sont présentées ensemble pour l’analyse, sans affirmer que tous les murs coexistaient. Deux angles de la nef non utilisés pour le calage donnent ${medievalFragments[3].checkPoints.map((point) => point.errorMetres).join(translate("details.and", " et "))} m d’écart avec IGN. Ces contrôles locaux ne garantissent pas la précision ailleurs.`,
+          `Saint-Pierre-des-Cuisines : la figure 3 complète le bourg avec les phases rouges vers 1100 et 1150 et la phase vert clair vers 1180. Le jaune de 1050, le bleu-vert du bas Moyen Âge et les éléments gris postérieurs sont exclus. Les phases sont présentées ensemble pour l’analyse, sans affirmer que tous les murs coexistaient. Deux angles de la nef non utilisés pour le calage donnent ${RASTER_ITEMS["1195"].properties["retrolosa:fragments"][3].checkPoints.map((point) => point.errorMetres).join(translate("details.and", " et "))} m d’écart avec IGN. Ces contrôles locaux ne garantissent pas la précision ailleurs.`,
           {
-            v0: medievalFragments[3].checkPoints
+            v0: RASTER_ITEMS["1195"].properties["retrolosa:fragments"][3].checkPoints
               .map((point) => point.errorMetres)
               .join(translate("details.and", " et ")),
           },
@@ -160,8 +147,8 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.affineAlignmentOnSaintSerninSaintEtienneAndLa",
-          `Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${medievalCheckPoints[0].errorMetres} m, sans garantir la précision ailleurs. La légende originale est conservée sur la carte. Le repère 1250 dans les liens et la frise sert au classement ; la source date le plan du XIIIe siècle, sans année précise.`,
-          { v0: medievalCheckPoints[0].errorMetres },
+          `Calage affine sur Saint-Sernin, Saint-Étienne et la Dalbade. Un contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${RASTER_ITEMS["1250"].properties["retrolosa:check_points"][0].errorMetres} m, sans garantir la précision ailleurs. La légende originale est conservée sur la carte. Le repère 1250 dans les liens et la frise sert au classement ; la source date le plan du XIIIe siècle, sans année précise.`,
+          { v0: RASTER_ITEMS["1250"].properties["retrolosa:check_points"][0].errorMetres },
         ),
       ],
       links: [
@@ -183,8 +170,8 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.1550DatesTheReconstructedCadastreUsedForAnalysisStreets",
-          `1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${parcelsCheckPoints[0].errorMetres} m, sans garantir la précision ailleurs.`,
-          { v0: parcelsCheckPoints[0].errorMetres },
+          `1550 date le cadastre restitué qui sert à l’analyse. Les rues et édifices du fond représentent notamment les XIIe et XIIIe siècles : ce n’est pas un état complet de Toulouse en 1550. Le calage utilise trois églises ; le contrôle indépendant à Saint-Pierre-des-Cuisines donne un écart d’environ ${RASTER_ITEMS["1550"].properties["retrolosa:check_points"][0].errorMetres} m, sans garantir la précision ailleurs.`,
+          { v0: RASTER_ITEMS["1550"].properties["retrolosa:check_points"][0].errorMetres },
         ),
       ],
       links: [
@@ -240,9 +227,9 @@ function createEpochDetails(translate: Translate) {
         ),
         translate(
           "details.theCompletePlanPreservesItsTablesAndLegendManual",
-          `Le plan complet conserve ses tables et sa légende. Calage affine manuel sur Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles distincts donnent des écarts de ${sagetCheckPoints.map((point) => point.errorMetres).join(translate("details.and", " et "))} m. Ces repères ne garantissent pas la précision ailleurs ; la correspondance des rues reste approximative, surtout aux bords.`,
+          `Le plan complet conserve ses tables et sa légende. Calage affine manuel sur Saint-Sernin, Saint-Étienne et la rive droite du Pont Neuf. Deux contrôles distincts donnent des écarts de ${RASTER_ITEMS["1777"].properties["retrolosa:check_points"].map((point) => point.errorMetres).join(translate("details.and", " et "))} m. Ces repères ne garantissent pas la précision ailleurs ; la correspondance des rues reste approximative, surtout aux bords.`,
           {
-            v0: sagetCheckPoints
+            v0: RASTER_ITEMS["1777"].properties["retrolosa:check_points"]
               .map((point) => point.errorMetres)
               .join(translate("details.and", " et ")),
           },
@@ -300,7 +287,10 @@ function createEpochDetails(translate: Translate) {
           "details.thePlanShowsTheRailwaySquaresAndSuburbsIt",
           "Le plan montre le chemin de fer, les places et les faubourgs. Il comprend des changements réalisés et des alignements officiellement projetés, à distinguer avec la légende. Les cartes annexes et les vues de monuments sont conservées.",
         ),
-        planAlignment(jourdanFitPointCount, jourdanCheckPoints),
+        planAlignment(
+          RASTER_ITEMS["1860"].properties["retrolosa:fit_point_count"],
+          RASTER_ITEMS["1860"].properties["retrolosa:check_points"],
+        ),
       ],
       links: [
         {
@@ -333,7 +323,10 @@ function createEpochDetails(translate: Translate) {
           "details.thePlanCoversTheCentreAndSuburbsIncludingMinimes",
           "Le plan couvre le centre et les faubourgs, notamment les Minimes, Bonnefoy, Saint-Cyprien et Saint-Michel. Le pont des Amidonniers y figure comme projet. Les numéros de grille, le titre et les marges sont conservés.",
         ),
-        planAlignment(laffontFitPointCount, laffontCheckPoints),
+        planAlignment(
+          RASTER_ITEMS["1904"].properties["retrolosa:fit_point_count"],
+          RASTER_ITEMS["1904"].properties["retrolosa:check_points"],
+        ),
       ],
       links: [
         {

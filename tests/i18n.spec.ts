@@ -181,7 +181,7 @@ test("mobile selector fits and works with blocked storage", async ({ page }) => 
 test("active map failures and location markers update when the language changes", async ({
   page,
 }) => {
-  await page.route("**/openedition-13c/map.webp*", (route) => route.fulfill({ status: 503 }));
+  await page.route("**/openedition-13c/display.webp*", (route) => route.fulfill({ status: 503 }));
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "geolocation", {
       value: {

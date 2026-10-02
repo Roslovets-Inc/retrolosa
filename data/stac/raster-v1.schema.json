@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Retrolosa raster profile v1; validate alongside STAC and Projection",
+  "type": "object",
+  "required": ["properties", "assets"],
+  "properties": {
+    "properties": {
+      "type": "object",
+      "required": ["title", "retrolosa:raster_contract", "retrolosa:revision", "retrolosa:raster_sha256", "retrolosa:date_precision"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "retrolosa:raster_contract": {"const": 1},
+        "retrolosa:revision": {"type": "string", "minLength": 1},
+        "retrolosa:raster_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "retrolosa:date_precision": {"enum": ["day", "year", "approximate-year", "interval"]},
+        "retrolosa:fit_point_count": {"type": "integer", "minimum": 0},
+        "retrolosa:check_points": {
+          "type": "array", "items": {
+            "type": "object", "required": ["name", "errorMetres"],
+            "properties": {"name": {"type": "string"}, "errorMetres": {"type": "number", "minimum": 0}}
+          }
+        }
+      }
+    },
+    "assets": {
+      "type": "object", "required": ["display"],
+      "properties": {
+        "display": {
+          "type": "object",
+          "required": ["href", "type", "roles", "proj:code", "proj:shape", "proj:transform"],
+          "properties": {
+            "href": {"type": "string", "pattern": "^(?!/)(?![a-zA-Z][a-zA-Z0-9+.-]*:)[^?#\\\\]+$"},
+            "type": {"const": "image/webp"},
+            "roles": {"type": "array", "contains": {"const": "visual"}},
+            "proj:code": {"const": "EPSG:3857"},
+            "proj:shape": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "integer", "minimum": 1}},
+            "proj:transform": {
+              "type": "array", "minItems": 6, "maxItems": 6,
+              "items": [{"type": "number", "exclusiveMinimum": 0}, {"const": 0}, {"type": "number"}, {"const": 0}, {"type": "number", "exclusiveMaximum": 0}, {"type": "number"}]
+            }
+          }
+        }
+      }
+    }
+  }
+}

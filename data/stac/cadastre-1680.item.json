@@ -1,0 +1,82 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "cadastre-1680",
+  "properties": {
+    "title": "Cadastre 1680 overview",
+    "datetime": null,
+    "start_datetime": "1680-01-01T00:00:00Z",
+    "end_datetime": "1680-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Cadastre 1680 overview",
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "1287eb951e282a514e045b7dbb561db1f7497fe78bb6069a376e12f63a89e156"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://tolosa1680.makina-corpus.com/",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.417236328125,
+    43.58039085560785,
+    1.4721679687499998,
+    43.62017061618989
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.417236328125,
+          43.58039085560785
+        ],
+        [
+          1.4721679687499998,
+          43.58039085560785
+        ],
+        [
+          1.4721679687499998,
+          43.62017061618989
+        ],
+        [
+          1.417236328125,
+          43.62017061618989
+        ],
+        [
+          1.417236328125,
+          43.58039085560785
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "map.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        1280,
+        1280
+      ],
+      "proj:transform": [
+        4.777314267823499,
+        0.0,
+        157766.02638060378,
+        0.0,
+        -4.777314267821202,
+        5406849.632780226
+      ]
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "openedition-antiquite",
+  "properties": {
+    "title": "Late Antiquity reconstruction",
+    "datetime": null,
+    "start_datetime": "0401-01-01T00:00:00Z",
+    "end_datetime": "0500-12-31T23:59:59Z",
+    "retrolosa:date_precision": "interval",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+    "retrolosa:check_points": [
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 4.4
+      }
+    ],
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "92c4077b94c3f771cbd91e54e0d559f6bd2e5841170f20a226db55adf3102799"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://books.openedition.org/psorbonne/3296",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.4303810762055773,
+    43.58926042155137,
+    1.454607184703282,
+    43.61246599196031
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.4303810762055773,
+          43.58926042155137
+        ],
+        [
+          1.454607184703282,
+          43.58926042155137
+        ],
+        [
+          1.454607184703282,
+          43.61246599196031
+        ],
+        [
+          1.4303810762055773,
+          43.61246599196031
+        ],
+        [
+          1.4303810762055773,
+          43.58926042155137
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "display.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        2746,
+        2076
+      ],
+      "proj:transform": [
+        1.299054943095899,
+        0.0,
+        159229.2930435395,
+        0.0,
+        -1.299054943095899,
+        5405664.958797128
+      ]
+    }
+  }
+}

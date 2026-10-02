@@ -1,0 +1,154 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "openedition-12c",
+  "properties": {
+    "title": "Twelfth-century reconstruction",
+    "datetime": null,
+    "start_datetime": "1101-01-01T00:00:00Z",
+    "end_datetime": "1200-12-31T23:59:59Z",
+    "retrolosa:date_precision": "interval",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transfer through figure 6, translated to the corrected Saint-Sernin crossing on IGN. Withheld gates check inter-diagram agreement only.",
+    "retrolosa:check_points": [
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 15.9
+      },
+      {
+        "name": "La Porterie gate",
+        "errorMetres": 19.1
+      },
+      {
+        "name": "Matabiau gate",
+        "errorMetres": 19.8
+      }
+    ],
+    "retrolosa:fragments": [
+      {
+        "id": "saint-sernin",
+        "figure": 9,
+        "checkPoints": [
+          {
+            "name": "Saint-Pierre-des-Cuisines footprint",
+            "errorMetres": 15.9
+          },
+          {
+            "name": "La Porterie gate",
+            "errorMetres": 19.1
+          },
+          {
+            "name": "Matabiau gate",
+            "errorMetres": 19.8
+          }
+        ]
+      },
+      {
+        "id": "saint-etienne",
+        "figure": 4,
+        "checkPoints": [
+          {
+            "name": "Cathedral southwest nave corner",
+            "errorMetres": 4.9
+          },
+          {
+            "name": "Cathedral north choir corner",
+            "errorMetres": 7.8
+          }
+        ],
+        "method": "Similarity fit to two ends of the surviving cathedral; two separate cathedral corner checks on IGN Plan v2. Checks do not validate the complete historical quarter."
+      },
+      {
+        "id": "narbonnais",
+        "figure": 11,
+        "checkPoints": [],
+        "method": "Approximate placement from the figure 6 castle symbol, north arrow and printed 50-metre scale. No independent survey check; symbol centre does not establish an archaeological footprint.",
+        "approximate": true
+      },
+      {
+        "id": "saint-pierre",
+        "figure": 3,
+        "checkPoints": [
+          {
+            "name": "Northwest nave corner",
+            "errorMetres": 3.8
+          },
+          {
+            "name": "Southwest nave corner",
+            "errorMetres": 7.0
+          }
+        ],
+        "method": "Similarity fit to the surviving church's west facade midpoint and eastern main apse end on IGN Plan v2. Two withheld nave corners; manual low-resolution annotations limit accuracy.",
+        "multiphase": true
+      }
+    ],
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "79658e332f04702d844b270aa3680bfcec7bd296c98c7036322a5acb4ca985c0"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://books.openedition.org/psorbonne/3296",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.434059143066406,
+    43.59238970944836,
+    1.4524054527282715,
+    43.61179729776887
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.434059143066406,
+          43.59238970944836
+        ],
+        [
+          1.4524054527282715,
+          43.59238970944836
+        ],
+        [
+          1.4524054527282715,
+          43.61179729776887
+        ],
+        [
+          1.434059143066406,
+          43.61179729776887
+        ],
+        [
+          1.434059143066406,
+          43.59238970944836
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "map.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        4996,
+        3420
+      ],
+      "proj:transform": [
+        0.5971642834779449,
+        0.0,
+        159638.73357359058,
+        0.0,
+        -0.5971642834782374,
+        5405562.14658505
+      ]
+    }
+  }
+}

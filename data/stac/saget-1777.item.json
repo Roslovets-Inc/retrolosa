@@ -1,0 +1,92 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "saget-1777",
+  "properties": {
+    "title": "Plan de Saget, 1777",
+    "datetime": null,
+    "start_datetime": "1777-01-01T00:00:00Z",
+    "end_datetime": "1777-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Affine transform in Web Mercator from three manually annotated landmarks. Two independent checkpoints; not survey-grade. Entire original retained, including tables and margins.",
+    "retrolosa:check_points": [
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 36.2
+      },
+      {
+        "name": "Pont Neuf left-bank abutment",
+        "errorMetres": 58.8
+      }
+    ],
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "996dd83462c0d42bf2903504b34ebc5b286595864a9a5037183ca1c6ac8650a5"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://www.flickr.com/photos/archives-toulouse/25111159875/",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.3808140526733155,
+    43.558122987172574,
+    1.4858186202571002,
+    43.636099724530155
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.3808140526733155,
+          43.558122987172574
+        ],
+        [
+          1.4858186202571002,
+          43.558122987172574
+        ],
+        [
+          1.4858186202571002,
+          43.636099724530155
+        ],
+        [
+          1.3808140526733155,
+          43.636099724530155
+        ],
+        [
+          1.3808140526733155,
+          43.558122987172574
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "display.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        4965,
+        4842
+      ],
+      "proj:transform": [
+        2.4140964465912425,
+        0.0,
+        153711.5172237899,
+        0.0,
+        -2.4140964465912425,
+        5409299.396625351
+      ]
+    }
+  }
+}

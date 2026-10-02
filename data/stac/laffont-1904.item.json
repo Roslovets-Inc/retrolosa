@@ -1,0 +1,145 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "laffont-1904",
+  "properties": {
+    "title": "Plan de Laffont, 1904",
+    "datetime": null,
+    "start_datetime": "1904-01-01T00:00:00Z",
+    "end_datetime": "1904-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Retained least-squares affine sheet frame with dense street anchors and a regularized inverse thin-plate spline. Fixed boundaries and fifteen withheld checks; manual annotations, not a survey.",
+    "retrolosa:check_points": [
+      {
+        "name": "Notre-Dame du Taur footprint",
+        "errorMetres": 24.8
+      },
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 7.8
+      },
+      {
+        "name": "Notre-Dame de la Dalbade nave footprint",
+        "errorMetres": 38.1
+      },
+      {
+        "name": "Place du Capitole centre",
+        "errorMetres": 6.8
+      },
+      {
+        "name": "Place Wilson centre",
+        "errorMetres": 12.5
+      },
+      {
+        "name": "Grand Rond Paul-Sabatier junction",
+        "errorMetres": 15.6
+      },
+      {
+        "name": "Filatiers / Polinaires axis",
+        "errorMetres": 25.6
+      },
+      {
+        "name": "Valade / De-la-Bastide axis",
+        "errorMetres": 11.8
+      },
+      {
+        "name": "Dalbade / Pont-de-Tounis axis",
+        "errorMetres": 4.3
+      },
+      {
+        "name": "Saint-Remesy / Pretres axis",
+        "errorMetres": 2.0
+      },
+      {
+        "name": "Grand Rond Jules-Guesde junction",
+        "errorMetres": 21.0
+      },
+      {
+        "name": "Donne / Brasserie axis",
+        "errorMetres": 18.9
+      },
+      {
+        "name": "Taur / Place-Saint-Sernin axis",
+        "errorMetres": 8.3
+      },
+      {
+        "name": "Laque / Tour-du-Sac axis",
+        "errorMetres": 37.7
+      },
+      {
+        "name": "Pont-Saint-Pierre / Reclusane axis",
+        "errorMetres": 35.8
+      }
+    ],
+    "retrolosa:fit_point_count": 37,
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "9df0c8d45c19b71fe5ae525140f6231c37c33a9a3b3fc75a20d436021feca5eb"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://archives.toulouse.fr/plans-anciens/#plan-laffont",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.4072761798817623,
+    43.57362113563651,
+    1.4760402974977984,
+    43.634295799981544
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.4072761798817623,
+          43.57362113563651
+        ],
+        [
+          1.4760402974977984,
+          43.57362113563651
+        ],
+        [
+          1.4760402974977984,
+          43.634295799981544
+        ],
+        [
+          1.4072761798817623,
+          43.634295799981544
+        ],
+        [
+          1.4072761798817623,
+          43.57362113563651
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "display.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        4461,
+        3661
+      ],
+      "proj:transform": [
+        2.0909004528450934,
+        0.0,
+        156657.26774994106,
+        0.0,
+        -2.0909004528450934,
+        5409021.935492429
+      ]
+    }
+  }
+}

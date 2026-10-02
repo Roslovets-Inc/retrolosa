@@ -1,9 +1,9 @@
 {
-  "fitPoints": 40,
+  "fitPoints": 75,
   "fitResiduals": [
     {
       "name": "Saint-Sernin crossing",
-      "errorMetres": 0.2
+      "errorMetres": 1.3
     },
     {
       "name": "Saint-Etienne west portal",
@@ -11,11 +11,11 @@
     },
     {
       "name": "Pont Neuf right-bank abutment",
-      "errorMetres": 0.2
+      "errorMetres": 0.1
     },
     {
       "name": "Pont des Minimes centre",
-      "errorMetres": 0.0
+      "errorMetres": 0.3
     },
     {
       "name": "Pont du Bearnais centre",
@@ -23,11 +23,11 @@
     },
     {
       "name": "Pont Matabiau centre",
-      "errorMetres": 0.1
+      "errorMetres": 0.6
     },
     {
       "name": "Pont Bayard centre",
-      "errorMetres": 0.1
+      "errorMetres": 0.3
     },
     {
       "name": "Chateau d eau centre",
@@ -59,7 +59,7 @@
     },
     {
       "name": "Pont Guilhemery centre",
-      "errorMetres": 0.7
+      "errorMetres": 1.3
     },
     {
       "name": "Pont des Demoiselles centre",
@@ -67,7 +67,7 @@
     },
     {
       "name": "Lascrosses / boulevard Arcole axis",
-      "errorMetres": 0.7
+      "errorMetres": 0.2
     },
     {
       "name": "Sebastopol / boulevard Lascrosses axis",
@@ -75,7 +75,7 @@
     },
     {
       "name": "Allees Lafayette / boulevard Strasbourg axis",
-      "errorMetres": 0.2
+      "errorMetres": 0.3
     },
     {
       "name": "Riquet / Colombette axis",
@@ -95,7 +95,7 @@
     },
     {
       "name": "Filatiers / Maletache axis",
-      "errorMetres": 0.5
+      "errorMetres": 0.6
     },
     {
       "name": "Nazareth / Perchepinte axis",
@@ -107,7 +107,7 @@
     },
     {
       "name": "Gambetta / Romiguieres axis",
-      "errorMetres": 1.1
+      "errorMetres": 0.9
     },
     {
       "name": "La Grave dome centre",
@@ -115,11 +115,11 @@
     },
     {
       "name": "Lafayette / Remusat axis",
-      "errorMetres": 1.0
+      "errorMetres": 0.6
     },
     {
       "name": "Lafayette / Taur axis",
-      "errorMetres": 0.7
+      "errorMetres": 0.9
     },
     {
       "name": "Gambetta / Saint-Rome axis",
@@ -127,7 +127,7 @@
     },
     {
       "name": "Lafayette / Wilson west road axis",
-      "errorMetres": 0.1
+      "errorMetres": 0.3
     },
     {
       "name": "Desparadoux / Paradis axis",
@@ -135,7 +135,7 @@
     },
     {
       "name": "Dalbade / Saint-Jean axis",
-      "errorMetres": 0.8
+      "errorMetres": 0.5
     },
     {
       "name": "Desparadoux / Joutx-Aigues axis",
@@ -151,7 +151,7 @@
     },
     {
       "name": "Taur / Perigord axis",
-      "errorMetres": 0.4
+      "errorMetres": 0.8
     },
     {
       "name": "Quilmery / Pont-Saint-Pierre axis",
@@ -159,92 +159,335 @@
     },
     {
       "name": "Valade / Pargaminieres axis",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Renforts / Parlement axis",
+      "errorMetres": 0.0
+    },
+    {
+      "name": "Caussade / Viadieu axis",
+      "errorMetres": 1.8
+    },
+    {
+      "name": "Sainte-Catherine / Grande-Saint-Michel axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Sabots / Caussade axis",
+      "errorMetres": 0.8
+    },
+    {
+      "name": "Dumeril / Sachet axis",
       "errorMetres": 0.3
+    },
+    {
+      "name": "Leclerc / Barcelone axis",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Lancefoc / Barcelone axis",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Quai-Saint-Pierre / Brienne axis",
+      "errorMetres": 0.0
+    },
+    {
+      "name": "Colombette / Saint-Aubin axis",
+      "errorMetres": 0.3
+    },
+    {
+      "name": "Riquet / Camichel axis",
+      "errorMetres": 0.7
+    },
+    {
+      "name": "Colombette canal west abutment",
+      "errorMetres": 0.6
+    },
+    {
+      "name": "Caffarelli / Bayard (former Orient)",
+      "errorMetres": 0.1
+    },
+    {
+      "name": "Heliot / Place Belfort (former Castelet)",
+      "errorMetres": 0.5
+    },
+    {
+      "name": "Caffarelli / Jean-Jaures northwest opening",
+      "errorMetres": 0.6
+    },
+    {
+      "name": "Belfort / Jean-Jaures northwest opening",
+      "errorMetres": 0.3
+    },
+    {
+      "name": "Jean-Jaures / Bonrepos west bridge abutment",
+      "errorMetres": 0.8
+    },
+    {
+      "name": "Denfert-Rochereau / Lafaille axis",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Arnaud-Bernard / Queteurs axis",
+      "errorMetres": 1.4
+    },
+    {
+      "name": "Arnaud-Bernard / Embarthe / Chaine axis",
+      "errorMetres": 1.9
+    },
+    {
+      "name": "Gatien-Arnoult / Gramat axis",
+      "errorMetres": 10.0
+    },
+    {
+      "name": "Verge-d-Or / Trois-Piliers axis",
+      "errorMetres": 0.8
+    },
+    {
+      "name": "Hirondelle / Trois-Piliers axis",
+      "errorMetres": 6.7
+    },
+    {
+      "name": "Embarthe / Salenques axis",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Chaine / Peyrou / Cartailhac axis",
+      "errorMetres": 0.7
+    },
+    {
+      "name": "Puits-Creuses / Albert-Lautman axis",
+      "errorMetres": 0.3
+    },
+    {
+      "name": "Urbain-Vitry / Albert-Lautman axis",
+      "errorMetres": 0.2
+    },
+    {
+      "name": "Saint-Bernard / Henri-Beraldi axis",
+      "errorMetres": 15.5
+    },
+    {
+      "name": "Bellegarde / Henri-Beraldi axis",
+      "errorMetres": 27.5
+    },
+    {
+      "name": "Saint-Bernard / Strasbourg northwest opening",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Montoyol / Remusat axis",
+      "errorMetres": 0.5
+    },
+    {
+      "name": "Bayard / Strasbourg northeast opening",
+      "errorMetres": 0.4
+    },
+    {
+      "name": "Terre-Cabade main gate",
+      "errorMetres": 0.7
+    },
+    {
+      "name": "Cimetiere / Saint-Bertrand / Compans axis",
+      "errorMetres": 0.7
+    },
+    {
+      "name": "Colonne / Saint-Sylve axis",
+      "errorMetres": 0.9
+    },
+    {
+      "name": "Terre-Cabade southwest boundary / Gloire",
+      "errorMetres": 0.9
     }
   ],
   "independentChecks": [
     {
       "name": "Notre-Dame du Taur footprint",
-      "beforeMetres": 19.9,
-      "afterMetres": 15.3
-    },
-    {
-      "name": "Saint-Pierre-des-Cuisines footprint",
-      "beforeMetres": 8.7,
-      "afterMetres": 18.9
-    },
-    {
-      "name": "Notre-Dame de la Dalbade nave footprint",
-      "beforeMetres": 46.7,
-      "afterMetres": 9.1
-    },
-    {
-      "name": "Place du Capitole centre",
-      "beforeMetres": 16.7,
-      "afterMetres": 17.1
-    },
-    {
-      "name": "Place Wilson centre",
-      "beforeMetres": 6.4,
-      "afterMetres": 6.3
-    },
-    {
-      "name": "Grand Rond Paul-Sabatier junction",
-      "beforeMetres": 2.5,
-      "afterMetres": 3.4
-    },
-    {
-      "name": "Filatiers / Polinaires axis",
-      "beforeMetres": 14.9,
-      "afterMetres": 13.7
-    },
-    {
-      "name": "Valade / De-la-Bastide axis",
-      "beforeMetres": 39.1,
-      "afterMetres": 36.7
-    },
-    {
-      "name": "Dalbade / Pont-de-Tounis axis",
-      "beforeMetres": 59.8,
-      "afterMetres": 15.1
-    },
-    {
-      "name": "Saint-Remesy / Pretres axis",
-      "beforeMetres": 65.3,
-      "afterMetres": 39.6
-    },
-    {
-      "name": "Grand Rond Jules-Guesde junction",
-      "beforeMetres": 21.4,
-      "afterMetres": 14.9
-    },
-    {
-      "name": "Donne / Brasserie axis",
-      "beforeMetres": 10.6,
+      "beforeMetres": 15.3,
       "afterMetres": 11.0
     },
     {
+      "name": "Saint-Pierre-des-Cuisines footprint",
+      "beforeMetres": 18.9,
+      "afterMetres": 31.3
+    },
+    {
+      "name": "Notre-Dame de la Dalbade nave footprint",
+      "beforeMetres": 9.1,
+      "afterMetres": 9.0
+    },
+    {
+      "name": "Place du Capitole centre",
+      "beforeMetres": 17.1,
+      "afterMetres": 18.5
+    },
+    {
+      "name": "Place Wilson centre",
+      "beforeMetres": 6.3,
+      "afterMetres": 8.0
+    },
+    {
+      "name": "Grand Rond Paul-Sabatier junction",
+      "beforeMetres": 3.4,
+      "afterMetres": 3.7
+    },
+    {
+      "name": "Filatiers / Polinaires axis",
+      "beforeMetres": 13.7,
+      "afterMetres": 15.6
+    },
+    {
+      "name": "Valade / De-la-Bastide axis",
+      "beforeMetres": 36.7,
+      "afterMetres": 14.2
+    },
+    {
+      "name": "Dalbade / Pont-de-Tounis axis",
+      "beforeMetres": 15.1,
+      "afterMetres": 16.3
+    },
+    {
+      "name": "Saint-Remesy / Pretres axis",
+      "beforeMetres": 39.6,
+      "afterMetres": 30.5
+    },
+    {
+      "name": "Grand Rond Jules-Guesde junction",
+      "beforeMetres": 14.9,
+      "afterMetres": 15.9
+    },
+    {
+      "name": "Donne / Brasserie axis",
+      "beforeMetres": 11.0,
+      "afterMetres": 11.1
+    },
+    {
       "name": "Taur / Place-Saint-Sernin axis",
-      "beforeMetres": 19.1,
-      "afterMetres": 7.3
+      "beforeMetres": 7.3,
+      "afterMetres": 14.0
     },
     {
       "name": "Laque / Tour-du-Sac axis",
-      "beforeMetres": 42.4,
-      "afterMetres": 41.1
+      "beforeMetres": 41.1,
+      "afterMetres": 41.0
     },
     {
       "name": "Pont-Saint-Pierre / Reclusane axis",
-      "beforeMetres": 51.4,
-      "afterMetres": 51.9
+      "beforeMetres": 51.9,
+      "afterMetres": 51.8
+    },
+    {
+      "name": "Sainte-Catherine / Trente-Six-Ponts axis",
+      "beforeMetres": 57.3,
+      "afterMetres": 34.8,
+      "area": "parlement"
+    },
+    {
+      "name": "Mespoul / Viadieu axis",
+      "beforeMetres": 43.9,
+      "afterMetres": 2.9,
+      "area": "parlement"
+    },
+    {
+      "name": "Lejeune / Barcelone axis",
+      "beforeMetres": 62.7,
+      "afterMetres": 22.9,
+      "area": "brienne"
+    },
+    {
+      "name": "Saint-Aubin nave centre",
+      "beforeMetres": 79.9,
+      "afterMetres": 35.5,
+      "area": "saint-aubin"
+    },
+    {
+      "name": "Saint-Aubin / Aubuisson axis",
+      "beforeMetres": 44.3,
+      "afterMetres": 16.3,
+      "area": "saint-aubin"
+    },
+    {
+      "name": "Caffarelli / Stalingrad (former Redoutes)",
+      "beforeMetres": 137.4,
+      "afterMetres": 20.1,
+      "area": "belfort-bayard"
+    },
+    {
+      "name": "Belfort / Place Belfort east opening",
+      "beforeMetres": 137.0,
+      "afterMetres": 6.3,
+      "area": "belfort-bayard"
+    },
+    {
+      "name": "Heliot / Dalayrac axis",
+      "beforeMetres": 103.2,
+      "afterMetres": 15.1,
+      "area": "belfort-bayard"
+    },
+    {
+      "name": "Arnaud-Bernard / Trois-Piliers axis",
+      "beforeMetres": 107.5,
+      "afterMetres": 49.7,
+      "area": "arnaud-bernard"
+    },
+    {
+      "name": "Gatien-Arnoult / Saint-Charles axis",
+      "beforeMetres": 9.5,
+      "afterMetres": 19.1,
+      "area": "arnaud-bernard"
+    },
+    {
+      "name": "Verge-d-Or / Escoussieres axis",
+      "beforeMetres": 29.4,
+      "afterMetres": 32.4,
+      "area": "arnaud-bernard"
+    },
+    {
+      "name": "Lois / Salenques / Peyrou axis",
+      "beforeMetres": 49.1,
+      "afterMetres": 7.5,
+      "area": "saint-julien"
+    },
+    {
+      "name": "Puits-Creuses / Saint-Julien axis",
+      "beforeMetres": 69.2,
+      "afterMetres": 30.4,
+      "area": "saint-julien"
+    },
+    {
+      "name": "Saint-Bernard / Pouzonville axis",
+      "beforeMetres": 32.5,
+      "afterMetres": 14.5,
+      "area": "strasbourg"
+    },
+    {
+      "name": "Perigord / Remusat axis",
+      "beforeMetres": 30.7,
+      "afterMetres": 12.4,
+      "area": "strasbourg"
+    },
+    {
+      "name": "Bayard / Moutons (former Saint-Loup) axis",
+      "beforeMetres": 75.7,
+      "afterMetres": 31.1,
+      "area": "strasbourg"
+    },
+    {
+      "name": "Cimetiere / Saint-Paul / Gazan axis",
+      "beforeMetres": 159.2,
+      "afterMetres": 4.1,
+      "area": "terre-cabade"
     }
   ],
   "meanIndependentErrorMetres": {
-    "before": 28.3,
-    "after": 20.1
+    "before": 47.8,
+    "after": 20.2
   },
-  "minimumInverseJacobian": 0.5111,
-  "boundaryMaxDisplacementPixels": 0.0007,
-  "validationMethod": "Root solve of the actual 16-pixel renderer mesh; frozen street-baseline is the preceding 32-anchor regularized model, evaluated on identical current check annotations. Thirteen-anchor baseline retained as the affine frame; 1860 uses its soft prior, 1904 uses the frozen preceding 32-anchor field.",
+  "minimumInverseJacobian": 0.3523,
+  "boundaryMaxDisplacementPixels": 0.0042,
+  "validationBaseline": "data/jourdan-1860-local-baseline.json",
+  "validationMethod": "Root solve of the actual 16-pixel renderer mesh; frozen comparison field evaluated on identical current check annotations. Thirteen-anchor baseline retained as the affine frame; 1860 uses its soft prior, 1904 uses the frozen preceding 32-anchor field.",
   "limitations": "Manual landmark annotation, not a survey. Validation concerns the control-point network; outskirts beyond it remain less reliable. Original full sheet and source JPEG retained."
 }

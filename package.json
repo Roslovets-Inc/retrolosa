@@ -22,7 +22,9 @@
     "test:e2e:ui": "playwright test --ui",
     "check": "bun run format:check && bun run lint && bun run typecheck && bun run test",
     "prep": "bun run format && bun run lint:fix && bun run check",
-    "verify": "bun run check && bun run build && bun run test:e2e"
+    "verify": "bun run check && bun run build && bun run test:e2e",
+    "maps:list": "bun scripts/list-maps.ts",
+    "maps:validate": "bun scripts/validate-raster.ts"
   },
   "dependencies": {
     "i18next": "26.4.2",
@@ -42,6 +44,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
     "@vitest/coverage-v8": "5.0.1",
+    "ajv": "6.15.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "oxfmt": "0.70.0",
     "oxlint": "1.85.0",

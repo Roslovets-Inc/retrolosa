@@ -1,0 +1,88 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "openedition-13c",
+  "properties": {
+    "title": "Thirteenth-century reconstruction",
+    "datetime": null,
+    "start_datetime": "1201-01-01T00:00:00Z",
+    "end_datetime": "1300-12-31T23:59:59Z",
+    "retrolosa:date_precision": "interval",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+    "retrolosa:check_points": [
+      {
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "errorMetres": 3.2
+      }
+    ],
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "c8ac512bb93fbdbfd04f432b8c6d6af5e9d2c43b0b204924418b2ff2e9d46155"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://books.openedition.org/psorbonne/3296",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.4311720765516043,
+    43.589126547680735,
+    1.455254769439148,
+    43.61238537263228
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.4311720765516043,
+          43.589126547680735
+        ],
+        [
+          1.455254769439148,
+          43.589126547680735
+        ],
+        [
+          1.455254769439148,
+          43.61238537263228
+        ],
+        [
+          1.4311720765516043,
+          43.61238537263228
+        ],
+        [
+          1.4311720765516043,
+          43.589126547680735
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "display.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        2686,
+        2014
+      ],
+      "proj:transform": [
+        1.331118723521422,
+        0.0,
+        159317.34679927654,
+        0.0,
+        -1.331118723521422,
+        5405652.563456954
+      ]
+    }
+  }
+}

@@ -1,0 +1,575 @@
+[
+  {
+    "epoch": "450",
+    "id": "openedition-antiquite",
+    "image": "public/openedition-antiquite/map.webp",
+    "sha256": "404b4e5f4d0f83c817a0474dda0c8581c89da9a779f61ee5658df749abf1cf12",
+    "coordinates": [
+      [
+        1.4303810762055775,
+        43.612123786055065
+      ],
+      [
+        1.4538057506763096,
+        43.61246599196032
+      ],
+      [
+        1.4545989508742991,
+        43.5896069498768
+      ],
+      [
+        1.431174276403567,
+        43.58926461392832
+      ]
+    ],
+    "output": "display.webp",
+    "properties": {
+      "title": "Late Antiquity reconstruction",
+      "datetime": null,
+      "start_datetime": "0401-01-01T00:00:00Z",
+      "end_datetime": "0500-12-31T23:59:59Z",
+      "retrolosa:date_precision": "interval",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+      "retrolosa:check_points": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 4.4
+        }
+      ]
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://books.openedition.org/psorbonne/3296",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1195",
+    "id": "openedition-12c",
+    "image": "public/openedition-12c/map.webp",
+    "sha256": "79658e332f04702d844b270aa3680bfcec7bd296c98c7036322a5acb4ca985c0",
+    "coordinates": [
+      [
+        1.4340591430664062,
+        43.61179729776887
+      ],
+      [
+        1.4524054527282715,
+        43.61179729776887
+      ],
+      [
+        1.4524054527282715,
+        43.59238970944837
+      ],
+      [
+        1.4340591430664062,
+        43.59238970944837
+      ]
+    ],
+    "output": "map.webp",
+    "properties": {
+      "title": "Twelfth-century reconstruction",
+      "datetime": null,
+      "start_datetime": "1101-01-01T00:00:00Z",
+      "end_datetime": "1200-12-31T23:59:59Z",
+      "retrolosa:date_precision": "interval",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transfer through figure 6, translated to the corrected Saint-Sernin crossing on IGN. Withheld gates check inter-diagram agreement only.",
+      "retrolosa:check_points": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 15.9
+        },
+        {
+          "name": "La Porterie gate",
+          "errorMetres": 19.1
+        },
+        {
+          "name": "Matabiau gate",
+          "errorMetres": 19.8
+        }
+      ],
+      "retrolosa:fragments": [
+        {
+          "id": "saint-sernin",
+          "figure": 9,
+          "checkPoints": [
+            {
+              "name": "Saint-Pierre-des-Cuisines footprint",
+              "errorMetres": 15.9
+            },
+            {
+              "name": "La Porterie gate",
+              "errorMetres": 19.1
+            },
+            {
+              "name": "Matabiau gate",
+              "errorMetres": 19.8
+            }
+          ]
+        },
+        {
+          "id": "saint-etienne",
+          "figure": 4,
+          "checkPoints": [
+            {
+              "name": "Cathedral southwest nave corner",
+              "errorMetres": 4.9
+            },
+            {
+              "name": "Cathedral north choir corner",
+              "errorMetres": 7.8
+            }
+          ],
+          "method": "Similarity fit to two ends of the surviving cathedral; two separate cathedral corner checks on IGN Plan v2. Checks do not validate the complete historical quarter."
+        },
+        {
+          "id": "narbonnais",
+          "figure": 11,
+          "checkPoints": [],
+          "method": "Approximate placement from the figure 6 castle symbol, north arrow and printed 50-metre scale. No independent survey check; symbol centre does not establish an archaeological footprint.",
+          "approximate": true
+        },
+        {
+          "id": "saint-pierre",
+          "figure": 3,
+          "checkPoints": [
+            {
+              "name": "Northwest nave corner",
+              "errorMetres": 3.8
+            },
+            {
+              "name": "Southwest nave corner",
+              "errorMetres": 7.0
+            }
+          ],
+          "method": "Similarity fit to the surviving church's west facade midpoint and eastern main apse end on IGN Plan v2. Two withheld nave corners; manual low-resolution annotations limit accuracy.",
+          "multiphase": true
+        }
+      ]
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://books.openedition.org/psorbonne/3296",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1250",
+    "id": "openedition-13c",
+    "image": "public/openedition-13c/map.webp",
+    "sha256": "8ec1a1be79db1f57230deedd0f428004ced476d4cafd45d374f1966dd24de0f1",
+    "coordinates": [
+      [
+        1.4311720765516043,
+        43.61208650631677
+      ],
+      [
+        1.4545304154844416,
+        43.61238537263229
+      ],
+      [
+        1.4552438029340635,
+        43.58942843399519
+      ],
+      [
+        1.4318854640012262,
+        43.589129453620124
+      ]
+    ],
+    "output": "display.webp",
+    "properties": {
+      "title": "Thirteenth-century reconstruction",
+      "datetime": null,
+      "start_datetime": "1201-01-01T00:00:00Z",
+      "end_datetime": "1300-12-31T23:59:59Z",
+      "retrolosa:date_precision": "interval",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Affine transform in Web Mercator from three preserved building footprints, with one independent church checkpoint. Manual annotation; not survey-grade.",
+      "retrolosa:check_points": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 3.2
+        }
+      ]
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://books.openedition.org/psorbonne/3296",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1550",
+    "id": "openedition-1550",
+    "image": "public/openedition-1550/map.webp",
+    "sha256": "9ec376d44886148ef7099907f72c1e58c34e846ed628452a75d8c0e1f8803c87",
+    "coordinates": [
+      [
+        1.4299474965179684,
+        43.61160685891167
+      ],
+      [
+        1.452809771077824,
+        43.611963651416595
+      ],
+      [
+        1.45362339676754,
+        43.58955122309041
+      ],
+      [
+        1.4307611222077128,
+        43.58919429765001
+      ]
+    ],
+    "output": "display.webp",
+    "properties": {
+      "title": "Historical parcel inheritance, nominal 1550",
+      "datetime": null,
+      "start_datetime": "1550-01-01T00:00:00Z",
+      "end_datetime": "1550-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Historical period represented by a modern reconstruction; dates do not describe the production of the illustration. Figure 8 with registered red parcel boundaries from figure 7. Affine Web Mercator fit on three churches; one withheld checkpoint. Manual annotation, not survey-grade.",
+      "retrolosa:check_points": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 1.8
+        }
+      ]
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://books.openedition.org/psorbonne/3296",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1631",
+    "id": "tavernier-1631",
+    "image": "public/tavernier-1631/overview.webp",
+    "sha256": "7645770f6ac273948785688cd201056174e7d3ea13c19e35bf80f898b2a59b38",
+    "coordinates": [
+      [
+        1.38427734375,
+        43.644025847699496
+      ],
+      [
+        1.494140625,
+        43.644025847699496
+      ],
+      [
+        1.494140625,
+        43.5644715872181
+      ],
+      [
+        1.38427734375,
+        43.5644715872181
+      ]
+    ],
+    "output": "overview.webp",
+    "properties": {
+      "title": "Plan de Tavernier, 1631",
+      "datetime": null,
+      "start_datetime": "1631-01-01T00:00:00Z",
+      "end_datetime": "1631-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Plan de Tavernier, 1631"
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://www.flickr.com/photos/archives-toulouse/24484342123/",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1680",
+    "id": "cadastre-1680",
+    "image": "public/history-overview.png",
+    "sha256": "3431886be227e63fcd42080915ba7ae8f33b7a3aa6ce88e0881d2e0e57666720",
+    "coordinates": [
+      [
+        1.417236328125,
+        43.6201706161899
+      ],
+      [
+        1.47216796875,
+        43.6201706161899
+      ],
+      [
+        1.47216796875,
+        43.58039085560785
+      ],
+      [
+        1.417236328125,
+        43.58039085560785
+      ]
+    ],
+    "output": "map.webp",
+    "properties": {
+      "title": "Cadastre 1680 overview",
+      "datetime": null,
+      "start_datetime": "1680-01-01T00:00:00Z",
+      "end_datetime": "1680-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Cadastre 1680 overview"
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://tolosa1680.makina-corpus.com/",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1777",
+    "id": "saget-1777",
+    "image": "public/saget-1777/map.webp",
+    "sha256": "f6bfc5e2d2fe49d9fe9bc19d749b1ce6d54f78cb3f4b0b9cb3e20b363ba4aad0",
+    "coordinates": [
+      [
+        1.4319540909690431,
+        43.636099724530155
+      ],
+      [
+        1.485814865614003,
+        43.58393022019329
+      ],
+      [
+        1.4346748273182186,
+        43.5581367965311
+      ],
+      [
+        1.3808140526733155,
+        43.610328658826894
+      ]
+    ],
+    "output": "display.webp",
+    "properties": {
+      "title": "Plan de Saget, 1777",
+      "datetime": null,
+      "start_datetime": "1777-01-01T00:00:00Z",
+      "end_datetime": "1777-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Affine transform in Web Mercator from three manually annotated landmarks. Two independent checkpoints; not survey-grade. Entire original retained, including tables and margins.",
+      "retrolosa:check_points": [
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 36.2
+        },
+        {
+          "name": "Pont Neuf left-bank abutment",
+          "errorMetres": 58.8
+        }
+      ]
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://www.flickr.com/photos/archives-toulouse/25111159875/",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1830",
+    "id": "cadastre-1830",
+    "image": "public/history-overview-1830.png",
+    "sha256": "6a2d41a7e71d90eb2fcc1c1368f2acdafe62398c8fe3ca59723b4e746f55197f",
+    "coordinates": [
+      [
+        1.40625,
+        43.6201706161899
+      ],
+      [
+        1.47216796875,
+        43.6201706161899
+      ],
+      [
+        1.47216796875,
+        43.58039085560785
+      ],
+      [
+        1.40625,
+        43.58039085560785
+      ]
+    ],
+    "output": "map.webp",
+    "properties": {
+      "title": "Cadastre 1830 overview",
+      "datetime": null,
+      "start_datetime": "1830-01-01T00:00:00Z",
+      "end_datetime": "1830-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Cadastre 1830 overview"
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://tolosa.makina-corpus.com/",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1875",
+    "id": "flood-1875",
+    "image": "public/flood-1875/overview.webp",
+    "sha256": "c6f0beb6bfbc93e9ca502ede67860118b9a2e160523101ef4f9f7e3ef119fd85",
+    "coordinates": [
+      [
+        1.40625,
+        43.6281234121246
+      ],
+      [
+        1.47216796875,
+        43.6281234121246
+      ],
+      [
+        1.47216796875,
+        43.5644715872181
+      ],
+      [
+        1.40625,
+        43.5644715872181
+      ]
+    ],
+    "output": "overview.webp",
+    "properties": {
+      "title": "Inondation de Toulouse, 1875",
+      "datetime": null,
+      "start_datetime": "1875-01-01T00:00:00Z",
+      "end_datetime": "1875-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Inondation de Toulouse, 1875"
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/",
+        "type": "text/html"
+      }
+    ]
+  },
+  {
+    "epoch": "1904",
+    "id": "laffont-1904",
+    "image": "public/laffont-1904/map.webp",
+    "sha256": "e4b4af48de99199ec5cdb7d8377208b11483039adfee5617d14efb57453cae9c",
+    "coordinates": [
+      [
+        1.4075846221117843,
+        43.634295799981544
+      ],
+      [
+        1.4760300287121595,
+        43.6303807764652
+      ],
+      [
+        1.4757215864820807,
+        43.57363106887878
+      ],
+      [
+        1.4072761798817623,
+        43.577549787223234
+      ]
+    ],
+    "output": "display.webp",
+    "properties": {
+      "title": "Plan de Laffont, 1904",
+      "datetime": null,
+      "start_datetime": "1904-01-01T00:00:00Z",
+      "end_datetime": "1904-12-31T23:59:59Z",
+      "retrolosa:date_precision": "year",
+      "retrolosa:revision": "stac-v1-2026-10-02",
+      "description": "Retained least-squares affine sheet frame with dense street anchors and a regularized inverse thin-plate spline. Fixed boundaries and fifteen withheld checks; manual annotations, not a survey.",
+      "retrolosa:check_points": [
+        {
+          "name": "Notre-Dame du Taur footprint",
+          "errorMetres": 24.8
+        },
+        {
+          "name": "Saint-Pierre-des-Cuisines footprint",
+          "errorMetres": 7.8
+        },
+        {
+          "name": "Notre-Dame de la Dalbade nave footprint",
+          "errorMetres": 38.1
+        },
+        {
+          "name": "Place du Capitole centre",
+          "errorMetres": 6.8
+        },
+        {
+          "name": "Place Wilson centre",
+          "errorMetres": 12.5
+        },
+        {
+          "name": "Grand Rond Paul-Sabatier junction",
+          "errorMetres": 15.6
+        },
+        {
+          "name": "Filatiers / Polinaires axis",
+          "errorMetres": 25.6
+        },
+        {
+          "name": "Valade / De-la-Bastide axis",
+          "errorMetres": 11.8
+        },
+        {
+          "name": "Dalbade / Pont-de-Tounis axis",
+          "errorMetres": 4.3
+        },
+        {
+          "name": "Saint-Remesy / Pretres axis",
+          "errorMetres": 2.0
+        },
+        {
+          "name": "Grand Rond Jules-Guesde junction",
+          "errorMetres": 21.0
+        },
+        {
+          "name": "Donne / Brasserie axis",
+          "errorMetres": 18.9
+        },
+        {
+          "name": "Taur / Place-Saint-Sernin axis",
+          "errorMetres": 8.3
+        },
+        {
+          "name": "Laque / Tour-du-Sac axis",
+          "errorMetres": 37.7
+        },
+        {
+          "name": "Pont-Saint-Pierre / Reclusane axis",
+          "errorMetres": 35.8
+        }
+      ],
+      "retrolosa:fit_point_count": 37
+    },
+    "links": [
+      {
+        "rel": "derived_from",
+        "href": "https://archives.toulouse.fr/plans-anciens/#plan-laffont",
+        "type": "text/html"
+      }
+    ]
+  }
+]

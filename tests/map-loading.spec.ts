@@ -13,7 +13,7 @@ test("snapping to an epoch keeps its neighbours warm without repeated image requ
   const gate = new Promise<void>((resolve) => {
     release = resolve;
   });
-  await page.route("**/openedition-1550/map.webp", async (route) => {
+  await page.route("**/openedition-1550/display.webp*", async (route) => {
     requests++;
     await gate;
     await route.continue();
@@ -73,7 +73,7 @@ test("retry restores a failed active image without recreating the page or losing
   await page.setViewportSize({ width: 390, height: 844 });
   let fail = true;
   let requests = 0;
-  await page.route("**/openedition-13c/map.webp", async (route) => {
+  await page.route("**/openedition-13c/display.webp*", async (route) => {
     requests++;
     if (fail) await route.fulfill({ status: 503, body: "unavailable" });
     else await route.continue();
@@ -150,7 +150,7 @@ test("inactive archives are not fetched and switching epochs resets loading", as
   const gate = new Promise<void>((resolve) => {
     release = resolve;
   });
-  await page.route("**/openedition-1550/map.webp", async (route) => {
+  await page.route("**/openedition-1550/display.webp*", async (route) => {
     await gate;
     await route.continue();
   });

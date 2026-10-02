@@ -1,0 +1,82 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "flood-1875",
+  "properties": {
+    "title": "Inondation de Toulouse, 1875",
+    "datetime": null,
+    "start_datetime": "1875-01-01T00:00:00Z",
+    "end_datetime": "1875-12-31T23:59:59Z",
+    "retrolosa:date_precision": "year",
+    "retrolosa:revision": "stac-v1-2026-10-02",
+    "description": "Inondation de Toulouse, 1875",
+    "retrolosa:raster_contract": 1,
+    "retrolosa:raster_sha256": "c6f0beb6bfbc93e9ca502ede67860118b9a2e160523101ef4f9f7e3ef119fd85"
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://mapasmilhaud.com/mapas-urbanos/plano-de-las-inundaciones-de-toulouse-1875/",
+      "type": "text/html"
+    }
+  ],
+  "bbox": [
+    1.40625,
+    43.56447158721811,
+    1.4721679687499998,
+    43.628123412124594
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          1.40625,
+          43.56447158721811
+        ],
+        [
+          1.4721679687499998,
+          43.56447158721811
+        ],
+        [
+          1.4721679687499998,
+          43.628123412124594
+        ],
+        [
+          1.40625,
+          43.628123412124594
+        ],
+        [
+          1.40625,
+          43.56447158721811
+        ]
+      ]
+    ]
+  },
+  "assets": {
+    "display": {
+      "href": "overview.webp",
+      "type": "image/webp",
+      "roles": [
+        "data",
+        "visual"
+      ],
+      "proj:code": "EPSG:3857",
+      "proj:shape": [
+        1024,
+        768
+      ],
+      "proj:transform": [
+        9.554628535646998,
+        0.0,
+        156543.03392804097,
+        0.0,
+        -9.554628535645861,
+        5408072.62523279
+      ]
+    }
+  }
+}

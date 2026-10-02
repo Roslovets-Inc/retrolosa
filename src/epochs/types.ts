@@ -4,22 +4,13 @@ export type Bounds = [number, number, number, number];
 export type ImageRender = { kind: "image"; path: string; coordinates: Coordinates };
 export type TileRender = {
   kind: "tiles";
-  tiles: string[];
-  local?: boolean;
+  source: { type: "template"; tiles: string[]; local?: boolean } | { type: "pmtiles"; url: string };
   minzoom?: number;
   maxzoom?: number;
   bounds?: Bounds;
+  overview?: { image: ImageRender; switchZoom: number };
 };
-export type ArchiveRender = { kind: "archive"; url: string };
-export type EpochRender =
-  | ImageRender
-  | TileRender
-  | {
-      kind: "overview";
-      image: ImageRender;
-      detail: TileRender | ArchiveRender;
-      switchZoom: number;
-    };
+export type EpochRender = ImageRender | TileRender;
 
 export interface EpochDetails {
   title: string;
