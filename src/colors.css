@@ -5,6 +5,7 @@
   --border: #d5d8cd;
   --ink: #263e36;
   --muted: #5f6d62;
+  --disabled: #939b91;
   --primary: #2f4b40;
   --on-primary: #fff;
   --slider: #3e604d;
@@ -28,6 +29,7 @@
   --border: #405047;
   --ink: #eeeade;
   --muted: #aab8ab;
+  --disabled: #69776d;
   --primary: #a9c5ab;
   --on-primary: #1c2c22;
   --slider: var(--primary);

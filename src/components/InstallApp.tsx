@@ -1,10 +1,12 @@
 import { ArrowUpFromLine, Check, Download, EllipsisVertical, Smartphone, Wifi } from "lucide-react";
 import React, { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { useInstallation } from "../pwa";
 import { Button, Dialog } from "../ui";
 
 export function InstallApp() {
+  const { t } = useTranslation();
   const { installed, canInstall, busy, message, install } = useInstallation();
   const [open, setOpen] = useState(false);
   const [phone, setPhone] = useState<"iphone" | "android">(() =>
@@ -15,8 +17,8 @@ export function InstallApp() {
     <>
       <Button
         className="header-icon install-trigger"
-        aria-label="Installer Rétrolosa"
-        data-tooltip="Installer l’application"
+        aria-label={t("installApp.installRetrolosa")}
+        data-tooltip={t("installApp.installTheApp")}
         onClick={() => setOpen(true)}
       >
         <Download size={18} aria-hidden="true" />
@@ -24,8 +26,8 @@ export function InstallApp() {
       <Dialog
         open={open}
         onOpenChange={setOpen}
-        label="Installer Rétrolosa"
-        closeLabel="Fermer l’installation"
+        label={t("installApp.installRetrolosa")}
+        closeLabel={t("installApp.closeInstallation")}
         className="install-modal"
       >
         <div className="install-hero">
@@ -35,32 +37,29 @@ export function InstallApp() {
             height="76"
             alt=""
           />
-          <span className="install-eyebrow">TOULOUSE, AU FIL DU TEMPS</span>
+          <span className="install-eyebrow">{t("installApp.toulouseThroughTime")}</span>
           <h2>
-            Une ville. Des siècles.
-            <br />À portée de main.
+            {t("installApp.oneCityCenturiesOfHistory")} <br />
+            {t("installApp.atYourFingertips")}{" "}
           </h2>
-          <p>
-            Retrouvez Rétrolosa sur votre écran d’accueil et explorez Toulouse dans une fenêtre
-            dédiée.
-          </p>
+          <p>{t("installApp.addRetrolosaToYourHomeScreenAndExploreToulouse")}</p>
         </div>
         <div className="install-benefits">
           <span>
-            <Smartphone size={16} aria-hidden="true" /> Plein écran
+            <Smartphone size={16} aria-hidden="true" /> {t("installApp.fullScreen")}{" "}
           </span>
           <span>
-            <Check size={16} aria-hidden="true" /> Gratuit, sans compte
+            <Check size={16} aria-hidden="true" /> {t("installApp.freeNoAccountNeeded")}{" "}
           </span>
         </div>
         {canInstall ? (
           <Button className="install-action" onClick={install} disabled={busy}>
             <Download size={18} aria-hidden="true" />
-            {busy ? "Installation en cours…" : "Installer l’application"}
+            {busy ? t("installApp.installing") : t("installApp.installTheApp")}
           </Button>
         ) : (
           <>
-            <div className="install-platforms" role="group" aria-label="Votre téléphone">
+            <div className="install-platforms" role="group" aria-label={t("installApp.yourPhone")}>
               <Button aria-pressed={phone === "iphone"} onClick={() => setPhone("iphone")}>
                 iPhone / iPad
               </Button>
@@ -74,22 +73,25 @@ export function InstallApp() {
                   <li>
                     <span>1</span>
                     <p>
-                      Ouvrez ce site dans <strong>Safari</strong>.
+                      <Trans i18nKey="installApp.iphoneOpen" components={{ strong: <strong /> }} />
                     </p>
                   </li>
                   <li>
                     <span>2</span>
                     <p>
-                      Touchez <ArrowUpFromLine size={16} aria-hidden="true" />{" "}
-                      <strong>Partager</strong> dans le menu du navigateur.
+                      <Trans
+                        i18nKey="installApp.iphoneShare"
+                        components={{
+                          strong: <strong />,
+                          icon: <ArrowUpFromLine size={16} aria-hidden="true" />,
+                        }}
+                      />
                     </p>
                   </li>
                   <li>
                     <span>3</span>
                     <p>
-                      Choisissez <strong>Sur l’écran d’accueil</strong>, puis{" "}
-                      <strong>Ajouter</strong>. Si l’option apparaît, gardez{" "}
-                      <strong>Ouvrir comme app web</strong> activé.
+                      <Trans i18nKey="installApp.iphoneAdd" components={{ strong: <strong /> }} />
                     </p>
                   </li>
                 </>
@@ -98,40 +100,43 @@ export function InstallApp() {
                   <li>
                     <span>1</span>
                     <p>
-                      Ouvrez ce site dans <strong>Chrome</strong>.
+                      <Trans i18nKey="installApp.androidOpen" components={{ strong: <strong /> }} />
                     </p>
                   </li>
                   <li>
                     <span>2</span>
                     <p>
-                      Touchez le menu <EllipsisVertical size={16} aria-hidden="true" /> du
-                      navigateur.
+                      <Trans
+                        i18nKey="installApp.androidMenu"
+                        components={{
+                          strong: <strong />,
+                          icon: <EllipsisVertical size={16} aria-hidden="true" />,
+                        }}
+                      />
                     </p>
                   </li>
                   <li>
                     <span>3</span>
                     <p>
-                      Choisissez <strong>Installer l’application</strong> ou{" "}
-                      <strong>Ajouter à l’écran d’accueil</strong>, puis confirmez.
+                      <Trans i18nKey="installApp.androidAdd" components={{ strong: <strong /> }} />
                     </p>
                   </li>
                 </>
               )}
             </ol>
             <p className="install-desktop">
-              Sur ordinateur, utilisez l’option d’installation dans la barre d’adresse ou le menu du
-              navigateur.
+              {t("installApp.onAComputerUseTheInstallationOptionInThe")}
             </p>
           </>
         )}
         {message && (
           <p className="install-message" role="status">
-            {message}
+            {t(message)}
           </p>
         )}
         <p className="install-network">
           <Wifi size={16} aria-hidden="true" />
-          <span>Une connexion Internet reste nécessaire pour charger les cartes.</span>
+          <span>{t("installApp.anInternetConnectionIsStillRequiredToLoadThe")}</span>
         </p>
       </Dialog>
     </>

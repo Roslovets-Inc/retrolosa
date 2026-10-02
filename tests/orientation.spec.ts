@@ -51,25 +51,29 @@ test("compass cycles, preserves position and shares its orientation", async ({ p
   await expect(compass).toHaveAttribute("data-bearing", "0");
   await compass.click();
   await expect(compass).toHaveAttribute("data-bearing", "84");
-  await slider.fill("1656");
+  for (const time of ["1656", "1730", "1860", "1777"]) {
+    await slider.fill(time);
+    await expect(compass).toHaveAttribute("data-bearing", "84");
+    await expect(compass).toBeEnabled();
+  }
+  await compass.click();
   await expect(compass).toHaveAttribute("data-bearing", "0");
-  await expect(compass).toBeDisabled();
-  await slider.fill("1730");
+  await compass.click();
+  await expect(compass).toHaveAttribute("data-bearing", "53");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.locator(".timeline-ticks").getByRole("button", { name: "1904", exact: true }).click();
   await expect(compass).toHaveAttribute("data-bearing", "53");
   await expect(compass).toBeEnabled();
-  await slider.fill("1860");
+  const rotatedUrl = await sharedView(page);
+  await page.goto(rotatedUrl);
+  await page.reload();
+  await waitForApp(page);
+  await expect(compass).toHaveAttribute("data-bearing", "53");
+  await expect(compass).toBeEnabled();
+  await compass.click();
   await expect(compass).toHaveAttribute("data-bearing", "0");
   await expect(compass).toBeDisabled();
   await slider.fill("1777");
-  await expect(compass).toHaveAttribute("data-bearing", "53");
-  await compass.click();
-  await slider.fill("1631");
   await expect(compass).toHaveAttribute("data-bearing", "0");
-  await compass.click();
-
-  await page.locator(".timeline-ticks").getByRole("button", { name: "1777", exact: true }).click();
-  await expect(compass).toHaveAttribute("data-bearing", "53");
-  await page.locator(".timeline-ticks").getByRole("button", { name: "1904", exact: true }).click();
-  await expect(compass).toBeDisabled();
-  await expect(compass).toHaveAttribute("data-bearing", "0");
+  await expect(compass).toBeEnabled();
 });

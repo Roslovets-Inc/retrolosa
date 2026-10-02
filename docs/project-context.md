@@ -9,13 +9,24 @@ Source and configuration take precedence over this dated snapshot.
 
 The current public name is **Rétrolosa**, and the package name is `retrolosa`.
 The repository has historically been named `toulouse-in-time`. These names and
-the local directory name are independent. The app is a static French-language
+the local directory name are independent. The app is a static English/French
 map of Toulouse, built with React, TypeScript, Vite, MapLibre, Radix and PMTiles.
 There is no application backend or database to migrate.
 
+The places dropdown opens navigation commands directly from the header and
+focuses on six major central landmarks and an overview.
+Camera rotation persists while scrubbing or changing enabled epochs. The compass
+can reset a rotated view to north on any sheet and disables only when both the
+camera and the dominant sheet are north-aligned.
+Two enabled historical neighbours on each side are prepared in advance, up to
+six sheets during a crossfade. Invisible neighbours do not block visible readiness
+or contribute credits; the current endpoint retains the last two historical sheets.
+Navigation allows zoom 10.5–19 within [1.18, 43.38]–[1.70, 43.86], leaving room
+to view wider historical sheets. These camera bounds do not change source coverage.
+
 The app is also installable on iPhone/iPad and Android. `pwa.config.ts` generates
 deployment-scoped manifest/service-worker files; `src/pwa.ts` and
-`src/components/InstallApp.tsx` handle registration and the French installation
+`src/components/InstallApp.tsx` handle registration and the localized installation
 guide. Icons in `public/icons/` derive from the existing Occitan-cross brand mark.
 The production worker caches only the application shell, fonts and icons; maps
 still need Internet access. It is disabled in development and never forces a
@@ -26,9 +37,10 @@ iPhone/Android installation remains a separate verification step.
 
 English is the primary development language for project documentation, including
 README, code comments and commit messages. The website interface, user-facing
-content and accessibility labels remain in French for now; additional interface
-languages are planned for later. Keep original source titles, proper names and
-quoted UI labels when needed for identification.
+content and accessibility labels support English and French. Browser language determines
+the initial selection, English is the fallback, and the header saves manual choices
+through a styled Radix Select with keyboard navigation and theme-aware options.
+Keep original source titles, proper names and quoted UI labels when needed for identification.
 
 The catalogue covers thirteen historical epochs: 450, 1195, 1250, 1550, 1631, 1680,
 1777, 1830, 1848, 1860, 1875, 1904 and 1954, followed by the current basemap.
@@ -47,7 +59,9 @@ Source accuracy and licensing limitations are documented in [sources.md](sources
 and [licensing.md](licensing.md). Do not infer accuracy from alignment alone.
 
 The same timeline works with overlay, curtain and loupe. It skips unchecked
-epochs, preserves the calendar year when comparison tools change, and snaps
+epochs and uses evenly spaced historical ticks, with extra room before the present
+label. Calendar-year interpolation remains linear within each interval. It
+preserves the calendar year when comparison tools change, and snaps
 pointer input near source dates. Camera, theme, location, population and curated
 events are part of the experience. Sharing explicitly creates an address;
 ordinary interactions do not continuously rewrite the URL.

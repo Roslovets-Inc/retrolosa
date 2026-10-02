@@ -6,19 +6,20 @@ The XII-century partial reconstruction combines Saint-Sernin borough growth,
 Romanesque Saint-Étienne and an approximately positioned Narbonnais castle fragment.
 Saint-Pierre-des-Cuisines adds building-phase detail within the Saint-Sernin borough.
 Undocumented gaps remain transparent; original phase legends are linked from sources.
-React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is in French.
+React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is available in English and French.
 
-UI components use Radix Primitives: tooltips, panels, dialogs, checkboxes, mode selection
-and the opacity slider. Wrappers in `src/ui.tsx` share project styles and colours without
+UI components use Radix Primitives: tooltips, panels, dialogs, checkboxes, mode selection,
+the language selector and the opacity slider. Wrappers in `src/ui.tsx` share project styles and colours without
 a library-imposed theme. Radix handles focus, keyboard input, dismissal and screen-edge
 collisions. The nonlinear timeline and map tools retain their specific behaviour;
-place selection uses a native list suited to mobile devices.
+place selection opens a styled Radix dropdown directly from the header.
 
 ## Language policy
 
 English is the primary development language for all project documentation, including
-README, and code comments. Keep the website interface, user-facing content and accessibility
-labels in French for now. Additional interface languages are planned for later.
+README, and code comments. The interface, user-facing content and accessibility labels
+are available in English and French. The first visit follows the browser language; unsupported
+languages fall back to English. The header selector saves an explicit choice locally.
 Preserve original source titles, proper names and quoted UI labels where needed.
 
 ## License
@@ -118,7 +119,7 @@ the changes concerned.
 ## Installing on a phone
 
 Rétrolosa is an installable progressive web app. Open **Installer Rétrolosa** in
-the header for the French installation guide. On iPhone/iPad, use Safari's Share
+the header for the installation guide in the selected language. On iPhone/iPad, use Safari's Share
 menu, choose **Sur l’écran d’accueil**, and keep **Ouvrir comme app web** enabled
 when offered. On Android, use the app's installation button when available, or
 Chrome's **Installer l’application / Ajouter à l’écran d’accueil** menu.

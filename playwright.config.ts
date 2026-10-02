@@ -16,6 +16,7 @@ export default defineConfig({
   workers: 2,
   use: {
     baseURL,
+    locale: "fr-FR",
     channel:
       process.env.PLAYWRIGHT_CHANNEL ?? (process.platform === "win32" ? "msedge" : undefined),
     headless: true,

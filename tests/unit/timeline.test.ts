@@ -38,12 +38,15 @@ describe("timeline snapping", () => {
 
 describe("bounded visual timeline", () => {
   const dates = [1250, 1631, 1680, 1830, 1875, 1954, 2026];
-  it("keeps the widest visual gap at most twice the narrowest", () => {
+  it("compresses historical gaps and reserves space for the present label", () => {
     const stops = timelineStops(dates);
     const gaps = stops.slice(1).map((stop, i) => stop - stops[i]);
     expect(stops[0]).toBe(0);
     expect(stops.at(-1)).toBe(1);
-    expect(Math.max(...gaps) / Math.min(...gaps)).toBeCloseTo(2);
+    expect(Math.max(...gaps) / Math.min(...gaps)).toBeCloseTo(1.5);
+    const historicalGaps = gaps.slice(0, -1);
+    expect(Math.max(...historicalGaps) / Math.min(...historicalGaps)).toBeCloseTo(1);
+    expect(gaps.at(-1)).toBeGreaterThan(Math.max(...historicalGaps));
   });
   it("maps dates and intermediate years back without changing chronological order", () => {
     for (const year of [...dates, 1400, 1700, 1850, 1900, 2000])

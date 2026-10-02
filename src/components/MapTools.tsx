@@ -1,6 +1,8 @@
 import { Eye, Navigation, Plus, Minus, Compass, RotateCcw } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
+import { translateLabel } from "../i18n-labels";
 import { nextBearing } from "../orientation";
 import { Button, Slider } from "../ui";
 export function MapTools({
@@ -34,15 +36,20 @@ export function MapTools({
   readingBearing: number;
   orientationEpoch: number;
 }) {
+  const { t } = useTranslation();
   return (
     <>
-      <div className="opacity-controls" role="group" aria-label="Transparence et comparaison">
+      <div
+        className="opacity-controls"
+        role="group"
+        aria-label={t("mapTools.transparencyAndComparison")}
+      >
         <Button
           className="compare-hold"
           tooltipSide="left"
-          aria-label="Maintenir pour comparer avec la carte actuelle"
+          aria-label={t("mapTools.holdToCompareWithTheCurrentMap")}
           aria-pressed={compareHeld}
-          data-tooltip="Maintenez pour lire les rues actuelles"
+          data-tooltip={t("mapTools.holdToReadTodaySStreets")}
           onPointerDown={(e) => {
             if (e.button !== 0 || !e.isPrimary) return;
             e.preventDefault();
@@ -71,12 +78,12 @@ export function MapTools({
         >
           <Eye size={20} />
         </Button>
-        <section className="opacity-panel" aria-label="Opacité">
+        <section className="opacity-panel" aria-label={t("mapTools.opacity")}>
           <Slider
             value={opacity}
             onValueChange={onOpacityChange}
-            label="Opacité de la carte historique"
-            valueText={opacity === 0 ? "Carte actuelle" : `${opacity} %`}
+            label={t("mapTools.historicalMapOpacity")}
+            valueText={opacity === 0 ? t("mapTools.currentMap") : `${opacity} %`}
             disabled={!hasEpochs}
           />
           <output>{opacity}%</output>
@@ -85,9 +92,13 @@ export function MapTools({
       <div className="zoom-controls">
         <Button
           className={locationStatus !== "off" ? "location-active" : ""}
-          aria-label={locationStatus === "off" ? "Me localiser" : "Désactiver la localisation"}
+          aria-label={
+            locationStatus === "off" ? t("mapTools.locateMe") : t("mapTools.stopLocationTracking")
+          }
           tooltipSide="left"
-          data-tooltip={locationStatus === "off" ? "Me localiser" : "Désactiver la localisation"}
+          data-tooltip={
+            locationStatus === "off" ? t("mapTools.locateMe") : t("mapTools.stopLocationTracking")
+          }
           aria-pressed={locationStatus !== "off"}
           onClick={onLocation}
         >
@@ -96,16 +107,16 @@ export function MapTools({
         <div />
         <Button
           tooltipSide="left"
-          data-tooltip="Zoom avant"
-          aria-label="Zoom avant"
+          data-tooltip={t("mapTools.zoomIn")}
+          aria-label={t("mapTools.zoomIn")}
           onClick={onZoomIn}
         >
           <Plus size={20} />
         </Button>
         <Button
           tooltipSide="left"
-          data-tooltip="Zoom arrière"
-          aria-label="Zoom arrière"
+          data-tooltip={t("mapTools.zoomOut")}
+          aria-label={t("mapTools.zoomOut")}
           onClick={onZoomOut}
         >
           <Minus size={20} />
@@ -114,17 +125,25 @@ export function MapTools({
           className="orientation-button"
           tooltipSide="left"
           aria-label={
-            readingBearing === 0
-              ? "Orientation : nord"
-              : `Orientation : ${bearing === 0 ? "nord" : `${bearing}°`}. Tourner vers ${nextBearing(bearing, orientationEpoch) === 0 ? "le nord" : `${nextBearing(bearing, orientationEpoch)}°`}`
+            readingBearing === 0 && bearing === 0
+              ? t("mapTools.orientationNorth")
+              : t("mapTools.orientationRotateTowards", {
+                  v0: bearing === 0 ? translateLabel(t, "nord") : `${bearing}°`,
+                  v1:
+                    nextBearing(bearing, orientationEpoch) === 0
+                      ? translateLabel(t, "le nord")
+                      : `${nextBearing(bearing, orientationEpoch)}°`,
+                })
           }
           data-tooltip={
-            readingBearing === 0
-              ? "Ce plan est orienté au nord"
-              : `Orientation : ${bearing === 0 ? "nord" : `${bearing}°`} · Cliquer pour tourner`
+            readingBearing === 0 && bearing === 0
+              ? t("mapTools.thisMapFacesNorth")
+              : t("mapTools.orientationClickToRotate", {
+                  v0: bearing === 0 ? translateLabel(t, "nord") : `${bearing}°`,
+                })
           }
           data-bearing={bearing}
-          disabled={readingBearing === 0}
+          disabled={readingBearing === 0 && bearing === 0}
           onClick={onToggleAlignment}
         >
           <Compass size={18} style={{ transform: `rotate(${-bearing}deg)` }} />
@@ -132,9 +151,9 @@ export function MapTools({
         </Button>
         <div />
         <Button
-          aria-label="Vue d’ensemble de Toulouse"
+          aria-label={t("mapTools.overviewOfToulouse")}
           tooltipSide="left"
-          data-tooltip="Vue d’ensemble de Toulouse"
+          data-tooltip={t("mapTools.overviewOfToulouse")}
           onClick={onOverview}
         >
           <RotateCcw size={18} />

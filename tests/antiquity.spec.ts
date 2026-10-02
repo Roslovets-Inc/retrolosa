@@ -22,7 +22,7 @@ test("late Antiquity uses a period label, preserves the complete raster and shar
   await expect(slider).toHaveAttribute("min", "450");
   await expect(slider).toHaveAttribute("aria-valuetext", "Ve");
   await expect(
-    page.locator(".timeline-ticks").getByRole("button", { name: "Ve", exact: true }),
+    page.locator(".timeline-ticks").getByRole("button", { name: "Ve siècle", exact: true }),
   ).toBeVisible();
   await expect(page.locator(".timeline-ticks")).not.toContainText("450");
   const missing = await page.evaluate(async () => {
@@ -47,7 +47,7 @@ test("late Antiquity uses a period label, preserves the complete raster and shar
     }
 
     await expect(
-      page.locator(".timeline-ticks").getByRole("button", { name: "Ve", exact: true }),
+      page.locator(".timeline-ticks").getByRole("button", { name: "Ve siècle", exact: true }),
     ).toHaveAttribute("aria-pressed", "true");
     const dock = (await page.locator(".control-dock").boundingBox())!;
     expect(dock.x).toBeGreaterThanOrEqual(0);

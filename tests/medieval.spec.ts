@@ -32,7 +32,7 @@ test("medieval reconstruction loads, identifies its period and restores shared s
   await page.goto("/#year=1250&layers=1250,1631&lon=1.442&lat=43.602&z=15&mode=overlay&opacity=55");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await expect(
-    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe", exact: true }),
+    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe siècle", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   const asset = await page.request.get("/openedition-13c/map.webp");
   expect(asset.ok()).toBe(true);
@@ -72,10 +72,10 @@ test("defaults select the first enabled period and superposition while shared op
 }) => {
   await page.goto("/");
   await expect(
-    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe", exact: true }),
+    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe siècle", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await expect(
-    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe", exact: true }),
+    page.locator(".timeline-ticks").getByRole("button", { name: "XIIIe siècle", exact: true }),
   ).toHaveText("XIIIe");
   await expect(page.getByRole("radio", { name: "Superposition", exact: true })).toHaveAttribute(
     "aria-checked",

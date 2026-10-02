@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import React, { useEffect, useReducer, useState } from "react";
 import { createRoot } from "react-dom/client";
+import { useTranslation } from "react-i18next";
 
 import { CityWidget } from "./CityWidget";
 import { ComparisonPanel } from "./components/ComparisonPanel";
@@ -10,6 +11,7 @@ import { MapViewport } from "./components/MapViewport";
 import { SourcesPanel } from "./components/SourcesPanel";
 import { getEpoch } from "./epochs/catalog";
 import type { EpochId as Year } from "./epochs/catalog";
+import { translateLabel } from "./i18n-labels";
 import { Coordinates } from "./map/Coordinates";
 import { useMaps } from "./map/useMaps";
 import { registerAppWorker, useOnline } from "./pwa";
@@ -26,14 +28,18 @@ import {
 import type { ViewState, ViewAction } from "./view/state";
 
 import "maplibre-gl/dist/maplibre-gl.css";
+import "./i18n";
+
 import "./style.css";
 
 const TODAY = new Date().getFullYear();
 const viewReducer = (state: ViewState, action: ViewAction) => reduceViewState(state, action, TODAY);
 const sourceUrl = (value: Year) => getEpoch(value).sourceUrl;
 const mapCredit = (value: Year) => getEpoch(value).credit;
-const dateLabel = (value: number) => labelDate(value, TODAY);
+
 function App() {
+  const { t } = useTranslation();
+  const dateLabel = (value: number) => translateLabel(t, labelDate(value, TODAY));
   const online = useOnline();
   const { selection: themePreference, theme } = useTheme();
   const [initial] = useState(() => parseViewState(location.hash, TODAY));
@@ -65,7 +71,19 @@ function App() {
     bearing,
   );
   const geo = useLocation(controller.locationMaps);
-  const errors = [...new Set(status.failures.map((failure) => failure.message))];
+  const errors = [
+    ...new Set(
+      status.failures.map((failure) =>
+        failure.kind === "renderer"
+          ? t("failure.renderer")
+          : t("failure.message", {
+              map: t(`failure.${failure.resource.map}`),
+              label: translateLabel(t, failure.resource.label),
+              reason: t(`failure.${failure.kind}`),
+            }),
+      ),
+    ),
+  ];
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (
@@ -130,7 +148,7 @@ function App() {
       />
       {!online && (
         <div className="offline-notice" role="status">
-          Vous êtes hors connexion. Reconnectez-vous pour charger les cartes.
+          {t("main.youAreOfflineReconnectToLoadTheMaps")}{" "}
         </div>
       )}
       <MapTools
@@ -144,7 +162,7 @@ function App() {
         onZoomOut={controller.zoomOut}
         onOverview={() => controller.overview(bearing)}
         onOpacityChange={(value) => dispatch({ type: "opacity", value })}
-        onToggleAlignment={() => dispatch({ type: "toggleAlignment" })}
+        onToggleAlignment={() => dispatch({ type: "toggleAlignment", epoch: orientationEpoch })}
         bearing={bearing}
         readingBearing={readingBearing}
         orientationEpoch={orientationEpoch}
@@ -169,8 +187,8 @@ function App() {
       />
       {(geo.message || geo.status === "locating") && (
         <div className="location-notice" role="status">
-          <span>{geo.message || "Localisation en cours…"}</span>
-          <Button aria-label="Masquer le message de localisation" onClick={geo.dismiss}>
+          <span>{geo.message || t("main.locating")}</span>
+          <Button aria-label={t("main.dismissLocationMessage")} onClick={geo.dismiss}>
             <X size={14} />
           </Button>
         </div>
@@ -180,8 +198,8 @@ function App() {
           {errors.map((e) => (
             <p key={e}>{e}</p>
           ))}
-          <Button onClick={controller.retry}>Réessayer</Button>
-          <Button aria-label="Fermer le message" onClick={controller.loading.dismiss}>
+          <Button onClick={controller.retry}>{t("main.retry")}</Button>
+          <Button aria-label={t("main.closeMessage")} onClick={controller.loading.dismiss}>
             <X size={16} />
           </Button>
         </div>

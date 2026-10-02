@@ -1,16 +1,106 @@
-import { Check, X } from "lucide-react";
+import { Check, ChevronDown, X } from "lucide-react";
 import {
   Checkbox as CheckboxPrimitive,
   Dialog as DialogPrimitive,
+  DropdownMenu as DropdownMenuPrimitive,
   Popover as PopoverPrimitive,
+  Select as SelectPrimitive,
   Slider as SliderPrimitive,
   Tooltip as TooltipPrimitive,
   ToggleGroup as ToggleGroupPrimitive,
 } from "radix-ui";
 import React, { forwardRef, useRef, useSyncExternalStore } from "react";
+import { useTranslation } from "react-i18next";
 
 type Side = "top" | "right" | "bottom" | "left";
 export const TooltipProvider = TooltipPrimitive.Provider;
+
+export function DropdownMenu({
+  open,
+  onOpenChange,
+  trigger,
+  label,
+  options,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  trigger: React.ReactElement;
+  label: string;
+  options: readonly { id: string; label: string; onSelect: () => void }[];
+}) {
+  return (
+    <DropdownMenuPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DropdownMenuPrimitive.Trigger asChild>{trigger}</DropdownMenuPrimitive.Trigger>
+      <DropdownMenuPrimitive.Portal>
+        <DropdownMenuPrimitive.Content
+          className="ui-select-content"
+          aria-label={label}
+          align="end"
+          sideOffset={6}
+          collisionPadding={10}
+        >
+          {options.map((option) => (
+            <DropdownMenuPrimitive.Item
+              className="ui-select-item"
+              key={option.id}
+              onSelect={option.onSelect}
+            >
+              {option.label}
+            </DropdownMenuPrimitive.Item>
+          ))}
+        </DropdownMenuPrimitive.Content>
+      </DropdownMenuPrimitive.Portal>
+    </DropdownMenuPrimitive.Root>
+  );
+}
+
+export function Select({
+  label,
+  value,
+  onValueChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  options: readonly { value: string; label: string; lang?: string }[];
+}) {
+  return (
+    <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
+      <SelectPrimitive.Trigger className="ui-select-trigger" aria-label={label} data-value={value}>
+        <SelectPrimitive.Value />
+        <SelectPrimitive.Icon asChild>
+          <ChevronDown size={14} aria-hidden="true" />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Content
+          className="ui-select-content"
+          position="popper"
+          align="end"
+          sideOffset={6}
+          collisionPadding={10}
+        >
+          <SelectPrimitive.Viewport>
+            {options.map((option) => (
+              <SelectPrimitive.Item
+                className="ui-select-item"
+                key={option.value}
+                value={option.value}
+                lang={option.lang}
+              >
+                <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
+                <SelectPrimitive.ItemIndicator>
+                  <Check size={14} aria-hidden="true" />
+                </SelectPrimitive.ItemIndicator>
+              </SelectPrimitive.Item>
+            ))}
+          </SelectPrimitive.Viewport>
+        </SelectPrimitive.Content>
+      </SelectPrimitive.Portal>
+    </SelectPrimitive.Root>
+  );
+}
 
 export function Tooltip({
   text,
@@ -121,6 +211,7 @@ export function Dialog({
   className?: string;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
   const returnFocus = useRef<HTMLElement | null>(null);
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
@@ -138,7 +229,7 @@ export function Dialog({
         >
           <DialogPrimitive.Title className="sr-only">{label}</DialogPrimitive.Title>
           <DialogPrimitive.Description className="sr-only">
-            {label} · Fermez cette fenêtre pour revenir à la carte.
+            {label} · {t("dialog.return")}
           </DialogPrimitive.Description>
           <DialogPrimitive.Close className="close-modal" aria-label={closeLabel}>
             <X />

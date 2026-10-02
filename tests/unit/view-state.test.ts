@@ -26,7 +26,7 @@ test("default state and camera are deterministic without browser globals", () =>
       mode: "overlay",
       opacity: 75,
       split: 50,
-      alignedToMap: false,
+      bearing: 0,
     },
   });
   expect(initial("year=1875").state.time).toBe(1875);
@@ -87,9 +87,13 @@ test("shared camera validates coverage and clamps zoom independently of orientat
   expect(initial("#lon=1.44954&lat=43.597678&z=30&bearing=53")).toMatchObject({
     shared: true,
     camera: { center: [1.44954, 43.597678], zoom: 19, bearing: 53 },
-    state: { alignedToMap: true },
+    state: { bearing: 53 },
   });
-  expect(initial("#lon=1.3&lat=43.49&z=-10").camera.zoom).toBe(11.5);
+  expect(initial("#lon=1.18&lat=43.38&z=-10").camera.zoom).toBe(10.5);
+  expect(initial("#lon=1.65&lat=43.8&z=11")).toMatchObject({
+    shared: true,
+    camera: { center: [1.65, 43.8], zoom: 11 },
+  });
   for (const hash of [
     "lon=1.442&lat=43.602",
     "lon=1.442&lat=43.602&z=",
@@ -144,15 +148,15 @@ test("view actions preserve independent controls and enforce numeric bounds", ()
   current = reduceViewState(current, { type: "opacity", value: 42 }, TODAY);
   current = reduceViewState(current, { type: "split", value: 98 }, TODAY);
   current = reduceViewState(current, { type: "moveSplit", delta: 10 }, TODAY);
-  current = reduceViewState(current, { type: "toggleAlignment" }, TODAY);
+  current = reduceViewState(current, { type: "toggleAlignment", epoch: 1777 }, TODAY);
   expect(current).toMatchObject({
     time: 1777,
     mode: "loupe",
     opacity: 42,
     split: 100,
-    alignedToMap: true,
+    bearing: 53,
   });
-  expect(reduceViewState(current, { type: "toggleAlignment" }, TODAY).alignedToMap).toBe(false);
+  expect(reduceViewState(current, { type: "toggleAlignment", epoch: 1777 }, TODAY).bearing).toBe(0);
 });
 
 test.each(["overlay", "split", "loupe"] as Mode[])(
@@ -164,7 +168,7 @@ test.each(["overlay", "split", "loupe"] as Mode[])(
       mode,
       opacity: 42,
       split: 72,
-      alignedToMap: true,
+      bearing: 53,
     });
     const camera = { center: [1.4315, 43.599] as [number, number], zoom: 15.6, bearing: 53 };
     const year = resolveTimeline(view, TODAY).year;
@@ -189,17 +193,25 @@ test.each(EPOCH_IDS)("exact epoch %s renders and credits only its sheet", (id) =
 });
 
 test("prepared neighbours follow enabled epochs and remain bounded around a crossfade", () => {
-  expect(resolveTimeline(state({ time: 1550 }), TODAY).prepared).toEqual(["1250", "1550", "1631"]);
-  expect(resolveTimeline(state({ time: 1590 }), TODAY).prepared).toEqual([
+  expect(resolveTimeline(state({ time: 1550 }), TODAY).prepared).toEqual([
+    "1195",
     "1250",
     "1550",
     "1631",
     "1680",
   ]);
+  expect(resolveTimeline(state({ time: 1590 }), TODAY).prepared).toEqual([
+    "1195",
+    "1250",
+    "1550",
+    "1631",
+    "1680",
+    "1777",
+  ]);
   expect(
     resolveTimeline(state({ enabled: ["1250", "1777", "1954"], time: 1777 }), TODAY).prepared,
   ).toEqual(["1250", "1777", "1954"]);
-  expect(resolveTimeline(state({ time: TODAY }), TODAY).prepared).toEqual(["1954"]);
+  expect(resolveTimeline(state({ time: TODAY }), TODAY).prepared).toEqual(["1904", "1954"]);
   expect(resolveTimeline(state({ enabled: [], time: TODAY }), TODAY).prepared).toEqual([]);
 });
 
@@ -248,7 +260,7 @@ test("empty selection has a finite timeline and no historical contribution", () 
 });
 
 test("temporary comparison restores persisted controls and does not rotate the camera", () => {
-  const view = state({ time: 1777, mode: "split", opacity: 72, alignedToMap: true });
+  const view = state({ time: 1777, mode: "split", opacity: 72, bearing: 53 });
   expect(derivePresentation(view, { compareHeld: true, peek: true }, TODAY)).toMatchObject({
     visibleMode: "overlay",
     historicOpacity: 0.2,
@@ -272,6 +284,20 @@ test("temporary comparison restores persisted controls and does not rotate the c
     readingBearing: 0,
     creditedPeriods: [],
   });
+});
+
+test("camera bearing persists across timeline, opacity and epoch-selection changes", () => {
+  let view = state({ time: 1631, bearing: 84 });
+  for (const time of [1656, 1777, 1904, TODAY]) {
+    view = reduceViewState(view, { type: "time", value: time }, TODAY);
+    expect(derivePresentation(view, idle, TODAY).bearing).toBe(84);
+  }
+  view = reduceViewState(view, { type: "opacity", value: 0 }, TODAY);
+  view = reduceViewState(view, { type: "toggleEpoch", id: "1631" }, TODAY);
+  expect(derivePresentation(view, idle, TODAY)).toMatchObject({ bearing: 84, readingBearing: 0 });
+  view = reduceViewState(view, { type: "toggleAlignment", epoch: TODAY }, TODAY);
+  expect(view.bearing).toBe(0);
+  expect(reduceViewState(view, { type: "toggleAlignment", epoch: TODAY }, TODAY).bearing).toBe(0);
 });
 
 test("timeline labels distinguish dated maps and symbolic historical anchors", () => {

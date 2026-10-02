@@ -50,16 +50,27 @@ Re-enabling an epoch preserves the selected time; visitors can then select that
 epoch on the timeline.
 
 The URL fragment is read once at startup with `parseViewState`.
+Navigation and shared-camera validation use the same Toulouse-area bounds
+([1.18, 43.38]–[1.70, 43.86]) and zoom range (10.5–19). The renderer may enforce
+a higher minimum zoom to keep the viewport within those bounds. This extra margin
+allows wider historical sheets to fit without changing their source coverage.
 `serializeViewState` produces a sharing link from state and the live camera,
 without changing the address. Legacy `modern`, `historic` and `time` modes remain
 compatible. The historical `year` field is retained in links. The current year is
 an explicit parameter of calculation functions.
+
+Historical timeline stops use equal visual gaps, with a 1.5-times wider final
+interval to fit the present-day label. Calendar-year interpolation remains linear
+inside each interval; changing spacing does not change dates or blending.
 
 `src/view/presentation.ts` calculates active layers, opacities, the dominant epoch,
 labels, credits and orientation. Between historical maps, the preceding sheet stays
 opaque while the next fades in above it: their coefficients must not be normalized
 to sum to one. Towards the current city, the last historical map fades out.
 At the endpoint, no historical credit is displayed.
+The selected camera bearing lives in view state and persists through timeline,
+epoch-selection and opacity changes. Only the compass changes it; a rotated view
+can return to north even when the dominant sheet has no reading angle.
 
 Temporary comparison actions are separate from shared state. They change presentation
 without replacing the selected mode, opacity or time. They do not rotate the camera
@@ -72,9 +83,9 @@ on every press and release.
 resources already created. Coordinates have their own subscription in
 `Coordinates.tsx`, without rerendering the entire application.
 
-Epochs contributing to the selected date and their immediate enabled neighbours are
-installed: at most three at an exact date, four between dates. At the current date,
-only the last historical epoch is prepared. Neighbours have exactly zero opacity
+Epochs contributing to the selected date and two enabled neighbours on each side are
+installed: at most five at an exact date, six between dates. At the current date,
+the last two historical epochs are prepared. Neighbours have exactly zero opacity
 and contribute neither credits nor visible loading status. This prepares sources
 in both directions and avoids recreating images whenever a snapped date is crossed.
 A neighbouring source may still wait for the network if movement outpaces its first
@@ -117,7 +128,8 @@ its cache.
 services. `src/components/` separates responsibilities:
 
 - `Header` handles places, theme and sharing, cleaning up the confirmation timer.
-  The application supplies the link from its current view.
+  The application supplies the link from its current view. Places opens a styled
+  Radix dropdown of navigation commands directly, without a nested native selector.
 - `MapViewport` owns loupe position and gestures, and displays the curtain.
 - `MapTools` exposes location, zoom, orientation and opacity.
 - `ComparisonPanel` handles timeline gestures and epoch/mode choices.
@@ -131,20 +143,34 @@ the sharing link.
 
 `style.css` is the single entry point for project styles: `colors.css` for colours,
 `base.css` for global rules, `app.css` for the application and responsive variants,
-and `ui.css` for Radix primitives. `compact.css` and rules for the previous screen
-were removed. Remaining rules retain their cascade order; declarations already
+and `ui.css` for Radix primitives. Disabled buttons share the `--disabled` theme
+colour and subtle background in `base.css`; hover effects apply only to enabled
+buttons. `compact.css` and rules for the previous screen were removed. Remaining
+rules retain their cascade order; declarations already
 overridden by an identical later rule were removed.
 
-Documentation and code comments use English. The website interface, user-facing
-content and accessibility labels remain in French; additional interface languages
-are planned for later.
+Documentation and code comments use English. Interface text and accessibility labels
+support English and French through i18next and react-i18next. `src/i18n.ts` initializes
+bundled UI resources in `src/locales/`, uses the browser language with English fallback,
+and synchronizes the document language and description. Only explicit header choices
+are stored under `retrolosa-language`; unavailable storage does not block selection.
+The language selector uses the styled Radix Select wrapper in `src/ui.tsx`, with
+theme tokens, keyboard navigation, dismissal and focus return.
+`i18n-labels.ts` translates catalogue and view labels at the UI boundary, preserving
+the pure view model and shared URL format. Historical milestones have localized prose.
+Source descriptions and the `sources` translation namespace remain in the lazy source
+module. Translation keys and interpolation placeholders must match across languages.
+Existing browser scenarios explicitly use French; `tests/i18n.spec.ts` also covers
+English, regional detection, fallback, persistence, lazy content and mobile storage failure.
 
 ## Installed application
 
 `pwa.config.ts` is a Vite plugin that serves the manifest in development and emits
 the manifest and service worker during production builds. Identity, launch URL,
-scope and icon addresses follow the configured deployment base. The cache revision
-includes emitted shell contents, manifest and static fonts/icons. The worker
+scope and icon addresses follow the configured deployment base. Static manifest
+metadata uses English; the in-app installation guide follows the selected interface
+language. The cache revision includes emitted shell contents, manifest and static
+fonts/icons. The worker
 precaches only HTML, bundled JavaScript/CSS, local fonts, theme initialization and
 icons; it never caches historical imagery, originals or external map providers.
 Lazy modules stay deferred in React, but their production files are precached so
@@ -157,7 +183,7 @@ prevent offline module loading. Activation removes only older Rétrolosa shell c
 same deployment scope; it neither calls `skipWaiting` nor reloads an active map.
 
 `src/pwa.ts` registers the production worker after page load and owns installation
-and connectivity hooks. `InstallApp` in the header provides an optional French
+and connectivity hooks. `InstallApp` in the header provides an optional localized
 dialog, a one-use native install prompt when available, and manual iPhone/Android
 instructions otherwise. Installed standalone windows hide the install action.
 `App` displays a connectivity notice; map loading and retry remain the controller's

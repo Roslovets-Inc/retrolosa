@@ -39,7 +39,7 @@ test("installation metadata and icons use the deployment scope", async ({ page, 
     start_url: base,
     scope: base,
     display: "standalone",
-    lang: "fr",
+    lang: "en",
   });
   for (const icon of manifest.icons) {
     expect(icon.src.startsWith(base)).toBe(true);

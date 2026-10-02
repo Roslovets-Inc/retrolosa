@@ -13,12 +13,21 @@ test("compact mobile controls keep the map clear and places collapse after selec
   await page.goto("/");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await expect(page.locator(".intro")).toHaveCount(0);
-  await expect(page.getByRole("combobox")).toHaveCount(0);
+  await expect(page.getByRole("menu")).toHaveCount(0);
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
-  await expect(page.getByRole("combobox")).toBeVisible();
-  await page.getByRole("combobox").selectOption("1");
-  await expect(page.getByRole("combobox")).toHaveCount(0);
-  await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
+  await expect(page.getByRole("menu")).toBeVisible();
+  await expect(page.getByRole("menuitem")).toHaveText([
+    "Place du Capitole",
+    "Basilique Saint-Sernin",
+    "Couvent des Jacobins",
+    "Saint-Étienne",
+    "Pont Neuf",
+    "Dôme de la Grave",
+    "Tout le centre",
+  ]);
+  await page.getByRole("menuitem", { name: "Place du Capitole", exact: true }).click();
+  await expect(page.getByRole("menu")).toHaveCount(0);
+  await expect.poll(() => sharedView(page)).toMatch(/lat=43.604341/);
 
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
   const panel = await page.locator(".control-panel").boundingBox();
@@ -31,7 +40,8 @@ test("compact mobile controls keep the map clear and places collapse after selec
   await page.screenshot({ path: ".local/compact-time.png" });
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("combobox")).toHaveCount(0);
+  await expect(page.getByRole("menu")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Lieux", exact: true })).toBeFocused();
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
   ).toBeTruthy();

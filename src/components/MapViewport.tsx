@@ -1,8 +1,10 @@
 import { ArrowLeftRight } from "lucide-react";
 import React, { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { getEpoch } from "../epochs/catalog";
 import type { EpochId as Year } from "../epochs/catalog";
+import { translateLabel } from "../i18n-labels";
 import { Button } from "../ui";
 import type { Mode, ViewAction } from "../view/state";
 export function MapViewport({
@@ -24,19 +26,20 @@ export function MapViewport({
   year: Year;
   dispatch: React.Dispatch<ViewAction>;
 }) {
+  const { t } = useTranslation();
   const [loupe, setLoupe] = useState({ x: 50, y: 42 });
   const loupeDrag = useRef<{ id: number; x: number; y: number } | null>(null);
   const loupeLeft = `clamp(var(--loupe-radius), ${loupe.x}%, calc(100% - var(--loupe-radius)))`;
   const loupeTop = `clamp(var(--loupe-radius), ${loupe.y}%, calc(100% - var(--loupe-radius)))`;
-  const epochLabel = (value: Year) => getEpoch(value).label;
+  const epochLabel = (value: Year) => translateLabel(t, getEpoch(value).label);
   const setSplit = (value: number) => dispatch({ type: "split", value });
   return (
     <>
-      <div className="map" ref={modernEl} aria-label="Carte actuelle de Toulouse" />
+      <div className="map" ref={modernEl} aria-label={t("mapViewport.currentMapOfToulouse")} />
       <div
         className="map historic-map"
         ref={oldEl}
-        aria-label="Cartes historiques sur la frise"
+        aria-label={t("mapViewport.historicalMapsOnTheTimeline")}
         style={{
           opacity: historicOpacity,
           clipPath:
@@ -51,7 +54,7 @@ export function MapViewport({
         <div className="map loupe-overlay">
           <Button
             className="loupe-glass"
-            aria-label="Déplacer la loupe historique"
+            aria-label={t("mapViewport.moveTheHistoricalMagnifier")}
             aria-describedby="loupe-help"
             style={{ left: loupeLeft, top: loupeTop }}
             onPointerDown={(e) => {
@@ -132,18 +135,18 @@ export function MapViewport({
       {visibleMode === "split" && opacity > 0 && (
         <>
           <div className="epoch-label old-label">
-            {year === "1875" ? "1875 · Inondation" : epochLabel(year)}{" "}
-            <span>{getEpoch(year).category}</span>
+            {year === "1875" ? t("mapViewport.1875Flood") : epochLabel(year)}{" "}
+            <span>{translateLabel(t, getEpoch(year).category)}</span>
           </div>
           <div className="epoch-label new-label">
-            <span>CARTE ACTUELLE</span> Actuel
+            <span>{t("mapViewport.currentMap")}</span> {t("mapViewport.present")}{" "}
           </div>
           <div className="divider" style={{ left: `${split}%` }}>
             <div
               className="divider-handle"
               role="slider"
               tabIndex={0}
-              aria-label="Limite de comparaison"
+              aria-label={t("mapViewport.comparisonBoundary")}
               aria-valuemin={0}
               aria-valuemax={100}
               aria-valuenow={Math.round(split)}

@@ -1,6 +1,51 @@
 .tooltip {
   max-height: var(--radix-tooltip-content-available-height);
 }
+.ui-select-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ui-select-trigger:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+.ui-select-content {
+  z-index: 50;
+  min-width: max(150px, var(--radix-select-trigger-width, 0px));
+  max-height: var(
+    --radix-select-content-available-height,
+    var(--radix-dropdown-menu-content-available-height)
+  );
+  overflow: auto;
+  padding: 5px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 6px 20px #0002;
+}
+.ui-select-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+.ui-select-item[data-state="checked"] {
+  color: var(--primary);
+  font-weight: 600;
+}
+.ui-select-item[data-highlighted] {
+  background: var(--hover);
+}
 .ui-popover {
   position: relative;
   inset: auto;
@@ -20,7 +65,7 @@
   place-items: center;
   border-radius: 4px;
 }
-.popover-close:hover {
+.popover-close:enabled:hover {
   background: var(--hover);
 }
 .ui-backdrop {

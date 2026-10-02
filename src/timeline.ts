@@ -7,11 +7,11 @@ export function snapTimelineYear(value: number, dates: readonly number[]): numbe
   return fraction <= 0.2 ? before : fraction >= 0.8 ? after : value;
 }
 
-/** Bound visual gaps while retaining linear interpolation inside each interval. */
+/** Evenly space historical dates; reserve extra room for the present label. */
 export function timelineStops(dates: readonly number[]): number[] {
   const stops = [0];
   for (let i = 1; i < dates.length; i++)
-    stops.push(stops[i - 1] + Math.max(60, Math.min(120, dates[i] - dates[i - 1])));
+    stops.push(stops[i - 1] + (i === dates.length - 1 ? 90 : 60));
   const total = stops.at(-1) || 1;
   return stops.map((stop) => stop / total);
 }

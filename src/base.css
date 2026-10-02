@@ -29,6 +29,11 @@ button {
   background: none;
   color: inherit;
 }
+:root button:disabled {
+  color: var(--disabled);
+  background: var(--subtle);
+  cursor: default;
+}
 button:focus-visible,
 a:focus-visible,
 select:focus-visible,

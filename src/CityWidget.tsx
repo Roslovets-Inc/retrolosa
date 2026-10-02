@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { eventsAt } from "./city-events";
 import { populationAt } from "./population";
@@ -41,6 +42,7 @@ export function CityWidget({
   label: string;
   onSources: () => void;
 }) {
+  const { t, i18n } = useTranslation();
   const [selected, setSelected] = useState<number | null>(null);
   const [expanded, setExpanded] = useState(false);
   useEffect(() => {
@@ -55,18 +57,23 @@ export function CityWidget({
   return (
     <section
       className="population-counter"
-      aria-label="Toulouse à cette époque"
+      aria-label={t("cityWidget.toulouseAtThisTime")}
       data-expanded={expanded}
     >
-      <span>Toulouse · {label}</span>
+      <span>
+        {t("cityWidget.toulouse")} {label}
+      </span>
       <Button
         className="population-value"
         onClick={onSources}
-        aria-label={`Population estimée de Toulouse : environ ${populationAt(year)} habitants. Voir les sources`}
-        data-tooltip="Population estimée de Toulouse · Voir les sources"
+        aria-label={t("cityWidget.estimatedPopulationOfToulouseAboutInhabitantsViewSources", {
+          v0: populationAt(year),
+        })}
+        data-tooltip={t("cityWidget.estimatedPopulationOfToulouseViewSources")}
       >
         <strong>
-          ≈ {populationAt(year).toLocaleString("fr-FR")} <small>habitants</small>
+          ≈ {populationAt(year).toLocaleString(i18n.resolvedLanguage)}{" "}
+          <small>{t("cityWidget.inhabitants")}</small>
         </strong>
       </Button>
       <Button
@@ -78,16 +85,21 @@ export function CityWidget({
           setSelected(null);
         }}
       >
-        Repères historiques <ChevronDown size={14} />
+        {t("cityWidget.historicalMilestones")} <ChevronDown size={14} />
       </Button>
-      <div id="city-events" className="city-events" role="group" aria-label="Repères historiques">
+      <div
+        id="city-events"
+        className="city-events"
+        role="group"
+        aria-label={t("cityWidget.historicalMilestones")}
+      >
         {events.map((event) => {
           const Icon = icons[event.icon];
           return (
             <Button
               key={event.year}
-              data-tooltip={`${event.year} · ${event.title}`}
-              aria-label={`${event.year} · ${event.title}`}
+              data-tooltip={`${event.year} · ${t(`events.${event.year}.title`)}`}
+              aria-label={`${event.year} · ${t(`events.${event.year}.title`)}`}
               aria-expanded={selected === event.year}
               aria-controls="city-event-detail"
               onClick={() => setSelected(selected === event.year ? null : event.year)}
@@ -102,17 +114,17 @@ export function CityWidget({
         <div className="city-event-detail" id="city-event-detail">
           <Button
             className="event-close"
-            aria-label="Fermer le repère historique"
+            aria-label={t("cityWidget.closeHistoricalMilestone")}
             onClick={() => setSelected(null)}
           >
             <X size={15} />
           </Button>
           <h3>
-            {active.year} · {active.title}
+            {active.year} · {t(`events.${active.year}.title`)}
           </h3>
-          <p>{active.text}</p>
+          <p>{t(`events.${active.year}.text`)}</p>
           <a href={active.source} target="_blank" rel="noreferrer">
-            Source <ExternalLink size={12} />
+            {t("cityWidget.source")} <ExternalLink size={12} />
           </a>
         </div>
       )}

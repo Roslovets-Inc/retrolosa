@@ -26,11 +26,11 @@ export function resolveTimeline(state: Pick<ViewState, "enabled" | "time">, toda
     ]),
   ) as Record<EpochId, number>;
   const active = enabled.filter((id) => opacities[id] > 0);
-  // Keep both directions warm around a snapped date without loading the entire catalogue.
+  // Prepare two enabled neighbours in each direction without loading the entire catalogue.
   const prepared = enabled.filter((_, index) =>
     active.length
-      ? enabled.slice(Math.max(0, index - 1), index + 2).some((id) => active.includes(id))
-      : index === enabled.length - 1,
+      ? enabled.slice(Math.max(0, index - 2), index + 3).some((id) => active.includes(id))
+      : index >= enabled.length - 2,
   );
   const epoch = visibleEpoch(time, dates);
   // Keep a historical sheet for source details and the legacy year field at modernity.
@@ -88,7 +88,7 @@ export function derivePresentation(
     creditedPeriods,
     orientationEpoch,
     readingBearing,
-    bearing: state.alignedToMap ? readingBearing : 0,
+    bearing: state.bearing,
     populationYear: visibleMode === "modern" ? today : timeline.time,
   };
 }

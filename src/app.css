@@ -32,6 +32,34 @@ main {
   align-items: center;
 }
 
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+}
+.language-selector .ui-select-trigger {
+  height: 40px;
+  max-width: 94px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: 4px;
+  color: inherit;
+  background: var(--surface);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.language-selector .ui-select-trigger:enabled:hover {
+  background: var(--hover);
+}
+@media (max-width: 400px) {
+  .brand span,
+  .language-selector > svg {
+    display: none;
+  }
+}
+
 .eyebrow {
   letter-spacing: 2px;
   font-weight: 600;
@@ -379,32 +407,11 @@ main {
   background: none;
   font-size: 12px;
 }
-.header-icon:hover,
-.places-button:hover {
+.header-icon:enabled:hover,
+.places-button:enabled:hover {
   background: var(--hover);
 }
 
-.places-popover {
-  position: absolute;
-  top: 44px;
-  right: 0;
-  width: 230px;
-  padding: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  box-shadow: var(--shadow-panel);
-}
-.places-popover select {
-  width: 100%;
-  height: 42px;
-  padding: 0 8px;
-  border: 1px solid var(--border);
-  border-radius: 5px;
-  background: var(--surface);
-  color: inherit;
-  font-size: 14px;
-}
 .control-dock {
   position: absolute;
   z-index: 5;
@@ -480,7 +487,7 @@ main {
   font-size: 11px;
   border-radius: 4px;
 }
-.comparison-switch button[aria-checked="true"] {
+.comparison-switch button:enabled[aria-checked="true"] {
   background: var(--primary);
   color: var(--on-primary);
 }
@@ -572,7 +579,7 @@ main {
 .timeline-ticks button {
   position: absolute;
   min-height: 22px;
-  font-size: 10px;
+  font-size: 9px;
   padding: 2px 0;
 }
 .sr-only {
@@ -850,7 +857,7 @@ footer {
   border-radius: 6px;
   font-size: 11px;
 }
-.epochs-button:hover,
+.epochs-button:enabled:hover,
 .epochs-button[aria-expanded="true"] {
   background: var(--hover);
 }
@@ -988,7 +995,7 @@ footer {
   border-radius: 5px;
   color: var(--primary);
 }
-.city-events button:hover,
+.city-events button:enabled:hover,
 .city-events button[aria-expanded="true"] {
   background: var(--hover);
 }
@@ -1031,10 +1038,6 @@ footer {
     max-height: 115px;
     overflow-y: auto;
   }
-}
-.orientation-button:disabled {
-  cursor: default;
-  color: var(--muted);
 }
 
 .tooltip {
@@ -1229,10 +1232,6 @@ footer {
   color: var(--on-primary);
   font-size: 13px;
   font-weight: 500;
-}
-.install-action:disabled {
-  opacity: 0.7;
-  cursor: wait;
 }
 .install-desktop,
 .install-network,

@@ -12,7 +12,7 @@ test("address stays stable while sharing captures and restores the current view"
   const original = page.url();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
-  await page.getByRole("combobox").selectOption({ label: "Saint-Cyprien" });
+  await page.getByRole("menuitem", { name: "Pont Neuf", exact: true }).click();
   await page.waitForTimeout(1200);
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
@@ -25,9 +25,9 @@ test("address stays stable while sharing captures and restores the current view"
   const overlay = await sharedView(page);
   expect(page.url()).toBe(original);
   const params = new URLSearchParams(new URL(overlay).hash.slice(1));
-  expect(params.get("lon")).toBe("1.431500");
-  expect(params.get("lat")).toBe("43.599000");
-  expect(params.get("z")).toBe("15.60");
+  expect(params.get("lon")).toBe("1.440401");
+  expect(params.get("lat")).toBe("43.599588");
+  expect(params.get("z")).toBe("16.00");
   expect(params.get("mode")).toBe("overlay");
   expect(params.get("opacity")).toBe("42");
   expect(params.get("layers")).toBe("450,1195,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");

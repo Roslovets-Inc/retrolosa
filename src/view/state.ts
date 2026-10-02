@@ -1,6 +1,6 @@
 import { EPOCH_IDS, getEpoch, isEpochId } from "../epochs/catalog";
 import type { EpochId } from "../epochs/catalog";
-import { readBearing } from "../orientation";
+import { nextBearing, readBearing } from "../orientation";
 
 export type Mode = "split" | "overlay" | "loupe";
 export interface ViewState {
@@ -9,7 +9,7 @@ export interface ViewState {
   mode: Mode;
   opacity: number;
   split: number;
-  alignedToMap: boolean;
+  bearing: number;
 }
 export interface CameraView {
   center: [number, number];
@@ -24,14 +24,14 @@ export interface InitialView {
 
 // Navigation and shared views use the same bounds and zoom limits.
 export const CITY_LIMITS: [[number, number], [number, number]] = [
-  [1.3, 43.49],
-  [1.57, 43.75],
+  [1.18, 43.38],
+  [1.7, 43.86],
 ];
 export const CITY_OVERVIEW: [[number, number], [number, number]] = [
   [1.412, 43.579],
   [1.472, 43.625],
 ];
-export const MIN_ZOOM = 11.5;
+export const MIN_ZOOM = 10.5;
 export const MAX_ZOOM = 19;
 const DEFAULT_CAMERA: CameraView = { center: [1.442, 43.602], zoom: 14, bearing: 0 };
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
@@ -107,7 +107,7 @@ export function parseViewState(hash: string, today: number): InitialView {
         mode,
         opacity,
         split: percent(params, "split", 50),
-        alignedToMap: bearing !== 0,
+        bearing,
       },
       today,
     ),
@@ -121,7 +121,7 @@ export type ViewAction =
   | { type: "opacity"; value: number }
   | { type: "split"; value: number }
   | { type: "moveSplit"; delta: number }
-  | { type: "toggleAlignment" };
+  | { type: "toggleAlignment"; epoch: number };
 
 export function reduceViewState(state: ViewState, action: ViewAction, today: number): ViewState {
   switch (action.type) {
@@ -146,7 +146,7 @@ export function reduceViewState(state: ViewState, action: ViewAction, today: num
     case "moveSplit":
       return { ...state, split: bounded(state.split + action.delta, 0, 100, 50) };
     case "toggleAlignment":
-      return { ...state, alignedToMap: !state.alignedToMap };
+      return { ...state, bearing: nextBearing(state.bearing, action.epoch) };
   }
 }
 

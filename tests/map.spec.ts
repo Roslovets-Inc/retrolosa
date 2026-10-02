@@ -44,7 +44,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   for (let i = 0; i < 35; i++) await page.keyboard.press("ArrowRight");
   await expect(page.locator(".historic-map")).toHaveCSS("clip-path", "inset(0px 30% 0px 0px)");
   await page.getByRole("button", { name: "Lieux", exact: true }).click();
-  await page.getByRole("combobox").selectOption("1");
+  await page.getByRole("menuitem", { name: "Saint-Étienne", exact: true }).click();
   await expect.poll(() => sharedView(page)).toMatch(/lat=43.599782/);
   await page.screenshot({ path: ".local/saint-etienne.png" });
 

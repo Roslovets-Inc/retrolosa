@@ -8,6 +8,7 @@ test("snapping to an epoch keeps its neighbours warm without repeated image requ
 }) => {
   await prepareOfflineMaps(page);
   let requests = 0;
+  let secondNeighbourRequests = 0;
   let release!: () => void;
   const gate = new Promise<void>((resolve) => {
     release = resolve;
@@ -17,10 +18,16 @@ test("snapping to an epoch keeps its neighbours warm without repeated image requ
     await gate;
     await route.continue();
   });
-  await page.goto("/#year=1250&time=1250");
+  await page.route("**/tavernier-1631/overview.webp?*", async (route) => {
+    secondNeighbourRequests++;
+    await gate;
+    await route.continue();
+  });
+  await page.goto("/#year=1250&time=1250&lon=1.442&lat=43.602&z=13");
   await waitForApp(page);
   try {
     await expect.poll(() => requests).toBe(1);
+    await expect.poll(() => secondNeighbourRequests).toBe(1);
     await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({
       timeout: 15000,
     });
@@ -50,8 +57,13 @@ test("snapping to an epoch keeps its neighbours warm without repeated image requ
   await move(1550);
   await move(1370);
   await page.mouse.up();
+  await slider.fill("1631");
+  await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 15000 });
+  await slider.fill("1250");
+  await slider.fill("1631");
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 15000 });
   expect(requests).toBe(1);
+  expect(secondNeighbourRequests).toBe(1);
 });
 
 test("retry restores a failed active image without recreating the page or losing the camera", async ({

@@ -1,8 +1,11 @@
 import { Marker, type Map } from "maplibre-gl";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // Browser geolocation only; no separate location service or backend.
 export function useLocation(maps: React.RefObject<Map[]>) {
+  const { t } = useTranslation();
+  const [accuracyMetres, setAccuracyMetres] = useState(0);
   const [status, setStatus] = useState<"off" | "locating" | "following">("off");
   const [message, setMessage] = useState("");
   const watch = useRef<number | null>(null);
@@ -17,6 +20,16 @@ export function useLocation(maps: React.RefObject<Map[]>) {
     setStatus("off");
   }, []);
   useEffect(() => stop, [stop]);
+  useEffect(() => {
+    markers.current.forEach((marker) =>
+      marker.getElement().setAttribute(
+        "aria-label",
+        t(status === "locating" ? "location.last" : "location.position", {
+          accuracy: accuracyMetres,
+        }),
+      ),
+    );
+  }, [t, accuracyMetres, status]);
   const toggle = () => {
     if (watch.current !== null) {
       stop();
@@ -24,7 +37,7 @@ export function useLocation(maps: React.RefObject<Map[]>) {
       return;
     }
     if (!navigator.geolocation) {
-      setMessage("Ce navigateur ne prend pas en charge la géolocalisation.");
+      setMessage("location.unsupported");
       return;
     }
     if (!maps.current.length) return;
@@ -37,7 +50,7 @@ export function useLocation(maps: React.RefObject<Map[]>) {
         const { longitude: lon, latitude: lat, accuracy } = position.coords;
         if (lon < 1.405 || lon > 1.48 || lat < 43.575 || lat > 43.635) {
           stop();
-          setMessage("Vous êtes en dehors du centre de Toulouse couvert par cette carte.");
+          setMessage("location.outside");
           return;
         }
         if (!markers.current.length) {
@@ -45,7 +58,10 @@ export function useLocation(maps: React.RefObject<Map[]>) {
             const el = document.createElement("div");
             el.className = "location-dot";
             el.setAttribute("role", "img");
-            el.setAttribute("aria-label", "Ma position");
+            el.setAttribute(
+              "aria-label",
+              t("location.position", { accuracy: Math.round(accuracy) }),
+            );
             return new Marker({ element: el }).setLngLat([lon, lat]).addTo(map);
           });
         }
@@ -54,38 +70,35 @@ export function useLocation(maps: React.RefObject<Map[]>) {
           marker.setLngLat([lon, lat]);
           marker
             .getElement()
-            .setAttribute(
-              "aria-label",
-              `Ma position · précision estimée : ${Math.round(accuracy)} m`,
-            );
+            .setAttribute("aria-label", t("location.position", { accuracy: Math.round(accuracy) }));
         });
         setStatus("following");
-        setMessage(`Localisation active · précision estimée : ${Math.round(accuracy)} m`);
+        setAccuracyMetres(Math.round(accuracy));
+        setMessage("location.active");
         maps.current[0]?.easeTo({ center: [lon, lat], duration: 600 });
       },
       (error) => {
         if (request !== generation.current) return;
         if (error.code === 1) {
           stop();
-          setMessage(
-            "Autorisez la géolocalisation dans le navigateur, puis appuyez à nouveau sur « Me localiser ».",
-          );
+          setMessage("location.permission");
         } else {
           // A temporary GPS loss must not cancel the watch; it can recover on its own.
           setStatus("locating");
           markers.current.forEach((marker) => {
             marker.getElement().style.opacity = "0.4";
-            marker
-              .getElement()
-              .setAttribute("aria-label", "Dernière position connue — en attente du signal");
+            marker.getElement().setAttribute("aria-label", t("location.last"));
           });
-          setMessage(
-            "En attente du signal GPS. Le point pâle indique la dernière position connue. Appuyez sur la flèche pour arrêter.",
-          );
+          setMessage("location.waiting");
         }
       },
       { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 },
     );
   };
-  return { status, message, toggle, dismiss: () => setMessage("") };
+  return {
+    status,
+    message: message ? t(message, { accuracy: accuracyMetres }) : "",
+    toggle,
+    dismiss: () => setMessage(""),
+  };
 }

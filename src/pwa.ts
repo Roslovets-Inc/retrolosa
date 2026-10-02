@@ -49,15 +49,9 @@ export function useInstallation() {
     try {
       await prompt.prompt();
       const choice = await prompt.userChoice;
-      setMessage(
-        choice.outcome === "accepted"
-          ? "Installation demandée. Retrouvez Rétrolosa sur votre écran d’accueil."
-          : "Vous pourrez installer Rétrolosa quand vous le souhaitez.",
-      );
+      setMessage(choice.outcome === "accepted" ? "install.accepted" : "install.dismissed");
     } catch {
-      setMessage(
-        "Utilisez le menu de votre navigateur pour ajouter Rétrolosa à l’écran d’accueil.",
-      );
+      setMessage("install.failed");
     } finally {
       // The browser's installation event can only be used once, including after dismissal.
       setPrompt(null);
