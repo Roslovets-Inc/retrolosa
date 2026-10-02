@@ -9,7 +9,7 @@ Source and configuration take precedence over this dated snapshot.
 
 The current public name is **Rétrolosa**, and the package name is `retrolosa`.
 The repository has historically been named `toulouse-in-time`. These names and
-the local directory name are independent. The app is a static English/French
+the local directory name are independent. The app is a static English/French/Russian
 map of Toulouse, built with React, TypeScript, Vite, MapLibre, Radix and PMTiles.
 There is no application backend or database to migrate.
 
@@ -37,7 +37,7 @@ iPhone/Android installation remains a separate verification step.
 
 English is the primary development language for project documentation, including
 README, code comments and commit messages. The website interface, user-facing
-content and accessibility labels support English and French. Browser language determines
+content and accessibility labels support English, French and Russian. Browser language determines
 the initial selection, English is the fallback, and the header saves manual choices
 through a styled Radix Select with keyboard navigation and theme-aware options.
 Keep original source titles, proper names and quoted UI labels when needed for identification.

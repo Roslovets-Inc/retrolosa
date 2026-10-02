@@ -6,7 +6,7 @@ The XII-century partial reconstruction combines Saint-Sernin borough growth,
 Romanesque Saint-Étienne and an approximately positioned Narbonnais castle fragment.
 Saint-Pierre-des-Cuisines adds building-phase detail within the Saint-Sernin borough.
 Undocumented gaps remain transparent; original phase legends are linked from sources.
-React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is available in English and French.
+React 19, TypeScript, Vite 8, MapLibre GL JS 6 and PMTiles 4. The interface is available in English, French and Russian.
 
 UI components use Radix Primitives: tooltips, panels, dialogs, checkboxes, mode selection,
 the language selector and the opacity slider. Wrappers in `src/ui.tsx` share project styles and colours without
@@ -18,7 +18,7 @@ place selection opens a styled Radix dropdown directly from the header.
 
 English is the primary development language for all project documentation, including
 README, and code comments. The interface, user-facing content and accessibility labels
-are available in English and French. The first visit follows the browser language; unsupported
+are available in English, French and Russian. The first visit follows the browser language; unsupported
 languages fall back to English. The header selector saves an explicit choice locally.
 Preserve original source titles, proper names and quoted UI labels where needed.
 

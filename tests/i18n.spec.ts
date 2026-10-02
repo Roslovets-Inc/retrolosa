@@ -2,10 +2,13 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { prepareOfflineMaps, waitForApp } from "./ui";
 
-async function chooseLanguage(page: Page, label: string, language: "en" | "fr") {
+async function chooseLanguage(page: Page, label: string, language: "en" | "fr" | "ru") {
   await page.getByRole("combobox", { name: label, exact: true }).click();
   await page
-    .getByRole("option", { name: language === "en" ? "English" : "Français", exact: true })
+    .getByRole("option", {
+      name: { en: "English", fr: "Français", ru: "Русский" }[language],
+      exact: true,
+    })
     .click();
 }
 
@@ -16,7 +19,9 @@ test.beforeEach(async ({ page }) => {
 for (const [locale, language, label] of [
   ["en-GB", "en", "Language"],
   ["fr-CA", "fr", "Langue"],
-  ["ru-RU", "en", "Language"],
+  ["ru-RU", "ru", "Язык"],
+  ["ru-KZ", "ru", "Язык"],
+  ["de-DE", "en", "Language"],
 ] as const) {
   test(`browser locale ${locale} selects ${language}`, async ({ browser }) => {
     const context = await browser.newContext({ locale });
@@ -31,7 +36,7 @@ for (const [locale, language, label] of [
     );
     await expect(
       page.getByRole("button", {
-        name: language === "en" ? "About the maps" : "À propos des cartes",
+        name: { en: "About the maps", fr: "À propos des cartes", ru: "О картах" }[language],
       }),
     ).toBeVisible();
     await context.close();
@@ -95,6 +100,59 @@ test("lazy sources and install guide switch languages", async ({ page }) => {
   await expect(page.getByRole("dialog")).toContainText("Add to Home Screen");
 });
 
+test("Russian selection preserves the view, persists, and translates deferred content", async ({
+  page,
+}) => {
+  await page.goto("/#year=1195&time=1993&mode=split");
+  await waitForApp(page);
+  const initialURL = page.url();
+  const canvases = await page.locator("canvas").elementHandles();
+  await chooseLanguage(page, "Langue", "ru");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ru");
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+    "content",
+    "Исследуйте Тулузу сквозь века: от исторических карт до современных улиц.",
+  );
+  await expect(
+    page.getByRole("slider", { name: "Путешествие во времени", exact: true }),
+  ).toHaveValue("1993");
+  await expect(page.getByRole("radio", { name: "Шторка", exact: true })).toHaveAttribute(
+    "data-state",
+    "on",
+  );
+  expect(page.url()).toBe(initialURL);
+  for (const canvas of canvases)
+    expect(await canvas.evaluate((element) => element.isConnected)).toBe(true);
+  await page.getByRole("button", { name: "1993 · Первая линия метро" }).click();
+  await expect(page.locator(".city-event-detail")).toContainText("26 июня 1993 года");
+  await page.reload();
+  await waitForApp(page);
+  await expect(page.getByRole("combobox", { name: "Язык", exact: true })).toHaveAttribute(
+    "data-value",
+    "ru",
+  );
+  await page.getByRole("button", { name: "Места", exact: true }).click();
+  await expect(
+    page.getByRole("menuitem", { name: "Весь центр города", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.goto("/#year=1195&time=1195");
+  // Shared view fragments are read only at startup, not on same-document navigation.
+  await page.reload();
+  await waitForApp(page);
+  await page.getByRole("button", { name: "О картах", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Тулуза в XII веке · три реконструированных участка" }),
+  ).toBeVisible();
+  await expect(page.getByRole("dialog")).toContainText("не гарантируют исторической достоверности");
+  await expect(page.getByRole("dialog")).not.toContainText("{{");
+  await page.getByRole("button", { name: "Закрыть источники" }).click();
+  await page.getByRole("button", { name: "Установить Rétrolosa", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("На экран «Домой»");
+  await page.getByRole("button", { name: "Android", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("Добавить на главный экран");
+});
+
 test("mobile selector fits and works with blocked storage", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.addInitScript(() => {
@@ -111,6 +169,9 @@ test("mobile selector fits and works with blocked storage", async ({ page }) => 
   await expect(selector).toBeVisible();
   await chooseLanguage(page, "Langue", "en");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await chooseLanguage(page, "Language", "ru");
+  await expect(page.locator("html")).toHaveAttribute("lang", "ru");
+  await expect(page.getByRole("combobox", { name: "Язык", exact: true })).toContainText("Русский");
   const bounds = await page.locator(".header-right").boundingBox();
   expect(bounds!.x).toBeGreaterThanOrEqual(0);
   expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(320);
@@ -153,6 +214,16 @@ test("active map failures and location markers update when the language changes"
     page.getByRole("img", { name: "My position · estimated accuracy: 12 m", exact: true }),
   ).toHaveCount(2);
   await expect(page.locator(".location-notice")).toContainText("Location tracking active");
+  await chooseLanguage(page, "Language", "ru");
+  await expect(page.getByRole("alert")).toContainText(
+    "Не удалось полностью загрузить карту: историческая · XIII век · Реконструкция",
+  );
+  await expect(
+    page.getByRole("img", { name: "Моё местоположение · оценка точности: 12 м", exact: true }),
+  ).toHaveCount(2);
+  await expect(page.locator(".location-notice")).toContainText(
+    "Отслеживание местоположения включено",
+  );
 });
 
 test("styled language menu supports keyboard selection and dismissal in both themes", async ({

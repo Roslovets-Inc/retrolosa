@@ -150,7 +150,7 @@ rules retain their cascade order; declarations already
 overridden by an identical later rule were removed.
 
 Documentation and code comments use English. Interface text and accessibility labels
-support English and French through i18next and react-i18next. `src/i18n.ts` initializes
+support English, French and Russian through i18next and react-i18next. `src/i18n.ts` initializes
 bundled UI resources in `src/locales/`, uses the browser language with English fallback,
 and synchronizes the document language and description. Only explicit header choices
 are stored under `retrolosa-language`; unavailable storage does not block selection.
@@ -161,7 +161,7 @@ the pure view model and shared URL format. Historical milestones have localized 
 Source descriptions and the `sources` translation namespace remain in the lazy source
 module. Translation keys and interpolation placeholders must match across languages.
 Existing browser scenarios explicitly use French; `tests/i18n.spec.ts` also covers
-English, regional detection, fallback, persistence, lazy content and mobile storage failure.
+English and Russian, regional detection, fallback, persistence, lazy content and mobile storage failure.
 
 ## Installed application
 

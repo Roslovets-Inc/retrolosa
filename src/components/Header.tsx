@@ -103,10 +103,11 @@ export function Header({
             <Select
               label={t("language")}
               value={i18n.resolvedLanguage ?? "en"}
-              onValueChange={(value) => selectLanguage(value as "en" | "fr")}
+              onValueChange={(value) => selectLanguage(value as "en" | "fr" | "ru")}
               options={[
                 { value: "en", label: "English", lang: "en" },
                 { value: "fr", label: "Français", lang: "fr" },
+                { value: "ru", label: "Русский", lang: "ru" },
               ]}
             />
           </div>

@@ -30,6 +30,10 @@ test("phone layout fills the viewport and keeps population and timeline compact"
     const panel = (await page.locator(".control-panel").boundingBox())!;
     expect(main.y + main.height).toBe(height);
     expect(map.y + map.height).toBe(height);
+    const credits = (await page.locator(".map-credits").boundingBox())!;
+    expect(credits.y + credits.height).toBeCloseTo(height, 1);
+    expect(credits.x).toBe(0);
+    expect(credits.width).toBe(width);
     expect(panel.height).toBeLessThanOrEqual(120);
     const zoom = (await page.locator(".zoom-controls").boundingBox())!;
     const opacity = (await page.locator(".opacity-controls").boundingBox())!;
@@ -48,4 +52,9 @@ test("phone layout fills the viewport and keeps population and timeline compact"
     );
   }
   await page.screenshot({ path: ".local/mobile-layout.png" });
+  await page.setViewportSize({ width: 1440, height: 960 });
+  const desktopCredits = (await page.locator(".map-credits").boundingBox())!;
+  expect(desktopCredits.y + desktopCredits.height).toBeCloseTo(960, 1);
+  expect(desktopCredits.x).toBe(0);
+  expect(desktopCredits.width).toBe(1440);
 });

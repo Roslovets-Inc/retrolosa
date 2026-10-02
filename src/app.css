@@ -650,7 +650,8 @@ main {
 }
 footer {
   height: var(--footer-height);
-  padding: 0 10px;
+  padding: 0;
+  align-items: flex-end;
   font-size: 11px;
   color: var(--muted);
   background: transparent;
@@ -1087,6 +1088,8 @@ body {
 }
 footer {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.map-credits {
   padding-left: max(10px, env(safe-area-inset-left, 0px));
   padding-right: max(10px, env(safe-area-inset-right, 0px));
 }

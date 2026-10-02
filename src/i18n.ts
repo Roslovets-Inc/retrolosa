@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 
 import en from "./locales/en.json";
 import fr from "./locales/fr.json";
+import ru from "./locales/ru.json";
 
 export const LANGUAGE_STORAGE_KEY = "retrolosa-language";
 
@@ -11,8 +12,8 @@ void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources: { en: { translation: en }, fr: { translation: fr } },
-    supportedLngs: ["en", "fr"],
+    resources: { en: { translation: en }, fr: { translation: fr }, ru: { translation: ru } },
+    supportedLngs: ["en", "fr", "ru"],
     fallbackLng: "en",
     load: "languageOnly",
     initAsync: false,
@@ -35,7 +36,7 @@ function updateDocumentLanguage() {
 i18n.on("languageChanged", updateDocumentLanguage);
 updateDocumentLanguage();
 
-export function selectLanguage(language: "en" | "fr") {
+export function selectLanguage(language: "en" | "fr" | "ru") {
   try {
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
   } catch {
