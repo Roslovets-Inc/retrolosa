@@ -277,3 +277,30 @@ Open `http://127.0.0.1:5174/nouveau-depot/`. Stop your preview afterward and
 remove the temporary setting with `Remove-Item Env:VITE_BASE_PATH` before a
 normal root-path build. There is no deployment in these commands. Publication
 rules remain in `AGENTS.md`; renaming or moving a checkout does not publish it.
+
+## Modern streets overlay (2026-10-06)
+
+The viewer now offers an optional modern street network above all historical maps.
+The compact street visibility control, labels and accessibility text support EN/FR/RU.
+The vertical slider replaces the historical-opacity control below the eye button.
+Zero hides streets; positive values enable them without a separate activation button.
+The bottom 20% of slider travel snaps to off, with a shaded detent. Tapping the
+street icon toggles streets, restoring the last committed positive opacity (initially 80%). Keyboard increments leave off immediately. The historical-opacity slider was removed:
+new views use 100%, with legacy URL opacity preserved until historical navigation.
+It starts disabled and is a session setting, outside shared URLs. The controller
+creates/releases a separate transparent renderer on toggle and tracks its failures,
+retry and graphics-context availability separately. OpenFreeMap vector tiles serve
+transportation geometry and street names; see architecture.md. These display tiles
+are not a saved reference graph for the separate georeferencer.
+Dedicated street colour tokens extend the forest-green design palette. Light mode
+uses emerald/ivory annotations; dark mode uses mint/deep-green annotations.
+Contrasting opaque halos help lines and names remain legible over varied map content,
+while the slider fades the complete overlay. Theme changes update paint in place.
+
+Validation: `bun run check` passes (169 unit tests), as does `bun run build`.
+Chrome browser checks pass for streets, loupe, mobile layout, loading and compact
+controls, plus ten localization scenarios. The existing styled-language-menu
+keyboard scenario fails when Home/Enter leaves French selected; the same failure
+was reproduced on unchanged commit `76cde70` in Chrome. It remains separate work.
+A real OpenFreeMap check loaded street geometry and names without console errors
+on the 1860 map at desktop and mobile sizes. Physical-device performance is unmeasured.

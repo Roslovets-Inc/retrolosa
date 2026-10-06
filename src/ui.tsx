@@ -9,7 +9,7 @@ import {
   Tooltip as TooltipPrimitive,
   ToggleGroup as ToggleGroupPrimitive,
 } from "radix-ui";
-import React, { forwardRef, useRef, useSyncExternalStore } from "react";
+import React, { forwardRef, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 type Side = "top" | "right" | "bottom" | "left";
@@ -261,34 +261,52 @@ export function Checkbox({
   );
 }
 
-const shortScreen = window.matchMedia("(max-height: 650px)");
-function subscribeScreen(callback: () => void) {
-  shortScreen.addEventListener("change", callback);
-  return () => shortScreen.removeEventListener("change", callback);
-}
 export function Slider({
   value,
   onValueChange,
   disabled,
   label,
   valueText,
+  offThreshold = 0,
+  onValueCommit,
 }: {
   value: number;
   onValueChange: (value: number) => void;
   disabled?: boolean;
   label: string;
   valueText: string;
+  offThreshold?: number;
+  onValueCommit?: (value: number) => void;
 }) {
-  const horizontal = useSyncExternalStore(subscribeScreen, () => shortScreen.matches);
   return (
     <SliderPrimitive.Root
       className="ui-slider"
       min={0}
-      max={100}
+      max={100 + offThreshold}
       step={1}
-      value={[value]}
-      onValueChange={(values) => onValueChange(values[0])}
-      orientation={horizontal ? "horizontal" : "vertical"}
+      value={[value === 0 ? 0 : value + offThreshold]}
+      data-off-zone={offThreshold > 0 ? "true" : undefined}
+      style={
+        {
+          "--slider-off-zone": `${(offThreshold / (100 + offThreshold)) * 100}%`,
+        } as React.CSSProperties
+      }
+      onValueChange={(values) => onValueChange(Math.max(0, values[0] - offThreshold))}
+      onValueCommit={(values) => onValueCommit?.(Math.max(0, values[0] - offThreshold))}
+      onKeyDown={(event) => {
+        // Keyboard users leave the off detent immediately instead of traversing invisible steps.
+        if (
+          offThreshold > 0 &&
+          value === 0 &&
+          ["ArrowUp", "ArrowRight", "PageUp"].includes(event.key)
+        ) {
+          event.preventDefault();
+          const next = event.key === "PageUp" || event.shiftKey ? 10 : 1;
+          onValueChange(next);
+          onValueCommit?.(next);
+        }
+      }}
+      orientation="vertical"
       disabled={disabled}
     >
       <SliderPrimitive.Track className="ui-slider-track">
@@ -299,6 +317,9 @@ export function Slider({
           className="ui-slider-thumb"
           aria-label={label}
           aria-valuetext={valueText}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={value}
         />
       </Tooltip>
     </SliderPrimitive.Root>

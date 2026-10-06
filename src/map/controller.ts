@@ -17,6 +17,7 @@ import { CITY_LIMITS, CITY_OVERVIEW, MIN_ZOOM, MAX_ZOOM } from "../view/state";
 import type { InitialView, CameraView } from "../view/state";
 import { MapLoading } from "./loading";
 import type { MapKind, MapResource } from "./loading";
+import { streetStyle, type StreetColors } from "./streets";
 import { modernMapStyle } from "./styles";
 
 type Opacities = Readonly<Partial<Record<EpochId, number>>>;
@@ -24,7 +25,8 @@ type ResourceEvent = { sourceId?: string; tile?: { tileID: { key: string }; stat
 const root = (map: MapKind): MapResource => ({
   map,
   id: "$style",
-  label: map === "modern" ? "Carte actuelle" : "Carte historique",
+  label:
+    map === "streets" ? "Rues actuelles" : map === "modern" ? "Carte actuelle" : "Carte historique",
 });
 function resource(map: MapKind, id: string): MapResource {
   const epoch = id.split("-").at(-1)!;
@@ -34,7 +36,9 @@ function resource(map: MapKind, id: string): MapResource {
     label:
       map === "historic" && isEpochId(epoch)
         ? `${getEpoch(epoch).label} · ${getEpoch(epoch).optionLabel}`
-        : "Carte actuelle",
+        : map === "streets"
+          ? "Rues actuelles"
+          : "Carte actuelle",
   };
 }
 
@@ -52,10 +56,17 @@ export class MapController {
   readonly locationMaps: { current: MapInstance[] } = { current: [] };
   private modern?: MapInstance;
   private historic?: MapInstance;
+  private streets?: MapInstance;
+  private streetContainer?: HTMLDivElement;
+  private streetUnsubscribe?: () => void;
+  private streetSources = new Set<string>();
+  private streetsEnabled = false;
+  private streetColors?: StreetColors;
+  private streetRendererFailed = false;
   private containers?: { modern: HTMLDivElement; historic: HTMLDivElement };
   private resize?: ResizeObserver;
   private subscriptions: (() => void)[] = [];
-  private styleReady = { modern: false, historic: false };
+  private styleReady = { modern: false, historic: false, streets: false };
   private historicSources = new Set<string>();
   private modernSources = new Set<string>();
   private historicalSignature = "";
@@ -80,9 +91,14 @@ export class MapController {
   };
   getCoordinates = () => this.coordinates;
 
-  mount(modernContainer: HTMLDivElement, historicContainer: HTMLDivElement) {
+  mount(
+    modernContainer: HTMLDivElement,
+    historicContainer: HTMLDivElement,
+    streetContainer?: HTMLDivElement,
+  ) {
     this.releaseMaps();
     this.containers = { modern: modernContainer, historic: historicContainer };
+    this.streetContainer = streetContainer;
     this.loading.clear();
     this.loading.require([root("modern")]);
     try {
@@ -110,8 +126,10 @@ export class MapController {
       this.locationMaps.current = [this.modern, this.historic];
       this.modern.touchZoomRotate.disableRotation();
       this.modern.keyboard.disableRotation();
-      this.bind("modern", this.modern);
-      this.bind("historic", this.historic);
+      this.subscriptions.push(
+        this.bind("modern", this.modern),
+        this.bind("historic", this.historic),
+      );
       const modern = this.modern;
       const sync = () => {
         this.historic?.jumpTo({
@@ -120,6 +138,7 @@ export class MapController {
           bearing: modern.getBearing(),
           pitch: 0,
         });
+        this.syncStreets();
         this.reconcileHistory();
         this.refreshRequired();
       };
@@ -144,9 +163,11 @@ export class MapController {
       this.resize = new ResizeObserver(() => {
         this.modern?.resize();
         this.historic?.resize();
+        this.streets?.resize();
         sync();
       });
       this.resize.observe(modernContainer);
+      if (this.streetsEnabled) this.createStreets();
     } catch (error) {
       this.releaseMaps();
       this.loading.clear();
@@ -162,6 +183,10 @@ export class MapController {
       if (kind === "historic") this.historicalSignature = "";
       this.loading.success(root(kind), true);
       if (kind === "historic") this.reconcileHistory();
+      if (kind === "streets") {
+        this.syncStreets();
+        this.applyStreetColors();
+      }
       this.refreshRequired();
       this.refreshSettled(kind, instance);
     };
@@ -210,7 +235,7 @@ export class MapController {
     instance.on("idle", idle);
     instance.on("webglcontextlost", contextLost);
     instance.on("webglcontextrestored", contextRestored);
-    this.subscriptions.push(() => {
+    return () => {
       instance.off("style.load", styleLoaded);
       instance.off("sourcedataloading", sourceLoading);
       instance.off("sourcedata", sourceData);
@@ -218,14 +243,21 @@ export class MapController {
       instance.off("idle", idle);
       instance.off("webglcontextlost", contextLost);
       instance.off("webglcontextrestored", contextRestored);
-    });
+    };
+  }
+  private sourcesFor(kind: MapKind) {
+    return kind === "streets"
+      ? this.streetSources
+      : kind === "historic"
+        ? this.historicSources
+        : this.modernSources;
   }
   private isTracked(kind: MapKind, id: string) {
-    return (kind === "historic" ? this.historicSources : this.modernSources).has(id);
+    return this.sourcesFor(kind).has(id);
   }
   private refreshSettled(kind: MapKind, instance: MapInstance) {
     if (!this.styleReady[kind] || this.loading.isContextLost(kind)) return;
-    const ids = kind === "historic" ? this.historicSources : this.modernSources;
+    const ids = this.sourcesFor(kind);
     for (const id of ids) {
       if (instance.getSource(id))
         this.loading.settled(resource(kind, id), instance.isSourceLoaded(id));
@@ -262,7 +294,78 @@ export class MapController {
           .map((id) => resource("historic", id)),
       );
     }
+    if (this.streetsEnabled) {
+      required.push(root("streets"));
+      if (this.streetRendererFailed) required.push(resource("streets", "$renderer"));
+      required.push(...[...this.streetSources].map((id) => resource("streets", id)));
+    }
     this.loading.require(required);
+  }
+
+  private syncStreets() {
+    if (!this.modern || !this.streets || this.loading.isContextLost("streets")) return;
+    this.streets.jumpTo({
+      center: this.modern.getCenter(),
+      zoom: this.modern.getZoom(),
+      bearing: this.modern.getBearing(),
+      pitch: 0,
+    });
+  }
+  private createStreets() {
+    if (!this.streetContainer || !this.modern || this.streets || !this.streetColors) return;
+    this.streetRendererFailed = false;
+    this.streetSources = new Set(["streets"]);
+    this.loading.reset(root("streets"));
+    this.loading.reset(resource("streets", "streets"));
+    this.refreshRequired();
+    try {
+      this.streets = new MapRenderer({
+        container: this.streetContainer,
+        center: this.modern.getCenter(),
+        zoom: this.modern.getZoom(),
+        bearing: this.modern.getBearing(),
+        interactive: false,
+        attributionControl: false,
+        style: streetStyle(this.streetColors),
+      });
+      this.streetUnsubscribe = this.bind("streets", this.streets);
+    } catch (error) {
+      this.streetRendererFailed = true;
+      this.loading.fail(resource("streets", "$renderer"), error);
+      this.refreshRequired();
+    }
+  }
+  private releaseStreets() {
+    this.streetUnsubscribe?.();
+    this.streetUnsubscribe = undefined;
+    this.streets?.remove();
+    this.streets = undefined;
+    this.styleReady.streets = false;
+    this.streetSources.forEach((id) => this.loading.forget(resource("streets", id)));
+    this.streetSources.clear();
+    this.streetRendererFailed = false;
+    this.loading.forget(resource("streets", "$renderer"));
+    this.loading.forget(root("streets"));
+    this.loading.contextLost("streets", false);
+  }
+  private applyStreetColors() {
+    if (!this.streets || !this.styleReady.streets || !this.streetColors) return;
+    const { line, text, halo } = this.streetColors;
+    this.streets.setPaintProperty("street-line", "line-color", line);
+    this.streets.setPaintProperty("street-halo", "line-color", halo);
+    this.streets.setPaintProperty("street-name", "text-color", text);
+    this.streets.setPaintProperty("street-name", "text-halo-color", halo);
+  }
+  setStreetColors(colors: StreetColors) {
+    this.streetColors = colors;
+    if (this.streetsEnabled) this.createStreets();
+    this.applyStreetColors();
+  }
+  setStreets(enabled: boolean) {
+    this.streetsEnabled = enabled;
+    if (enabled) this.createStreets();
+    else this.releaseStreets();
+    this.refreshRequired();
   }
 
   private reconcileHistory(retry = new Set<string>()) {
@@ -337,12 +440,17 @@ export class MapController {
   }
   retry = () => {
     if (!this.modern || !this.historic) {
-      if (this.containers) this.mount(this.containers.modern, this.containers.historic);
+      if (this.containers)
+        this.mount(this.containers.modern, this.containers.historic, this.streetContainer);
       return;
     }
     const failures = this.loading
       .failedResources()
       .filter((failure) => !this.loading.isContextLost(failure.map));
+    if (failures.some((failure) => failure.map === "streets")) {
+      this.releaseStreets();
+      this.createStreets();
+    }
     if (failures.some((failure) => failure.map === "modern")) this.reloadModern();
     if (failures.some((failure) => failure.map === "historic" && failure.id === "$style")) {
       this.styleReady.historic = false;
@@ -390,6 +498,7 @@ export class MapController {
   }
 
   private releaseMaps() {
+    this.releaseStreets();
     this.resize?.disconnect();
     this.resize = undefined;
     this.subscriptions.splice(0).forEach((unsubscribe) => unsubscribe());
@@ -398,7 +507,7 @@ export class MapController {
     this.modern = undefined;
     this.historic = undefined;
     this.locationMaps.current = [];
-    this.styleReady = { modern: false, historic: false };
+    this.styleReady = { modern: false, historic: false, streets: false };
     this.historicSources.clear();
     this.modernSources.clear();
     this.historicalSignature = "";
@@ -411,6 +520,7 @@ export class MapController {
   }
   unmount = () => {
     this.containers = undefined;
+    this.streetContainer = undefined;
     this.releaseMaps();
     this.loading.clear();
   };

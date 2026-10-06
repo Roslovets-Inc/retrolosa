@@ -1,4 +1,4 @@
-import type { LayerSpecification, SourceSpecification } from "maplibre-gl";
+import type { LayerSpecification, SourceSpecification, StyleSpecification } from "maplibre-gl";
 import { beforeEach, expect, test, vi } from "vitest";
 
 import { parseViewState } from "../../src/view/state";
@@ -16,8 +16,12 @@ const fake = vi.hoisted(() => {
     additions = 0;
     touchZoomRotate = { disableRotation: () => {} };
     keyboard = { disableRotation: () => {} };
-    constructor() {
+    constructor(options: { style: StyleSpecification | string }) {
       if (failAt === maps.length + 1) throw new Error("WebGL");
+      if (typeof options.style !== "string") {
+        this.sources = options.style.sources;
+        this.layers = options.style.layers;
+      }
       maps.push(this);
     }
     on(name: string, fn: (event: never) => void) {
@@ -77,9 +81,9 @@ const fake = vi.hoisted(() => {
       const layer = this.getLayer(id);
       return layer?.type === "raster" ? layer.paint?.["raster-opacity"] : undefined;
     }
-    setPaintProperty(id: string, _name: string, value: number) {
+    setPaintProperty(id: string, name: string, value: number | string) {
       const layer = this.getLayer(id);
-      if (layer?.type === "raster") layer.paint = { ...layer.paint, "raster-opacity": value };
+      if (layer) layer.paint = { ...layer.paint, [name]: value };
     }
     setStyle() {
       this.styleChanges++;
@@ -121,7 +125,8 @@ function mounted() {
     assets: { baseUrl: "/", origin: "https://example.test" },
     opacities: { "1250": 1 },
   });
-  controller.mount({} as HTMLDivElement, {} as HTMLDivElement);
+  controller.setStreetColors({ line: "#2f4b40", text: "#263e36", halo: "#faf9f2" });
+  controller.mount({} as HTMLDivElement, {} as HTMLDivElement, {} as HTMLDivElement);
   return controller;
 }
 function loaded() {
@@ -240,5 +245,72 @@ test("prepared transparent neighbours survive snapped dates and do not block rea
     "history-1250",
     "history-1550",
   ]);
+  controller.unmount();
+});
+
+test("street overlay is lazy, follows the camera, retries independently and releases its renderer", () => {
+  const controller = loaded();
+  expect(fake.maps).toHaveLength(2);
+  controller.setStreets(true);
+  const streets = fake.maps[2];
+  streets.sources = { streets: { type: "vector", url: "https://example.test/streets" } };
+  // Failures during TileJSON loading must be tracked before style.load too.
+  streets.emit("error", { sourceId: "streets", error: { status: 503 } });
+  expect(controller.loading.getSnapshot().phase).toBe("error");
+  streets.emit("style.load");
+  streets.emit("idle");
+  expect(controller.loading.getSnapshot().phase).toBe("error");
+  controller.loading.dismiss();
+  controller.retry();
+  expect(streets.removed).toBe(true);
+  expect([...streets.handlers.values()].every((set) => set.size === 0)).toBe(true);
+  const replacement = fake.maps[3];
+  replacement.sources = { streets: { type: "vector", url: "https://example.test/streets" } };
+  replacement.emit("style.load");
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  controller.setBearing(53);
+  expect(replacement.bearing).toBe(53);
+  fake.maps[0].zoom = 16;
+  fake.maps[0].emit("move");
+  expect(replacement.zoom).toBe(16);
+  controller.setHistorical({ "1550": 1 }, false);
+  expect(replacement.removed).toBe(false);
+  replacement.emit("webglcontextlost");
+  expect(controller.loading.getSnapshot().phase).toBe("unavailable");
+  controller.setStreets(false);
+  expect(replacement.removed).toBe(true);
+  expect(controller.loading.getSnapshot().phase).toBe("ready");
+  expect(fake.maps[0].removed).toBe(false);
+  expect(fake.maps[1].removed).toBe(false);
+  fake.setFailure(fake.maps.length + 1);
+  controller.setStreets(true);
+  expect(controller.loading.getSnapshot().failures[0].kind).toBe("renderer");
+  fake.setFailure(0);
+  controller.retry();
+  expect(fake.maps).toHaveLength(5);
+  controller.unmount();
+});
+
+test("street palette updates in place and retains changes made before loading or during context loss", () => {
+  const controller = loaded();
+  controller.setStreets(true);
+  const streets = fake.maps[2];
+  const dark = { line: "#a9c5ab", text: "#eeeade", halo: "#232e28" };
+  controller.setStreetColors(dark);
+  streets.emit("style.load");
+  expect(streets.getLayer("street-line")?.paint).toHaveProperty("line-color", dark.line);
+  expect(streets.getLayer("street-name")?.paint).toHaveProperty("text-color", dark.text);
+  expect(streets.getLayer("street-name")?.paint).toHaveProperty("text-halo-color", dark.halo);
+  const light = { line: "#2f4b40", text: "#263e36", halo: "#faf9f2" };
+  controller.setStreetColors(light);
+  expect(streets.getLayer("street-line")?.paint).toHaveProperty("line-color", light.line);
+  streets.emit("webglcontextlost");
+  controller.setStreetColors(dark);
+  streets.emit("webglcontextrestored");
+  streets.emit("style.load");
+  expect(streets.getLayer("street-halo")?.paint).toHaveProperty("line-color", dark.halo);
+  expect(fake.maps).toHaveLength(3);
+  expect(streets.styleChanges).toBe(0);
+  expect(streets.removed).toBe(false);
   controller.unmount();
 });

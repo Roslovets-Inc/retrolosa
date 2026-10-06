@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { setSlider } from "./ui";
 test.beforeEach(async ({ page }) => prepareSharing(page));
 test("1830 loads real tiles, preserves view and comparison, survives reload and zoom out", async ({
   page,
@@ -20,19 +19,17 @@ test("1830 loads real tiles, preserves view and comparison, survives reload and 
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 42);
   await page.locator(".timeline-ticks").getByRole("button", { name: "1830", exact: true }).click();
   await expect.poll(() => received1830).toBeTruthy();
   await expect(page.getByText("Cartes chargées", { exact: true })).toBeVisible({ timeout: 60000 });
   await expect(page.getByRole("alert")).toHaveCount(0);
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await expect
     .poll(() => sharedView(page))
     .toMatch(/lon=1.449540?&lat=43.597678&z=16.70?&year=1830/);
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 100);
   await page.screenshot({ path: ".local/1830-desktop.png" });
   await page.getByRole("button", { name: "Me localiser", exact: true }).click();
   await expect(page.locator(".location-dot")).toHaveCount(2);

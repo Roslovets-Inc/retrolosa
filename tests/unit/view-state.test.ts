@@ -24,7 +24,7 @@ test("default state and camera are deterministic without browser globals", () =>
       enabled: EPOCH_IDS,
       time: 1250,
       mode: "overlay",
-      opacity: 75,
+      opacity: 100,
       split: 50,
       bearing: 0,
     },
@@ -39,15 +39,15 @@ test.each([
   ["time", "overlay", 100],
   ["split", "split", 100],
   ["loupe", "loupe", 100],
-  ["overlay", "overlay", 75],
-  ["invalid", "overlay", 75],
+  ["overlay", "overlay", 100],
+  ["invalid", "overlay", 100],
 ])("old and current %s links preserve their initial appearance", (raw, mode, opacity) => {
   expect(initial(`#mode=${raw}`).state).toMatchObject({ mode, opacity });
 });
 
 test.each(["", "-1", "101", "NaN", "Infinity"])("invalid percentages %s use defaults", (value) => {
   expect(initial(`#opacity=${value}&split=${value}`).state).toMatchObject({
-    opacity: 75,
+    opacity: 100,
     split: 50,
   });
 });
@@ -117,7 +117,7 @@ test("normalization clamps nonfinite values without mutating the caller", () => 
   expect(normalizeViewState(input, TODAY)).toMatchObject({
     enabled: ["1631", "1954"],
     time: 1631,
-    opacity: 75,
+    opacity: 100,
     split: 50,
   });
   expect(input.enabled).toEqual(["1954", "1631", "1631"]);
@@ -145,7 +145,8 @@ test("view actions preserve independent controls and enforce numeric bounds", ()
   let current = state();
   current = reduceViewState(current, { type: "time", value: 1777 }, TODAY);
   current = reduceViewState(current, { type: "mode", value: "loupe" }, TODAY);
-  current = reduceViewState(current, { type: "opacity", value: 42 }, TODAY);
+  // Legacy shared opacity remains serializable without an editing control.
+  current = { ...current, opacity: 42 };
   current = reduceViewState(current, { type: "split", value: 98 }, TODAY);
   current = reduceViewState(current, { type: "moveSplit", delta: 10 }, TODAY);
   current = reduceViewState(current, { type: "toggleAlignment", epoch: 1777 }, TODAY);
@@ -292,7 +293,7 @@ test("camera bearing persists across timeline, opacity and epoch-selection chang
     view = reduceViewState(view, { type: "time", value: time }, TODAY);
     expect(derivePresentation(view, idle, TODAY).bearing).toBe(84);
   }
-  view = reduceViewState(view, { type: "opacity", value: 0 }, TODAY);
+  view = { ...view, opacity: 0 };
   view = reduceViewState(view, { type: "toggleEpoch", id: "1631" }, TODAY);
   expect(derivePresentation(view, idle, TODAY)).toMatchObject({ bearing: 84, readingBearing: 0 });
   view = reduceViewState(view, { type: "toggleAlignment", epoch: TODAY }, TODAY);
@@ -310,4 +311,17 @@ test("timeline labels distinguish dated maps and symbolic historical anchors", (
     [1875, "1875 · Inondation"],
   ] as const)
     expect(resolveTimeline(state({ time }), TODAY).timeLabel).toBe(label);
+});
+
+test("historical navigation restores full opacity after opening a legacy view", () => {
+  const legacy = state({ opacity: 42 });
+  for (const action of [
+    { type: "time", value: 1777 } as const,
+    { type: "mode", value: "loupe" } as const,
+    { type: "toggleEpoch", id: "450" } as const,
+  ])
+    expect(reduceViewState(legacy, action, TODAY).opacity).toBe(100);
+  expect(
+    reduceViewState(initial("#mode=modern").state, { type: "time", value: 1777 }, TODAY).opacity,
+  ).toBe(100);
 });

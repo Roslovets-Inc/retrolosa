@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { prepareOfflineMaps, setSlider } from "./ui";
+import { prepareOfflineMaps } from "./ui";
 
 test("one timeline serves every comparison tool and fits mobile widths", async ({ page }) => {
   await prepareSharing(page);
@@ -24,7 +24,7 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
   await expect(page.getByRole("button", { name: "Frise", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Cartes", exact: true })).toHaveCount(0);
   await expect(page.locator(".masthead").getByRole("button", { name: "Époques" })).toHaveCount(0);
-  await setSlider(transparency, 60);
+  await expect(transparency).toHaveCount(0);
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 700 });
     const height = (await panel.boundingBox())!.height;
@@ -32,8 +32,10 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
     await expect(scale).toBeVisible();
     const scaleBox = (await scale.boundingBox())!;
     const dockBox = (await page.locator(".control-dock").boundingBox())!;
-    expect(scaleBox.y + scaleBox.height).toBeLessThanOrEqual(dockBox.y - 8);
-    expect(dockBox.y - scaleBox.y).toBeLessThan(40);
+    if (scaleBox.x + scaleBox.width > dockBox.x) {
+      expect(scaleBox.y + scaleBox.height).toBeLessThanOrEqual(dockBox.y - 8);
+      expect(dockBox.y - scaleBox.y).toBeLessThan(40);
+    }
     expect(scaleBox.x).toBeGreaterThanOrEqual(0);
     expect(scaleBox.x + scaleBox.width).toBeLessThanOrEqual(width);
     await expect(epochs).toBeVisible();
@@ -60,8 +62,8 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
       await page.getByRole("radio", { name: tool, exact: true }).click();
       await expect(timeline).toHaveValue("1777");
       await expect(timeline).toBeVisible();
-      await expect(transparency).toHaveAttribute("aria-valuenow", "60");
-      await expect(layer).toHaveCSS("opacity", "0.6");
+      await expect(transparency).toHaveCount(0);
+      await expect(layer).toHaveCSS("opacity", "1");
       expect((await panel.boundingBox())!.height).toBe(height);
       const tools = (await page.locator(".comparison-switch").boundingBox())!;
       const track = (await page.locator(".timeline-range").boundingBox())!;
@@ -91,7 +93,7 @@ test("one timeline serves every comparison tool and fits mobile widths", async (
   );
   const hold = page.getByRole("button", { name: "Maintenir pour comparer avec la carte actuelle" });
   await hold.press("Enter");
-  await expect(layer).toHaveCSS("opacity", "0.6");
+  await expect(layer).toHaveCSS("opacity", "1");
   await expect(layer).toHaveCSS("clip-path", /circle\(/);
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   const divider = page.getByRole("slider", { name: "Limite de comparaison", exact: true });
@@ -109,9 +111,11 @@ test("legacy current-map links preserve transparency and keep the timeline avail
     "aria-checked",
     "true",
   );
-  await expect(
-    page.getByRole("slider", { name: "Opacité de la carte historique" }),
-  ).toHaveAttribute("aria-valuenow", "0");
+  await expect(page.getByRole("slider", { name: "Opacité de la carte historique" })).toHaveCount(0);
+  await page.getByRole("slider", { name: "Voyage dans le temps" }).fill("1777");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await page.goto("/#mode=modern");
+  await page.reload();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toBeVisible();
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
 });
@@ -125,7 +129,6 @@ test("credits follow the visible blend while every source remains available in t
   await page.goto("/#time=1631&mode=overlay");
   const footer = page.locator("footer");
   const timeline = page.getByRole("slider", { name: "Voyage dans le temps" });
-  const opacity = page.getByRole("slider", { name: "Opacité de la carte historique" });
   await expect(footer.getByRole("link", { name: "Tavernier", exact: true })).toBeVisible();
   await expect(footer.getByRole("link")).toHaveCount(3);
   await timeline.fill("1650");
@@ -135,7 +138,7 @@ test("credits follow the visible blend while every source remains available in t
   await timeline.fill("1680");
   await expect(footer).not.toContainText("Tavernier");
   await expect(footer.getByRole("link")).toHaveCount(3);
-  await setSlider(opacity, 0);
+  await timeline.fill(String(new Date().getFullYear()));
   await expect(footer.getByRole("link")).toHaveCount(2);
   await expect(footer.getByRole("link", { name: "OpenMapTiles", exact: true })).toBeVisible();
   await expect(footer.getByRole("link", { name: "OpenStreetMap", exact: true })).toHaveAttribute(
@@ -144,7 +147,7 @@ test("credits follow the visible blend while every source remains available in t
   );
   await page.getByRole("button", { name: "À propos des cartes" }).click();
   const dialog = page.getByRole("dialog", { name: "Cartes et précision" });
-  await expect(dialog.locator(".source-credits a")).toHaveCount(12);
+  await expect(dialog.locator(".source-credits a")).toHaveCount(13);
   await expect(dialog.locator(".source-credits")).toContainText("F. Callède / Inrap");
   await expect(dialog.locator(".source-credits")).toContainText("Archives municipales de Toulouse");
   await expect(dialog.getByRole("link", { name: "OpenFreeMap", exact: true })).toBeVisible();

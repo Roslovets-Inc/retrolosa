@@ -172,5 +172,13 @@
   "installApp.androidMenu": "Tap the <icon/> browser menu.",
   "installApp.androidAdd": "Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>, then confirm.",
   "terms.Carte actuelle": "Current map",
-  "terms.Carte historique": "Historical map"
+  "terms.Carte historique": "Historical map",
+  "streets.title": "Modern streets",
+  "streets.opacity": "Street overlay opacity",
+  "failure.streets": "street overlay",
+  "terms.Rues actuelles": "Modern streets",
+  "mapTools.streetsAndComparison": "Streets and comparison",
+  "streets.hidden": "Hidden",
+  "streets.hide": "Hide streets",
+  "streets.show": "Show streets"
 }

@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { setSlider } from "./ui";
 test.beforeEach(async ({ page }) => prepareSharing(page));
 
 test("location opt-in, tracking on both maps, stop and outside coverage", async ({
@@ -22,7 +21,6 @@ test("location opt-in, tracking on both maps, stop and outside coverage", async 
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 100);
   await expect(page.locator(".historic-map .location-dot")).toBeVisible();
   await page.getByRole("button", { name: "Désactiver la localisation", exact: true }).click();
   await expect(page.locator(".location-dot")).toHaveCount(0);

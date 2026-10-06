@@ -104,6 +104,50 @@ To add an epoch:
 3. Choose an existing rendering variant with appropriate bounds and zooms.
 4. Run `bun run check` and relevant browser scenarios.
 
+## Modern street overlay
+
+`src/map/streets.ts` defines a transparent OpenMapTiles style using OpenFreeMap
+vector tiles: transportation lines and transportation_name labels, excluding railways,
+ferries, backgrounds, buildings and POIs. Local road names are preserved.
+Street lines, labels and halos use `--street-line`, `--street-text` and
+`--street-halo` in `src/colors.css`. These dedicated map annotation tokens extend
+the forest-green theme palette: emerald lines with an ivory halo in light mode,
+and pale mint lines with a deep green halo in dark mode. Opaque, contrasting
+halos separate geometry and labels from both light paper and dark imagery;
+the overlay slider controls the opacity of the complete annotation.
+`useMaps` passes resolved colours to the controller, which updates paint properties
+in place on theme changes, including changes made before the street style loads.
+`StreetControls` receives the enabled state, opacity and commands. These are session
+settings, initially disabled at zero, outside the historical timeline and
+shared URL contract. A single vertical Radix slider remains available at zero;
+zero disables the overlay, positive values enable it. The bottom 25 of 125 track
+units form a visually marked off detent (20% of physical travel). Above it,
+100 steps map linearly to 1–100% opacity. Pointer/touch movement inside the detent
+snaps to zero; the street icon toggles the overlay and restores the last committed positive opacity
+(80% on first activation). Keyboard ArrowUp/PageUp
+leave off immediately at 1/10%, avoiding a controlled-slider deadlock. Accessible
+slider values remain the actual opacity percentage rather than track units. There is no separate activation button. The slider replaces the previous
+historical-opacity slider below the hold-to-compare button. There is no historical-opacity slider.
+New views default to 100% historical opacity; explicit legacy URL opacity and
+modern/historic modes retain their initial appearance. Selecting a date, comparison
+mode or epoch restores full historical opacity. Timeline crossfades are unchanged.
+
+The controller creates a third, non-interactive renderer only while streets are
+enabled. Its full-viewport canvas sits above the historical canvas and remains
+independent of historical opacity, curtain clipping and magnifier clipping. It follows
+the modern camera and resize events. Disabling releases its renderer, subscriptions
+and loading resources. The loading store tracks the `streets` kind separately,
+including source failures, retry and WebGL context loss. Retrying streets preserves
+the existing modern/historical renderers. Existing OSM/OpenMapTiles credits also
+cover the overlay.
+
+Display vector tiles are zoom-dependent and do not constitute an authoritative
+editable street graph. Future georeferencing work must preserve raw OSM geometry,
+node/way IDs and dated reference snapshots separately.
+`tests/streets.spec.ts` covers desktop/mobile toggling, opacity, comparison modes
+and failure recovery with simulated external services; controller tests cover camera
+synchronization and resource cleanup. Real provider availability is checked separately.
+
 ## State and presentation
 
 `src/view/state.ts` contains persistent view state and transitions. The reducer

@@ -41,7 +41,7 @@ test("panels dismiss, restore focus and keep keyboard navigation within a modal"
   await expect(info).toBeFocused();
 });
 
-test("comparison and opacity work with keyboard and pointer in both orientations", async ({
+test("comparison and street visibility work with keyboard and pointer on tall and short screens", async ({
   page,
 }) => {
   const overlay = page.getByRole("radio", { name: "Superposition", exact: true });
@@ -51,22 +51,19 @@ test("comparison and opacity work with keyboard and pointer in both orientations
   await expect(split).toBeFocused();
   await page.keyboard.press("Space");
   await expect(split).toBeChecked();
-  const opacity = page.getByRole("slider", { name: "Opacité de la carte historique" });
+  const opacity = page.getByRole("slider", { name: "Opacité des rues" });
   await opacity.press("Home");
   await opacity.press("PageUp");
   await expect(opacity).toHaveAttribute("aria-valuenow", "10");
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.1");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await opacity.press("Space");
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.1");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   for (const height of [960, 600]) {
     await page.setViewportSize({ width: 390, height });
-    await expect(opacity).toHaveAttribute(
-      "aria-orientation",
-      height === 600 ? "horizontal" : "vertical",
-    );
+    await expect(opacity).toHaveAttribute("aria-orientation", "vertical");
     const track = page.locator(".ui-slider-track");
     const box = (await track.boundingBox())!;
     await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-    await expect(opacity).toHaveAttribute("aria-valuenow", /^(49|50|51)$/);
+    await expect(opacity).toHaveAttribute("aria-valuenow", /^(37|38|39)$/);
   }
 });

@@ -24,6 +24,13 @@ a library-imposed theme. Radix handles focus, keyboard input, dismissal and scre
 collisions. The nonlinear timeline and map tools retain their specific behaviour;
 place selection opens a styled Radix dropdown directly from the header.
 
+The compact **Modern streets** control adds a transparent current-day street network and names
+above every historical map, including curtain and magnifier modes. Drag its visibility slider to show more or fewer streets; zero hides the overlay. The shaded bottom zone snaps to off; tap the street icon to toggle the overlay, restoring the last committed positive strength (80% on first activation).
+The vertical slider sits below the hold-to-compare button. Historical maps use full
+opacity, with the timeline controlling crossfades. Streets start disabled on each visit; these
+session controls are not included in shared URLs. Data comes from the same
+OpenFreeMap/OpenMapTiles service as the modern basemap.
+
 ## Language policy
 
 English is the primary development language for all project documentation, including

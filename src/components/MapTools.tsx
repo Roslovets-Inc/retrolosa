@@ -4,10 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { translateLabel } from "../i18n-labels";
 import { nextBearing } from "../orientation";
-import { Button, Slider } from "../ui";
+import { Button } from "../ui";
 export function MapTools({
-  opacity,
-  hasEpochs,
+  streetControls,
   compareHeld,
   setCompareHeld,
   locationStatus,
@@ -15,14 +14,12 @@ export function MapTools({
   onZoomIn,
   onZoomOut,
   onOverview,
-  onOpacityChange,
   onToggleAlignment,
   bearing,
   readingBearing,
   orientationEpoch,
 }: {
-  opacity: number;
-  hasEpochs: boolean;
+  streetControls: React.ReactNode;
   compareHeld: boolean;
   setCompareHeld: (held: boolean) => void;
   locationStatus: "off" | "locating" | "following";
@@ -30,7 +27,6 @@ export function MapTools({
   onZoomIn: () => void;
   onZoomOut: () => void;
   onOverview: () => void;
-  onOpacityChange: (value: number) => void;
   onToggleAlignment: () => void;
   bearing: number;
   readingBearing: number;
@@ -40,9 +36,9 @@ export function MapTools({
   return (
     <>
       <div
-        className="opacity-controls"
+        className="overlay-controls"
         role="group"
-        aria-label={t("mapTools.transparencyAndComparison")}
+        aria-label={t("mapTools.streetsAndComparison")}
       >
         <Button
           className="compare-hold"
@@ -78,16 +74,7 @@ export function MapTools({
         >
           <Eye size={20} />
         </Button>
-        <section className="opacity-panel" aria-label={t("mapTools.opacity")}>
-          <Slider
-            value={opacity}
-            onValueChange={onOpacityChange}
-            label={t("mapTools.historicalMapOpacity")}
-            valueText={opacity === 0 ? t("mapTools.currentMap") : `${opacity} %`}
-            disabled={!hasEpochs}
-          />
-          <output>{opacity}%</output>
-        </section>
+        {streetControls}
       </div>
       <div className="zoom-controls">
         <Button

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { prepareOfflineMaps, waitForApp, setSlider } from "./ui";
+import { prepareOfflineMaps, waitForApp } from "./ui";
 test.beforeEach(async ({ page }) => prepareOfflineMaps(page));
 test("hold comparison restores split, overlay and timeline on release or cancellation", async ({
   page,
@@ -26,10 +26,9 @@ test("hold comparison restores split, overlay and timeline on release or cancell
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 72);
   await hold();
   await page.mouse.up();
-  await expect(layer).toHaveCSS("opacity", "0.72");
+  await expect(layer).toHaveCSS("opacity", "1");
 
   const time = page.getByRole("slider", { name: "Voyage dans le temps" });
   await time.fill("1850");
@@ -37,17 +36,17 @@ test("hold comparison restores split, overlay and timeline on release or cancell
   await hold();
   await page.screenshot({ path: ".local/compare-mobile.png" });
   await button.dispatchEvent("pointercancel");
-  await expect(layer).toHaveCSS("opacity", "0.72");
+  await expect(layer).toHaveCSS("opacity", "1");
   await page.mouse.up();
   await expect(time).toHaveValue("1850");
   await button.focus();
   await page.keyboard.down("Enter");
   await expect(layer).toHaveCSS("opacity", "0.2");
   await page.keyboard.up("Enter");
-  await expect(layer).toHaveCSS("opacity", "0.72");
+  await expect(layer).toHaveCSS("opacity", "1");
   await hold();
   await page.evaluate(() => window.dispatchEvent(new Event("blur")));
-  await expect(layer).toHaveCSS("opacity", "0.72");
+  await expect(layer).toHaveCSS("opacity", "1");
   await page.mouse.up();
   await expect(page.getByRole("alert")).toHaveCount(0);
 });

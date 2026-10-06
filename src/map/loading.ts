@@ -1,4 +1,4 @@
-export type MapKind = "modern" | "historic";
+export type MapKind = "modern" | "historic" | "streets";
 export type LoadState = "loading" | "ready" | "error" | "unavailable";
 export interface MapResource {
   map: MapKind;
@@ -31,7 +31,7 @@ export function describeFailure(resource: MapResource, error: unknown, tile?: st
   const status =
     typeof error === "object" && error !== null && "status" in error ? error.status : undefined;
   const kind = resource.id === "$renderer" ? "renderer" : status === 404 ? "missing" : "service";
-  const map = resource.map === "modern" ? "actuelle" : "historique";
+  const map = resource.map === "historic" ? "historique" : "actuelle";
   const message =
     kind === "renderer"
       ? "Impossible de démarrer la carte. Vérifiez WebGL et l’accélération matérielle, puis réessayez."
@@ -85,7 +85,7 @@ export class MapLoading {
     const failures = entries
       .flatMap((entry) => [...entry.failures.values()])
       .filter((failure) => !this.dismissed.has(failure.key));
-    const unavailableMaps = (["modern", "historic"] as const).filter(
+    const unavailableMaps = (["modern", "historic", "streets"] as const).filter(
       (map) => this.lostContexts.has(map) && resources.some((resource) => resource.map === map),
     );
     const phase = unavailableMaps.length

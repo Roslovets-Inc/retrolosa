@@ -7,6 +7,9 @@
   --muted: #5f6d62;
   --disabled: #939b91;
   --primary: #2f4b40;
+  --street-line: #17634f;
+  --street-text: #124b3c;
+  --street-halo: #fffdf3;
   --on-primary: #fff;
   --slider: #3e604d;
   --track: #7b877e;
@@ -31,6 +34,9 @@
   --muted: #aab8ab;
   --disabled: #69776d;
   --primary: #a9c5ab;
+  --street-line: #b8e3ca;
+  --street-text: #d5f0df;
+  --street-halo: #142b22;
   --on-primary: #1c2c22;
   --slider: var(--primary);
   --track: #819087;

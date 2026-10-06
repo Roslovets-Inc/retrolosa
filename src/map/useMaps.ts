@@ -13,9 +13,11 @@ export function useMaps(
   today: number,
   historicVisible: boolean,
   bearing: number,
+  streetsEnabled: boolean,
 ) {
   const modernEl = useRef<HTMLDivElement>(null);
   const oldEl = useRef<HTMLDivElement>(null);
+  const streetsEl = useRef<HTMLDivElement>(null);
   const [controller] = useState(
     () =>
       new MapController({
@@ -29,15 +31,21 @@ export function useMaps(
   const status = useSyncExternalStore(controller.loading.subscribe, controller.loading.getSnapshot);
   const { enabled, time } = selection;
   useEffect(() => {
-    if (!modernEl.current || !oldEl.current) return;
+    if (!modernEl.current || !oldEl.current || !streetsEl.current) return;
     initializeMapRuntime();
-    controller.mount(modernEl.current, oldEl.current);
+    controller.mount(modernEl.current, oldEl.current, streetsEl.current);
     return () => {
       controller.unmount();
       disposeMapRuntime();
     };
   }, [controller]);
   useEffect(() => {
+    const colors = getComputedStyle(document.documentElement);
+    controller.setStreetColors({
+      line: colors.getPropertyValue("--street-line").trim(),
+      text: colors.getPropertyValue("--street-text").trim(),
+      halo: colors.getPropertyValue("--street-halo").trim(),
+    });
     controller.setTheme(theme);
   }, [controller, theme]);
   useEffect(() => {
@@ -47,5 +55,8 @@ export function useMaps(
   useEffect(() => {
     controller.setBearing(bearing);
   }, [controller, bearing]);
-  return { controller, modernEl, oldEl, status };
+  useEffect(() => {
+    controller.setStreets(streetsEnabled);
+  }, [controller, streetsEnabled]);
+  return { controller, modernEl, oldEl, streetsEl, status };
 }

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { prepareOfflineMaps, waitForApp, setSlider } from "./ui";
+import { prepareOfflineMaps, waitForApp } from "./ui";
 test.beforeEach(async ({ page }) => prepareOfflineMaps(page));
 test("address stays stable while sharing captures and restores the current view", async ({
   page,
@@ -17,7 +17,6 @@ test("address stays stable while sharing captures and restores the current view"
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 42);
   await page.getByRole("button", { name: "Époques", exact: true }).click();
   await page.getByRole("checkbox", { name: "1830 Cadastre" }).uncheck();
   await page.keyboard.press("Escape");
@@ -29,12 +28,12 @@ test("address stays stable while sharing captures and restores the current view"
   expect(params.get("lat")).toBe("43.599588");
   expect(params.get("z")).toBe("16.00");
   expect(params.get("mode")).toBe("overlay");
-  expect(params.get("opacity")).toBe("42");
+  expect(params.get("opacity")).toBe("100");
   expect(params.get("layers")).toBe("450,1195,1250,1550,1631,1680,1777,1848,1860,1875,1904,1954");
   await page.goto(overlay);
   await waitForApp(page);
   await page.reload();
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.42");
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await expect(
     page.locator(".timeline-ticks").getByRole("button", { name: "1875", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");

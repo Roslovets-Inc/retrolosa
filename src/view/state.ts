@@ -48,7 +48,7 @@ export function normalizeViewState(state: ViewState, today: number): ViewState {
   return {
     ...state,
     ...normalizeTimeSelection(state, today),
-    opacity: bounded(state.opacity, 0, 100, 75),
+    opacity: bounded(state.opacity, 0, 100, 100),
     split: bounded(state.split, 0, 100, 50),
   };
 }
@@ -77,11 +77,7 @@ export function parseViewState(hash: string, today: number): InitialView {
   const legacyMode = params.get("mode");
   const mode: Mode = legacyMode === "split" || legacyMode === "loupe" ? legacyMode : "overlay";
   const opacity =
-    legacyMode === "modern"
-      ? 0
-      : legacyMode === "historic"
-        ? 100
-        : percent(params, "opacity", legacyMode === "time" || mode !== "overlay" ? 100 : 75);
+    legacyMode === "modern" ? 0 : legacyMode === "historic" ? 100 : percent(params, "opacity", 100);
   const bearing = readBearing(params.get("bearing"));
   const lon = Number(params.get("lon"));
   const lat = Number(params.get("lat"));
@@ -118,7 +114,6 @@ export type ViewAction =
   | { type: "time"; value: number }
   | { type: "toggleEpoch"; id: EpochId }
   | { type: "mode"; value: Mode }
-  | { type: "opacity"; value: number }
   | { type: "split"; value: number }
   | { type: "moveSplit"; delta: number }
   | { type: "toggleAlignment"; epoch: number };
@@ -126,11 +121,12 @@ export type ViewAction =
 export function reduceViewState(state: ViewState, action: ViewAction, today: number): ViewState {
   switch (action.type) {
     case "time":
-      return normalizeViewState({ ...state, time: action.value }, today);
+      return normalizeViewState({ ...state, time: action.value, opacity: 100 }, today);
     case "toggleEpoch":
       return normalizeViewState(
         {
           ...state,
+          opacity: 100,
           enabled: state.enabled.includes(action.id)
             ? state.enabled.filter((id) => id !== action.id)
             : [...state.enabled, action.id],
@@ -138,9 +134,7 @@ export function reduceViewState(state: ViewState, action: ViewAction, today: num
         today,
       );
     case "mode":
-      return { ...state, mode: action.value };
-    case "opacity":
-      return { ...state, opacity: bounded(action.value, 0, 100, 75) };
+      return { ...state, mode: action.value, opacity: 100 };
     case "split":
       return { ...state, split: bounded(action.value, 0, 100, 50) };
     case "moveSplit":

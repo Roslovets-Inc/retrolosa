@@ -9,6 +9,7 @@ import { Header } from "./components/Header";
 import { MapTools } from "./components/MapTools";
 import { MapViewport } from "./components/MapViewport";
 import { SourcesPanel } from "./components/SourcesPanel";
+import { StreetControls } from "./components/StreetControls";
 import { getEpoch } from "./epochs/catalog";
 import type { EpochId as Year } from "./epochs/catalog";
 import { translateLabel } from "./i18n-labels";
@@ -47,6 +48,8 @@ function App() {
   const { enabled, time, opacity, split } = view;
   const [openPanel, setOpenPanel] = useState<"places" | "epochs" | null>(null);
   const [compareHeld, setCompareHeld] = useState(false);
+  const [streetOpacity, setStreetOpacity] = useState(0);
+  const streetsEnabled = streetOpacity > 0;
   const [peek, setPeek] = useState(false),
     [sources, setSources] = useState(false);
   const presentation = derivePresentation(view, { compareHeld, peek }, TODAY);
@@ -62,13 +65,14 @@ function App() {
     bearing,
     historicOpacity,
   } = presentation;
-  const { controller, modernEl, oldEl, status } = useMaps(
+  const { controller, modernEl, oldEl, streetsEl, status } = useMaps(
     initial,
     theme,
     { enabled, time },
     TODAY,
     historicOpacity > 0,
     bearing,
+    streetsEnabled,
   );
   const geo = useLocation(controller.locationMaps);
   const errors = [
@@ -128,6 +132,12 @@ function App() {
         year={year}
         dispatch={dispatch}
       />
+      <div
+        ref={streetsEl}
+        className="map streets-map"
+        aria-hidden="true"
+        style={{ display: streetsEnabled ? undefined : "none", opacity: streetOpacity / 100 }}
+      />
       <Header
         theme={theme}
         themePreference={themePreference}
@@ -152,8 +162,9 @@ function App() {
         </div>
       )}
       <MapTools
-        opacity={opacity}
-        hasEpochs={enabled.length > 0}
+        streetControls={
+          <StreetControls opacity={streetOpacity} onOpacityChange={setStreetOpacity} />
+        }
         compareHeld={compareHeld}
         setCompareHeld={setCompareHeld}
         locationStatus={geo.status}
@@ -161,7 +172,6 @@ function App() {
         onZoomIn={controller.zoomIn}
         onZoomOut={controller.zoomOut}
         onOverview={() => controller.overview(bearing)}
-        onOpacityChange={(value) => dispatch({ type: "opacity", value })}
         onToggleAlignment={() => dispatch({ type: "toggleAlignment", epoch: orientationEpoch })}
         bearing={bearing}
         readingBearing={readingBearing}

@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 
 import { prepareSharing, sharedView } from "./sharing";
-import { setSlider } from "./ui";
 test.beforeEach(async ({ page }) => prepareSharing(page));
 test("real map sources, comparison, navigation, sources and mobile layout", async ({ page }) => {
   const failures: string[] = [];
@@ -18,18 +17,15 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(
-    page.getByRole("slider", { name: "Opacité de la carte historique", exact: true }),
-    38,
-  );
-  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0.38");
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 0);
+  await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
+  await page.locator("main").focus();
+  await page.keyboard.down("Space");
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "0");
   await page.screenshot({ path: ".local/modern.png" });
+  await page.keyboard.up("Space");
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(page.getByRole("slider", { name: "Opacité de la carte historique" }), 100);
   await expect(page.locator(".historic-map")).toHaveCSS("opacity", "1");
   await page.screenshot({ path: ".local/historic.png" });
   await page.locator("main").focus();
@@ -50,10 +46,6 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
   await page.getByRole("radio", { name: "Superposition", exact: true }).click();
-  await setSlider(
-    page.getByRole("slider", { name: "Opacité de la carte historique", exact: true }),
-    50,
-  );
   await page.screenshot({ path: ".local/alignment.png" });
 
   await page.getByRole("radio", { name: "Rideau", exact: true }).click();
@@ -80,7 +72,7 @@ test("real map sources, comparison, navigation, sources and mobile layout", asyn
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
   ).toBeTruthy();
-  await expect(page.getByRole("slider", { name: "Opacité de la carte historique" })).toBeVisible();
+  await expect(page.getByRole("slider", { name: "Opacité de la carte historique" })).toHaveCount(0);
   expect(failures).toEqual([]);
 });
 test("historical network failure is explained", async ({ page }) => {

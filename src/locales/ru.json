@@ -172,5 +172,13 @@
   "installApp.androidMenu": "Откройте меню браузера <icon/>.",
   "installApp.androidAdd": "Выберите <strong>Установить приложение</strong> или <strong>Добавить на главный экран</strong>, затем подтвердите действие.",
   "terms.Carte actuelle": "Современная карта",
-  "terms.Carte historique": "Историческая карта"
+  "terms.Carte historique": "Историческая карта",
+  "streets.title": "Современные улицы",
+  "streets.opacity": "Непрозрачность улиц",
+  "failure.streets": "современных улиц",
+  "terms.Rues actuelles": "Современные улицы",
+  "mapTools.streetsAndComparison": "Улицы и сравнение",
+  "streets.hidden": "Скрыты",
+  "streets.hide": "Скрыть улицы",
+  "streets.show": "Показать улицы"
 }

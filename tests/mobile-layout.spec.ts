@@ -36,7 +36,7 @@ test("phone layout fills the viewport and keeps population and timeline compact"
     expect(credits.width).toBe(width);
     expect(panel.height).toBeLessThanOrEqual(120);
     const zoom = (await page.locator(".zoom-controls").boundingBox())!;
-    const opacity = (await page.locator(".opacity-controls").boundingBox())!;
+    const opacity = (await page.locator(".overlay-controls").boundingBox())!;
     expect(opacity.y - zoom.y - zoom.height).toBeLessThanOrEqual(16);
     expect(opacity.y + opacity.height).toBeLessThan(panel.y);
     const ticks = await page.locator(".timeline-ticks button:visible").all();

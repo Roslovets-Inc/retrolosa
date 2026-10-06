@@ -172,5 +172,13 @@
   "installApp.androidMenu": "Touchez le menu <icon/> du navigateur.",
   "installApp.androidAdd": "Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>, puis confirmez.",
   "terms.Carte actuelle": "Carte actuelle",
-  "terms.Carte historique": "Carte historique"
+  "terms.Carte historique": "Carte historique",
+  "streets.title": "Rues actuelles",
+  "streets.opacity": "Opacité des rues",
+  "failure.streets": "des rues actuelles",
+  "terms.Rues actuelles": "Rues actuelles",
+  "mapTools.streetsAndComparison": "Rues et comparaison",
+  "streets.hidden": "Masquées",
+  "streets.hide": "Masquer les rues",
+  "streets.show": "Afficher les rues"
 }
