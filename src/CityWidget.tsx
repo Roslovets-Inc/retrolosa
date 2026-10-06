@@ -11,7 +11,6 @@ import {
   Swords,
   ExternalLink,
   X,
-  ChevronDown,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -44,7 +43,6 @@ export function CityWidget({
 }) {
   const { t, i18n } = useTranslation();
   const [selected, setSelected] = useState<number | null>(null);
-  const [expanded, setExpanded] = useState(false);
   useEffect(() => {
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") setSelected(null);
@@ -55,11 +53,7 @@ export function CityWidget({
   const events = eventsAt(year);
   const active = events.find((event) => event.year === selected);
   return (
-    <section
-      className="population-counter"
-      aria-label={t("cityWidget.toulouseAtThisTime")}
-      data-expanded={expanded}
-    >
+    <section className="population-counter" aria-label={t("cityWidget.toulouseAtThisTime")}>
       <span>
         {t("cityWidget.toulouse")} {label}
       </span>
@@ -75,17 +69,6 @@ export function CityWidget({
           ≈ {populationAt(year).toLocaleString(i18n.resolvedLanguage)}{" "}
           <small>{t("cityWidget.inhabitants")}</small>
         </strong>
-      </Button>
-      <Button
-        className="city-events-toggle"
-        aria-expanded={expanded}
-        aria-controls="city-events"
-        onClick={() => {
-          setExpanded(!expanded);
-          setSelected(null);
-        }}
-      >
-        {t("cityWidget.historicalMilestones")} <ChevronDown size={14} />
       </Button>
       <div
         id="city-events"

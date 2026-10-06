@@ -147,9 +147,10 @@ approved user-02 example snapshot. See [georeferencing.md](georeferencing.md).
 
 Mobile layout uses a viewport-fixed application with maps continuing beneath
 the footer safe area. The population card sits just below the header, with
-milestones initially collapsed on phones. The compact timeline exposes its
-selected date and uses one sparse label row. See `tests/mobile-layout.spec.ts`
-for viewport, expansion and non-overlap checks.
+milestones always visible on phones as on desktop. The shared timeline keeps
+its current-date announcement screen-reader-only, shows every enabled date in
+two rows on narrow screens, and highlights selected dates at every width.
+See `tests/mobile-layout.spec.ts` for viewport and non-overlap checks.
 
 | Area                                                   | Entry points                                                     |
 | ------------------------------------------------------ | ---------------------------------------------------------------- |

@@ -13,13 +13,16 @@ test("phone layout fills the viewport and keeps population and timeline compact"
   const widget = page.locator(".population-counter");
   const card = (await widget.boundingBox())!;
   expect(card.y - header.y - header.height).toBe(14);
-  await expect(widget.getByRole("group")).toBeHidden();
-  await widget.getByRole("button", { name: "Repères historiques", exact: true }).click();
   await expect(widget.getByRole("group")).toBeVisible();
-  await widget.getByRole("button", { name: "Repères historiques", exact: true }).click();
-  await expect(widget.getByRole("group")).toBeHidden();
+  await expect(
+    widget.getByRole("button", { name: "Repères historiques", exact: true }),
+  ).toHaveCount(0);
   await expect(page.locator(".timeline-current")).toHaveText("1860");
+  await expect(page.locator(".timeline-current")).toHaveCSS("position", "absolute");
+  await expect(page.locator(".timeline-current")).toHaveCSS("clip", "rect(0px, 0px, 0px, 0px)");
   for (const [width, height] of [
+    [600, 844],
+    [510, 844],
     [390, 844],
     [320, 568],
     [390, 700],
@@ -35,17 +38,19 @@ test("phone layout fills the viewport and keeps population and timeline compact"
     expect(credits.x).toBe(0);
     expect(credits.width).toBe(width);
     expect(panel.height).toBeLessThanOrEqual(120);
+    expect(panel.x + panel.width / 2).toBeCloseTo(width / 2, 1);
     const zoom = (await page.locator(".zoom-controls").boundingBox())!;
     const opacity = (await page.locator(".overlay-controls").boundingBox())!;
     expect(opacity.y - zoom.y - zoom.height).toBeLessThanOrEqual(16);
     expect(opacity.y + opacity.height).toBeLessThan(panel.y);
     const ticks = await page.locator(".timeline-ticks button:visible").all();
-    let previousRight = 0;
+    expect(ticks).toHaveLength(await page.locator(".timeline-ticks button").count());
+    const rightByRow = new Map<number, number>();
     for (const tick of ticks) {
       const box = (await tick.boundingBox())!;
-      expect(box.x).toBeGreaterThanOrEqual(previousRight);
+      expect(box.x).toBeGreaterThanOrEqual(rightByRow.get(box.y) ?? 0);
       expect(box.x + box.width).toBeLessThanOrEqual(width);
-      previousRight = box.x + box.width;
+      rightByRow.set(box.y, box.x + box.width);
     }
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
       true,

@@ -25,12 +25,18 @@ for (const locale of ["en-GB", "fr-FR"]) {
       }
       for (const width of [1440, 768, 390, 320]) {
         await page.setViewportSize({ width, height: 844 });
+        const selected = page.locator('.timeline-ticks button[data-period="1250"]');
+        await expect(selected).toHaveAttribute("aria-pressed", "true");
+        await expect(selected).toHaveCSS("font-weight", "700");
+        await expect(selected).toHaveCSS("text-decoration-line", "underline");
         const labels = page.locator(".timeline-ticks button:visible");
-        let right = 0;
+        await expect(labels).toHaveCount(await page.locator(".timeline-ticks button").count());
+        const rightByRow = new Map<number, number>();
         for (const label of await labels.all()) {
           const bounds = (await label.boundingBox())!;
-          expect(bounds.x).toBeGreaterThanOrEqual(right + 2);
-          right = bounds.x + bounds.width;
+          const right = rightByRow.get(bounds.y);
+          if (right !== undefined) expect(bounds.x).toBeGreaterThanOrEqual(right + 2);
+          rightByRow.set(bounds.y, bounds.x + bounds.width);
         }
         await page.screenshot({ path: `.local/timeline-${locale}-${width}.png` });
       }

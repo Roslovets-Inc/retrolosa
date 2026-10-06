@@ -222,9 +222,6 @@ export function ComparisonPanel({
                 <Button
                   key={date}
                   data-period={date}
-                  data-mobile-tick={
-                    (index % 2 === 0 && index < dates.length - 2) || index === dates.length - 1
-                  }
                   aria-pressed={time === date}
                   aria-label={isCentury(date) ? t(`comparisonPanel.century${date}`) : undefined}
                   data-tooltip={isCentury(date) ? t(`comparisonPanel.century${date}`) : undefined}

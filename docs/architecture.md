@@ -300,10 +300,18 @@ The viewport includes `viewport-fit=cover`. Header/footer dimensions and map-con
 offsets include safe-area insets in `app.css`. The top inset has a dark background
 so iOS's translucent status bar remains legible with either app theme.
 The application is fixed to the viewport edges rather than sized by `100dvh`;
-maps extend beneath the transparent footer and bottom safe area. Mobile population
-milestones collapse initially, and the 120 px comparison panel shows the selected
-date above a single sparse row of timeline labels. `tests/mobile-layout.spec.ts`
-checks viewport coverage, card placement, expansion and control separation.
+maps extend beneath the transparent footer and bottom safe area. Population
+milestones remain visible at every viewport size, without a mobile
+accordion. The shared comparison panel adapts its height and
+shows all timeline dates in two staggered rows on narrow screens. The current
+date announcement remains screen-reader-only as on desktop. `tests/mobile-layout.spec.ts`
+checks viewport coverage, card placement, visible milestones and control separation.
+Header controls keep fixed 32 px icon widths below 600 px; the places text yields
+to its icon, and the brand text hides below 480 px. The language and places
+selectors each embed their icon inside the trigger.
+Both hide only their text below 600 px, retaining the same menus and accessible labels.
+`tests/header-layout.spec.ts` checks control bounds and overlap across compact
+breakpoints in all three interface languages.
 The install dialog uses existing
 Radix focus/dismissal primitives and project colour tokens in both themes.
 `scripts/build-app-icons.mjs` explicitly renders PNG icons from the existing SVG

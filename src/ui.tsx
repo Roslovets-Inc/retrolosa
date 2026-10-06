@@ -59,16 +59,25 @@ export function Select({
   value,
   onValueChange,
   options,
+  icon,
 }: {
   label: string;
   value: string;
   onValueChange: (value: string) => void;
   options: readonly { value: string; label: string; lang?: string }[];
+  icon?: React.ReactNode;
 }) {
   return (
     <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
       <SelectPrimitive.Trigger className="ui-select-trigger" aria-label={label} data-value={value}>
-        <SelectPrimitive.Value />
+        {icon && (
+          <span className="ui-select-icon" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        <span className="ui-select-value">
+          <SelectPrimitive.Value />
+        </span>
         <SelectPrimitive.Icon asChild>
           <ChevronDown size={14} aria-hidden="true" />
         </SelectPrimitive.Icon>

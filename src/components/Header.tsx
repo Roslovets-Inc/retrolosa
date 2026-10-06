@@ -99,8 +99,8 @@ export function Header({
         </a>
         <div className="header-right">
           <div className="language-selector">
-            <Languages size={16} aria-hidden="true" />
             <Select
+              icon={<Languages size={17} />}
               label={t("language")}
               value={i18n.resolvedLanguage ?? "en"}
               onValueChange={(value) => selectLanguage(value as "en" | "fr" | "ru")}

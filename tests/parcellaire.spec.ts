@@ -67,8 +67,8 @@ test("1550 combines both parcel colors, preserves its legend and restores shared
     page.locator(".timeline-ticks").getByRole("button", { name: "1550", exact: true }),
   ).toHaveAttribute("aria-pressed", "true");
   await page.setViewportSize({ width: 390, height: 844 });
-  // Compact mobile ticks can omit intermediate dates; the selected year remains
-  // available through the timeline slider and its full accessible label.
+  // The same timeline keeps every enabled date available on mobile.
+  await expect(page.locator('.timeline-ticks button[data-period="1550"]')).toBeVisible();
   await expect(page.getByRole("slider", { name: "Voyage dans le temps" })).toHaveValue("1550");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   if (await page.getByRole("button", { name: "Fermer le message", exact: true }).isVisible()) {
