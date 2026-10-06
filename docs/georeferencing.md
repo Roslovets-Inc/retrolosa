@@ -9,7 +9,7 @@ The browser editor and all map-generation scripts have moved to the independent 
 - Other `data/*control-points.json`, baselines and reports: historical preparation evidence.
 - `public/` plus `data/stac/`: reviewed delivery assets consumed by the site.
 
-The current 1860 project is `data/georeferencing/jourdan-1860.json`, approved revision `2026-10-02-user-02`. The new editor includes an independent snapshot for demonstration; there is no automatic synchronization between repositories.
+The current 1860 project is `data/georeferencing/jourdan-1860.json`, approved revision `2026-10-06-streets-01` (based on approved `2026-10-02-user-02`). The new editor includes an independent snapshot for demonstration; there is no automatic synchronization between repositories.
 
 ## Import a reviewed result
 

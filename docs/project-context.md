@@ -32,12 +32,21 @@ This supersedes the earlier 1860-only migration notes below.
 
 ## Current 1860 source and delivery
 
-The current map is approved revision `2026-10-02-user-02`. Its editable source is
+The current map is approved revision `2026-10-06-streets-01`, prepared from
+the approved `2026-10-02-user-02` baseline with Rue du Taur correspondences. Its editable source is
 `data/georeferencing/jourdan-1860.json`; its latest GDAL report is
 `data/georeferencing/jourdan-1860-report.json`. Preserve the original scan in
 `data/map-sources/jourdan-1860/original.jpg`. The site consumes only
 `public/jourdan-1860/map.webp` and `data/stac/jourdan-1860.item.json`.
-There are 75 fit points and 30 independent checks; check RMSE is 15.54 m.
+There are 75 fit points and 32 withheld checks; check RMSE is 15.17 m.
+The same 29 inherited checks change from 15.62 m to 15.70 m RMSE; this revision
+does not establish an overall accuracy improvement. Esquile remains unresolved
+and is excluded from fitting. The tracing and comparison are preserved in
+`data/georeferencing/jourdan-1860-street-tracing.json` and
+`data/georeferencing/jourdan-1860-comparison.json`. The user accepted the visual alignment against the street overlay on 2026-10-06.
+Local regressions at Notre-Dame du Taur and other checks remain recorded.
+The approved baseline remains in Git; a local rollback copy is also in
+`.local/1860-before-street-review/`. Publication has not been requested.
 This measures consistency with manual annotations, not survey accuracy.
 Historical revision folders, duplicate previews and obsolete metadata have been
 removed. Use Git for future history; commit current source records with each

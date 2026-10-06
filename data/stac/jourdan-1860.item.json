@@ -5,25 +5,25 @@
     "datetime": null,
     "start_datetime": "1860-01-01T00:00:00Z",
     "end_datetime": "1860-12-31T23:59:59Z",
-    "retrolosa:revision": "2026-10-02-user-02",
+    "retrolosa:revision": "2026-10-06-streets-01",
     "retrolosa:date_precision": "approximate-year",
     "retrolosa:fit_point_count": 75,
     "retrolosa:check_points": [
       {
         "name": "Notre-Dame du Taur footprint",
-        "errorMetres": 5.9
+        "errorMetres": 9.5
       },
       {
         "name": "Saint-Pierre-des-Cuisines footprint",
-        "errorMetres": 30.9
+        "errorMetres": 30.8
       },
       {
         "name": "Place du Capitole centre",
-        "errorMetres": 3.7
+        "errorMetres": 4.9
       },
       {
         "name": "Place Wilson centre",
-        "errorMetres": 4.0
+        "errorMetres": 4.5
       },
       {
         "name": "Grand Rond Paul-Sabatier junction",
@@ -54,10 +54,6 @@
         "errorMetres": 13.0
       },
       {
-        "name": "Taur / Place-Saint-Sernin axis",
-        "errorMetres": 13.0
-      },
-      {
         "name": "Laque / Tour-du-Sac axis",
         "errorMetres": 13.6
       },
@@ -75,7 +71,7 @@
       },
       {
         "name": "Lejeune / Barcelone axis",
-        "errorMetres": 29.7
+        "errorMetres": 29.6
       },
       {
         "name": "Saint-Aubin nave centre",
@@ -95,7 +91,7 @@
       },
       {
         "name": "Heliot / Dalayrac axis",
-        "errorMetres": 21.6
+        "errorMetres": 21.7
       },
       {
         "name": "Arnaud-Bernard / Trois-Piliers axis",
@@ -128,11 +124,23 @@
       {
         "name": "Cimetiere / Saint-Paul / Gazan axis",
         "errorMetres": 14.5
+      },
+      {
+        "name": "Rue du Taur — 1860 pilot",
+        "errorMetres": 13.9
+      },
+      {
+        "name": "Rue du Taur — 1860 pilot",
+        "errorMetres": 5.1
+      },
+      {
+        "name": "Rue du Taur — 1860 pilot",
+        "errorMetres": 1.3
       }
     ],
-    "description": "GDAL thin-plate spline using the user-corrected original-pixel project, 75 fitting landmarks and 30 withheld manual checks. Forward geodesic check errors are annotation consistency diagnostics, not survey accuracy.",
+    "description": "User-approved delivery (2026-10-06): GDAL thin-plate spline with Rue du Taur street correspondences, 75 fitting landmarks and 32 withheld manual checks. The same 29 inherited checks have RMSE 15.62 m before and 15.70 m after; overall improvement is not established. Errors measure annotation consistency, not survey accuracy.",
     "retrolosa:raster_contract": 1,
-    "retrolosa:raster_sha256": "88329da407d777b49e81efb4037612673c965d11c0aa4b26a0292217e4aacf0b"
+    "retrolosa:raster_sha256": "2d1b624878914604048a06d98a43948bf2390258e8cafb82e6d7ca341e98c6a5"
   },
   "links": [
     {
@@ -147,34 +155,34 @@
     "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
   ],
   "bbox": [
-    1.4028051199422835,
-    43.58005909031827,
-    1.4783077144716055,
-    43.62373830504546
+    1.4028048916000992,
+    43.580059154707115,
+    1.4783073341049116,
+    43.62373828147137
   ],
   "geometry": {
     "type": "Polygon",
     "coordinates": [
       [
         [
-          1.4028051199422835,
-          43.58005909031827
+          1.4028048916000992,
+          43.580059154707115
         ],
         [
-          1.4783077144716055,
-          43.58005909031827
+          1.4783073341049116,
+          43.580059154707115
         ],
         [
-          1.4783077144716055,
-          43.62373830504546
+          1.4783073341049116,
+          43.62373828147137
         ],
         [
-          1.4028051199422835,
-          43.62373830504546
+          1.4028048916000992,
+          43.62373828147137
         ],
         [
-          1.4028051199422835,
-          43.58005909031827
+          1.4028048916000992,
+          43.580059154707115
         ]
       ]
     ]
@@ -193,12 +201,12 @@
         4096
       ],
       "proj:transform": [
-        2.051980072406036,
+        2.051975940743194,
         0.0,
-        156159.55163417206,
+        156159.52621523637,
         0.0,
-        -2.052129802221111,
-        5407398.257118487
+        -2.052125670256788,
+        5407398.253493254
       ]
     }
   }

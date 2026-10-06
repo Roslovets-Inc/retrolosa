@@ -1,0 +1,78 @@
+{
+  "candidate": "2026-10-06-streets-01",
+  "sourceSha256": "827a68694d8790e7b3e7df629226c99a067cb381dc1ac5b8248619fab04513b5",
+  "scope": "Rue du Taur pilot: 2 OSM-node fits, 3 held-out street checks, 1 unresolved Esquile correspondence excluded after an initial regression.",
+  "commonChecks": {
+    "count": 29,
+    "baselineRmseMetres": 15.61919743689987,
+    "candidateRmseMetres": 15.696677516512594
+  },
+  "pilotChecks": [
+    {
+      "id": "street:1860-taur-trois-renards",
+      "baselineMetres": 13.488079694624318,
+      "candidateMetres": 13.912279644935776
+    },
+    {
+      "id": "street:1860-taur-montoyol",
+      "baselineMetres": 6.584510054513776,
+      "candidateMetres": 5.105185553720908
+    },
+    {
+      "id": "street:1860-taur-senechal",
+      "baselineMetres": 5.790900955015705,
+      "candidateMetres": 1.2763254857834267
+    }
+  ],
+  "largestCommonRegressions": [
+    {
+      "id": "jourdan-004",
+      "baselineMetres": 5.875953760095533,
+      "candidateMetres": 9.535888154453716,
+      "deltaMetres": 3.6599343943581824
+    },
+    {
+      "id": "jourdan-014",
+      "baselineMetres": 3.6584452722062526,
+      "candidateMetres": 4.907696061910337,
+      "deltaMetres": 1.2492507897040843
+    },
+    {
+      "id": "jourdan-015",
+      "baselineMetres": 3.971995211573407,
+      "candidateMetres": 4.46361084848815,
+      "deltaMetres": 0.4916156369147431
+    },
+    {
+      "id": "jourdan-079",
+      "baselineMetres": 21.600767337310455,
+      "candidateMetres": 21.697695451771278,
+      "deltaMetres": 0.09692811446082317
+    },
+    {
+      "id": "jourdan-035",
+      "baselineMetres": 8.571095938478393,
+      "candidateMetres": 8.61315426714927,
+      "deltaMetres": 0.04205832867087622
+    }
+  ],
+  "affine": {
+    "checkRmseMetres": 24.247388877024846,
+    "orientationReversalSamples": 0
+  },
+  "tps": {
+    "checkRmseMetres": 15.172372422707625,
+    "orientationReversalSamples": 0,
+    "warnings": [
+      "102 enabled annotations still need review.",
+      "Errors are based on manual annotations. Inspect streets, edges and inverse residuals before accepting this result."
+    ]
+  },
+  "limitations": [
+    "Full check RMSE cannot be compared directly because the check set changed.",
+    "Zero reversed grid samples does not guarantee no local folds.",
+    "No new complete historical street graph; one traced centreline only.",
+    "Not approved for website replacement."
+  ],
+  "initialTrial": "initial-trial/ contains the rejected 3-fit variant and its comparison. Esquile was removed from fitting because the oblique historic mouth is uncertain and independent checks regressed."
+}

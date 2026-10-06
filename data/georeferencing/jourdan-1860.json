@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "title": "Toulouse · Jourdan 1860",
+  "title": "Toulouse · Jourdan 1860 — street-reference pilot 2026-10-06",
   "image": {
     "name": "original.jpg",
     "width": 4117,
@@ -10,7 +10,7 @@
   "crs": "EPSG:4326",
   "pixelConvention": "top-left-edge-x-right-y-down",
   "transform": "tps",
-  "provenance": "https://www.flickr.com/photos/archives-toulouse/24480515944/\nArchives municipales de Toulouse, 20 Fi 66. Domaine public, stated in official Flickr description. Justin Jourdan; Prosper Riviere.\nImported from data/jourdan-1860-control-points.json; legacy smoothing and priors are not part of the GDAL transform.",
+  "provenance": "https://www.flickr.com/photos/archives-toulouse/24480515944/\nArchives municipales de Toulouse, 20 Fi 66. Domaine public, stated in official Flickr description. Justin Jourdan; Prosper Riviere.\nImported from data/jourdan-1860-control-points.json; legacy smoothing and priors are not part of the GDAL transform.\nReview candidate: 2 explicit OSM-node fit junctions, 3 held-out street checks, 1 unresolved Esquile correspondence excluded from fitting. Existing points preserved; duplicate old observations disabled. Inherited observations outside this pilot remain unreviewed.",
   "points": [
     {
       "id": "jourdan-001",
@@ -600,9 +600,9 @@
         43.60486588193218
       ],
       "role": "fit",
-      "enabled": true,
+      "enabled": false,
       "reviewed": false,
-      "note": "Imported candidate; verify against original and modern reference. {}"
+      "note": "Imported candidate; verify against original and modern reference. {}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
     },
     {
       "id": "jourdan-039",
@@ -728,9 +728,9 @@
         43.60700762075243
       ],
       "role": "fit",
-      "enabled": true,
+      "enabled": false,
       "reviewed": false,
-      "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"60960445\"}"
+      "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"60960445\"}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
     },
     {
       "id": "jourdan-047",
@@ -808,9 +808,9 @@
         43.6075842182219
       ],
       "role": "check",
-      "enabled": true,
+      "enabled": false,
       "reviewed": false,
-      "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"755995097\"}"
+      "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"755995097\"}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
     },
     {
       "id": "jourdan-052",
@@ -1691,6 +1691,86 @@
       "enabled": true,
       "reviewed": false,
       "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"annotationUncertaintyMetres\": 8, \"annotationNote\": \"Preserved southwest corner at the meeting of the cemetery west wall / Chemin du Nou and Avenue de la Gloire; original street labelled Rue de la Colombette. Manually inspected on IGN, not the later northern extension.\"}"
+    },
+    {
+      "id": "street:1860-taur-trois-renards",
+      "name": "Rue du Taur — 1860 pilot",
+      "pixel": [
+        2051,
+        1115
+      ],
+      "geographic": [
+        1.4420397,
+        43.6075556
+      ],
+      "role": "check",
+      "enabled": true,
+      "reviewed": true,
+      "note": "Independent check. The historic Rue des Trois Renards enters the west side of Rue du Taur below Place Saint-Sernin. Matched road centre junction to shared OSM node 60960446, not the nearby shape node 6871954702. Historical scan inspected at original pixels; modern named-way connections inspected in the 2026-10-06 OSM snapshot. Estimated manual uncertainty 4–6 m; pedestrian junction geometry has changed.\nOSM osm:way:349894872:3-4; node 60960446; snapshot 2026-10-06T11:25:57Z; sha256 1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4"
+    },
+    {
+      "id": "street:1860-taur-perigord",
+      "name": "Rue du Taur — 1860 pilot",
+      "pixel": [
+        2074,
+        1158
+      ],
+      "geographic": [
+        1.4422546,
+        43.6070077
+      ],
+      "role": "fit",
+      "enabled": true,
+      "reviewed": true,
+      "note": "Historic Rue Perigord opens on the east side of Rue du Taur; shared node belongs to both modern named ways. Original-pixel road-centre intersection inspected in the scan and modern OSM geometry. Estimated manual uncertainty 3–5 m. Supersedes imported fit jourdan-046 without deleting it.\nOSM osm:way:8590239:12-13; node 60960445; snapshot 2026-10-06T11:25:57Z; sha256 1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4"
+    },
+    {
+      "id": "street:1860-taur-montoyol",
+      "name": "Rue du Taur — 1860 pilot",
+      "pixel": [
+        2087,
+        1193
+      ],
+      "geographic": [
+        1.4424242,
+        43.6065608
+      ],
+      "role": "check",
+      "enabled": true,
+      "reviewed": true,
+      "note": "Independent check. Rue Montoyol enters Rue du Taur from the east, immediately south of the Esquile junction. Matched the road-centre junction to shared OSM node 60960444; not used in the fit. Original scan and modern named-way geometry inspected. Closely spaced junctions and old street width imply 4–6 m manual uncertainty.\nOSM osm:way:8590239:9-11; node 60960444; snapshot 2026-10-06T11:25:57Z; sha256 1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4"
+    },
+    {
+      "id": "street:1860-taur-senechal",
+      "name": "Rue du Taur — 1860 pilot",
+      "pixel": [
+        2111,
+        1252
+      ],
+      "geographic": [
+        1.4426132,
+        43.6058279
+      ],
+      "role": "check",
+      "enabled": true,
+      "reviewed": true,
+      "note": "Independent check. Historic Rue du Senechal enters Rue du Taur from the east north of Notre-Dame du Taur. Matched the centre of the street mouth to shared OSM node 60960443. Original scan and modern named-way geometry inspected. Estimated manual uncertainty 4–6 m; not used in fitting.\nOSM osm:way:8590239:8-9; node 60960443; snapshot 2026-10-06T11:25:57Z; sha256 1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4"
+    },
+    {
+      "id": "street:1860-taur-capitole",
+      "name": "Rue du Taur — 1860 pilot",
+      "pixel": [
+        2132,
+        1331
+      ],
+      "geographic": [
+        1.4428728,
+        43.6048189
+      ],
+      "role": "fit",
+      "enabled": true,
+      "reviewed": true,
+      "note": "South end of Rue du Taur at the northern edge of Place du Capitole, where the historic Louis-Napoleon/Lafayette alignment enters from the east. Modern short section is named Rue Dominique Baudis. OSM node 60960442 links Taur, Baudis and Capitole. Matched the road-centre opening, not a square corner. Estimated uncertainty 5–8 m due to pedestrianisation and widened mouths; compare carefully. Supersedes imported fit jourdan-038 without deleting it.\nOSM osm:way:8590239:0-2; node 60960442; snapshot 2026-10-06T11:25:57Z; sha256 1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4"
     }
   ]
 }

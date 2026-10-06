@@ -1,0 +1,1822 @@
+{
+  "version": 1,
+  "kind": "street-tracing-project",
+  "project": {
+    "version": 1,
+    "title": "Toulouse · Jourdan 1860",
+    "image": {
+      "name": "original.jpg",
+      "width": 4117,
+      "height": 3152,
+      "sha256": "827a68694d8790e7b3e7df629226c99a067cb381dc1ac5b8248619fab04513b5"
+    },
+    "crs": "EPSG:4326",
+    "pixelConvention": "top-left-edge-x-right-y-down",
+    "transform": "tps",
+    "provenance": "https://www.flickr.com/photos/archives-toulouse/24480515944/\nArchives municipales de Toulouse, 20 Fi 66. Domaine public, stated in official Flickr description. Justin Jourdan; Prosper Riviere.\nImported from data/jourdan-1860-control-points.json; legacy smoothing and priors are not part of the GDAL transform.",
+    "points": [
+      {
+        "id": "jourdan-001",
+        "name": "Saint-Sernin crossing",
+        "pixel": [
+          2055.989059957821,
+          1025.055975282833
+        ],
+        "geographic": [
+          1.4419171142578193,
+          43.608458208997625
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-002",
+        "name": "Saint-Etienne west portal",
+        "pixel": [
+          2606.575625,
+          1682.82375
+        ],
+        "geographic": [
+          1.4496959124778646,
+          43.600003585586016
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-003",
+        "name": "Pont Neuf right-bank abutment",
+        "pixel": [
+          2049.0102515979656,
+          1794.0154363295937
+        ],
+        "geographic": [
+          1.44040100097655,
+          43.599587873697494
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-004",
+        "name": "Notre-Dame du Taur footprint",
+        "pixel": [
+          2121.6607738068537,
+          1275.9963580157062
+        ],
+        "geographic": [
+          1.4426860392471452,
+          43.60557940418106
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-005",
+        "name": "Saint-Pierre-des-Cuisines footprint",
+        "pixel": [
+          1695.689375,
+          1404.92625
+        ],
+        "geographic": [
+          1.4356329345703216,
+          43.604284143285156
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-007",
+        "name": "Pont des Minimes centre",
+        "pixel": [
+          1662.007777074319,
+          450.0009647705997
+        ],
+        "geographic": [
+          1.43725012207031,
+          43.61607014122803
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"minimes\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: actual crossing of Rue de Paris / Faubourg Arnaud-Bernard over the canal. Previous original point [690,173] was east along the canal, not on the bridge. Reference bridge centre retained.\"}"
+      },
+      {
+        "id": "jourdan-008",
+        "name": "Pont du Bearnais centre",
+        "pixel": [
+          1031.0060095574281,
+          864.9980704588008
+        ],
+        "geographic": [
+          1.4252563476562443,
+          43.61205768048432
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-009",
+        "name": "Pont Matabiau centre",
+        "pixel": [
+          2463.556276184394,
+          507.0071594399201
+        ],
+        "geographic": [
+          1.4507116699218727,
+          43.61392494574341
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: corrected original bridge position; centre between canal banks, checked against preserved crossing. Previous annotation was south of the actual bridge.\"}"
+      },
+      {
+        "id": "jourdan-010",
+        "name": "Pont Bayard centre",
+        "pixel": [
+          2624.0750147357285,
+          686.6000023363042
+        ],
+        "geographic": [
+          1.452587831563226,
+          43.61148669697272
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: corrected original bridge position; centre between canal banks, checked against preserved crossing. Previous annotation was south of the actual bridge.\"}"
+      },
+      {
+        "id": "jourdan-011",
+        "name": "Chateau d eau centre",
+        "pixel": [
+          1891.0148471418815,
+          1854.953691011219
+        ],
+        "geographic": [
+          1.4375677000186562,
+          43.59905676977809
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-012",
+        "name": "Porte Saint-Cyprien centre",
+        "pixel": [
+          1498.0148471418815,
+          2012.036661282785
+        ],
+        "geographic": [
+          1.4308296951442447,
+          43.597828711395195
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-013",
+        "name": "Patte d Oie junction",
+        "pixel": [
+          1062.0070700675626,
+          2186.0135067883944
+        ],
+        "geographic": [
+          1.4230206298828136,
+          43.59640139362756
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-014",
+        "name": "Place du Capitole centre",
+        "pixel": [
+          2185.3146320978863,
+          1368.2533270855524
+        ],
+        "geographic": [
+          1.443353697623251,
+          43.60436537270118
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-015",
+        "name": "Place Wilson centre",
+        "pixel": [
+          2414.631678323254,
+          1286.9899353654632
+        ],
+        "geographic": [
+          1.4473843840011562,
+          43.60486007587408
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-016",
+        "name": "Grand Rond fountain centre",
+        "pixel": [
+          2800.5892500000004,
+          2025.8213124999997
+        ],
+        "geographic": [
+          1.4525683593749932,
+          43.59576487301887
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-017",
+        "name": "Grand Rond north road axis",
+        "pixel": [
+          2793.6418125,
+          1946.826375
+        ],
+        "geographic": [
+          1.4523266601562455,
+          43.596652021769714
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-018",
+        "name": "Grand Rond south road axis",
+        "pixel": [
+          2822.9754374999993,
+          2109.9625
+        ],
+        "geographic": [
+          1.452760620117175,
+          43.59484190617675
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-019",
+        "name": "Grand Rond rue de Tivoli road axis",
+        "pixel": [
+          2894.765625,
+          2031.9968125000003
+        ],
+        "geographic": [
+          1.4539471435546716,
+          43.59575691646865
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-020",
+        "name": "Grand Rond Paul-Sabatier junction",
+        "pixel": [
+          2875.4671875,
+          1977.18925
+        ],
+        "geographic": [
+          1.4536889648437352,
+          43.596353654815445
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationNote\": \"Refined to the junction of the centreline of the northeast avenue and the circular road, rather than either edge of the avenue.\"}"
+      },
+      {
+        "id": "jourdan-021",
+        "name": "Pont Guilhemery centre",
+        "pixel": [
+          2997.690625,
+          1586.3315625
+        ],
+        "geographic": [
+          1.4563405151367022,
+          43.60078803099281
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-022",
+        "name": "Pont des Demoiselles centre",
+        "pixel": [
+          3347.635625,
+          2637.453125
+        ],
+        "geographic": [
+          1.4606982421874761,
+          43.58760089931305
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-023",
+        "name": "Lascrosses / boulevard Arcole axis",
+        "pixel": [
+          1658.3438568177728,
+          897.8622712916376
+        ],
+        "geographic": [
+          1.4359903714839108,
+          43.61074469490728
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: corrected original intersection from [676,337.3], inside the adjacent block, to the actual Lascrosses crossing of the broad boulevard.\"}"
+      },
+      {
+        "id": "jourdan-024",
+        "name": "Sebastopol / boulevard Lascrosses axis",
+        "pixel": [
+          1479.0328758141661,
+          1018.9922818352031
+        ],
+        "geographic": [
+          1.4327403720952605,
+          43.60972686276789
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-025",
+        "name": "Allees Lafayette / boulevard Strasbourg axis",
+        "pixel": [
+          2486.1796937481895,
+          1194.2835697449138
+        ],
+        "geographic": [
+          1.4487210545308973,
+          43.60575794644366
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-026",
+        "name": "Riquet / Colombette axis",
+        "pixel": [
+          2853.500353503378,
+          1252.5110948618953
+        ],
+        "geographic": [
+          1.4541383056640598,
+          43.60460275713904
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"11023195\", \"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: corrected the misidentified original position [1159,499.2] and reference [896.3,585]. Match Rue Pierre-Paul Riquet west of Saint-Aubin, not the boulevard along the canal.\"}"
+      },
+      {
+        "id": "jourdan-027",
+        "name": "Pont Montaudran centre",
+        "pixel": [
+          3031.6558750000004,
+          1771.5965625
+        ],
+        "geographic": [
+          1.4565069580077932,
+          43.59850186386527
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-028",
+        "name": "Porte Saint-Etienne / boulevard Carnot axis",
+        "pixel": [
+          2749.3840625,
+          1639.080625
+        ],
+        "geographic": [
+          1.4521995559617553,
+          43.60044293013441
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-029",
+        "name": "Filatiers / Trinite axis",
+        "pixel": [
+          2263.100502444898,
+          1756.8272637329753
+        ],
+        "geographic": [
+          1.4440369492237484,
+          43.599724693009954
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-030",
+        "name": "Filatiers / Maletache axis",
+        "pixel": [
+          2287.5,
+          1862.497588073501
+        ],
+        "geographic": [
+          1.444192553377071,
+          43.59845031854552
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-031",
+        "name": "Nazareth / Perchepinte axis",
+        "pixel": [
+          2530.6684375,
+          1925.7267499999998
+        ],
+        "geographic": [
+          1.4484375000000114,
+          43.597399921766275
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-032",
+        "name": "Lascrosses / Armand-Duportal axis",
+        "pixel": [
+          1533.5825,
+          1228.6671875
+        ],
+        "geographic": [
+          1.43316650390625,
+          43.60692687680887
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-033",
+        "name": "Gambetta / Romiguieres axis",
+        "pixel": [
+          2005.4966417179078,
+          1384.5
+        ],
+        "geographic": [
+          1.4405201636569087,
+          43.60458774438206
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-034",
+        "name": "La Grave dome centre",
+        "pixel": [
+          1612.0628125,
+          1723.99375
+        ],
+        "geographic": [
+          1.432891845703125,
+          43.60084093760801
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-035",
+        "name": "Filatiers / Polinaires axis",
+        "pixel": [
+          2294.5093678395206,
+          1903.5057886235977
+        ],
+        "geographic": [
+          1.4443266619314923,
+          43.597883231162754
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-036",
+        "name": "Valade / De-la-Bastide axis",
+        "pixel": [
+          1819.7140000000002,
+          1345.744375
+        ],
+        "geographic": [
+          1.4376434326171648,
+          43.60532589692795
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"243664960\"}"
+      },
+      {
+        "id": "jourdan-037",
+        "name": "Lafayette / Remusat axis",
+        "pixel": [
+          2210.314375,
+          1311.2645000000002
+        ],
+        "geographic": [
+          1.4437687065143836,
+          43.604976599795506
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-038",
+        "name": "Lafayette / Taur axis",
+        "pixel": [
+          2131.65417403111,
+          1330.7259167962136
+        ],
+        "geographic": [
+          1.442749450969818,
+          43.60486588193218
+        ],
+        "role": "fit",
+        "enabled": false,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
+      },
+      {
+        "id": "jourdan-039",
+        "name": "Gambetta / Saint-Rome axis",
+        "pixel": [
+          2188.858039889848,
+          1421.9971945328132
+        ],
+        "geographic": [
+          1.4432967088404782,
+          43.60383454320292
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-040",
+        "name": "Lafayette / Wilson west road axis",
+        "pixel": [
+          2367.85848731071,
+          1290.2552033787333
+        ],
+        "geographic": [
+          1.4465689654377647,
+          43.60488819032475
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {}"
+      },
+      {
+        "id": "jourdan-041",
+        "name": "Desparadoux / Paradis axis",
+        "pixel": [
+          2209.0063630608065,
+          1902.4990352294003
+        ],
+        "geographic": [
+          1.4427924630274136,
+          43.598050191560496
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-042",
+        "name": "Dalbade / Saint-Jean axis",
+        "pixel": [
+          2184.999646496622,
+          1998.4980704588008
+        ],
+        "geographic": [
+          1.442346679687489,
+          43.597020801280834
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"57179140\"}"
+      },
+      {
+        "id": "jourdan-043",
+        "name": "Desparadoux / Joutx-Aigues axis",
+        "pixel": [
+          2206.004949047294,
+          1879.0082005500967
+        ],
+        "geographic": [
+          1.4428353726826029,
+          43.59842705435313
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-044",
+        "name": "Grand Rond west road axis",
+        "pixel": [
+          2701.2666249999997,
+          2030.195625
+        ],
+        "geographic": [
+          1.4511181640624784,
+          43.59570122058769
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-045",
+        "name": "Velane / Montoulieu-Velane axis",
+        "pixel": [
+          2611.721875,
+          1999.318125
+        ],
+        "geographic": [
+          1.4493867187499916,
+          43.59624504887684
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"344770417\"}"
+      },
+      {
+        "id": "jourdan-046",
+        "name": "Taur / Perigord axis",
+        "pixel": [
+          2073.989041395278,
+          1158.017365870793
+        ],
+        "geographic": [
+          1.4422543945312611,
+          43.60700762075243
+        ],
+        "role": "fit",
+        "enabled": false,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"60960445\"}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
+      },
+      {
+        "id": "jourdan-047",
+        "name": "Dalbade / Pont-de-Tounis axis",
+        "pixel": [
+          2166.500530255067,
+          1936.9913170646037
+        ],
+        "geographic": [
+          1.4421165161132876,
+          43.59778858740232
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"83794282\"}"
+      },
+      {
+        "id": "jourdan-048",
+        "name": "Saint-Remesy / Pretres axis",
+        "pixel": [
+          2243.999646496622,
+          1982.0067533941972
+        ],
+        "geographic": [
+          1.4433504137036748,
+          43.59712167778745
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-049",
+        "name": "Grand Rond Jules-Guesde junction",
+        "pixel": [
+          2715.9334375,
+          2072.6521875
+        ],
+        "geographic": [
+          1.451332397460959,
+          43.595351131012634
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-050",
+        "name": "Donne / Brasserie axis",
+        "pixel": [
+          2875.4671875,
+          1913.8903749999997
+        ],
+        "geographic": [
+          1.4537164306640875,
+          43.59714531855575
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-051",
+        "name": "Taur / Place-Saint-Sernin axis",
+        "pixel": [
+          2051.319021903897,
+          1115.1312707853497
+        ],
+        "geographic": [
+          1.4420184988715694,
+          43.6075842182219
+        ],
+        "role": "check",
+        "enabled": false,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\", \"referenceNodeId\": \"755995097\"}\n2026-10-06 street pilot: retained original observation but disabled to avoid duplicating the corresponding explicit OSM-node observation on Rue du Taur. Original fit/check role and ID preserved."
+      },
+      {
+        "id": "jourdan-052",
+        "name": "Laque / Tour-du-Sac axis",
+        "pixel": [
+          1738.1459375,
+          1977.4465625
+        ],
+        "geographic": [
+          1.4349067135297402,
+          43.59779786455942
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\"}"
+      },
+      {
+        "id": "jourdan-053",
+        "name": "Pont-Saint-Pierre / Reclusane axis",
+        "pixel": [
+          1574.0061863091173,
+          1914.0038590823983
+        ],
+        "geographic": [
+          1.4323699951171704,
+          43.598931496471984
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"annotationUncertaintyMetres\": 5, \"annotationNote\": \"Quarter survey: matched the preserved road-centre junction on the original full-resolution sheet.\"}"
+      },
+      {
+        "id": "jourdan-054",
+        "name": "Quilmery / Pont-Saint-Pierre axis",
+        "pixel": [
+          1616.0111353564112,
+          1815.9961409176017
+        ],
+        "geographic": [
+          1.4331950683593675,
+          43.59992123102536
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"243670364\", \"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-055",
+        "name": "Valade / Pargaminieres axis",
+        "pixel": [
+          1732.9996875,
+          1451.2425
+        ],
+        "geographic": [
+          1.4360696411132778,
+          43.603863697701804
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"226138346\", \"annotationUncertaintyMetres\": 5}"
+      },
+      {
+        "id": "jourdan-056",
+        "name": "Renforts / Parlement axis",
+        "pixel": [
+          2317.0990625,
+          2255.8586875
+        ],
+        "geographic": [
+          1.4442182006835935,
+          43.59361099647203
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"241771518\"}"
+      },
+      {
+        "id": "jourdan-057",
+        "name": "Caussade / Viadieu axis",
+        "pixel": [
+          2345.4034375,
+          2431.3458124999997
+        ],
+        "geographic": [
+          1.444441223144537,
+          43.59170610015138
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"240717117\"}"
+      },
+      {
+        "id": "jourdan-058",
+        "name": "Sainte-Catherine / Grande-Saint-Michel axis",
+        "pixel": [
+          2422.5971875,
+          2501.3348125
+        ],
+        "geographic": [
+          1.4453333129882822,
+          43.59062949674146
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"13519386602\"}"
+      },
+      {
+        "id": "jourdan-059",
+        "name": "Sabots / Caussade axis",
+        "pixel": [
+          2316.5844374999997,
+          2428.7726875
+        ],
+        "geographic": [
+          1.4438677368164292,
+          43.59163329276741
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"240717111\"}"
+      },
+      {
+        "id": "jourdan-060",
+        "name": "Dumeril / Sachet axis",
+        "pixel": [
+          2550.2241875,
+          2304.2334375
+        ],
+        "geographic": [
+          1.4476695556640777,
+          43.592697147094086
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"240744152\"}"
+      },
+      {
+        "id": "jourdan-061",
+        "name": "Sainte-Catherine / Trente-Six-Ponts axis",
+        "pixel": [
+          2594.2246250000003,
+          2454.2466249999998
+        ],
+        "geographic": [
+          1.4479398193359145,
+          43.59099234527509
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"240736036\"}"
+      },
+      {
+        "id": "jourdan-062",
+        "name": "Mespoul / Viadieu axis",
+        "pixel": [
+          2355.1813125,
+          2456.5624375
+        ],
+        "geographic": [
+          1.4444434204101242,
+          43.591344847347735
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"parlement\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"240717055\"}"
+      },
+      {
+        "id": "jourdan-063",
+        "name": "Leclerc / Barcelone axis",
+        "pixel": [
+          1357.9985859864876,
+          1287
+        ],
+        "geographic": [
+          1.4304358520507776,
+          43.60670015678203
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"brienne\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"243450757\"}"
+      },
+      {
+        "id": "jourdan-064",
+        "name": "Lancefoc / Barcelone axis",
+        "pixel": [
+          1529.7228125,
+          1348.3175
+        ],
+        "geographic": [
+          1.4328336181640395,
+          43.605825486776226
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"brienne\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"243451406\"}"
+      },
+      {
+        "id": "jourdan-065",
+        "name": "Quai-Saint-Pierre / Brienne axis",
+        "pixel": [
+          1532.5532500000002,
+          1386.914375
+        ],
+        "geographic": [
+          1.4328292236328366,
+          43.60529964448042
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"brienne\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"243450732\"}"
+      },
+      {
+        "id": "jourdan-066",
+        "name": "Lejeune / Barcelone axis",
+        "pixel": [
+          1462.8215625,
+          1324.6447499999997
+        ],
+        "geographic": [
+          1.4315652465820392,
+          43.60628927427504
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"brienne\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"243451397\"}"
+      },
+      {
+        "id": "jourdan-067",
+        "name": "Colombette / Saint-Aubin axis",
+        "pixel": [
+          2736.273070859182,
+          1277.3370689410285
+        ],
+        "geographic": [
+          1.4524947509765411,
+          43.60445637795006
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"60292984\"}"
+      },
+      {
+        "id": "jourdan-068",
+        "name": "Riquet / Camichel axis",
+        "pixel": [
+          2865.002121020269,
+          1439.9913170646037
+        ],
+        "geographic": [
+          1.4543085937499995,
+          43.60273997583156
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"242780785\"}"
+      },
+      {
+        "id": "jourdan-069",
+        "name": "Colombette canal west abutment",
+        "pixel": [
+          2967.3277500000004,
+          1223.2636249999998
+        ],
+        "geographic": [
+          1.4566129760742115,
+          43.60503075511574
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"8831215\"}"
+      },
+      {
+        "id": "jourdan-070",
+        "name": "Saint-Aubin nave centre",
+        "pixel": [
+          2909.4324375,
+          1346.7736249999998
+        ],
+        "geographic": [
+          1.4552874755859477,
+          43.60361747513022
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 withheld check: centre of the drawn nave on the scan and the present IGN church footprint. Construction-era drawing is not an exact building survey.\"}"
+      },
+      {
+        "id": "jourdan-071",
+        "name": "Saint-Aubin / Aubuisson axis",
+        "pixel": [
+          2747.8401875000004,
+          1380.738875
+        ],
+        "geographic": [
+          1.452356872558596,
+          43.60337164932806
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-aubin\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02 local survey: original full-resolution scan matched to preserved road centrelines on IGN PLANIGNV2 and OSM. Modern pedestrian/cycle offsets excluded.\", \"referenceNodeId\": \"242788006\"}"
+      },
+      {
+        "id": "jourdan-072",
+        "name": "Caffarelli / Bayard (former Orient)",
+        "pixel": [
+          2450.9015625,
+          852.9909375
+        ],
+        "geographic": [
+          1.4492834472656284,
+          43.60968364441462
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"3845301552\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-073",
+        "name": "Caffarelli / Stalingrad (former Redoutes)",
+        "pixel": [
+          2459.9075,
+          869.71625
+        ],
+        "geographic": [
+          1.4496119384765507,
+          43.609440229824266
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"13287499106\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-074",
+        "name": "Heliot / Place Belfort (former Castelet)",
+        "pixel": [
+          2514.8232675728696,
+          935.4886275931369
+        ],
+        "geographic": [
+          1.4501953352560772,
+          43.60873686117968
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"243047222\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-075",
+        "name": "Belfort / Place Belfort east opening",
+        "pixel": [
+          2540.9609375,
+          927.6115625
+        ],
+        "geographic": [
+          1.4505468749999864,
+          43.60868333142984
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"243047220\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-076",
+        "name": "Caffarelli / Jean-Jaures northwest opening",
+        "pixel": [
+          2612.060698536089,
+          1030.9882926074836
+        ],
+        "geographic": [
+          1.4512967007390911,
+          43.607485505036834
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"243044828\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-077",
+        "name": "Belfort / Jean-Jaures northwest opening",
+        "pixel": [
+          2691.0038885371596,
+          927.016883485493
+        ],
+        "geographic": [
+          1.4528721703712446,
+          43.608538343382456
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"344742810\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-078",
+        "name": "Jean-Jaures / Bonrepos west bridge abutment",
+        "pixel": [
+          2768.5063630608065,
+          832.492764220503
+        ],
+        "geographic": [
+          1.4541489056550199,
+          43.60938531238385
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"8831750\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-079",
+        "name": "Heliot / Dalayrac axis",
+        "pixel": [
+          2520.4803717869977,
+          1085.0608132974232
+        ],
+        "geographic": [
+          1.449622924804686,
+          43.606878748593914
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"243047235\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-080",
+        "name": "Denfert-Rochereau / Lafaille axis",
+        "pixel": [
+          2452.188125,
+          1036.969375
+        ],
+        "geographic": [
+          1.4480277099609395,
+          43.60741332759679
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"referenceNodeId\": \"344752164\", \"area\": \"belfort-bayard\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: original scan topology matched to IGN and OSM. Place Castelet is present Place Belfort; old Redoutes is Stalingrad. Match the named street opening on the northwest side of the broad promenade, not a modern divided carriageway axis.\"}"
+      },
+      {
+        "id": "jourdan-081",
+        "name": "Arnaud-Bernard / Queteurs axis",
+        "pixel": [
+          1857.537803217668,
+          935.0743799457143
+        ],
+        "geographic": [
+          1.4391551513671743,
+          43.61002688913195
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"243667018\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-082",
+        "name": "Arnaud-Bernard / Embarthe / Chaine axis",
+        "pixel": [
+          1862.5778310341682,
+          985.5297874052146
+        ],
+        "geographic": [
+          1.4391331787109323,
+          43.609473639728336
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"243667004\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-083",
+        "name": "Gatien-Arnoult / Gramat axis",
+        "pixel": [
+          1944.2532500000002,
+          925.2957500000001
+        ],
+        "geographic": [
+          1.440487243652342,
+          43.60977830537818
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"84826079\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-084",
+        "name": "Verge-d-Or / Trois-Piliers axis",
+        "pixel": [
+          1900.4098464483286,
+          886.3113118545252
+        ],
+        "geographic": [
+          1.4398615722656132,
+          43.61040433673932
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"84826096\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-085",
+        "name": "Arnaud-Bernard / Trois-Piliers axis",
+        "pixel": [
+          1867.6383697715864,
+          899.7794461249433
+        ],
+        "geographic": [
+          1.4394122314452886,
+          43.61046200766144
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"243667017\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-086",
+        "name": "Gatien-Arnoult / Saint-Charles axis",
+        "pixel": [
+          1977.7038750000002,
+          890.8158749999999
+        ],
+        "geographic": [
+          1.4412906781922443,
+          43.61008049333853
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"84826072\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-087",
+        "name": "Hirondelle / Trois-Piliers axis",
+        "pixel": [
+          2073.680880507452,
+          900.6089847302546
+        ],
+        "geographic": [
+          1.4426337722897833,
+          43.610001183217776
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"84826083\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-088",
+        "name": "Verge-d-Or / Escoussieres axis",
+        "pixel": [
+          1898.5582289948006,
+          799.1133355760174
+        ],
+        "geographic": [
+          1.4401155662811862,
+          43.61132348364774
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"arnaud-bernard\", \"referenceNodeId\": \"84826093\", \"annotationUncertaintyMetres\": 5, \"annotationNote\": \"2026-10-02: preserved street junction inspected on full-resolution source and IGN / OSM; old straight and curved Trois-Piliers segments matched by topology. Checks excluded from fitting.\"}"
+      },
+      {
+        "id": "jourdan-089",
+        "name": "Embarthe / Salenques axis",
+        "pixel": [
+          1766.4503125,
+          1080.197875
+        ],
+        "geographic": [
+          1.4374802856445115,
+          43.60848048263272
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-julien\", \"referenceNodeId\": \"243667023\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: source street-axis junction matched to IGN / OSM. The historical Place et Rue des Salenques opens onto present Place Saint-Julien. Old Cartailhac is labelled Rue du Peyrou; Albert-Lautman is labelled Rue des Trois-Renards. Checks remain withheld.\"}"
+      },
+      {
+        "id": "jourdan-090",
+        "name": "Chaine / Peyrou / Cartailhac axis",
+        "pixel": [
+          1935.0056560540502,
+          1139.497588073501
+        ],
+        "geographic": [
+          1.4399461669922005,
+          43.607492479887604
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-julien\", \"referenceNodeId\": \"84826020\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: source street-axis junction matched to IGN / OSM. The historical Place et Rue des Salenques opens onto present Place Saint-Julien. Old Cartailhac is labelled Rue du Peyrou; Albert-Lautman is labelled Rue des Trois-Renards. Checks remain withheld.\"}"
+      },
+      {
+        "id": "jourdan-091",
+        "name": "Puits-Creuses / Albert-Lautman axis",
+        "pixel": [
+          1880.0044187922267,
+          1254.002411926499
+        ],
+        "geographic": [
+          1.438733825683613,
+          43.60631711732158
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-julien\", \"referenceNodeId\": \"84825905\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: source street-axis junction matched to IGN / OSM. The historical Place et Rue des Salenques opens onto present Place Saint-Julien. Old Cartailhac is labelled Rue du Peyrou; Albert-Lautman is labelled Rue des Trois-Renards. Checks remain withheld.\"}"
+      },
+      {
+        "id": "jourdan-092",
+        "name": "Urbain-Vitry / Albert-Lautman axis",
+        "pixel": [
+          1896.0040652888486,
+          1207.9971056882011
+        ],
+        "geographic": [
+          1.439186462402347,
+          43.60681311914784
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-julien\", \"referenceNodeId\": \"84825895\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: source street-axis junction matched to IGN / OSM. The historical Place et Rue des Salenques opens onto present Place Saint-Julien. Old Cartailhac is labelled Rue du Peyrou; Albert-Lautman is labelled Rue des Trois-Renards. Checks remain withheld.\"}"
+      },
+      {
+        "id": "jourdan-093",
+        "name": "Lois / Salenques / Peyrou axis",
+        "pixel": [
+          1915.502828027025,
+          1164.0019295411992
+        ],
+        "geographic": [
+          1.4396401977539313,
+          43.60730474162133
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"saint-julien\", \"referenceNodeId\": \"60964494\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: source street-axis junction matched to IGN / OSM. The historical Place et Rue des Salenques opens onto present Place Saint-Julien. Old Cartailhac is labelled Rue du Peyrou; Albert-Lautman is labelled Rue des Trois-Renards. Checks remain withheld.\"}"
+      },
+      {
+        "id": "jourdan-095",
+        "name": "Saint-Bernard / Henri-Beraldi axis",
+        "pixel": [
+          2106.87475,
+          984.99225
+        ],
+        "geographic": [
+          1.4435046386718682,
+          43.60884441675198
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"84826038\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\", \"smoothing\": 500}"
+      },
+      {
+        "id": "jourdan-096",
+        "name": "Bellegarde / Henri-Beraldi axis",
+        "pixel": [
+          2118.1965,
+          1060.8994375
+        ],
+        "geographic": [
+          1.4438512573242122,
+          43.60818177659
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"84826045\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\", \"smoothing\": 500}"
+      },
+      {
+        "id": "jourdan-097",
+        "name": "Saint-Bernard / Pouzonville axis",
+        "pixel": [
+          2203.8815625,
+          948.7111874999999
+        ],
+        "geographic": [
+          1.4446175537109696,
+          43.609161017757565
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"84826066\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-098",
+        "name": "Saint-Bernard / Strasbourg northwest opening",
+        "pixel": [
+          2243.5076875,
+          941.5064374999998
+        ],
+        "geographic": [
+          1.4449361572265786,
+          43.60926840716737
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"243666274\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-099",
+        "name": "Montoyol / Remusat axis",
+        "pixel": [
+          2253.5428749999996,
+          1194.4446249999999
+        ],
+        "geographic": [
+          1.4445922851562614,
+          43.60631035544003
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"60960462\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-100",
+        "name": "Perigord / Remusat axis",
+        "pixel": [
+          2263.8353749999997,
+          1089.97575
+        ],
+        "geographic": [
+          1.4452624511718568,
+          43.60729360458713
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"11379409593\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-101",
+        "name": "Bayard / Strasbourg northeast opening",
+        "pixel": [
+          2323.531875,
+          1006.091875
+        ],
+        "geographic": [
+          1.446335266113266,
+          43.60805728215554
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"10526875\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-102",
+        "name": "Bayard / Moutons (former Saint-Loup) axis",
+        "pixel": [
+          2369.848125,
+          959.775625
+        ],
+        "geographic": [
+          1.44739709472654,
+          43.60864196624046
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"strasbourg\", \"referenceNodeId\": \"243048213\", \"annotationUncertaintyMetres\": 6, \"annotationNote\": \"2026-10-02: preserved junction matched by original block topology and IGN / OSM. Former Saint-Loup is Moutons, not Jacques-Laffitte. Boulevard anchors match street openings on the corresponding edge rather than the broad promenade centre.\"}"
+      },
+      {
+        "id": "jourdan-103",
+        "name": "Terre-Cabade main gate",
+        "pixel": [
+          3254.0378248614597,
+          988.4662330290139
+        ],
+        "geographic": [
+          1.4612572393184655,
+          43.607082103284874
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"referenceNodeId\": \"1828807375\", \"annotationUncertaintyMetres\": 7, \"annotationNote\": \"2026-10-02: original cemetery gateway and approach road topology matched to IGN / OSM. Modern extensions and later internal grave paths excluded. Main entrance monument documented by Ministry of Culture PA31000114.\"}"
+      },
+      {
+        "id": "jourdan-104",
+        "name": "Cimetiere / Saint-Bertrand / Compans axis",
+        "pixel": [
+          3066.0195025883154,
+          1050.0624386078555
+        ],
+        "geographic": [
+          1.4581307373047139,
+          43.606683053306746
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"referenceNodeId\": \"250063183\", \"annotationUncertaintyMetres\": 7, \"annotationNote\": \"2026-10-02: original cemetery gateway and approach road topology matched to IGN / OSM. Modern extensions and later internal grave paths excluded. Main entrance monument documented by Ministry of Culture PA31000114.\"}"
+      },
+      {
+        "id": "jourdan-105",
+        "name": "Colonne / Saint-Sylve axis",
+        "pixel": [
+          3004.5027124129006,
+          936.9178494638419
+        ],
+        "geographic": [
+          1.4569334175770978,
+          43.60795795526891
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"referenceNodeId\": \"250055551\", \"annotationUncertaintyMetres\": 7, \"annotationNote\": \"2026-10-02: original cemetery gateway and approach road topology matched to IGN / OSM. Modern extensions and later internal grave paths excluded. Main entrance monument documented by Ministry of Culture PA31000114.\"}"
+      },
+      {
+        "id": "jourdan-106",
+        "name": "Cimetiere / Saint-Paul / Gazan axis",
+        "pixel": [
+          3006.6190334637436,
+          1070.569899653932
+        ],
+        "geographic": [
+          1.457335876464839,
+          43.60656372659966
+        ],
+        "role": "check",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"referenceNodeId\": \"250063003\", \"annotationUncertaintyMetres\": 7, \"annotationNote\": \"2026-10-02: original cemetery gateway and approach road topology matched to IGN / OSM. Modern extensions and later internal grave paths excluded. Main entrance monument documented by Ministry of Culture PA31000114.\"}"
+      },
+      {
+        "id": "jourdan-107",
+        "name": "Terre-Cabade southwest boundary / Gloire",
+        "pixel": [
+          3111.946448316422,
+          1178.7852072046378
+        ],
+        "geographic": [
+          1.4585202521120302,
+          43.60547347055823
+        ],
+        "role": "fit",
+        "enabled": true,
+        "reviewed": false,
+        "note": "Imported candidate; verify against original and modern reference. {\"area\": \"terre-cabade\", \"annotationUncertaintyMetres\": 8, \"annotationNote\": \"Preserved southwest corner at the meeting of the cemetery west wall / Chemin du Nou and Avenue de la Gloire; original street labelled Rue de la Colombette. Manually inspected on IGN, not the later northern extension.\"}"
+      }
+    ]
+  },
+  "reference": {
+    "source": "OpenStreetMap",
+    "timestamp": "2026-10-06T11:25:57Z",
+    "sha256": "1101f432f928e1cb3cd64ddb56571a67a43266b6fc45112b9c7de70fa38cd5b4",
+    "license": "ODbL-1.0"
+  },
+  "streets": [
+    {
+      "id": "1860-rue-du-taur-pilot",
+      "name": "Rue du Taur — 1860 pilot",
+      "vertices": [
+        {
+          "id": "1860-taur-trois-renards",
+          "pixel": [
+            2051,
+            1115
+          ],
+          "role": "check",
+          "reviewed": true,
+          "note": "Independent check. The historic Rue des Trois Renards enters the west side of Rue du Taur below Place Saint-Sernin. Matched road centre junction to shared OSM node 60960446, not the nearby shape node 6871954702. Historical scan inspected at original pixels; modern named-way connections inspected in the 2026-10-06 OSM snapshot. Estimated manual uncertainty 4–6 m; pedestrian junction geometry has changed.",
+          "reference": {
+            "edgeId": "osm:way:349894872:3-4",
+            "osmNodeId": 60960446,
+            "geographic": [
+              1.4420397,
+              43.6075556
+            ]
+          }
+        },
+        {
+          "id": "1860-taur-perigord",
+          "pixel": [
+            2074,
+            1158
+          ],
+          "role": "fit",
+          "reviewed": true,
+          "note": "Historic Rue Perigord opens on the east side of Rue du Taur; shared node belongs to both modern named ways. Original-pixel road-centre intersection inspected in the scan and modern OSM geometry. Estimated manual uncertainty 3–5 m. Supersedes imported fit jourdan-046 without deleting it.",
+          "reference": {
+            "edgeId": "osm:way:8590239:12-13",
+            "osmNodeId": 60960445,
+            "geographic": [
+              1.4422546,
+              43.6070077
+            ]
+          }
+        },
+        {
+          "id": "1860-taur-esquile",
+          "pixel": [
+            2083,
+            1185
+          ],
+          "role": "fit",
+          "reviewed": false,
+          "note": "Historic Rue de l Esquile approaches Rue du Taur obliquely from the southwest, just south of Perigord. Matched the centre of this distinctive junction to shared OSM node 60965710. Both the original scan and modern named-way geometry were inspected. Estimated manual uncertainty 4–6 m; this is a junction match, not interpolation along the modern line.\n2026-10-06 review: DO NOT FIT yet. The historic oblique/wide mouth is ambiguous and the initial fit worsened held-out Montoyol and other pilot checks. The provisional correspondence is retained for human review; it is excluded from exported GCPs.",
+          "reference": {
+            "edgeId": "osm:way:8590239:11-12",
+            "osmNodeId": 60965710,
+            "geographic": [
+              1.4423505,
+              43.6067442
+            ]
+          }
+        },
+        {
+          "id": "1860-taur-montoyol",
+          "pixel": [
+            2087,
+            1193
+          ],
+          "role": "check",
+          "reviewed": true,
+          "note": "Independent check. Rue Montoyol enters Rue du Taur from the east, immediately south of the Esquile junction. Matched the road-centre junction to shared OSM node 60960444; not used in the fit. Original scan and modern named-way geometry inspected. Closely spaced junctions and old street width imply 4–6 m manual uncertainty.",
+          "reference": {
+            "edgeId": "osm:way:8590239:9-11",
+            "osmNodeId": 60960444,
+            "geographic": [
+              1.4424242,
+              43.6065608
+            ]
+          }
+        },
+        {
+          "id": "1860-taur-senechal",
+          "pixel": [
+            2111,
+            1252
+          ],
+          "role": "check",
+          "reviewed": true,
+          "note": "Independent check. Historic Rue du Senechal enters Rue du Taur from the east north of Notre-Dame du Taur. Matched the centre of the street mouth to shared OSM node 60960443. Original scan and modern named-way geometry inspected. Estimated manual uncertainty 4–6 m; not used in fitting.",
+          "reference": {
+            "edgeId": "osm:way:8590239:8-9",
+            "osmNodeId": 60960443,
+            "geographic": [
+              1.4426132,
+              43.6058279
+            ]
+          }
+        },
+        {
+          "id": "1860-taur-capitole",
+          "pixel": [
+            2132,
+            1331
+          ],
+          "role": "fit",
+          "reviewed": true,
+          "note": "South end of Rue du Taur at the northern edge of Place du Capitole, where the historic Louis-Napoleon/Lafayette alignment enters from the east. Modern short section is named Rue Dominique Baudis. OSM node 60960442 links Taur, Baudis and Capitole. Matched the road-centre opening, not a square corner. Estimated uncertainty 5–8 m due to pedestrianisation and widened mouths; compare carefully. Supersedes imported fit jourdan-038 without deleting it.",
+          "reference": {
+            "edgeId": "osm:way:8590239:0-2",
+            "osmNodeId": 60960442,
+            "geographic": [
+              1.4428728,
+              43.6048189
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
