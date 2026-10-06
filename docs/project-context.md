@@ -305,3 +305,16 @@ keyboard scenario fails when Home/Enter leaves French selected; the same failure
 was reproduced on unchanged commit `76cde70` in Chrome. It remains separate work.
 A real OpenFreeMap check loaded street geometry and names without console errors
 on the 1860 map at desktop and mobile sizes. Physical-device performance is unmeasured.
+
+## Installed iOS viewport (2026-10-06)
+
+An iOS 27 screenshot showed header overlap with system glass and a bottom gap.
+The screenshot also predates the latest local controls; no new deployment was made.
+WebKit bug 301994 confirms an iOS 27 installed-app geometry regression, but the
+exact device cause cannot be established from the screenshot alone.
+The installation status bar now uses `default`; `theme-init.js` selects
+`viewport-fit=auto` before first paint only for `navigator.standalone` (iOS).
+Regular Safari retains `cover`, and other platforms retain safe-area handling.
+This is a conservative workaround awaiting physical iOS 27 validation; it does
+not claim to remove system-rendered glass. Existing installations may require
+reinstallation after deployment because iOS can retain installation metadata.

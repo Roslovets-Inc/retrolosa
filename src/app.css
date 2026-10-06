@@ -1007,18 +1007,6 @@ body {
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-/* iOS black-translucent status bars use light text, including with the light app theme. */
-.masthead::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto;
-  height: env(safe-area-inset-top, 0px);
-  background: #2f4b40;
-  pointer-events: none;
-}
-:root[data-theme="dark"] .masthead::before {
-  background: var(--canvas);
-}
 footer {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }

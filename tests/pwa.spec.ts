@@ -31,6 +31,10 @@ test("installation metadata and icons use the deployment scope", async ({ page, 
     "content",
     /viewport-fit=cover/,
   );
+  await expect(page.locator('meta[name="apple-mobile-web-app-status-bar-style"]')).toHaveAttribute(
+    "content",
+    "default",
+  );
   const response = await request.get(`${base}manifest.webmanifest`);
   expect(response.ok()).toBe(true);
   const manifest = await response.json();
@@ -179,4 +183,30 @@ test("production shell launches offline without caching maps", async ({ page, co
   await context.setOffline(false);
   await page.keyboard.press("Escape");
   await expect(page.locator(".offline-notice")).toHaveCount(0);
+});
+
+test("iOS standalone startup selects a contained viewport and preserves app bounds", async ({
+  page,
+}) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "standalone", { get: () => true });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base);
+  await waitForApp(page);
+  await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
+    "content",
+    "width=device-width, initial-scale=1.0, viewport-fit=auto",
+  );
+  await expect(page.locator('meta[name="apple-mobile-web-app-status-bar-style"]')).toHaveAttribute(
+    "content",
+    "default",
+  );
+  const app = (await page.locator("main").boundingBox())!;
+  expect(app.y).toBe(0);
+  expect(app.y + app.height).toBe(844);
+  const header = (await page.locator(".masthead").boundingBox())!;
+  expect(header.y).toBe(0);
+  const footer = (await page.locator("footer").boundingBox())!;
+  expect(footer.y + footer.height).toBe(844);
 });

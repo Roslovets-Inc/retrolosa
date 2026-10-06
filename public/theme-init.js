@@ -1,5 +1,11 @@
 // Apply the saved appearance before the page paints.
 (() => {
+  // iOS owns the status bar and home-indicator area in installed mode.
+  // Avoid its cover-mode viewport regressions; Safari tabs retain edge-to-edge layout.
+  if (navigator.standalone === true) {
+    document.querySelector('meta[name="viewport"]').content =
+      "width=device-width, initial-scale=1.0, viewport-fit=auto";
+  }
   let preference = "system";
   try {
     const saved = localStorage.getItem("retrolosa-theme");

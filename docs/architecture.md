@@ -297,8 +297,17 @@ instructions otherwise. Installed standalone windows hide the install action.
 responsibility. Offline shell availability does not imply offline map availability.
 
 The viewport includes `viewport-fit=cover`. Header/footer dimensions and map-control
-offsets include safe-area insets in `app.css`. The top inset has a dark background
-so iOS's translucent status bar remains legible with either app theme.
+offsets include safe-area insets in `app.css`. iOS installations use the system
+`default` status bar. Before first paint,
+`theme-init.js` changes viewport-fit to `auto` only when `navigator.standalone`
+is true; Safari tabs retain `cover`. This avoids relying on cover-mode geometry
+beneath iOS system overlays (WebKit bugs [301994](https://bugs.webkit.org/show_bug.cgi?id=301994)
+and [237961](https://bugs.webkit.org/show_bug.cgi?id=237961)). Existing safe-area
+padding still protects edge-to-edge layouts on other platforms.
+Status-bar metadata can be captured at installation; existing iOS installations
+may need reinstallation after deployment. Desktop browser tests verify the startup
+configuration and layout bounds, but cannot reproduce iOS system glass or confirm
+physical-device geometry. The new configuration needs an installed iOS 27 check.
 The application is fixed to the viewport edges rather than sized by `100dvh`;
 maps extend beneath the transparent footer and bottom safe area. Population
 milestones remain visible at every viewport size, without a mobile
